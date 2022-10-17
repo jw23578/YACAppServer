@@ -9,12 +9,14 @@ LIBS += \
     -lpqxx -lpq
 
 SOURCES += \
+        handler/handlerlogin.cpp \
         handler/handlerregister.cpp \
         main.cpp \
         pistachehandlerinterface.cpp \
         yacappserver.cpp
 
 HEADERS += \
+  handler/handlerlogin.h \
   handler/handlerregister.h \
   pistachehandlerinterface.h \
   yacappserver.h
