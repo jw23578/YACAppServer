@@ -13,8 +13,6 @@ class YACAppServer
 
     HandlerRegister handlerRegister;
 
-    void loginMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
-    void uploadAPPMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
     void getAPPMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
 public:
     YACAppServer(int port = 23578);
