@@ -19,6 +19,7 @@ SOURCES += \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
         postgres/pgsqlstring.cpp \
+        sole/sole.cpp \
         utils/extstring.cpp \
         main.cpp \
         postgres/pgconnectionpool.cpp \
@@ -33,5 +34,7 @@ HEADERS += \
   interfaces/pistacheserverinterface.h \
   postgres/pgconnectionpool.h \
   postgres/pgsqlstring.h \
+  sole/sole.hpp \
+  utils/definitions.h \
   utils/extstring.h \
   yacappserver.h
