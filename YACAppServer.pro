@@ -8,6 +8,9 @@ LIBS += \
     -L /usr/local/lib \
     -lpqxx -lpq
 
+INCLUDEPATH += ../utils
+INCLUDEPATH += ../postgres
+
 SOURCES += \
         handler/handlergetapp.cpp \
         handler/handlerlogin.cpp \
@@ -15,7 +18,9 @@ SOURCES += \
         handler/handleruploadapp.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
+        utils/extstring.cpp \
         main.cpp \
+        postgres/pgconnectionpool.cpp \
         yacappserver.cpp
 
 HEADERS += \
@@ -25,4 +30,6 @@ HEADERS += \
   handler/handleruploadapp.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
+  postgres/pgconnectionpool.h \
+  utils/extstring.h \
   yacappserver.h

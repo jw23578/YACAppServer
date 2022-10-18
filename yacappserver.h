@@ -12,7 +12,8 @@ class YACAppServer: public PistacheServerInterface
 
     void getAPPMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
 public:
-    YACAppServer(int port = 23578);
+    YACAppServer(
+            int port = 23578);
 };
 
 #endif // YACAPPSERVER_H
