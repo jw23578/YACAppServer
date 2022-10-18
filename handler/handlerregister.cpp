@@ -1,7 +1,7 @@
 #include "handlerregister.h"
 
-HandlerRegister::HandlerRegister(Pistache::Rest::Router &router):
-    PistacheHandlerInterface(router,
+HandlerRegister::HandlerRegister(PistacheServerInterface &serverInterface):
+    PistacheHandlerInterface(serverInterface,
                              "/register",
                              TypePost)
 {

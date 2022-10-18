@@ -13,8 +13,9 @@ SOURCES += \
         handler/handlerlogin.cpp \
         handler/handlerregister.cpp \
         handler/handleruploadapp.cpp \
+        interfaces/pistachehandlerinterface.cpp \
+        interfaces/pistacheserverinterface.cpp \
         main.cpp \
-        pistachehandlerinterface.cpp \
         yacappserver.cpp
 
 HEADERS += \
@@ -22,5 +23,6 @@ HEADERS += \
   handler/handlerlogin.h \
   handler/handlerregister.h \
   handler/handleruploadapp.h \
-  pistachehandlerinterface.h \
+  interfaces/pistachehandlerinterface.h \
+  interfaces/pistacheserverinterface.h \
   yacappserver.h

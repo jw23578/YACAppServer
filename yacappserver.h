@@ -4,13 +4,10 @@
 #include "pistache/router.h"
 #include "pistache/endpoint.h"
 #include "handler/handlerregister.h"
+#include "interfaces/pistacheserverinterface.h"
 
-class YACAppServer
+class YACAppServer: public PistacheServerInterface
 {
-    Pistache::Address addr;
-    Pistache::Http::Endpoint server;
-    Pistache::Rest::Router router;
-
     HandlerRegister handlerRegister;
 
     void getAPPMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);

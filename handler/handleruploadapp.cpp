@@ -1,7 +1,7 @@
 #include "handleruploadapp.h"
 
-HandlerUploadAPP::HandlerUploadAPP(Pistache::Rest::Router &router):
-    PistacheHandlerInterface(router,
+HandlerUploadAPP::HandlerUploadAPP(PistacheServerInterface &serverInterface):
+    PistacheHandlerInterface(serverInterface,
                              "/uploadAPP",
                              TypePost)
 {

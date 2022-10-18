@@ -1,7 +1,7 @@
 #include "handlerlogin.h"
 
-HandlerLogin::HandlerLogin(Pistache::Rest::Router &router):
-    PistacheHandlerInterface(router,
+HandlerLogin::HandlerLogin(PistacheServerInterface &serverInterface):
+    PistacheHandlerInterface(serverInterface,
                              "/login",
                              TypePost)
 {

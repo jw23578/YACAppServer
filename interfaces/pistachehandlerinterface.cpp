@@ -20,22 +20,22 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
 
 
 
-PistacheHandlerInterface::PistacheHandlerInterface(Pistache::Rest::Router &router,
+PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                                                    std::string const &methodName,
                                                    HandlerType type):request(0), response(0)
 {
     if (type == TypeDelete)
     {
-        Pistache::Rest::Routes::Delete(router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        Pistache::Rest::Routes::Delete(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
     if (type == TypePost)
     {
-        Pistache::Rest::Routes::Post(router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        Pistache::Rest::Routes::Post(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
     if (type == TypeGet)
     {
-        Pistache::Rest::Routes::Get(router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        Pistache::Rest::Routes::Get(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
     }
 }

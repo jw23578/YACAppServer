@@ -1,7 +1,7 @@
 #include "handlergetapp.h"
 
-HandlerGetAPP::HandlerGetAPP(Pistache::Rest::Router &router):
-    PistacheHandlerInterface(router,
+HandlerGetAPP::HandlerGetAPP(PistacheServerInterface &serverInterface):
+    PistacheHandlerInterface(serverInterface,
                              "/getAPP",
                              TypeGet)
 {

@@ -3,6 +3,7 @@
 
 #include "pistache/router.h"
 #include "rapidjson/document.h"
+#include "pistacheserverinterface.h"
 
 class PistacheHandlerInterface
 {
@@ -18,7 +19,7 @@ public:
         TypePost,
         TypeDelete
     };
-    PistacheHandlerInterface(Pistache::Rest::Router &router,
+    PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                              const std::string &methodName,
                              HandlerType type);
 

@@ -1,12 +1,12 @@
 #ifndef HANDLERLOGIN_H
 #define HANDLERLOGIN_H
 
-#include <pistachehandlerinterface.h>
+#include "interfaces/pistachehandlerinterface.h"
 
 class HandlerLogin : public PistacheHandlerInterface
 {
 public:
-    HandlerLogin(Pistache::Rest::Router &router);
+    HandlerLogin(PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:

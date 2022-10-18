@@ -1,12 +1,12 @@
 #ifndef HANDLERREGISTER_H
 #define HANDLERREGISTER_H
 
-#include <pistachehandlerinterface.h>
+#include "interfaces/pistachehandlerinterface.h"
 
 class HandlerRegister : public PistacheHandlerInterface
 {
 public:
-    HandlerRegister(Pistache::Rest::Router &router);
+    HandlerRegister(PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:

@@ -1,12 +1,12 @@
 #ifndef HANDLERUPLOADAPP_H
 #define HANDLERUPLOADAPP_H
 
-#include <pistachehandlerinterface.h>
+#include "interfaces/pistachehandlerinterface.h"
 
 class HandlerUploadAPP : public PistacheHandlerInterface
 {
 public:
-    HandlerUploadAPP(Pistache::Rest::Router &router);
+    HandlerUploadAPP(PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:

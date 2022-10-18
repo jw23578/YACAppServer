@@ -1,12 +1,12 @@
 #ifndef HANDLERGETAPP_H
 #define HANDLERGETAPP_H
 
-#include <pistachehandlerinterface.h>
+#include "interfaces/pistachehandlerinterface.h"
 
 class HandlerGetAPP : public PistacheHandlerInterface
 {
 public:
-    HandlerGetAPP(Pistache::Rest::Router &router);
+    HandlerGetAPP(PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:
