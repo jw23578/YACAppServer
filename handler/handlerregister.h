@@ -2,11 +2,13 @@
 #define HANDLERREGISTER_H
 
 #include "interfaces/pistachehandlerinterface.h"
+#include "databaselogic.h"
 
 class HandlerRegister : public PistacheHandlerInterface
 {
+    DatabaseLogic &databaseLogic;
 public:
-    HandlerRegister(PistacheServerInterface &serverInterface);
+    HandlerRegister(DatabaseLogic &databaseLogic, PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:

@@ -6,13 +6,16 @@
 #include "handler/handlerregister.h"
 #include "interfaces/pistacheserverinterface.h"
 #include "postgres/pgconnectionpool.h"
+#include "databaselogic.h"
 
 class YACAppServer: public PistacheServerInterface
 {
     PGConnectionPool postgresConnectionPool;
+    DatabaseLogic databaseLogic;
     HandlerRegister handlerRegister;
 
     void getAPPMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
+    void createDatabaseTables();
 public:
     YACAppServer(std::string const &postgresHost,
                  int postgresPort,

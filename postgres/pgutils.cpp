@@ -3,15 +3,14 @@
 #include "pgsqlstring.h"
 #include "utils/extstring.h"
 
-PGUtils::PGUtils()
+PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 {
 
 }
 
 void PGUtils::alterTableAddColumn(const std::string &tableName,
                                   const std::string &columnName,
-                                  const std::string &columnType,
-                                  PGConnectionPool &pool) const
+                                  const std::string &columnType) const
 {
     PGSqlString sql("alter table ");
     sql += tableName;
@@ -20,8 +19,7 @@ void PGUtils::alterTableAddColumn(const std::string &tableName,
     PGCommandTransactor ct(pool, sql, result);
 }
 
-bool PGUtils::tableExists(const std::string &tableName,
-                          PGConnectionPool &pool) const
+bool PGUtils::tableExists(const std::string &tableName) const
 {
     PGSqlString sql("select table_name from information_schema.tables ");
     sql += "where table_schema = 'public' ";
@@ -34,8 +32,7 @@ bool PGUtils::tableExists(const std::string &tableName,
     return result.size() > 0;
 }
 
-bool PGUtils::tableEmpty(const std::string &tableName,
-                         PGConnectionPool &pool) const
+bool PGUtils::tableEmpty(const std::string &tableName) const
 {
     PGSqlString sql("select * from ");
     sql += tableName;
@@ -46,8 +43,7 @@ bool PGUtils::tableEmpty(const std::string &tableName,
     return result.size() == 0;
 }
 
-bool PGUtils::databaseExists(const std::string &databaseName,
-                             PGConnectionPool &pool) const
+bool PGUtils::databaseExists(const std::string &databaseName) const
 {
     PGSqlString sql("select * from pg_database where datname = :datname");
     sql.set("datname", ExtString::lower(databaseName));
@@ -59,8 +55,7 @@ bool PGUtils::databaseExists(const std::string &databaseName,
 }
 
 bool PGUtils::createDatabase(const std::string &databaseName,
-                             const std::string &owner,
-                             PGConnectionPool &pool) const
+                             const std::string &owner) const
 {
     PGSqlString sql("create database ");
     sql += databaseName + " owner " + owner;
@@ -72,8 +67,7 @@ bool PGUtils::createDatabase(const std::string &databaseName,
     return result.size() > 0;
 }
 
-bool PGUtils::pgCryptoInstalled(std::string const dbName,
-                                PGConnectionPool &pool) const
+bool PGUtils::pgCryptoInstalled() const
 {
     PGSqlString sql("select * from pg_extension where extname = :extname");
     sql.set("extname", "pgcrypto");
@@ -84,8 +78,7 @@ bool PGUtils::pgCryptoInstalled(std::string const dbName,
     return result.size() > 0;
 }
 
-bool PGUtils::installPGCrypto(const std::string &dbName,
-                              PGConnectionPool &pool) const
+bool PGUtils::installPGCrypto() const
 {
     PGSqlString sql("CREATE EXTENSION pgcrypto");
     pqxx::connection c(pool.generateConnstring());
@@ -95,8 +88,7 @@ bool PGUtils::installPGCrypto(const std::string &dbName,
     return result.size() > 0;
 }
 
-bool PGUtils::roleExists(const std::string &roleName,
-                         PGConnectionPool &pool) const
+bool PGUtils::roleExists(const std::string &roleName) const
 {
     PGSqlString sql("select 1 from pg_roles ");
     sql += " where rolname = :roleName";
@@ -110,8 +102,7 @@ bool PGUtils::roleExists(const std::string &roleName,
 
 bool PGUtils::createRole(const std::string &name,
                          const std::string &password,
-                         bool superUser,
-                         PGConnectionPool &pool) const
+                         bool superUser) const
 {
     PGSqlString sql("create role ");
     sql += name + " with login encrypted password :password ";
@@ -127,8 +118,7 @@ bool PGUtils::createRole(const std::string &name,
     return result.size() > 0;
 }
 
-bool PGUtils::dropRole(const std::string &name,
-                       PGConnectionPool &pool) const
+bool PGUtils::dropRole(const std::string &name) const
 {
     PGSqlString sql("drop role ");
     sql += name;

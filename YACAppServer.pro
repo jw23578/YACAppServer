@@ -14,10 +14,12 @@ INCLUDEPATH += ../utils
 INCLUDEPATH += ../postgres
 
 SOURCES += \
+        databaselogic.cpp \
         handler/handlergetapp.cpp \
         handler/handlerlogin.cpp \
         handler/handlerregister.cpp \
         handler/handleruploadapp.cpp \
+        interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
         postgres/pgcommandtransactor.cpp \
@@ -32,10 +34,12 @@ SOURCES += \
         yacappserver.cpp
 
 HEADERS += \
+  databaselogic.h \
   handler/handlergetapp.h \
   handler/handlerlogin.h \
   handler/handlerregister.h \
   handler/handleruploadapp.h \
+  interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
   postgres/pgcommandtransactor.h \
@@ -50,4 +54,6 @@ HEADERS += \
   yacappserver.h
 
 DISTFILES += \
-  YACAppServerConfig.json
+  YACAppServerConfig.json \
+  curl-format.txt \
+  doc.txt

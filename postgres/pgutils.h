@@ -5,35 +5,26 @@
 
 class PGUtils
 {
+    PGConnectionPool &pool;
 public:
-    PGUtils();
+    PGUtils(PGConnectionPool &pool);
     void alterTableAddColumn(std::string const &tableName,
                              std::string const &columnName,
-                             std::string const &columnType,
-                             PGConnectionPool &pool) const;
-    bool tableExists(std::string const &tableName,
-                     PGConnectionPool &pool) const;
-    bool tableEmpty(std::string const &tableName,
-                    PGConnectionPool &pool) const;
-    bool databaseExists(const std::string &databaseName,
-                        PGConnectionPool &pool) const;
+                             std::string const &columnType) const;
+    bool tableExists(std::string const &tableName) const;
+    bool tableEmpty(std::string const &tableName) const;
+    bool databaseExists(const std::string &databaseName) const;
 
     bool createRole(const std::string &name,
                     const std::string &password,
-                    bool superUser,
-                    PGConnectionPool &pool) const;
-    bool dropRole(const std::string &name,
-                  PGConnectionPool &pool) const;
+                    bool superUser) const;
+    bool dropRole(const std::string &name) const;
     bool createDatabase(const std::string &databaseName,
-                        const std::string &owner,
-                        PGConnectionPool &pool) const;
+                        const std::string &owner) const;
 
-    bool pgCryptoInstalled(std::string const dbName,
-                           PGConnectionPool &pool) const;
-    bool installPGCrypto(const std::string &dbName,
-                         PGConnectionPool &pool) const;
-    bool roleExists(const std::string &roleName,
-                    PGConnectionPool &pool) const;
+    bool pgCryptoInstalled() const;
+    bool installPGCrypto() const;
+    bool roleExists(const std::string &roleName) const;
 };
 
 #endif // PGUTILS_H

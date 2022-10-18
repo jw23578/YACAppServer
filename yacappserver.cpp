@@ -1,5 +1,30 @@
 #include "yacappserver.h"
 #include "pistache/router.h"
+#include "postgres/pgconnection.h"
+#include "postgres/pgutils.h"
+#include "postgres/pgsqlstring.h"
+#include "postgres/pgcommandtransactor.h"
+
+void YACAppServer::createDatabaseTables()
+{
+    PGUtils utils(postgresConnectionPool);
+    std::string t0001_users("t0001_users");
+    if (!utils.tableExists(t0001_users))
+    {
+        std::cout << "creating table " << t0001_users << "\n";
+        PGSqlString sql("create table ");
+        sql += t0001_users;
+        sql += std::string(" ( id uuid, "
+                           " loginemail text, "
+                           " password_hash text, "
+                           " verified timestamp, "
+                           " verify_token text, "
+                           " login_token text, "
+                           " login_token_valid_until timestamp) ");
+        pqxx::result r;
+        PGCommandTransactor ct(postgresConnectionPool, sql, r);
+    }
+}
 
 YACAppServer::YACAppServer(std::string const &postgresHost,
                            int postgresPort,
@@ -14,11 +39,32 @@ YACAppServer::YACAppServer(std::string const &postgresHost,
                            postgresUser,
                            postgresPassword,
                            10),
-    handlerRegister(*this)
+    databaseLogic(postgresConnectionPool),
+    handlerRegister(databaseLogic, *this)
 
 {
-//    Pistache::Rest::Routes::Post(router, "/login", Pistache::Rest::Routes::bind(&YACAppServer::loginMethod, this));
-//    Pistache::Rest::Routes::Post(router, "/uploadAPP", Pistache::Rest::Routes::bind(&YACAppServer::uploadAPPMethod, this));
-//    Pistache::Rest::Routes::Get(router, "/getAPP", Pistache::Rest::Routes::bind(&YACAppServer::getAPPMethod, this));
+    std::cout << "Checking Databaseconnection\n";
+    try
+    {
+        PGConnection connection(postgresConnectionPool);
+    }
+    catch (...)
+    {
+        std::cout << "Databaseconnection is not ok\n";
+        std::cout << "exiting\n";
+        return;
+    }
+    std::cout << "Databaseconnection is ok\n";
+    std::cout << "Checking for PGCrypto installed\n";
+    PGUtils utils(postgresConnectionPool);
+    if (!utils.pgCryptoInstalled())
+    {
+        std::cout << "PGCrypto is not installed\n";
+        std::cout << "exiting\n";
+        return;
+    }
+    std::cout << "PGCrypto is installed\n";
+    createDatabaseTables();
+    std::cout << "Start Serving on Port: " << port << "\n";
     serve();
 }
