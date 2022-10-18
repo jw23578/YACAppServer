@@ -1,7 +1,19 @@
 #include "yacappserver.h"
 #include "pistache/router.h"
 
-YACAppServer::YACAppServer(int port):PistacheServerInterface(port),
+YACAppServer::YACAppServer(std::string const &postgresHost,
+                           int postgresPort,
+                           std::string const &postgresDBName,
+                           std::string const &postgresUser,
+                           std::string const &postgresPassword,
+                           int port):
+    PistacheServerInterface(port),
+    postgresConnectionPool(postgresHost,
+                           postgresPort,
+                           postgresDBName,
+                           postgresUser,
+                           postgresPassword,
+                           10),
     handlerRegister(*this)
 
 {

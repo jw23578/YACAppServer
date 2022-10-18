@@ -3,6 +3,8 @@ CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
+DEFINES += RAPIDJSON_HAS_STDSTRING
+
 LIBS += \
     -lpistache \
     -L /usr/local/lib \
@@ -23,6 +25,7 @@ SOURCES += \
         postgres/pgsqlstring.cpp \
         postgres/pgutils.cpp \
         sole/sole.cpp \
+        utils/extrapidjson.cpp \
         utils/extstring.cpp \
         main.cpp \
         postgres/pgconnectionpool.cpp \
@@ -42,5 +45,9 @@ HEADERS += \
   postgres/pgutils.h \
   sole/sole.hpp \
   utils/definitions.h \
+  utils/extrapidjson.h \
   utils/extstring.h \
   yacappserver.h
+
+DISTFILES += \
+  YACAppServerConfig.json
