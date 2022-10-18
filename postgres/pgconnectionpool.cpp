@@ -50,11 +50,7 @@ PGConnectionPool::PGConnectionPool(const std::string &h,
 {
 }
 
-std::string PGConnectionPool::generateConnstring(const std::string &dbName,
-                                                 const std::string &user,
-                                                 const std::string &password,
-                                                 const std::string &host,
-                                                 int port) const
+std::string PGConnectionPool::generateConnstring() const
 {
     std::stringstream connstring;
     connstring << std::string(" host=") << host;
@@ -104,11 +100,7 @@ pqxx::connection *PGConnectionPool::getConnection()
     }
     PGConnectionContainer c;
     c.inUse = true;
-    std::string cs(generateConnstring(dbName,
-                                      user,
-                                      password,
-                                      host,
-                                      port));
+    std::string cs(generateConnstring());
     c.conn = new pqxx::connection(cs.c_str());
     connections.push_back(c);
     return c.conn;

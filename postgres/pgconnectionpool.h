@@ -43,11 +43,7 @@ public:
                      std::string const &pwd,
                      size_t ms);
 
-    std::string generateConnstring(const std::string &dbName,
-                                   const std::string &user,
-                                   const std::string &password,
-                                   const std::string &host,
-                                   int port) const;
+    std::string generateConnstring() const;
 
     /*    pqxx::result execDirect(PGSqlString const &sql,
                             bool noTransaction,
