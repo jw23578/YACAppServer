@@ -3,12 +3,16 @@
 
 #include "interfaces/pistachehandlerinterface.h"
 #include "databaselogic.h"
+#include "emaillogic.h"
 
 class HandlerRegister : public PistacheHandlerInterface
 {
     DatabaseLogic &databaseLogic;
+    EMailLogic &emailLogic;
 public:
-    HandlerRegister(DatabaseLogic &databaseLogic, PistacheServerInterface &serverInterface);
+    HandlerRegister(DatabaseLogic &databaseLogic,
+                    EMailLogic &emailLogic,
+                    PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:

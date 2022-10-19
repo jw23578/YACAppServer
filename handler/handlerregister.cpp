@@ -1,11 +1,13 @@
 #include "handlerregister.h"
 
 HandlerRegister::HandlerRegister(DatabaseLogic &databaseLogic,
+                                 EMailLogic &emailLogic,
                                  PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/register",
                              TypePost),
-    databaseLogic(databaseLogic)
+    databaseLogic(databaseLogic),
+    emailLogic(emailLogic)
 {
 
 }
@@ -20,6 +22,7 @@ void HandlerRegister::method()
         answer(Pistache::Http::Code::Bad_Request, "loginEMail already exists and cannot be registered again");
         return;
     }
-    std::cout << databaseLogic.createUser(loginEMail, password);
+    std::string verifyToken(databaseLogic.createUser(loginEMail, password));
+    emailLogic.sendPleaseVerifyMail(loginEMail, verifyToken);
     answer(Pistache::Http::Code::Ok, "user registered, please verify");
 }

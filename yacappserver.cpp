@@ -6,7 +6,9 @@ YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
     PistacheServerInterface(port),
     databaseLogic(databaseLogic),
     emailLogic(emailLogic),
-    handlerRegister(databaseLogic, *this)
+    handlerRegister(databaseLogic,
+                    emailLogic,
+                    *this)
 
 {
     std::cout << "Checking Databaseconnection\n";

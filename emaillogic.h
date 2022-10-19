@@ -18,6 +18,9 @@ public:
                std::string smtpHost,
                std::string smtpUser,
                std::string smtpPassword);
+
+    void sendPleaseVerifyMail(const std::string &loginEMail,
+                              const std::string &verifyToken);
 };
 
 #endif // EMAILLOGIC_H

@@ -1,4 +1,5 @@
 #include "emaillogic.h"
+#include "jw78smtpwrapper.h"
 
 EMailLogic::EMailLogic(std::string smtpSenderName,
                        std::string smtpSenderEMail,
@@ -14,4 +15,20 @@ EMailLogic::EMailLogic(std::string smtpSenderName,
     smtpPassword(smtpPassword)
 {
 
+}
+
+void EMailLogic::sendPleaseVerifyMail(const std::string &loginEMail,
+                                      const std::string &verifyToken)
+{
+    jw78::SMTPWrapper *smtp(new jw78::SMTPWrapper);
+    smtp->createEmptyEMail("Please Verify your Account",
+                           verifyToken,
+                           smtpSenderName,
+                           smtpSenderEMail);
+    smtp->to_addr.push_back(loginEMail);
+    smtp->reply_to = smtpReplyTo;
+    smtp->host = smtpHost;
+    smtp->user = smtpUser;
+    smtp->password = smtpPassword;
+    smtp->send();
 }
