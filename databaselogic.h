@@ -9,6 +9,7 @@ class DatabaseLogic
 public:
     DatabaseLogic(PGConnectionPool &pool);
 
+    void createDatabaseTables();
     bool userExists(const std::string &loginEMail);
     std::string createUser(const std::string &loginEMail,
                            const std::string &password);

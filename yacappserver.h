@@ -15,7 +15,6 @@ class YACAppServer: public PistacheServerInterface
     HandlerRegister handlerRegister;
 
     void getAPPMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
-    void createDatabaseTables();
 public:
     YACAppServer(std::string const &postgresHost,
                  int postgresPort,
