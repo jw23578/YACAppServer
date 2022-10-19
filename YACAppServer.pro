@@ -22,6 +22,7 @@ SOURCES += \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
         databaselogic.cpp \
+        emaillogic.cpp \
         handler/handlergetapp.cpp \
         handler/handlerlogin.cpp \
         handler/handlerregister.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \
   databaselogic.h \
+  emaillogic.h \
   handler/handlergetapp.h \
   handler/handlerlogin.h \
   handler/handlerregister.h \

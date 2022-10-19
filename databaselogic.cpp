@@ -9,6 +9,25 @@ DatabaseLogic::DatabaseLogic(PGConnectionPool &pool):pool(pool)
 
 }
 
+bool DatabaseLogic::connectionOk()
+{
+    try
+    {
+        PGConnection connection(pool);
+    }
+    catch (...)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool DatabaseLogic::pgCryptoInstalled()
+{
+    PGUtils utils(pool);
+    return utils.pgCryptoInstalled();
+}
+
 void DatabaseLogic::createDatabaseTables()
 {
     PGUtils utils(pool);

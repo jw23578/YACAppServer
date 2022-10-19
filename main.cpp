@@ -4,6 +4,9 @@
 #include <rapidjson/istreamwrapper.h>
 #include <fstream>
 #include "utils/extrapidjson.h"
+#include "postgres/pgconnectionpool.h"
+#include "databaselogic.h"
+#include "emaillogic.h"
 
 using namespace std;
 
@@ -29,11 +32,23 @@ int main(int argc, char **argv)
         return 1;
     }
     ExtRapidJSON json(configJSON);
-    YACAppServer server(json.getString("postgresHost"),
-            json.getInt("postgresPort"),
-            json.getString("postgresDBName"),
-            json.getString("postgresUser"),
-            json.getString("postgresPassword"),
-            json.getInt("serverPort"));
+
+    PGConnectionPool pool(json.getString("postgresHost"),
+                          json.getInt("postgresPort"),
+                          json.getString("postgresDBName"),
+                          json.getString("postgresUser"),
+                          json.getString("postgresPassword"),
+                          10);
+    DatabaseLogic databaseLogic(pool);
+    EMailLogic emailLogic(json.getString("smtpSenderName"),
+                          json.getString("smtpSenderEMail"),
+                          json.getString("smtpReplyTo"),
+                          json.getString("smtpHost"),
+                          json.getString("smtpUser"),
+                          json.getString("smtpPassword"));
+
+    YACAppServer server(databaseLogic,
+                        emailLogic,
+                        json.getInt("serverPort"));
     return 0;
 }
