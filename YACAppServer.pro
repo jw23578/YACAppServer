@@ -56,4 +56,4 @@ HEADERS += \
 DISTFILES += \
   YACAppServerConfig.json \
   curl-format.txt \
-  doc.txt
+  intern_doc.txt
