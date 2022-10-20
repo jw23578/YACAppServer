@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <set>
+#include <chrono>
 
 class ExtString
 {
@@ -105,6 +106,8 @@ public:
         return ss.str();
     }
     static std::string urlDecode(std::string &src);
+
+    static std::chrono::system_clock::time_point toTimepoint(const std::string &s);
 };
 
 #endif // EXTSTRING_H

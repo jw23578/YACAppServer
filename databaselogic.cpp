@@ -82,3 +82,37 @@ std::string DatabaseLogic::createUser(const std::string &loginEMail,
     PGCommandTransactor ct(pool, sql, r);
     return verify_token;
 }
+
+bool DatabaseLogic::verfiyUser(const std::string &loginEMail,
+                               const std::string &verifyToken,
+                               std::string &message,
+                               std::string &loginToken)
+{
+    PGSqlString sql("select * from t0001_users "
+                    "where loginemail = :loginemail ");
+    sql.set("loginemail", loginEMail);
+    pqxx::result r;
+    PGCommandTransactor ct(pool, sql, r);
+    if (r.size() == 0)
+    {
+        message = std::string("no user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
+        return false;
+    }
+    if (r.size() > 1)
+    {
+        message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
+        return false;
+    }
+    const pqxx::row &row(r[0]);
+    if (row["verify_token"].get<std::string>() != verifyToken)
+    {
+        message = std::string("wrong verifyToken");
+        return false;
+    }
+    std::chrono::system_clock::time_point verify_token_valid_until(ExtString::toTimepoint(row["verify_token_valid_until"].c_str()));
+    if (verify_token_valid_until < std::chrono::system_clock::now())
+    {
+        message = std::string("verify token not valid any more");
+        return false;
+    }
+}

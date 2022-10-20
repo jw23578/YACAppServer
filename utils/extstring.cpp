@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <regex>
 #include <stdlib.h>
+#include <iomanip>
 
 ExtString::ExtString()
 {
@@ -423,4 +424,22 @@ std::string ExtString::urlDecode(std::string &src)
         }
     }
     return ret;
+}
+
+std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &s)
+{
+    std::stringstream ss(s);
+    std::tm tm;
+    std::chrono::system_clock::time_point time;
+    double fraction;
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> fraction;
+    if (!ss)
+    {
+        return std::chrono::system_clock::now();
+    }
+    time_t secondsSinceEpoch = mktime(&tm);
+    int64_t microseconds = fraction * 1'000'000;
+    std::chrono::milliseconds milliseconds(secondsSinceEpoch * 1000);
+    std::chrono::system_clock::time_point tp(milliseconds);
+    return tp;
 }

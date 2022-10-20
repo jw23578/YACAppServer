@@ -2,7 +2,8 @@
 #define YACAPPSERVER_H
 
 #include "interfaces/pistacheserverinterface.h"
-#include "handler/handlerregister.h"
+#include "handler/handlerregisteruser.h"
+#include "handler/handlerverifyuser.h"
 #include "databaselogic.h"
 #include "emaillogic.h"
 
@@ -10,7 +11,8 @@ class YACAppServer: public PistacheServerInterface
 {
     DatabaseLogic &databaseLogic;
     EMailLogic &emailLogic;
-    HandlerRegister handlerRegister;
+    HandlerRegisterUser handlerRegister;
+    HandlerVerifyUser handlerVerifyUser;
 
 public:
     YACAppServer(DatabaseLogic &databaseLogic,

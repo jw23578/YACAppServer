@@ -14,6 +14,7 @@ LIBS += \
 INCLUDEPATH += utils
 INCLUDEPATH += postgres
 INCLUDEPATH += curlWrapper
+INCLUDEPATH += interfaces
 
 SOURCES += \
         curlWrapper/jw78curlwrapper.cpp \
@@ -25,8 +26,9 @@ SOURCES += \
         emaillogic.cpp \
         handler/handlergetapp.cpp \
         handler/handlerlogin.cpp \
-        handler/handlerregister.cpp \
+        handler/handlerregisteruser.cpp \
         handler/handleruploadapp.cpp \
+        handler/handlerverifyuser.cpp \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
@@ -36,6 +38,7 @@ SOURCES += \
         postgres/pgutils.cpp \
         sole/sole.cpp \
         utils/base64.cpp \
+        utils/extmap.cpp \
         utils/extrapidjson.cpp \
         utils/extstring.cpp \
         main.cpp \
@@ -53,8 +56,9 @@ HEADERS += \
   emaillogic.h \
   handler/handlergetapp.h \
   handler/handlerlogin.h \
-  handler/handlerregister.h \
+  handler/handlerregisteruser.h \
   handler/handleruploadapp.h \
+  handler/handlerverifyuser.h \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
@@ -66,6 +70,7 @@ HEADERS += \
   sole/sole.hpp \
   utils/base64.h \
   utils/definitions.h \
+  utils/extmap.h \
   utils/extrapidjson.h \
   utils/extstring.h \
   utils/extvector.h \

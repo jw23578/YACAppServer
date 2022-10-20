@@ -15,6 +15,11 @@ public:
     bool userExists(const std::string &loginEMail);
     std::string createUser(const std::string &loginEMail,
                            const std::string &password);
+
+    bool verfiyUser(const std::string &loginEMail,
+                    const std::string &verifyToken,
+                    std::string &message,
+                    std::string &loginToken);
 };
 
 #endif // DATABASELOGIC_H
