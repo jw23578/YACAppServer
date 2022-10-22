@@ -50,7 +50,6 @@ bool DatabaseLogic::pgCryptoInstalled()
 void DatabaseLogic::createDatabaseTables()
 {
     PGUtils utils(pool);
-    std::string t0001_users("t0001_users");
     if (!utils.tableExists(t0001_users))
     {
         PGSqlString sql("create table ");
@@ -66,11 +65,22 @@ void DatabaseLogic::createDatabaseTables()
                            " primary key (id)) ");
         PGExecutor e(pool, sql);
     }
-    if (!utils.indexExists("t0001_users", "t0001_user_i1"))
+    std::string t0001_user_i1("t0001_user_i1");
+    utils.createIndex(t0001_users, t0001_user_i1, "(loginemail)");
+
+    if (!utils.tableExists(t0002_apps))
     {
-        PGSqlString sql("create index t0001_user_i1 on t0001_users (loginemail)");
+        PGSqlString sql("create table ");
+        sql += t0002_apps;
+        sql += std::string("( id uuid, "
+                           "appId uuid, "
+                           "json_yacapp text, "
+                           "yacpck_base64 text, "
+                           "primary key (id))");
         PGExecutor e(pool, sql);
     }
+    std::string t0002_apps_i1;
+    utils.createIndex(t0002_apps, t0002_apps_i1, "(appId)");
 }
 
 
@@ -194,4 +204,20 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
     sql.set("loginEMail", loginEMail);
     PGExecutor e(pool, sql);
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
+}
+
+void DatabaseLogic::saveApp(const std::string &appId,
+                            const std::string &json_yacapp,
+                            const std::string &yacpck_base64)
+{
+    std::string appIdField("appId");
+    PGUtils utils(pool);
+    PGSqlString sql(utils.entryExists(t0002_apps, appIdField, appId) ?
+                        utils.createUpdateString(t0002_apps, appIdField) :
+                        utils.createInsertString(t0002_apps));
+    sql.set("id", sole::uuid4());
+    MACRO_set(appId);
+    MACRO_set(json_yacapp);
+    MACRO_set(yacpck_base64);
+    PGExecutor e(pool, sql);
 }

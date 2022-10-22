@@ -2,11 +2,14 @@
 #define HANDLERUPLOADAPP_H
 
 #include "handlerloggedininterface.h"
+#include "databaselogic.h"
 
 class HandlerUploadApp : public HandlerLoggedInInterface
 {
+    DatabaseLogic &databaseLogic;
 public:
-    HandlerUploadApp(PistacheServerInterface &serverInterface,
+    HandlerUploadApp(DatabaseLogic &databaseLogic,
+                     PistacheServerInterface &serverInterface,
                      LoggedInUsersContainer &loggedInUsersContainer);
 
     // PistacheHandlerInterface interface

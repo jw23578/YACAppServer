@@ -9,7 +9,7 @@ class LoginTokenHeader : public Pistache::Http::Header::Header
 public:
 public:
     std::string value;
-    NAME("YACAPP-LoginEMail");
+    NAME("YACAPP-LoginToken");
     LoginTokenHeader();
 
     void parse(const std::string &data) override;

@@ -4,12 +4,12 @@
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
+    this->request = &request;
+    this->response = &response;
     if (loginNeeded == TypeLoginNeeded && !checkLogin())
     {
         return;
     }
-    this->request = &request;
-    this->response = &response;
     if (handlerType == TypePost)
     {
         postedData.Parse(request.body().c_str());

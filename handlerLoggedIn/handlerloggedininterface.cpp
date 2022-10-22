@@ -6,7 +6,7 @@ HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serv
                                                    const std::string &methodName,
                                                    HandlerType type,
                                                    LoggedInUsersContainer &loggedInUsersContainer):
-    PistacheHandlerInterface(serverInterface, methodName, type, TypeNoLoginNeeded),
+    PistacheHandlerInterface(serverInterface, methodName, type, TypeLoginNeeded),
     loggedInUsersContainer(loggedInUsersContainer)
 {
 

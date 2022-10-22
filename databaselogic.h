@@ -8,6 +8,9 @@ class DatabaseLogic
     PGConnectionPool &pool;
     void loginSuccessful(const std::string &loginEMail,
                          std::string &loginToken);
+
+    const std::string t0001_users = {"t0001_users"};
+    const std::string t0002_apps = {"t0002_apps"};
 public:
     DatabaseLogic(PGConnectionPool &pool);
 
@@ -34,6 +37,10 @@ public:
 
     void refreshLoginToken(const std::string &loginEMail,
                            std::chrono::system_clock::time_point &loginTokenValidUntil);
+
+    void saveApp(const std::string &appId,
+                   const std::string &json_yacapp,
+                   const std::string &yacpck_base64);
 };
 
 #endif // DATABASELOGIC_H
