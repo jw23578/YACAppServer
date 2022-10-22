@@ -2,9 +2,12 @@
 #define PGUTILS_H
 
 #include "pgconnectionpool.h"
+#include "pgsqlstring.h"
 
 class PGUtils
 {
+    static std::map<std::string, PGSqlString> tableName2InsertString;
+    static std::map<std::string, PGSqlString> tableName2UpdateString;
     PGConnectionPool &pool;
 public:
     PGUtils(PGConnectionPool &pool);
@@ -34,6 +37,10 @@ public:
     bool entryExists(const std::string &tableName,
                      const std::string &needleField,
                      const std::string &needleValue);
+
+    PGSqlString createInsertString(const std::string &tableName);
+    PGSqlString createUpdateString(const std::string &tableName,
+                                   const std::string &needleField);
 };
 
 #endif // PGUTILS_H

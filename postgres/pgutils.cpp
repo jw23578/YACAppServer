@@ -1,8 +1,11 @@
 #include "pgutils.h"
 #include "pgcommandtransactor.h"
-#include "pgsqlstring.h"
 #include "utils/extstring.h"
 #include "pgexecutor.h"
+
+
+std::map<std::string, PGSqlString> PGUtils::tableName2InsertString;
+std::map<std::string, PGSqlString> PGUtils::tableName2UpdateString;
 
 PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 {
@@ -75,6 +78,72 @@ bool PGUtils::entryExists(const std::string &tableName,
     sql.set(needleField, needleValue);
     PGExecutor e(pool, sql);
     return e.size() > 0;
+}
+
+PGSqlString PGUtils::createInsertString(const std::string &tableName)
+{
+    std::map<std::string, PGSqlString>::iterator it(tableName2InsertString.find(tableName));
+    if (it != tableName2InsertString.end())
+    {
+        return it->second;
+    }
+    PGSqlString sql("select * from ");
+    sql += tableName;
+    sql += " limit 1";
+    PGExecutor e(pool, sql);
+
+    PGSqlString insertSQL("insert into ");
+    insertSQL += tableName;
+    std::string fields(" (");
+    std::string values(") values (:");
+    fields += e.columnName(0);
+    values += e.columnName(0);
+    for (size_t c(1); c < e.columns(); ++c)
+    {
+        fields += ", ";
+        values += ", :";
+        fields += e.columnName(c);
+        values += e.columnName(c);
+    }
+    values += ")";
+    insertSQL += fields;
+    insertSQL += values;
+    tableName2InsertString[tableName] = insertSQL;
+    return insertSQL;
+}
+
+PGSqlString PGUtils::createUpdateString(const std::string &tableName,
+                                        const std::string &needleField)
+{
+    std::map<std::string, PGSqlString>::iterator it(tableName2UpdateString.find(tableName));
+    if (it != tableName2UpdateString.end())
+    {
+        return it->second;
+    }
+    PGSqlString sql("select * from ");
+    sql += tableName;
+    sql += " limit 1";
+    PGExecutor e(pool, sql);
+
+    PGSqlString updateSQL("update ");
+    updateSQL += tableName;
+    updateSQL += " set ";
+    updateSQL += e.columnName(0);
+    updateSQL += " = :";
+    updateSQL += e.columnName(0);
+    for (size_t c(1); c < e.columns(); ++c)
+    {
+        updateSQL +=  ", ";
+        updateSQL +=  e.columnName(c);
+        updateSQL += " = :";
+        updateSQL +=  e.columnName(c);
+    }
+    updateSQL += " where ";
+    updateSQL += ExtString::lower(needleField);
+    updateSQL += " = :";
+    updateSQL += ExtString::lower(needleField);
+    tableName2UpdateString[tableName] = updateSQL;
+    return updateSQL;
 }
 
 bool PGUtils::tableEmpty(const std::string &tableName) const
