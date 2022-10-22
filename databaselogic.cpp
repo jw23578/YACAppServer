@@ -8,10 +8,17 @@
 void DatabaseLogic::loginSuccessful(const std::string &loginEMail,
                                     std::string &loginToken)
 {
+    if (loginToken.size() == 0)
+    {
+        loginToken = sole::uuid4().str();
+    }
+    int validHours(24 * 7);
     PGSqlString sql("update t0001_users "
-                    "set login_token = :login_token "
+                    "set login_token = :login_token, "
+                    "login_token_valid_until = now() + interval '1 hour' *:validHours "
                     "where loginemail = :loginemail");
     sql.set("loginemail", loginEMail);
+    sql.set("validHours", validHours);
     sql.set("login_token", loginToken);
     PGExecutor e(pool, sql);
 }
@@ -55,9 +62,14 @@ void DatabaseLogic::createDatabaseTables()
                            " verify_token text, "
                            " verify_token_valid_until timestamp, "
                            " login_token text, "
-                           " login_token_valid_until timestamp) ");
+                           " login_token_valid_until timestamp,"
+                           " primary key (id)) ");
         PGExecutor e(pool, sql);
-        pqxx::result r;
+    }
+    if (!utils.indexExists("t0001_users", "t0001_user_i1"))
+    {
+        PGSqlString sql("create index t0001_user_i1 on t0001_users (loginemail)");
+        PGExecutor e(pool, sql);
     }
 }
 
@@ -122,4 +134,52 @@ bool DatabaseLogic::verfiyUser(const std::string &loginEMail,
         message = std::string("verify token not valid any more");
         return false;
     }
+    sql = "update t0001_users "
+          "set verified = now(), "
+          "verify_token = '', "
+          "verify_token_valid_until = null "
+          "where loginemail = :loginemail ";
+    sql.set("loginemail", loginEMail);
+    e.exec(sql);
+    loginSuccessful(loginEMail, loginToken);
+    return true;
+}
+
+bool DatabaseLogic::loginUser(const std::string &loginEMail,
+                              const std::string &password,
+                              std::string &message,
+                              std::string &loginToken)
+{
+    PGSqlString sql("select * from t0001_users "
+                    "where loginemail = :loginemail "
+                    "and password_hash = crypt(:password, password_hash) ");
+    sql.set("loginemail", loginEMail);
+    sql.set("password", password);
+    PGExecutor e(pool, sql);
+    if (!e.size())
+    {
+        message = "password or loginemail wrong";
+        return false;
+    }
+    loginToken = e.string("login_token");
+    loginSuccessful(loginEMail, loginToken);
+    return true;
+}
+
+bool DatabaseLogic::userLoggedIn(const std::string &loginEMail,
+                                 const std::string &loginToken,
+                                 std::chrono::system_clock::time_point &loginTokenValidUntil)
+{
+    PGSqlString sql("select * from t0001_users "
+                    "where loginemail = :loginemail "
+                    "and login_token = :login_token");
+    sql.set("login_token", loginToken);
+    sql.set("loginemail", loginEMail);
+    PGExecutor e(pool, sql);
+    if (e.size() == 0)
+    {
+        return false;
+    }
+    loginTokenValidUntil = e.timepoint("login_token_valid_until");
+    return true;
 }

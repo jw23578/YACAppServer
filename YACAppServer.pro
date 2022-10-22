@@ -25,7 +25,7 @@ SOURCES += \
         databaselogic.cpp \
         emaillogic.cpp \
         handler/handlergetapp.cpp \
-        handler/handlerlogin.cpp \
+        handler/handlerloginuser.cpp \
         handler/handlerregisteruser.cpp \
         handler/handleruploadapp.cpp \
         handler/handlerverifyuser.cpp \
@@ -56,7 +56,7 @@ HEADERS += \
   databaselogic.h \
   emaillogic.h \
   handler/handlergetapp.h \
-  handler/handlerlogin.h \
+  handler/handlerloginuser.h \
   handler/handlerregisteruser.h \
   handler/handleruploadapp.h \
   handler/handlerverifyuser.h \

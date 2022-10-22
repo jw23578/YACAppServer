@@ -10,7 +10,9 @@ YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
                     emailLogic,
                     *this),
     handlerVerifyUser(databaseLogic,
-                      *this)
+                      *this),
+    handlerLoginUser(databaseLogic,
+                     *this)
 
 {
     std::cout << "Checking Databaseconnection\n";

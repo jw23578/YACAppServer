@@ -25,6 +25,8 @@ public:
     bool pgCryptoInstalled() const;
     bool installPGCrypto() const;
     bool roleExists(const std::string &roleName) const;
+    bool indexExists(const std::string &tableName,
+                     const std::string &indexName) const;
 };
 
 #endif // PGUTILS_H

@@ -4,9 +4,15 @@
 
 
 PGExecutor::PGExecutor(PGConnectionPool &pool,
-                       const PGSqlString &sql)
+                       const PGSqlString &sql): pool(pool)
 {
     PGCommandTransactor ct(pool, sql, result);
+}
+
+size_t PGExecutor::exec(const PGSqlString &sql)
+{
+    PGCommandTransactor ct(pool, sql, result);
+    return size();
 }
 
 size_t PGExecutor::size()

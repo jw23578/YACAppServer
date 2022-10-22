@@ -22,6 +22,15 @@ public:
                     const std::string &verifyToken,
                     std::string &message,
                     std::string &loginToken);
+
+    bool loginUser(const std::string &loginEMail,
+                   const std::string &password,
+                   std::string &message,
+                   std::string &loginToken);
+
+    bool userLoggedIn(const std::string &loginEMail,
+                      const std::string &loginToken,
+                      std::chrono::system_clock::time_point &loginTokenValidUntil);
 };
 
 #endif // DATABASELOGIC_H

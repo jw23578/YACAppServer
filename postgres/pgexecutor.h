@@ -7,11 +7,14 @@
 
 class PGExecutor
 {
+    PGConnectionPool &pool;
     pqxx::result result;
     size_t currentRow = {0};
 public:
     PGExecutor(PGConnectionPool &pool,
                PGSqlString const &sql);
+
+    size_t exec(PGSqlString const &sql);
 
     size_t size();
 

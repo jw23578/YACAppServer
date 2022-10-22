@@ -2,6 +2,7 @@
 #include "pgcommandtransactor.h"
 #include "pgsqlstring.h"
 #include "utils/extstring.h"
+#include "pgexecutor.h"
 
 PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 {
@@ -30,6 +31,19 @@ bool PGUtils::tableExists(const std::string &tableName) const
                            sql,
                            result);
     return result.size() > 0;
+}
+
+bool PGUtils::indexExists(const std::string &tableName,
+                          const std::string &indexName) const
+{
+    PGSqlString sql("select indexname from pg_indexes ");
+    sql += "where schemaname = 'public' ";
+    sql += "and tablename = :tableName "
+           "and indexname = :indexName ";
+    sql.set("tableName", ExtString::lower(tableName));
+    sql.set("indexName", ExtString::lower(indexName));
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
 }
 
 bool PGUtils::tableEmpty(const std::string &tableName) const
