@@ -40,9 +40,11 @@ public:
     void refreshLoginToken(const std::string &loginEMail,
                            std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    void saveApp(const std::string &appId,
-                   const std::string &json_yacapp,
-                   const std::string &yacpck_base64);
+    bool saveApp(const sole::uuid userId,
+                 const std::string &appId,
+                 const std::string &json_yacapp,
+                 const std::string &yacpck_base64,
+                 std::string &message);
 };
 
 #endif // DATABASELOGIC_H

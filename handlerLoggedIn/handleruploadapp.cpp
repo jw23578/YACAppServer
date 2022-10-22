@@ -18,9 +18,16 @@ void HandlerUploadApp::method()
     MACRO_GetMandatoryPostString(json_yacapp);
     MACRO_GetMandatoryPostString(yacpck_base64);
 
-    databaseLogic.saveApp(appId,
+    std::string message;
+    if (!databaseLogic.saveApp(userId,
+                          appId,
                           json_yacapp,
-                          yacpck_base64);
+                          yacpck_base64,
+                          message))
+    {
+        answer(Pistache::Http::Code::Bad_Request, message);
+        return;
+    }
 
     answer(Pistache::Http::Code::Ok, "new yacApp stored");
 }

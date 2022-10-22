@@ -74,6 +74,7 @@ void DatabaseLogic::createDatabaseTables()
         sql += t0002_apps;
         sql += std::string("( id uuid, "
                            "appId uuid, "
+                           "ownerId uuid, "
                            "json_yacapp text, "
                            "yacpck_base64 text, "
                            "primary key (id))");
@@ -208,18 +209,36 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
 
-void DatabaseLogic::saveApp(const std::string &appId,
+bool DatabaseLogic::saveApp(const sole::uuid userId,
+                            const std::string &appId,
                             const std::string &json_yacapp,
-                            const std::string &yacpck_base64)
+                            const std::string &yacpck_base64,
+                            std::string &message)
 {
     std::string appIdField("appId");
     PGUtils utils(pool);
-    PGSqlString sql(utils.entryExists(t0002_apps, appIdField, appId) ?
-                        utils.createUpdateString(t0002_apps, appIdField) :
-                        utils.createInsertString(t0002_apps));
-    sql.set("id", sole::uuid4());
+    PGSqlString sql(utils.createEntryExistsString(t0002_apps, appIdField));
+    MACRO_set(appId);
+    PGExecutor e(pool, sql);
+    if (e.size())
+    {
+        if (e.uuid("ownerid") != userId)
+        {
+            message = "user is not app owner";
+            return false;
+        }
+        sql = utils.createUpdateString(t0002_apps, appIdField);
+        sql.set("id", e.uuid("id"));
+    }
+    else
+    {
+        sql = utils.createInsertString(t0002_apps);
+        sql.set("id", sole::uuid4());
+    }
+    sql.set("ownerid", userId);
     MACRO_set(appId);
     MACRO_set(json_yacapp);
     MACRO_set(yacpck_base64);
-    PGExecutor e(pool, sql);
+    PGExecutor insertOrUpdate(pool, sql);
+    return true;
 }

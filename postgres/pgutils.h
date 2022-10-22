@@ -34,9 +34,8 @@ public:
                      const std::string &indexName,
                      const std::string &definition) const;
 
-    bool entryExists(const std::string &tableName,
-                     const std::string &needleField,
-                     const std::string &needleValue);
+    PGSqlString createEntryExistsString(const std::string &tableName,
+                                        const std::string &needleField);
 
     PGSqlString createInsertString(const std::string &tableName);
     PGSqlString createUpdateString(const std::string &tableName,

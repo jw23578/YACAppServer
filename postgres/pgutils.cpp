@@ -64,20 +64,17 @@ void PGUtils::createIndex(const std::string &tableName, const std::string &index
     PGExecutor e(pool, sql);
 }
 
-bool PGUtils::entryExists(const std::string &tableName,
-                          const std::string &needleField,
-                          const std::string &needleValue)
+PGSqlString PGUtils::createEntryExistsString(const std::string &tableName,
+                                             const std::string &needleField)
 {
-    PGSqlString sql("select 1 from ");
+    PGSqlString sql("select * from ");
     sql += tableName;
     sql += " where ";
-    sql += needleField;
+    sql += ExtString::lower(needleField);
     sql += " = :";
-    sql += needleField;
+    sql += ExtString::lower(needleField);
     sql += " limit 1";
-    sql.set(needleField, needleValue);
-    PGExecutor e(pool, sql);
-    return e.size() > 0;
+    return sql;
 }
 
 PGSqlString PGUtils::createInsertString(const std::string &tableName)
