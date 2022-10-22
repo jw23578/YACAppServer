@@ -17,6 +17,9 @@ public:
     size_t exec(PGSqlString const &sql);
 
     size_t size();
+    size_t columns();
+
+    std::string columnName(size_t c);
 
     std::string string(const std::string &fieldname);
     std::chrono::system_clock::time_point timepoint(const std::string &fieldname);

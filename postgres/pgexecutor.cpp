@@ -20,6 +20,16 @@ size_t PGExecutor::size()
     return result.size();
 }
 
+size_t PGExecutor::columns()
+{
+    return result.columns();
+}
+
+std::string PGExecutor::columnName(size_t c)
+{
+    return result.column_name(c);
+}
+
 std::string PGExecutor::string(const std::string &fieldname)
 {
     const pqxx::row &row(result[currentRow]);
