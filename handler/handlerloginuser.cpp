@@ -5,7 +5,8 @@ HandlerLoginUser::HandlerLoginUser(DatabaseLogic &databaseLogic,
                                    PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/loginUser",
-                             TypePost),
+                             TypePost,
+                             TypeNoLoginNeeded),
     databaseLogic(databaseLogic)
 {
 

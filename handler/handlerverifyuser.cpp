@@ -3,7 +3,10 @@
 
 HandlerVerifyUser::HandlerVerifyUser(DatabaseLogic &databaseLogic,
                                      PistacheServerInterface &serverInterface):
-    PistacheHandlerInterface(serverInterface, "/verifyUser", TypePost),
+    PistacheHandlerInterface(serverInterface,
+                             "/verifyUser",
+                             TypePost,
+                             TypeNoLoginNeeded),
     databaseLogic(databaseLogic)
 {
 

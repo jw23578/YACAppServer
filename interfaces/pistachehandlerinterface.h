@@ -31,9 +31,18 @@ public:
         TypeDelete
     };
     HandlerType handlerType;
+
+    enum LoginNeededType
+    {
+        TypeNoLoginNeeded,
+        TypeLoginNeeded
+    };
+    LoginNeededType loginNeeded;
+
     PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                              const std::string &methodName,
-                             HandlerType type);
+                             HandlerType type,
+                             LoginNeededType loginNeeded);
 
     bool getString(std::string const &name,
                    std::string &target,

@@ -3,7 +3,8 @@
 HandlerUploadAPP::HandlerUploadAPP(PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/uploadAPP",
-                             TypePost)
+                             TypePost,
+                             TypeLoginNeeded)
 {
 
 }

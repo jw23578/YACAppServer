@@ -41,7 +41,9 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                                                    std::string const &methodName,
-                                                   HandlerType type):request(0), response(0), handlerType(type)
+                                                   HandlerType type,
+                                                   LoginNeededType loginNeeded):request(0), response(0), handlerType(type),
+    loginNeeded(loginNeeded)
 {
     if (type == TypeDelete)
     {

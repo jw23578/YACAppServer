@@ -5,7 +5,8 @@ HandlerRegisterUser::HandlerRegisterUser(DatabaseLogic &databaseLogic,
                                  PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/registerUser",
-                             TypePost),
+                             TypePost,
+                             TypeNoLoginNeeded),
     databaseLogic(databaseLogic),
     emailLogic(emailLogic)
 {

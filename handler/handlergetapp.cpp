@@ -3,7 +3,8 @@
 HandlerGetAPP::HandlerGetAPP(PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/getAPP",
-                             TypeGet)
+                             TypeGet,
+                             TypeNoLoginNeeded)
 {
 
 }
