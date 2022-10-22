@@ -31,6 +31,9 @@ public:
     bool userLoggedIn(const std::string &loginEMail,
                       const std::string &loginToken,
                       std::chrono::system_clock::time_point &loginTokenValidUntil);
+
+    void refreshLoginToken(const std::string &loginEMail,
+                           std::chrono::system_clock::time_point &loginTokenValidUntil);
 };
 
 #endif // DATABASELOGIC_H

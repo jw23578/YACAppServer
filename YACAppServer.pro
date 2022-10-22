@@ -32,6 +32,7 @@ SOURCES += \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
+        loggedinuserscontainer.cpp \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
         postgres/pgexecutor.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
+  loggedinuserscontainer.h \
   postgres/pgcommandtransactor.h \
   postgres/pgconnection.h \
   postgres/pgconnectionpool.h \

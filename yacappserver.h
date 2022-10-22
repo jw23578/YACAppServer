@@ -7,14 +7,17 @@
 #include "handler/handlerloginuser.h"
 #include "databaselogic.h"
 #include "emaillogic.h"
+#include "loggedinuserscontainer.h"
 
 class YACAppServer: public PistacheServerInterface
 {
     DatabaseLogic &databaseLogic;
     EMailLogic &emailLogic;
+    LoggedInUsersContainer loggedInUsersContainer;
     HandlerRegisterUser handlerRegister;
     HandlerVerifyUser handlerVerifyUser;
     HandlerLoginUser handlerLoginUser;
+
 
 public:
     YACAppServer(DatabaseLogic &databaseLogic,

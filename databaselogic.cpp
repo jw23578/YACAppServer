@@ -183,3 +183,15 @@ bool DatabaseLogic::userLoggedIn(const std::string &loginEMail,
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
     return true;
 }
+
+void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
+                                      std::chrono::system_clock::time_point &loginTokenValidUntil)
+{
+    PGSqlString sql("update t0001_users "
+                    "set login_token_valid_until = now() + interval '1 hour' *:validHours "
+                    "where loginemail = :loginemail "
+                    "returning login_token_valid_until");
+    sql.set("loginEMail", loginEMail);
+    PGExecutor e(pool, sql);
+    loginTokenValidUntil = e.timepoint("login_token_valid_until");
+}
