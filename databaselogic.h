@@ -6,6 +6,8 @@
 class DatabaseLogic
 {
     PGConnectionPool &pool;
+    void loginSuccessful(const std::string &loginEMail,
+                         std::string &loginToken);
 public:
     DatabaseLogic(PGConnectionPool &pool);
 

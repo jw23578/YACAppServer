@@ -1,4 +1,4 @@
-#include "handlerregister.h"
+#include "handlerregisteruser.h"
 
 HandlerRegisterUser::HandlerRegisterUser(DatabaseLogic &databaseLogic,
                                  EMailLogic &emailLogic,

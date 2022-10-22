@@ -34,6 +34,7 @@ SOURCES += \
         interfaces/pistacheserverinterface.cpp \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
+        postgres/pgexecutor.cpp \
         postgres/pgsqlstring.cpp \
         postgres/pgutils.cpp \
         sole/sole.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
   postgres/pgcommandtransactor.h \
   postgres/pgconnection.h \
   postgres/pgconnectionpool.h \
+  postgres/pgexecutor.h \
   postgres/pgsqlstring.h \
   postgres/pgutils.h \
   sole/sole.hpp \
