@@ -27,6 +27,13 @@ public:
     bool roleExists(const std::string &roleName) const;
     bool indexExists(const std::string &tableName,
                      const std::string &indexName) const;
+    void createIndex(const std::string &tableName,
+                     const std::string &indexName,
+                     const std::string &definition) const;
+
+    bool entryExists(const std::string &tableName,
+                     const std::string &needleField,
+                     const std::string &needleValue);
 };
 
 #endif // PGUTILS_H

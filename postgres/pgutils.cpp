@@ -46,6 +46,37 @@ bool PGUtils::indexExists(const std::string &tableName,
     return e.size() > 0;
 }
 
+void PGUtils::createIndex(const std::string &tableName, const std::string &indexName, const std::string &definition) const
+{
+    if (indexExists(tableName, indexName))
+    {
+        return;
+    }
+    PGSqlString sql("create index ");
+    sql += indexName;
+    sql += " on ";
+    sql += tableName;
+    sql += " ";
+    sql += definition;
+    PGExecutor e(pool, sql);
+}
+
+bool PGUtils::entryExists(const std::string &tableName,
+                          const std::string &needleField,
+                          const std::string &needleValue)
+{
+    PGSqlString sql("select 1 from ");
+    sql += tableName;
+    sql += " where ";
+    sql += needleField;
+    sql += " = :";
+    sql += needleField;
+    sql += " limit 1";
+    sql.set(needleField, needleValue);
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
+}
+
 bool PGUtils::tableEmpty(const std::string &tableName) const
 {
     PGSqlString sql("select * from ");
