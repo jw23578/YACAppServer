@@ -9,7 +9,7 @@
     if (!getPostString(#targetName, targetName, true) || !targetName.size()) \
 { \
     return; \
-}
+    }
 
 class PistacheHandlerInterface
 {
@@ -51,6 +51,32 @@ public:
                        std::string &target,
                        bool ifMissingThenSendResponse);
     virtual void method() = 0;
+    virtual bool checkLogin();
+
+    template<class T>
+    bool getHeaderString(std::string &target,
+                                bool ifMissingThenSendResponse)
+    {
+        auto &headers(request->headers());
+        if (!headers.has<T>())
+        {
+            if (ifMissingThenSendResponse)
+            {
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name());
+            }
+            return false;
+        }
+        target = headers.get<T>()->value;
+        if (!target.size())
+        {
+            if (ifMissingThenSendResponse)
+            {
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name());
+            }
+            return false;
+        }
+        return true;
+    }
 };
 
 #endif // PISTACHEHANDLERINTERFACE_H

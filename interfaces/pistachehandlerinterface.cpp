@@ -4,6 +4,10 @@
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
+    if (loginNeeded == TypeLoginNeeded && !checkLogin())
+    {
+        return;
+    }
     this->request = &request;
     this->response = &response;
     if (handlerType == TypePost)
@@ -74,5 +78,10 @@ bool PistacheHandlerInterface::getPostString(const std::string &name,
 {
     ExtRapidJSON postData(postedData);
     return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
+}
+
+bool PistacheHandlerInterface::checkLogin()
+{
+    return true;
 }
 

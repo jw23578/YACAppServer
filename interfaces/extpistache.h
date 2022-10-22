@@ -47,33 +47,6 @@ public:
                            std::string const &name,
                            int &target,
                            bool ifMissingThenSendResponse);
-
-    template<class T>
-    static bool getNexusHeaderString(const Pistache::Rest::Request &request,
-                                     Pistache::Http::ResponseWriter &response,
-                                     std::string &target,
-                                     bool ifMissingThenSendResponse)
-    {
-        auto &headers(request.headers());
-        if (!headers.has<T>())
-        {
-            if (ifMissingThenSendResponse)
-            {
-                answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name());
-            }
-            return false;
-        }
-        target = headers.get<T>()->value;
-        if (!target.size())
-        {
-            if (ifMissingThenSendResponse)
-            {
-                answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name());
-            }
-            return false;
-        }
-        return true;
-    }
 };
 
 #endif // EXTPISTACHE_H

@@ -27,8 +27,9 @@ SOURCES += \
         handler/handlergetapp.cpp \
         handler/handlerloginuser.cpp \
         handler/handlerregisteruser.cpp \
-        handler/handleruploadapp.cpp \
         handler/handlerverifyuser.cpp \
+        handlerLoggedIn/handlerloggedininterface.cpp \
+        handlerLoggedIn/handleruploadapp.cpp \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
@@ -38,6 +39,8 @@ SOURCES += \
         postgres/pgexecutor.cpp \
         postgres/pgsqlstring.cpp \
         postgres/pgutils.cpp \
+        serverHeader/loginemailheader.cpp \
+        serverHeader/logintokenheader.cpp \
         sole/sole.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
@@ -59,8 +62,9 @@ HEADERS += \
   handler/handlergetapp.h \
   handler/handlerloginuser.h \
   handler/handlerregisteruser.h \
-  handler/handleruploadapp.h \
   handler/handlerverifyuser.h \
+  handlerLoggedIn/handlerloggedininterface.h \
+  handlerLoggedIn/handleruploadapp.h \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
@@ -71,6 +75,8 @@ HEADERS += \
   postgres/pgexecutor.h \
   postgres/pgsqlstring.h \
   postgres/pgutils.h \
+  serverHeader/loginemailheader.h \
+  serverHeader/logintokenheader.h \
   sole/sole.hpp \
   utils/base64.h \
   utils/definitions.h \

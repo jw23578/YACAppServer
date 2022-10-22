@@ -1,4 +1,6 @@
 #include "yacappserver.h"
+#include "serverHeader/loginemailheader.h"
+#include "serverHeader/logintokenheader.h"
 
 YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
                            EMailLogic &emailLogic,
@@ -16,6 +18,9 @@ YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
                      *this)
 
 {
+    Pistache::Http::Header::Registrar<LoginEMailHeader>();
+    Pistache::Http::Header::Registrar<LoginTokenHeader>();
+
     std::cout << "Checking Databaseconnection\n";
     if (!databaseLogic.connectionOk())
     {
