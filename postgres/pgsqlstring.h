@@ -7,6 +7,10 @@
 #include <vector>
 #include <map>
 #include "sole/sole.hpp"
+#include "extstring.h" // marked as unused but is needed for MACRO_set
+
+#define MACRO_set(fieldValue) \
+    sql.set(ExtString::lower(#fieldValue), fieldValue);
 
 class PGSqlString
 {
