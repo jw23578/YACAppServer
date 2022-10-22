@@ -6,13 +6,20 @@
 class LoggedInUsersContainer
 {
     DatabaseLogic &databaseLogic;
-    typedef std::map<std::string, std::chrono::system_clock::time_point> LoggedInUsersMap;
+    struct SData
+    {
+        sole::uuid userId;
+        std::chrono::system_clock::time_point loginTokenValidUntil;
+    };
+
+    typedef std::map<std::string, SData> LoggedInUsersMap;
     LoggedInUsersMap loggedInUsers;
 public:
     LoggedInUsersContainer(DatabaseLogic &databaseLogic);
 
     bool isLoggedIn(const std::string &loginEMail,
-                    const std::string &loginToken);
+                    const std::string &loginToken,
+                    sole::uuid &userId);
 };
 
 #endif // LOGGEDINUSERSCONTAINER_H

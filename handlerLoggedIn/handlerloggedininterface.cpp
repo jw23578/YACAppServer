@@ -23,7 +23,8 @@ bool HandlerLoggedInInterface::checkLogin()
         return false;
     }
     if (!loggedInUsersContainer.isLoggedIn(loginEMail,
-                                           loginToken))
+                                           loginToken,
+                                           userId))
     {
         answer(Pistache::Http::Code::Bad_Request, "not logged in");
         return false;

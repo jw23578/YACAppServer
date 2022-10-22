@@ -9,6 +9,7 @@ class HandlerLoggedInInterface : public PistacheHandlerInterface
     LoggedInUsersContainer &loggedInUsersContainer;
     std::string loginEMail;
     std::string loginToken;
+    sole::uuid userId;
 public:
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                              const std::string &methodName,

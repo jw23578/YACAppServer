@@ -41,3 +41,9 @@ std::chrono::system_clock::time_point PGExecutor::timepoint(const std::string &f
     const pqxx::row &row(result[currentRow]);
     return ExtString::toTimepoint(row[fieldname].c_str());
 }
+
+sole::uuid PGExecutor::uuid(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return sole::rebuild(row[fieldname].c_str());
+}

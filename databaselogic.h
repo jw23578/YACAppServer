@@ -2,6 +2,7 @@
 #define DATABASELOGIC_H
 
 #include "postgres/pgconnectionpool.h"
+#include "sole/sole.hpp"
 
 class DatabaseLogic
 {
@@ -33,6 +34,7 @@ public:
 
     bool userLoggedIn(const std::string &loginEMail,
                       const std::string &loginToken,
+                      sole::uuid &userId,
                       std::chrono::system_clock::time_point &loginTokenValidUntil);
 
     void refreshLoginToken(const std::string &loginEMail,

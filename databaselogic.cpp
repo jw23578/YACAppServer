@@ -178,6 +178,7 @@ bool DatabaseLogic::loginUser(const std::string &loginEMail,
 
 bool DatabaseLogic::userLoggedIn(const std::string &loginEMail,
                                  const std::string &loginToken,
+                                 sole::uuid &userId,
                                  std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     PGSqlString sql("select * from t0001_users "
@@ -190,6 +191,7 @@ bool DatabaseLogic::userLoggedIn(const std::string &loginEMail,
     {
         return false;
     }
+    userId = e.uuid("id");
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
     return true;
 }
