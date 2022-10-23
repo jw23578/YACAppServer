@@ -172,6 +172,11 @@ bool DatabaseLogic::loginUser(const std::string &loginEMail,
         message = "password or loginemail wrong";
         return false;
     }
+    if (e.isNull("verified"))
+    {
+        message = "user not yet verified";
+        return false;
+    }
     loginToken = e.string("login_token");
     loginSuccessful(loginEMail, loginToken);
     return true;
