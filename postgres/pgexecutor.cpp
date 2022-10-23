@@ -30,6 +30,18 @@ std::string PGExecutor::columnName(size_t c)
     return result.column_name(c);
 }
 
+bool PGExecutor::isNull(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return row[fieldname].is_null();
+}
+
+bool PGExecutor::isNullOrEmpty(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return row[fieldname].is_null() || row[fieldname].get<std::string>().value() == "";
+}
+
 std::string PGExecutor::string(const std::string &fieldname)
 {
     const pqxx::row &row(result[currentRow]);
