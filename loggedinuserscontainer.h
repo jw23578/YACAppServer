@@ -20,6 +20,9 @@ public:
     bool isLoggedIn(const std::string &loginEMail,
                     const std::string &loginToken,
                     sole::uuid &userId);
+
+    bool isLoggedIn(const std::string &loginEMail,
+                    const std::string &loginToken);
 };
 
 #endif // LOGGEDINUSERSCONTAINER_H

@@ -27,6 +27,7 @@ SOURCES += \
         handler/handlergetapp.cpp \
         handler/handlerloginuser.cpp \
         handler/handlerregisteruser.cpp \
+        handler/handleruserloggedin.cpp \
         handler/handlerverifyuser.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
   handler/handlergetapp.h \
   handler/handlerloginuser.h \
   handler/handlerregisteruser.h \
+  handler/handleruserloggedin.h \
   handler/handlerverifyuser.h \
   handlerLoggedIn/handlerloggedininterface.h \
   handlerLoggedIn/handleruploadapp.h \

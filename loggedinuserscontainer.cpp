@@ -38,3 +38,10 @@ bool LoggedInUsersContainer::isLoggedIn(const std::string &loginEMail,
     userId = it->second.userId;
     return true;
 }
+
+bool LoggedInUsersContainer::isLoggedIn(const std::string &loginEMail,
+                                        const std::string &loginToken)
+{
+    sole::uuid userId;
+    return isLoggedIn(loginEMail, loginToken, userId);
+}
