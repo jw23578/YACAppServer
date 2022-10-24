@@ -106,8 +106,11 @@ bool ExtPistache::getPostString(ExtRapidJSON &postData,
                                 std::string &target,
                                 bool ifMissingThenSendResponse)
 {
-
-    if (!postData.hasValue(name))
+    if (postData.hasValue(name))
+    {
+        target = postData.getString(name);
+    }
+    if (!target.size())
     {
         if (ifMissingThenSendResponse)
         {
@@ -115,7 +118,6 @@ bool ExtPistache::getPostString(ExtRapidJSON &postData,
         }
         return false;
     }
-    target = postData.getString(name);
     target = ExtString::urlDecode(target);
     return true;
 }

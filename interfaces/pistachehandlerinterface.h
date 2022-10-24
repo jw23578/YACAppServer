@@ -9,7 +9,7 @@
     if (!getPostString(#targetName, targetName, true) || !targetName.size()) \
 { \
     return; \
-    }
+}
 
 #define MACRO_GetMandatoryGetString(targetName) std::string targetName; \
     if (!getString(#targetName, targetName, true) || !targetName.size()) \
