@@ -135,16 +135,21 @@ bool DatabaseLogic::verfiyUser(const std::string &loginEMail,
         message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
         return false;
     }
+    if (e.timepoint("verify_token_valid_until") < std::chrono::system_clock::now())
+    {
+        message = std::string("verify token not valid any more, please register again");
+        PGSqlString delSql("delete from t0001_users "
+                           "where loginemail = :loginemail ");
+        delSql.set("loginemail", loginEMail);
+        PGExecutor e(pool, delSql);
+        return false;
+    }
     if (e.string("verify_token") != verifyToken)
     {
         message = std::string("wrong verifyToken");
         return false;
     }
-    if (e.timepoint("verify_token_valid_until") < std::chrono::system_clock::now())
-    {
-        message = std::string("verify token not valid any more");
-        return false;
-    }
+
     sql = "update t0001_users "
           "set verified = now(), "
           "verify_token = '', "
