@@ -42,6 +42,12 @@ bool PGExecutor::isNullOrEmpty(const std::string &fieldname)
     return row[fieldname].is_null() || row[fieldname].get<std::string>().value() == "";
 }
 
+bool PGExecutor::boolean(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return row[fieldname].get<bool>().value();
+}
+
 std::string PGExecutor::string(const std::string &fieldname)
 {
     const pqxx::row &row(result[currentRow]);

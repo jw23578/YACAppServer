@@ -166,20 +166,25 @@ bool DatabaseLogic::loginUser(const std::string &loginEMail,
                               std::string &message,
                               std::string &loginToken)
 {
-    PGSqlString sql("select * from t0001_users "
-                    "where loginemail = :loginemail "
-                    "and password_hash = crypt(:password, password_hash) ");
+    PGSqlString sql("select *, password_hash = crypt(:password, password_hash) as login_ok "
+                    "from t0001_users "
+                    "where loginemail = :loginemail ");
     sql.set("loginemail", loginEMail);
     sql.set("password", password);
     PGExecutor e(pool, sql);
     if (!e.size())
     {
-        message = "password or loginemail wrong";
+        message = "LoginEMail/User not found";
         return false;
-    }
+    }    
     if (e.isNull("verified"))
     {
-        message = "user not yet verified";
+        message = "LoginEMail/User not yet verified";
+        return false;
+    }
+    if (!e.boolean("login_ok"))
+    {
+        message = "Password is wrong";
         return false;
     }
     loginToken = e.string("login_token");
