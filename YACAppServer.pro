@@ -38,6 +38,8 @@ SOURCES += \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
         postgres/pgexecutor.cpp \
+        postgres/pgoidloader.cpp \
+        postgres/pgoidstorer.cpp \
         postgres/pgsqlstring.cpp \
         postgres/pgutils.cpp \
         serverHeader/loginemailheader.cpp \
@@ -75,6 +77,8 @@ HEADERS += \
   postgres/pgconnection.h \
   postgres/pgconnectionpool.h \
   postgres/pgexecutor.h \
+  postgres/pgoidloader.h \
+  postgres/pgoidstorer.h \
   postgres/pgsqlstring.h \
   postgres/pgutils.h \
   serverHeader/loginemailheader.h \

@@ -20,10 +20,10 @@ void HandlerUploadApp::method()
 
     std::string message;
     if (!databaseLogic.saveApp(userId,
-                          appId,
-                          json_yacapp,
-                          yacpck_base64,
-                          message))
+                               appId,
+                               json_yacapp,
+                               yacpck_base64,
+                               message))
     {
         answer(Pistache::Http::Code::Bad_Request, message);
         return;

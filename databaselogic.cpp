@@ -4,6 +4,7 @@
 #include "postgres/pgexecutor.h"
 #include "utils/extstring.h"
 #include "postgres/pgutils.h"
+#include "pgoidstorer.h"
 
 void DatabaseLogic::loginSuccessful(const std::string &loginEMail,
                                     std::string &loginToken)
@@ -76,7 +77,7 @@ void DatabaseLogic::createDatabaseTables()
                            "appId uuid, "
                            "ownerId uuid, "
                            "json_yacapp text, "
-                           "yacpck_base64 text, "
+                           "yacpck_base64 oid, "
                            "primary key (id))");
         PGExecutor e(pool, sql);
     }
@@ -250,6 +251,9 @@ bool DatabaseLogic::saveApp(const sole::uuid userId,
         sql = utils.createInsertString(t0002_apps);
         sql.set("id", sole::uuid4());
     }
+    pqxx::oid oid;
+    PGOidStorer storeOid(pool, yacpck_base64, oid);
+    sql.set("yacpck_base64", oid);
     sql.set("ownerid", userId);
     MACRO_set(appId);
     MACRO_set(json_yacapp);
