@@ -257,7 +257,6 @@ bool DatabaseLogic::saveApp(const sole::uuid userId,
     sql.set("ownerid", userId);
     MACRO_set(appId);
     MACRO_set(json_yacapp);
-    MACRO_set(yacpck_base64);
     PGExecutor insertOrUpdate(pool, sql);
     return true;
 }
