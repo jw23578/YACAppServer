@@ -25,6 +25,11 @@ size_t PGExecutor::columns()
     return result.columns();
 }
 
+size_t PGExecutor::next()
+{
+    return ++currentRow;
+}
+
 std::string PGExecutor::columnName(size_t c)
 {
     return result.column_name(c);

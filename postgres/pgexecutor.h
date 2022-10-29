@@ -19,6 +19,8 @@ public:
     size_t size();
     size_t columns();
 
+    size_t next();
+
     std::string columnName(size_t c);
 
     bool isNull(const std::string &fieldname);

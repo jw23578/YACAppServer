@@ -290,6 +290,7 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
         appObject.AddMember("app_logo_url", e.string("app_logo_url"), alloc);
         appObject.AddMember("app_color_name", e.string("app_color_name"), alloc);
         allAPPs.PushBack(appObject, alloc);
+        e.next();
     }
     target.SetObject();
     target.AddMember("allApps", allAPPs, alloc);
