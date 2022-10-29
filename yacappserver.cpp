@@ -20,6 +20,8 @@ YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
                         loggedInUsersContainer),
     handlerGetAllApps(databaseLogic,
                       *this),
+    handlerGetAPP(databaseLogic,
+                  *this),
     handlerUploadApp(databaseLogic,
                      *this,
                      loggedInUsersContainer)

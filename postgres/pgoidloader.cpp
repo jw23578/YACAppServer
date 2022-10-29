@@ -3,11 +3,13 @@
 
 PGOidLoader::PGOidLoader(PGConnectionPool &pool,
                          pqxx::oid const &oid,
-                         std::basic_string<std::byte> &target)
+                         std::string &target)
 {
     PGConnection conn(pool);
     pqxx::work w(*conn.getConnection());
     std::size_t maxRead(1024 * 1024);
-    while (pqxx::blob::append_to_buf(w, oid, target.size(), target, maxRead)) {}
+    std::basic_string<std::byte> temp;
+    while (pqxx::blob::append_to_buf(w, oid, temp.size(), temp, maxRead)) {}
     w.commit();
+    target = pqxx::to_string(temp);
 }

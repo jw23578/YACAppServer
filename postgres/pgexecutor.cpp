@@ -70,3 +70,9 @@ sole::uuid PGExecutor::uuid(const std::string &fieldname)
     const pqxx::row &row(result[currentRow]);
     return sole::rebuild(row[fieldname].c_str());
 }
+
+pqxx::oid PGExecutor::oid(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return row[fieldname].get<pqxx::oid>().value();
+}

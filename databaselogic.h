@@ -52,6 +52,8 @@ public:
                  std::string &message);
 
     size_t fetchAllAPPs(rapidjson::Document &target);
+    bool fetchOneApp(const std::string &app_id,
+                     rapidjson::Document &target);
 };
 
 #endif // DATABASELOGIC_H

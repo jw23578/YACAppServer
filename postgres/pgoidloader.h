@@ -9,7 +9,7 @@ class PGOidLoader
 public:
     PGOidLoader(PGConnectionPool &pool,
                 const pqxx::oid &oid,
-                std::basic_string<std::byte> &target);
+                std::string &target);
 };
 
 #endif // PGOIDLOADER_H

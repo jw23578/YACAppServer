@@ -5,6 +5,7 @@
 #include "utils/extstring.h"
 #include "postgres/pgutils.h"
 #include "pgoidstorer.h"
+#include "pgoidloader.h"
 
 void DatabaseLogic::loginSuccessful(const std::string &loginEMail,
                                     std::string &loginToken)
@@ -295,4 +296,29 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
     target.SetObject();
     target.AddMember("allApps", allAPPs, alloc);
     return e.size();
+}
+
+bool DatabaseLogic::fetchOneApp(const std::string &app_id,
+                                rapidjson::Document &target)
+{
+    auto &alloc(target.GetAllocator());
+    PGSqlString sql("select json_yacapp "
+                    ", yacpck_base64 "
+                    "from t0002_apps "
+                    "where app_id = :app_id ");
+    MACRO_set(app_id);
+    PGExecutor e(pool, sql);
+    if (!e.size())
+    {
+        return false;
+    }
+    target.SetObject();
+    target.AddMember("message", "app found", alloc);
+    target.AddMember("json_yacapp", e.string("json_yacapp"), alloc);
+    std::string yacpck_base64;
+    PGOidLoader loader(pool,
+                       e.oid("yacpck_base64"),
+                       yacpck_base64);
+    target.AddMember("yacpck_base64", yacpck_base64, alloc);
+    return true;
 }
