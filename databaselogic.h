@@ -45,6 +45,7 @@ public:
     bool saveApp(const sole::uuid owner_id,
                  const std::string &app_id,
                  const std::string &app_name,
+                 const std::string &app_version,
                  const std::string &app_logo_url,
                  const std::string &app_color_name,
                  const std::string &json_yacapp,

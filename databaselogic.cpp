@@ -78,6 +78,7 @@ void DatabaseLogic::createDatabaseTables()
                            "app_id uuid, "
                            "owner_id uuid, "
                            "app_name text, "
+                           "app_version text, "
                            "app_logo_url text, "
                            "app_color_name text, "
                            "json_yacapp text, "
@@ -232,6 +233,7 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
 bool DatabaseLogic::saveApp(const sole::uuid owner_id,
                             const std::string &app_id,
                             const std::string &app_name,
+                            const std::string &app_version,
                             const std::string &app_logo_url,
                             const std::string &app_color_name,
                             const std::string &json_yacapp,
@@ -264,6 +266,7 @@ bool DatabaseLogic::saveApp(const sole::uuid owner_id,
     sql.set("owner_id", owner_id);
     MACRO_set(app_id);
     MACRO_set(app_name);
+    MACRO_set(app_version);
     MACRO_set(app_logo_url);
     MACRO_set(app_color_name);
     MACRO_set(json_yacapp);
@@ -276,6 +279,7 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
     auto &alloc(target.GetAllocator());
     PGSqlString sql("select app_id "
                     ", app_name "
+                    ", app_version "
                     ", app_logo_url "
                     ", app_color_name "
                     "from t0002_apps "
@@ -285,9 +289,10 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
     for (size_t r(0); r < e.size(); ++r)
     {
         rapidjson::Value appObject;
-        appObject.SetObject();
+        appObject.SetObject();        
         appObject.AddMember("app_id", e.string("app_id"), alloc);
         appObject.AddMember("app_name", e.string("app_name"), alloc);
+        appObject.AddMember("app_version", e.string("app_version"), alloc);
         appObject.AddMember("app_logo_url", e.string("app_logo_url"), alloc);
         appObject.AddMember("app_color_name", e.string("app_color_name"), alloc);
         allAPPs.PushBack(appObject, alloc);
@@ -302,7 +307,8 @@ bool DatabaseLogic::fetchOneApp(const std::string &app_id,
                                 rapidjson::Document &target)
 {
     auto &alloc(target.GetAllocator());
-    PGSqlString sql("select json_yacapp "
+    PGSqlString sql("select app_name "
+                    ", json_yacapp "
                     ", yacpck_base64 "
                     "from t0002_apps "
                     "where app_id = :app_id ");
@@ -313,6 +319,8 @@ bool DatabaseLogic::fetchOneApp(const std::string &app_id,
         return false;
     }
     target.SetObject();
+    target.AddMember("app_id", app_id, alloc);
+    target.AddMember("app_name", e.string("app_name"), alloc);
     target.AddMember("message", "app found", alloc);
     target.AddMember("json_yacapp", e.string("json_yacapp"), alloc);
     std::string yacpck_base64;

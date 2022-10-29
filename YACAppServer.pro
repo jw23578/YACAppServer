@@ -98,4 +98,5 @@ HEADERS += \
 DISTFILES += \
   YACAppServerConfig.json \
   curl-format.txt \
+  deployToJW78.sh \
   intern_doc.txt

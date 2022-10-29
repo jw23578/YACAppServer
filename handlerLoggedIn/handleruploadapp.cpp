@@ -14,17 +14,19 @@ HandlerUploadApp::HandlerUploadApp(DatabaseLogic &databaseLogic,
 
 void HandlerUploadApp::method()
 {
-    MACRO_GetMandatoryPostString(app_id);
-    MACRO_GetMandatoryPostString(json_yacapp);
-    MACRO_GetMandatoryPostString(yacpck_base64);
-    MACRO_GetMandatoryPostString(app_name);
-    MACRO_GetMandatoryPostString(app_logo_url);
-    MACRO_GetMandatoryPostString(app_color_name);
+    MACRO_GetMandatoryString(app_id);
+    MACRO_GetMandatoryString(json_yacapp);
+    MACRO_GetMandatoryString(yacpck_base64);
+    MACRO_GetMandatoryString(app_name);
+    MACRO_GetMandatoryString(app_version);
+    MACRO_GetMandatoryString(app_logo_url);
+    MACRO_GetMandatoryString(app_color_name);
 
     std::string message;
     if (!databaseLogic.saveApp(userId,
                                app_id,
                                app_name,
+                               app_version,
                                app_logo_url,
                                app_color_name,
                                json_yacapp,

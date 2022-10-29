@@ -5,6 +5,22 @@
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
 
+#define MACRO_GetMandatoryString(targetName) std::string targetName; \
+    if (handlerType == TypeGet) \
+    { \
+        if (!getString(#targetName, targetName, true) || !targetName.size()) \
+        { \
+            return; \
+        } \
+    } \
+    else \
+    { \
+        if (!getPostString(#targetName, targetName, true) || !targetName.size()) \
+        { \
+            return; \
+        } \
+    }
+
 #define MACRO_GetMandatoryPostString(targetName) std::string targetName; \
     if (!getPostString(#targetName, targetName, true) || !targetName.size()) \
 { \
