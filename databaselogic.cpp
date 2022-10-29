@@ -74,15 +74,18 @@ void DatabaseLogic::createDatabaseTables()
         PGSqlString sql("create table ");
         sql += t0002_apps;
         sql += std::string("( id uuid, "
-                           "appId uuid, "
-                           "ownerId uuid, "
+                           "app_id uuid, "
+                           "owner_id uuid, "
+                           "app_name text, "
+                           "app_logo_url text, "
+                           "app_color_name text, "
                            "json_yacapp text, "
                            "yacpck_base64 oid, "
                            "primary key (id))");
         PGExecutor e(pool, sql);
     }
     std::string t0002_apps_i1;
-    utils.createIndex(t0002_apps, t0002_apps_i1, "(appId)");
+    utils.createIndex(t0002_apps, t0002_apps_i1, "(app_id)");
 }
 
 
@@ -225,25 +228,28 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
 
-bool DatabaseLogic::saveApp(const sole::uuid userId,
-                            const std::string &appId,
+bool DatabaseLogic::saveApp(const sole::uuid owner_id,
+                            const std::string &app_id,
+                            const std::string &app_name,
+                            const std::string &app_logo_url,
+                            const std::string &app_color_name,
                             const std::string &json_yacapp,
                             const std::string &yacpck_base64,
                             std::string &message)
 {
-    std::string appIdField("appId");
+    std::string app_id_field("app_id");
     PGUtils utils(pool);
-    PGSqlString sql(utils.createEntryExistsString(t0002_apps, appIdField));
-    MACRO_set(appId);
+    PGSqlString sql(utils.createEntryExistsString(t0002_apps, app_id_field));
+    MACRO_set(app_id);
     PGExecutor e(pool, sql);
     if (e.size())
     {
-        if (e.uuid("ownerid") != userId)
+        if (e.uuid("owner_id") != owner_id)
         {
             message = "user is not app owner";
             return false;
         }
-        sql = utils.createUpdateString(t0002_apps, appIdField);
+        sql = utils.createUpdateString(t0002_apps, app_id_field);
         sql.set("id", e.uuid("id"));
     }
     else
@@ -254,8 +260,11 @@ bool DatabaseLogic::saveApp(const sole::uuid userId,
     pqxx::oid oid;
     PGOidStorer storeOid(pool, yacpck_base64, oid);
     sql.set("yacpck_base64", oid);
-    sql.set("ownerid", userId);
-    MACRO_set(appId);
+    sql.set("owner_id", owner_id);
+    MACRO_set(app_id);
+    MACRO_set(app_name);
+    MACRO_set(app_logo_url);
+    MACRO_set(app_color_name);
     MACRO_set(json_yacapp);
     PGExecutor insertOrUpdate(pool, sql);
     return true;

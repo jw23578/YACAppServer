@@ -40,8 +40,11 @@ public:
     void refreshLoginToken(const std::string &loginEMail,
                            std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    bool saveApp(const sole::uuid userId,
-                 const std::string &appId,
+    bool saveApp(const sole::uuid owner_id,
+                 const std::string &app_id,
+                 const std::string &app_name,
+                 const std::string &app_logo_url,
+                 const std::string &app_color_name,
                  const std::string &json_yacapp,
                  const std::string &yacpck_base64,
                  std::string &message);
