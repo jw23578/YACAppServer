@@ -3,6 +3,8 @@
 
 #include "postgres/pgconnectionpool.h"
 #include "sole/sole.hpp"
+#include "rapidjson/document.h"
+
 
 class DatabaseLogic
 {
@@ -48,6 +50,8 @@ public:
                  const std::string &json_yacapp,
                  const std::string &yacpck_base64,
                  std::string &message);
+
+    size_t fetchAllAPPs(rapidjson::Document &target);
 };
 
 #endif // DATABASELOGIC_H

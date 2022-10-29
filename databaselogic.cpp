@@ -269,3 +269,29 @@ bool DatabaseLogic::saveApp(const sole::uuid owner_id,
     PGExecutor insertOrUpdate(pool, sql);
     return true;
 }
+
+size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
+{
+    auto &alloc(target.GetAllocator());
+    PGSqlString sql("select app_id "
+                    ", app_name "
+                    ", app_logo_url "
+                    ", app_color_name "
+                    "from t0002_apps "
+                    "order by app_name ");
+    PGExecutor e(pool, sql);
+    rapidjson::Value allAPPs(rapidjson::kArrayType);
+    for (size_t r(0); r < e.size(); ++r)
+    {
+        rapidjson::Value appObject;
+        appObject.SetObject();
+        appObject.AddMember("app_id", e.string("app_id"), alloc);
+        appObject.AddMember("app_name", e.string("app_name"), alloc);
+        appObject.AddMember("app_logo_url", e.string("app_logo_url"), alloc);
+        appObject.AddMember("app_color_name", e.string("app_color_name"), alloc);
+        allAPPs.PushBack(appObject, alloc);
+    }
+    target.SetObject();
+    target.AddMember("allApps", allAPPs, alloc);
+    return e.size();
+}
