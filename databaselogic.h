@@ -48,7 +48,7 @@ public:
     bool saveApp(const sole::uuid owner_id,
                  const std::string &app_id,
                  const std::string &app_name,
-                 const std::string &app_version,
+                 const int app_version,
                  const std::string &app_logo_url,
                  const std::string &app_color_name,
                  const std::string &json_yacapp,
@@ -57,6 +57,7 @@ public:
 
     size_t fetchAllAPPs(rapidjson::Document &target);
     bool fetchOneApp(const std::string &app_id,
+                     const int current_installed_version,
                      rapidjson::Document &target);
 };
 

@@ -8,6 +8,7 @@
 
 class PGCommandTransactor
 {
+    PGConnectionPool &pool;
     PGConnection conn;
     PGSqlString const &sql;
     pqxx::result &result;

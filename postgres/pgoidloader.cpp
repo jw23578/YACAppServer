@@ -11,5 +11,5 @@ PGOidLoader::PGOidLoader(PGConnectionPool &pool,
     std::basic_string<std::byte> temp;
     while (pqxx::blob::append_to_buf(w, oid, temp.size(), temp, maxRead)) {}
     w.commit();
-    target = pqxx::to_string(temp);
+    target = std::string(reinterpret_cast<char*>(&temp[0]));
 }

@@ -81,7 +81,7 @@ void DatabaseLogic::createDatabaseTables()
                            "app_id uuid, "
                            "owner_id uuid, "
                            "app_name text, "
-                           "app_version text, "
+                           "app_version int, "
                            "app_logo_url text, "
                            "app_color_name text, "
                            "json_yacapp text, "
@@ -257,7 +257,7 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
 bool DatabaseLogic::saveApp(const sole::uuid owner_id,
                             const std::string &app_id,
                             const std::string &app_name,
-                            const std::string &app_version,
+                            const int app_version,
                             const std::string &app_logo_url,
                             const std::string &app_color_name,
                             const std::string &json_yacapp,
@@ -316,7 +316,7 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
         appObject.SetObject();
         appObject.AddMember("app_id", e.string("app_id"), alloc);
         appObject.AddMember("app_name", e.string("app_name"), alloc);
-        appObject.AddMember("app_version", e.string("app_version"), alloc);
+        appObject.AddMember("app_version", e.integer("app_version"), alloc);
         appObject.AddMember("app_logo_url", e.string("app_logo_url"), alloc);
         appObject.AddMember("app_color_name", e.string("app_color_name"), alloc);
         allAPPs.PushBack(appObject, alloc);
@@ -328,10 +328,14 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
 }
 
 bool DatabaseLogic::fetchOneApp(const std::string &app_id,
+                                const int current_installed_version,
                                 rapidjson::Document &target)
 {
+    target.SetObject();
+
     auto &alloc(target.GetAllocator());
     PGSqlString sql("select app_name "
+                    ", app_version "
                     ", json_yacapp "
                     ", yacpck_base64 "
                     "from t0002_apps "
@@ -340,9 +344,14 @@ bool DatabaseLogic::fetchOneApp(const std::string &app_id,
     PGExecutor e(pool, sql);
     if (!e.size())
     {
+        target.AddMember("message", "app not found", alloc);
         return false;
     }
-    target.SetObject();
+    if (e.integer("app_version") <= current_installed_version)
+    {
+        target.AddMember("message", "app version is up to date", alloc);
+        return true;
+    }
     target.AddMember("app_id", app_id, alloc);
     target.AddMember("app_name", e.string("app_name"), alloc);
     target.AddMember("message", "app found", alloc);

@@ -13,8 +13,9 @@ HandlerGetAPP::HandlerGetAPP(DatabaseLogic &databaseLogic,
 
 void HandlerGetAPP::method()
 {
-    MACRO_GetMandatoryGetString(app_id);
+    MACRO_GetMandatoryString(app_id);
+    MACRO_GetMandatoryInt(current_installed_version, true);
     rapidjson::Document target;
-    databaseLogic.fetchOneApp(app_id, target);
+    databaseLogic.fetchOneApp(app_id, current_installed_version, target);
     answer(Pistache::Http::Code::Ok, target);
 }

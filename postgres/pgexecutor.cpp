@@ -63,6 +63,12 @@ std::string PGExecutor::string(const std::string &fieldname)
     return row[fieldname].get<std::string>().value();
 }
 
+int PGExecutor::integer(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return row[fieldname].get<int>().value();
+}
+
 std::chrono::system_clock::time_point PGExecutor::timepoint(const std::string &fieldname)
 {
     const pqxx::row &row(result[currentRow]);
