@@ -4,10 +4,12 @@
 #include "postgres/pgconnectionpool.h"
 #include "sole/sole.hpp"
 #include "rapidjson/document.h"
+#include "logstat/logstatcontroller.h"
 
 
 class DatabaseLogic
 {
+    LogStatController &logStatController;
     PGConnectionPool &pool;
     void loginSuccessful(const std::string &loginEMail,
                          std::string &loginToken);
@@ -15,7 +17,8 @@ class DatabaseLogic
     const std::string t0001_users = {"t0001_users"};
     const std::string t0002_apps = {"t0002_apps"};
 public:
-    DatabaseLogic(PGConnectionPool &pool);
+    DatabaseLogic(LogStatController &logStatController,
+                  PGConnectionPool &pool);
 
     bool connectionOk();
     bool pgCryptoInstalled();

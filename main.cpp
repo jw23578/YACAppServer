@@ -51,7 +51,8 @@ int main(int argc, char **argv)
                           json.getString("postgresPassword"),
                           10,
                           logStatController);
-    DatabaseLogic databaseLogic(pool);
+    DatabaseLogic databaseLogic(logStatController,
+                                pool);
     EMailLogic emailLogic(json.getString("smtpSenderName"),
                           json.getString("smtpSenderEMail"),
                           json.getString("smtpReplyTo"),

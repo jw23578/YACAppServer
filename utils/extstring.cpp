@@ -430,16 +430,26 @@ std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &
 {
     std::stringstream ss(s);
     std::tm tm;
-    std::chrono::system_clock::time_point time;
-    double fraction;
-    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> fraction;
-    if (!ss)
-    {
-        return std::chrono::system_clock::now();
-    }
-    time_t secondsSinceEpoch = mktime(&tm);
-    int64_t microseconds = fraction * 1'000'000;
-    std::chrono::milliseconds milliseconds(secondsSinceEpoch * 1000);
-    std::chrono::system_clock::time_point tp(milliseconds);
-    return tp;
+    strptime(s.c_str(), "%F %TZ", &tm);
+    time_t t = mktime(&tm);
+
+    std::chrono::time_point<std::chrono::system_clock> time;
+    time = std::chrono::system_clock::from_time_t(t);    auto timeMs = std::chrono::time_point_cast<std::chrono::milliseconds>(time);
+
+    int value = std::stoi(s.substr(20,3));
+    timeMs += std::chrono::milliseconds(value);
+
+    return timeMs;
+
+//    double fraction;
+//    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> fraction;
+//    if (!ss)
+//    {
+//        return std::chrono::system_clock::now();
+//    }
+//    time_t secondsSinceEpoch = mktime(&tm);
+//    int64_t microseconds = fraction * 1'000'000;
+//    std::chrono::milliseconds milliseconds(secondsSinceEpoch * 1000);
+//    std::chrono::system_clock::time_point tp(milliseconds);
+//    return tp;
 }

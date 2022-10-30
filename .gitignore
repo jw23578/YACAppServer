@@ -70,8 +70,7 @@ Thumbs.db
 # --------
 *.dll
 *.exe
-*.sh
-
 YACAppServerConfig.json
 intern_*
+deploy.*
 

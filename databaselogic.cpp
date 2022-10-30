@@ -25,7 +25,10 @@ void DatabaseLogic::loginSuccessful(const std::string &loginEMail,
     PGExecutor e(pool, sql);
 }
 
-DatabaseLogic::DatabaseLogic(PGConnectionPool &pool):pool(pool)
+DatabaseLogic::DatabaseLogic(LogStatController &logStatController,
+                             PGConnectionPool &pool):
+    logStatController(logStatController),
+    pool(pool)
 {
 
 }
@@ -141,7 +144,25 @@ bool DatabaseLogic::verfiyUser(const std::string &loginEMail,
         message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
         return false;
     }
-    if (e.timepoint("verify_token_valid_until") < std::chrono::system_clock::now())
+    logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
+                          std::string("verify_token_valid_until as string: ") + e.string("verify_token_valid_until"));
+    std::chrono::system_clock::time_point verify_token_valid_until(e.timepoint("verify_token_valid_until"));
+    {
+        std::time_t t = std::chrono::system_clock::to_time_t(verify_token_valid_until);
+        std::stringstream ss;
+        ss << std::put_time( std::localtime( &t ), "%FT%T%z" );
+        logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
+                              std::string("verify_token_valid_until: ") + ss.str());
+    }
+    std::chrono::system_clock::time_point now(std::chrono::system_clock::now());
+    {
+        std::time_t t = std::chrono::system_clock::to_time_t(now);
+        std::stringstream ss;
+        ss << std::put_time( std::localtime( &t ), "%FT%T%z" );
+        logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
+                              std::string("now: ") + ss.str());
+    }
+    if (verify_token_valid_until < now)
     {
         message = std::string("verify token not valid any more, please register again");
         PGSqlString delSql("delete from t0001_users "
@@ -182,7 +203,7 @@ bool DatabaseLogic::loginUser(const std::string &loginEMail,
     {
         message = "LoginEMail/User not found";
         return false;
-    }    
+    }
     if (e.isNull("verified"))
     {
         message = "LoginEMail/User not yet verified";
@@ -222,10 +243,13 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
                                       std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     PGSqlString sql("update t0001_users "
-                    "set login_token_valid_until = now() + interval '1 hour' *:validHours "
+                    "set login_token_valid_until = now() + interval '1 hour' *:validhours "
                     "where loginemail = :loginemail "
                     "returning login_token_valid_until");
+    MACRO_set(loginEMail);
     sql.set("loginEMail", loginEMail);
+    int validHours(24 * 7);
+    MACRO_set(validHours);
     PGExecutor e(pool, sql);
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
@@ -289,7 +313,7 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
     for (size_t r(0); r < e.size(); ++r)
     {
         rapidjson::Value appObject;
-        appObject.SetObject();        
+        appObject.SetObject();
         appObject.AddMember("app_id", e.string("app_id"), alloc);
         appObject.AddMember("app_name", e.string("app_name"), alloc);
         appObject.AddMember("app_version", e.string("app_version"), alloc);
