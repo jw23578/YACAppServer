@@ -6,6 +6,10 @@
 PGExecutor::PGExecutor(PGConnectionPool &pool,
                        const PGSqlString &sql): pool(pool)
 {
+    pool.getLC().log(__FILE__,
+                     __LINE__,
+                     LogStatController::verbose,
+                     std::string("Executing: ") + sql.str());
     PGCommandTransactor ct(pool, sql, result);
 }
 

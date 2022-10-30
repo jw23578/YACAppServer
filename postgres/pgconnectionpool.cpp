@@ -1,11 +1,6 @@
 #include "pgconnectionpool.h"
 #include "utils/extstring.h"
 
-PGConnectionPool::PGConnectionPool()
-{
-
-}
-
 bool PGConnectionPool::findAndUse(pqxx::connection **conn)
 {
     for (size_t i(0); i < connections.size(); ++i)
@@ -40,13 +35,15 @@ PGConnectionPool::PGConnectionPool(const std::string &h,
                                    const std::string &db,
                                    const std::string &u,
                                    const std::string &pwd,
-                                   size_t ms):
+                                   size_t ms,
+                                   LogStatController &logStatController):
     host(h),
     port(p),
     dbName(db),
     user(u),
     password(pwd),
-    maxSize(ms)
+    maxSize(ms),
+    logStatController(logStatController)
 {
 }
 
@@ -59,6 +56,11 @@ std::string PGConnectionPool::generateConnstring() const
     connstring << std::string(" user=") << ExtString::lower(user);
     connstring << std::string(" password=") << password;
     return connstring.str();
+}
+
+LogStatController &PGConnectionPool::getLC()
+{
+    return logStatController;
 }
 
 

@@ -7,6 +7,8 @@
 #include "postgres/pgconnectionpool.h"
 #include "databaselogic.h"
 #include "emaillogic.h"
+#include "logstat/logstatcontroller.h"
+#include "logstat/filelogger.h"
 
 using namespace std;
 
@@ -33,12 +35,22 @@ int main(int argc, char **argv)
     }
     ExtRapidJSON json(configJSON);
 
+    LogStatController logStatController(LogStatController::verbose,
+                                        "server",
+                                        "yacapp");
+    std::string fileLoggerPath(json.getString("fileLoggerPath"));
+    if (fileLoggerPath.size())
+    {
+        logStatController.add(new FileLogger(fileLoggerPath));
+    }
+
     PGConnectionPool pool(json.getString("postgresHost"),
                           json.getInt("postgresPort"),
                           json.getString("postgresDBName"),
                           json.getString("postgresUser"),
                           json.getString("postgresPassword"),
-                          10);
+                          10,
+                          logStatController);
     DatabaseLogic databaseLogic(pool);
     EMailLogic emailLogic(json.getString("smtpSenderName"),
                           json.getString("smtpSenderEMail"),

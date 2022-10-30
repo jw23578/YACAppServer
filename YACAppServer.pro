@@ -36,6 +36,9 @@ SOURCES += \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
         loggedinuserscontainer.cpp \
+        logstat/filelogger.cpp \
+        logstat/loggerstatterinterface.cpp \
+        logstat/logstatcontroller.cpp \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
         postgres/pgexecutor.cpp \
@@ -75,6 +78,9 @@ HEADERS += \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
   loggedinuserscontainer.h \
+  logstat/filelogger.h \
+  logstat/loggerstatterinterface.h \
+  logstat/logstatcontroller.h \
   postgres/pgcommandtransactor.h \
   postgres/pgconnection.h \
   postgres/pgconnectionpool.h \
@@ -100,3 +106,8 @@ DISTFILES += \
   curl-format.txt \
   deployToJW78.sh \
   intern_doc.txt
+
+contains(DEFINES,WITH_INFLUX){
+SOURCES += logstat/influxlogger.cpp
+HEADERS += logstat/influxlogger.h
+}

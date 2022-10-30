@@ -86,7 +86,7 @@ void DatabaseLogic::createDatabaseTables()
                            "primary key (id))");
         PGExecutor e(pool, sql);
     }
-    std::string t0002_apps_i1;
+    std::string t0002_apps_i1("t0002_apps_i1");
     utils.createIndex(t0002_apps, t0002_apps_i1, "(app_id)");
 }
 
