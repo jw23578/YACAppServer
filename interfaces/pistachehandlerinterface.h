@@ -21,6 +21,13 @@
         } \
     }
 
+#define MACRO_GetMandatoryBool(targetName) bool targetName; \
+    if (!getBool(#targetName, targetName, true)) \
+    { \
+        return; \
+    }
+
+
 #define MACRO_GetMandatoryInt(targetName, zeroAllowed) int targetName; \
     if (!getInteger(#targetName, targetName, zeroAllowed, true)) \
     { \
@@ -71,6 +78,10 @@ public:
                              const std::string &methodName,
                              HandlerType type,
                              LoginNeededType loginNeeded);
+
+    bool getBool(std::string const &name,
+                 bool &target,
+                 bool ifMissingThenSendResponse);
 
     bool getInteger(std::string const &name,
                     int &target,

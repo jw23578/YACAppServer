@@ -89,6 +89,8 @@ void DatabaseLogic::createDatabaseTables()
                            "primary key (id))");
         PGExecutor e(pool, sql);
     }
+    utils.alterTableAddColumnIfNeeded(t0002_apps, "is_template_app", "bool");
+
     std::string t0002_apps_i1("t0002_apps_i1");
     utils.createIndex(t0002_apps, t0002_apps_i1, "(app_id)");
 }
@@ -260,6 +262,7 @@ bool DatabaseLogic::saveApp(const sole::uuid owner_id,
                             const int app_version,
                             const std::string &app_logo_url,
                             const std::string &app_color_name,
+                            const bool is_template_app,
                             const std::string &json_yacapp,
                             const std::string &yacpck_base64,
                             std::string &message)
@@ -293,7 +296,8 @@ bool DatabaseLogic::saveApp(const sole::uuid owner_id,
     MACRO_set(app_version);
     MACRO_set(app_logo_url);
     MACRO_set(app_color_name);
-    MACRO_set(json_yacapp);
+    MACRO_set(is_template_app);
+    MACRO_set(json_yacapp);    
     PGExecutor insertOrUpdate(pool, sql);
     return true;
 }

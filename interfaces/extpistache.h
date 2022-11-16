@@ -47,6 +47,11 @@ public:
                            std::string const &name,
                            int &target,
                            bool ifMissingThenSendResponse);
+    static bool getPostBool(ExtRapidJSON &postData,
+                           Pistache::Http::ResponseWriter &response,
+                           std::string const &name,
+                           bool &target,
+                           bool ifMissingThenSendResponse);
 };
 
 #endif // EXTPISTACHE_H

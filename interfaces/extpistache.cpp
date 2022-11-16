@@ -139,3 +139,21 @@ bool ExtPistache::getPostInt(ExtRapidJSON &postData,
     target = postData.getInt(name);
     return true;
 }
+
+bool ExtPistache::getPostBool(ExtRapidJSON &postData,
+                              Pistache::Http::ResponseWriter &response,
+                              const std::string &name,
+                              bool &target,
+                              bool ifMissingThenSendResponse)
+{
+    if (!postData.hasValue(name))
+    {
+        if (ifMissingThenSendResponse)
+        {
+            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name);
+        }
+        return false;
+    }
+    target = postData.getBool(name);
+    return true;
+}

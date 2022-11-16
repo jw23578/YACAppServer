@@ -65,6 +65,22 @@ PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serv
     }
 }
 
+bool PistacheHandlerInterface::getBool(const std::string &name,
+                                       bool &target,
+                                       bool ifMissingThenSendResponse)
+{
+    if (handlerType == TypeGet)
+    {
+        return ExtPistache::getBool(*request, *response, name, target, ifMissingThenSendResponse);
+    }
+    if (handlerType == TypePost)
+    {
+        ExtRapidJSON postData(postedData);
+        return ExtPistache::getPostBool(postData, *response, name, target, ifMissingThenSendResponse);
+    }
+    return false;
+}
+
 bool PistacheHandlerInterface::getInteger(const std::string &name,
                                           int &target,
                                           bool zeroAllowed,

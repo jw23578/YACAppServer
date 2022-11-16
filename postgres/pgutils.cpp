@@ -12,6 +12,19 @@ PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 
 }
 
+bool PGUtils::tableHasColumn(const std::string &tableName,
+                             const std::string &columnName) const
+{
+    PGSqlString sql("select exists ( "
+                    "select 1 "
+                    "FROM information_schema.columns "
+                    "WHERE table_name= :tablename and column_name= :columnname) ");
+    MACRO_set(tableName);
+    MACRO_set(columnName);
+    PGExecutor e(pool, sql);
+    return e.boolean("exists");
+}
+
 void PGUtils::alterTableAddColumn(const std::string &tableName,
                                   const std::string &columnName,
                                   const std::string &columnType) const
@@ -19,8 +32,18 @@ void PGUtils::alterTableAddColumn(const std::string &tableName,
     PGSqlString sql("alter table ");
     sql += tableName;
     sql += " add column " + columnName + " " + columnType;
-    pqxx::result result;
-    PGCommandTransactor ct(pool, sql, result);
+    PGExecutor e(pool, sql);
+}
+
+void PGUtils::alterTableAddColumnIfNeeded(const std::string &tableName,
+                                          const std::string &columnName,
+                                          const std::string &columnType) const
+{
+    if (tableHasColumn(tableName, columnName))
+    {
+        return;
+    }
+    alterTableAddColumn(tableName, columnName, columnType);
 }
 
 bool PGUtils::tableExists(const std::string &tableName) const

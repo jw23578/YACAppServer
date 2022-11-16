@@ -51,6 +51,7 @@ public:
                  const int app_version,
                  const std::string &app_logo_url,
                  const std::string &app_color_name,
+                 const bool is_template_app,
                  const std::string &json_yacapp,
                  const std::string &yacpck_base64,
                  std::string &message);

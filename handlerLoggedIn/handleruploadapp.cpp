@@ -21,6 +21,7 @@ void HandlerUploadApp::method()
     MACRO_GetMandatoryInt(app_version, false);
     MACRO_GetMandatoryString(app_logo_url);
     MACRO_GetMandatoryString(app_color_name);
+    MACRO_GetMandatoryBool(is_template_app);
 
     std::string message;
     if (!databaseLogic.saveApp(userId,
@@ -29,6 +30,7 @@ void HandlerUploadApp::method()
                                app_version,
                                app_logo_url,
                                app_color_name,
+                               is_template_app,
                                json_yacapp,
                                yacpck_base64,
                                message))
