@@ -84,15 +84,52 @@ void DatabaseLogic::createDatabaseTables()
                            "app_version int, "
                            "app_logo_url text, "
                            "app_color_name text, "
+                           "is_template_app bool, "
                            "json_yacapp text, "
                            "yacpck_base64 oid, "
                            "primary key (id))");
         PGExecutor e(pool, sql);
     }
-    utils.alterTableAddColumnIfNeeded(t0002_apps, "is_template_app", "bool");
 
     std::string t0002_apps_i1("t0002_apps_i1");
     utils.createIndex(t0002_apps, t0002_apps_i1, "(app_id)");
+
+    utils.createTableIfNeeded(t0003_appuser_profiles,
+                              {{"id", pg_uuid, true},
+                               {"app_id", pg_uuid},
+                               {"fstname", pg_text},
+                               {"surname", pg_text},
+                               {"visible_name", pg_text},
+                               {"email", pg_text, false, true}});
+
+    utils.createTableIfNeeded(t0004_appuser_passwordhashes,
+                              {{"id", pg_uuid, true},
+                               {"appuser_id", pg_uuid, false, true},
+                               {"password_hash", pg_text}});
+
+    utils.createTableIfNeeded(t0005_group_of_appusers,
+                              {{"id", pg_uuid, true},
+                               {"name", pg_text}});
+
+    utils.createTableIfNeeded(t0006_appuser2group,
+                              {{"id", pg_uuid, true},
+                               {"appuser_id", pg_uuid, false, true},
+                               {"group_id", pg_uuid, false, true}});
+
+    utils.createTableIfNeeded(t0007_messages,
+                              {{"id", pg_uuid, true},
+                               {"message_id", pg_uuid, false, true},
+                               {"sender_id", pg_uuid, false, true},
+                               {"to_id", pg_uuid, false, true},
+                               {"sended_datetime", pg_timestamp},
+                               {"content", pg_text}});
+
+    utils.createTableIfNeeded(t0008_message_state,
+                              {{"id", pg_uuid, true},
+                               {"message_id", pg_uuid, false, true},
+                               {"receiver_id", pg_uuid, false, true},
+                               {"received_datetime", pg_timestamp},
+                               {"read_datetime", pg_timestamp}});
 }
 
 

@@ -46,6 +46,49 @@ void PGUtils::alterTableAddColumnIfNeeded(const std::string &tableName,
     alterTableAddColumn(tableName, columnName, columnType);
 }
 
+bool PGUtils::createTable(const std::string &tableName,
+                          const std::vector<PGColumnAndType> &columnsAndTypes)
+{
+    PGSqlString sql("create table ");
+    sql += tableName;
+    sql += " ( ";
+    bool first(true);
+    for (const auto &cat : columnsAndTypes)
+    {
+        if (!first)
+        {
+            sql += ",";
+        }
+        first = false;
+        sql += cat.toString();
+        if (cat.primaryKey)
+        {
+            sql += ",";
+            sql += cat.primaryKeyString();
+        }
+    }
+    sql += " ) ";
+    PGExecutor pe(pool, sql);
+    for (const auto &cat : columnsAndTypes)
+    {
+        if (cat.index)
+        {
+            createIndex(tableName, tableName + "_" + cat.column, std::string("(") + cat.column + ")");
+        }
+    }
+}
+
+void PGUtils::createTableIfNeeded(const std::string &tableName,
+                                  const std::vector<PGColumnAndType> &columnsAndTypes)
+{
+    if (tableExists(tableName))
+    {
+        return;
+    }
+    createTable(tableName,
+                columnsAndTypes);
+}
+
 bool PGUtils::tableExists(const std::string &tableName) const
 {
     PGSqlString sql("select table_name from information_schema.tables ");
@@ -261,4 +304,61 @@ bool PGUtils::dropRole(const std::string &name) const
                            sql,
                            result);
     return result.size() > 0;
+}
+
+PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type):
+    column(column),
+    type(type),
+    primaryKey(false),
+    index(false)
+{
+
+}
+
+PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey):
+    column(column),
+    type(type),
+    primaryKey(primaryKey),
+    index(false)
+{
+
+}
+
+PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey, const bool index):
+    column(column), type(type), primaryKey(primaryKey), index(index)
+{
+
+}
+
+std::string PGColumnAndType::toString() const
+{
+    std::string s(column);
+    s += " ";
+    switch (type)
+    {
+    case pg_int: s += "int";
+        break;
+    case pg_bigint: s += "bigint";
+        break;
+    case pg_text: s += "text";
+        break;
+    case pg_float: s += "float";
+        break;
+    case pg_bool: s += "bool";
+        break;
+    case pg_timestamp: s += "timestamp";
+        break;
+    case pg_uuid: s += "uuid";
+        break;
+    }
+    return s;
+}
+
+std::string PGColumnAndType::primaryKeyString() const
+{
+    if (!primaryKey)
+    {
+        return "";
+    }
+    return std::string("primary key (") + column + ")";
 }

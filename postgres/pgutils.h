@@ -4,6 +4,31 @@
 #include "pgconnectionpool.h"
 #include "pgsqlstring.h"
 
+enum PGTypes
+{
+    pg_int,
+    pg_bigint,
+    pg_text,
+    pg_float,
+    pg_bool,
+    pg_timestamp,
+    pg_uuid
+};
+
+class PGColumnAndType
+{
+  public:
+    const std::string column;
+    const PGTypes type;
+    const bool primaryKey;
+    const bool index;
+    PGColumnAndType(const std::string &column, PGTypes type);
+    PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey);
+    PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey, const bool index);
+    std::string toString() const;
+    std::string primaryKeyString() const;
+};
+
 class PGUtils
 {
     static std::map<std::string, PGSqlString> tableName2InsertString;
@@ -19,6 +44,10 @@ public:
     void alterTableAddColumnIfNeeded(std::string const &tableName,
                                      std::string const &columnName,
                                      std::string const &columnType) const;
+    bool createTable(const std::string &tableName,
+                     const std::vector<PGColumnAndType> &columnsAndTypes);
+    void createTableIfNeeded(const std::string &tableName,
+                             const std::vector<PGColumnAndType> &columnsAndTypes);
     bool tableExists(std::string const &tableName) const;
     bool tableEmpty(std::string const &tableName) const;
     bool databaseExists(const std::string &databaseName) const;
