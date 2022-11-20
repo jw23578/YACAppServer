@@ -19,6 +19,12 @@ void HandlerAppUserRegister::method()
     MACRO_GetMandatoryPostString(password);
     MACRO_GetMandatoryPostString(appId);
 
+    if (!ExtString::emailIsValid(loginEMail))
+    {
+        answer(Pistache::Http::Code::Bad_Request, "this is not a valid email-adress: " + loginEMail);
+        return;
+    }
+
     if (databaseLogicAppUser.appUserExists(loginEMail))
     {
         answer(Pistache::Http::Code::Bad_Request, "loginEMail already exists and cannot be registered again");

@@ -1,5 +1,6 @@
 #include "databaselogicappuser.h"
 #include "postgres/pgexecutor.h"
+#include "definitions.h"
 
 void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
                                            std::string &loginToken)
@@ -65,10 +66,10 @@ bool DatabaseLogicAppUser::appUserExists(const std::string &loginEMail)
 }
 
 bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
-                                                const std::string &loginEMail,
-                                                const std::string &password,
-                                                std::string &message,
-                                                std::string &verifyToken)
+                                         const std::string &loginEMail,
+                                         const std::string &password,
+                                         std::string &message,
+                                         std::string &verifyToken)
 {
     if (!utils.entryExists(tableNames.t0002_apps, "id", appId.str()))
     {
@@ -81,6 +82,10 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         PGSqlString sql(utils.createInsertString(tableNames.t0003_appuser_profiles));
         sql.set("id", appUserId);
         sql.set("app_id", appId);
+        sql.set("fstname", "");
+        sql.set("surname", "");
+        sql.set("visible_name", "");
+        sql.set("verified", TimePointPostgreSqlNull);
         sql.set("loginemail", loginEMail);
         sql.set("verify_token", verifyToken);
         sql.set("verify_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
@@ -91,7 +96,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         PGSqlString sql("insert into t0004_appuser_passwordhashes "
                         " (id, appuser_id, password_hash) "
                         " values "
-                        " (:id, :appuser_id, crypt(:password, gen_salt('bf')) ");
+                        " (:id, :appuser_id, crypt(:password, gen_salt('bf'))) ");
         sql.set("id", sole::uuid4());
         sql.set("appuser_id", appUserId);
         sql.set("password", password);
@@ -140,10 +145,13 @@ bool DatabaseLogicAppUser::verifyAppUser(const std::string &loginEMail,
     if (verify_token_valid_until < now)
     {
         message = std::string("verify token not valid any more, please register again");
-        PGExecutor e(pool);
-        e.erase(tableNames.t0003_appuser_profiles,
-                "loginemail",
-                loginEMail);
+        PGExecutor erase(pool);
+        erase.erase(tableNames.t0003_appuser_profiles,
+                    "loginemail",
+                    loginEMail);
+        erase.erase(tableNames.t0004_appuser_passwordhashes,
+                    "appuser_id",
+                    e.uuid("id").str());
         return false;
     }
     if (e.string("verify_token") != verifyToken)
