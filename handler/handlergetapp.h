@@ -2,7 +2,7 @@
 #define HANDLERGETAPP_H
 
 #include "interfaces/pistachehandlerinterface.h"
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 
 class HandlerGetAPP : public PistacheHandlerInterface
 {

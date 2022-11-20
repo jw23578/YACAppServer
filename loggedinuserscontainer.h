@@ -1,7 +1,7 @@
 #ifndef LOGGEDINUSERSCONTAINER_H
 #define LOGGEDINUSERSCONTAINER_H
 
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 
 class LoggedInUsersContainer
 {

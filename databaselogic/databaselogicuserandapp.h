@@ -1,12 +1,12 @@
-#ifndef DATABASELOGIC_H
-#define DATABASELOGIC_H
+#ifndef DATABASELOGICUSERANDAPP_H
+#define DATABASELOGICUSERANDAPP_H
 
 #include "postgres/pgconnectionpool.h"
 #include "sole/sole.hpp"
 #include "rapidjson/document.h"
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
-#include "databaselogic/tablenames.h"
+#include "tablenames.h"
 
 
 class DatabaseLogicUserAndApp
@@ -62,4 +62,4 @@ public:
 
 };
 
-#endif // DATABASELOGIC_H
+#endif // DATABASELOGICUSERANDAPP_H

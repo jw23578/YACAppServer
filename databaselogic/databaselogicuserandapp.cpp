@@ -1,11 +1,10 @@
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 #include "postgres/pgsqlstring.h"
 #include "postgres/pgexecutor.h"
 #include "utils/extstring.h"
 #include "postgres/pgutils.h"
 #include "pgoidstorer.h"
 #include "pgoidloader.h"
-#include "databaselogic/databaselogictables.h"
 
 void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
                                     std::string &loginToken)

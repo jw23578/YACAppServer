@@ -2,7 +2,7 @@
 #define HANDLERLOGINUSER_H
 
 #include "interfaces/pistachehandlerinterface.h"
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 
 class HandlerLoginUser : public PistacheHandlerInterface
 {

@@ -15,6 +15,7 @@ INCLUDEPATH += utils
 INCLUDEPATH += postgres
 INCLUDEPATH += curlWrapper
 INCLUDEPATH += interfaces
+INCLUDEPATH += databaselogic
 
 SOURCES += \
         curlWrapper/jw78curlwrapper.cpp \
@@ -22,9 +23,9 @@ SOURCES += \
         curlWrapper/jw78imapwrapper.cpp \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
-        databaselogic.cpp \
         databaselogic/databaselogicappuser.cpp \
         databaselogic/databaselogictables.cpp \
+        databaselogic/databaselogicuserandapp.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlergetallapps.cpp \
@@ -67,9 +68,9 @@ HEADERS += \
   curlWrapper/jw78imapwrapper.h \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \
-  databaselogic.h \
   databaselogic/databaselogicappuser.h \
   databaselogic/databaselogictables.h \
+  databaselogic/databaselogicuserandapp.h \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlergetallapps.h \

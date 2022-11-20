@@ -5,11 +5,11 @@
 #include <fstream>
 #include "utils/extrapidjson.h"
 #include "postgres/pgconnectionpool.h"
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 #include "emaillogic.h"
 #include "logstat/logstatcontroller.h"
 #include "logstat/filelogger.h"
-#include "databaselogic/databaselogictables.h"
+#include "databaselogictables.h"
 
 using namespace std;
 

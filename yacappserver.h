@@ -9,8 +9,8 @@
 #include "handler/handlergetallapps.h"
 #include "handler/handlergetapp.h"
 #include "handlerLoggedIn/handleruploadapp.h"
-#include "databaselogic.h"
-#include "databaselogic/databaselogictables.h"
+#include "databaselogicuserandapp.h"
+#include "databaselogictables.h"
 #include "emaillogic.h"
 #include "loggedinuserscontainer.h"
 

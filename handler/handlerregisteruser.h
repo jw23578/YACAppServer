@@ -2,7 +2,7 @@
 #define HANDLERREGISTERUSER_H
 
 #include "interfaces/pistachehandlerinterface.h"
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 #include "emaillogic.h"
 
 class HandlerRegisterUser : public PistacheHandlerInterface

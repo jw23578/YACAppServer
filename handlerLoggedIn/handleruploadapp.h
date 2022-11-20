@@ -2,7 +2,7 @@
 #define HANDLERUPLOADAPP_H
 
 #include "handlerloggedininterface.h"
-#include "databaselogic.h"
+#include "databaselogicuserandapp.h"
 
 class HandlerUploadApp : public HandlerLoggedInInterface
 {
