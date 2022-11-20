@@ -70,6 +70,9 @@ public:
 
     PGSqlString createEntryExistsString(const std::string &tableName,
                                         const std::string &needleField);
+    bool entryExists(const std::string &tableName,
+                     const std::string &needleField,
+                     const std::string &needleValue);
 
     PGSqlString createInsertString(const std::string &tableName);
     PGSqlString createUpdateString(const std::string &tableName,

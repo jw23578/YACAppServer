@@ -143,6 +143,16 @@ PGSqlString PGUtils::createEntryExistsString(const std::string &tableName,
     return sql;
 }
 
+bool PGUtils::entryExists(const std::string &tableName,
+                          const std::string &needleField,
+                          const std::string &needleValue)
+{
+    PGSqlString sql(createEntryExistsString(tableName, needleField));
+    sql.set(needleField, needleValue);
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
+}
+
 PGSqlString PGUtils::createInsertString(const std::string &tableName)
 {
     std::map<std::string, PGSqlString>::iterator it(tableName2InsertString.find(tableName));
