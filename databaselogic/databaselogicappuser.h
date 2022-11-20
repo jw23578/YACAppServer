@@ -17,6 +17,8 @@ class DatabaseLogicAppUser
     PGConnectionPool &pool;
     PGUtils utils;
     TableNames tableNames;
+    void loginSuccessful(const sole::uuid &appUserId,
+                         std::string &loginToken);
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);

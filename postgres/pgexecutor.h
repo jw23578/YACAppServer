@@ -11,10 +11,19 @@ class PGExecutor
     pqxx::result result;
     size_t currentRow = {0};
 public:
+    PGExecutor(PGConnectionPool &pool);
     PGExecutor(PGConnectionPool &pool,
                PGSqlString const &sql);
 
     size_t exec(PGSqlString const &sql);
+
+    size_t select(const std::string &tableName,
+                  const std::string &needleField,
+                  const std::string &needleValue);
+
+    void erase(const std::string &tableName,
+               const std::string &needleField,
+               const std::string &needleValue);
 
     size_t size();
     size_t columns();
@@ -28,6 +37,7 @@ public:
     bool boolean(const std::string &fieldname);
     std::string string(const std::string &fieldname);
     int integer(const std::string &fieldname);
+    size_t get_size_t(const std::string &fieldname);
     std::chrono::system_clock::time_point timepoint(const std::string &fieldname);
     sole::uuid uuid(const std::string &fieldname);
     pqxx::oid oid(const std::string &fieldname);

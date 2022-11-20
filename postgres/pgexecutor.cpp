@@ -3,6 +3,12 @@
 #include "utils/extstring.h"
 
 
+PGExecutor::PGExecutor(PGConnectionPool &pool):
+    pool(pool)
+{
+
+}
+
 PGExecutor::PGExecutor(PGConnectionPool &pool,
                        const PGSqlString &sql): pool(pool)
 {
@@ -17,6 +23,29 @@ size_t PGExecutor::exec(const PGSqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
     return size();
+}
+
+size_t PGExecutor::select(const std::string &tableName,
+                          const std::string &needleField,
+                          const std::string &needleValue)
+{
+    PGSqlString sql("select * from ");
+    sql += tableName;
+    sql += " where " + needleField;
+    sql += " = :" + needleField;
+    sql.set(needleField, needleValue);
+    PGCommandTransactor ct(pool, sql, result);
+    return size();
+}
+
+void PGExecutor::erase(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
+{
+    PGSqlString sql("delete from ");
+    sql += tableName;
+    sql += " where " + needleField;
+    sql += " = :" + needleField;
+    sql.set(needleField, needleValue);
+    PGCommandTransactor ct(pool, sql, result);
 }
 
 size_t PGExecutor::size()
@@ -67,6 +96,12 @@ int PGExecutor::integer(const std::string &fieldname)
 {
     const pqxx::row &row(result[currentRow]);
     return row[fieldname].get<int>().value();
+}
+
+size_t PGExecutor::get_size_t(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    return row[fieldname].get<size_t>().value();
 }
 
 std::chrono::system_clock::time_point PGExecutor::timepoint(const std::string &fieldname)
