@@ -60,7 +60,7 @@ std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
     return verify_token;
 }
 
-bool DatabaseLogicUserAndApp::verfiyUser(const std::string &loginEMail,
+bool DatabaseLogicUserAndApp::verifyUser(const std::string &loginEMail,
                                const std::string &verifyToken,
                                std::string &message,
                                std::string &loginToken)

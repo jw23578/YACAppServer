@@ -26,7 +26,7 @@ public:
     std::string createUser(const std::string &loginEMail,
                            const std::string &password);
 
-    bool verfiyUser(const std::string &loginEMail,
+    bool verifyUser(const std::string &loginEMail,
                     const std::string &verifyToken,
                     std::string &message,
                     std::string &loginToken);

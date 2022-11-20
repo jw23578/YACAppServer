@@ -29,6 +29,7 @@ SOURCES += \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerappuserregister.cpp \
+        handler/handlerappuserverify.cpp \
         handler/handlergetallapps.cpp \
         handler/handlergetapp.cpp \
         handler/handlerloginuser.cpp \
@@ -75,6 +76,7 @@ HEADERS += \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerappuserregister.h \
+  handler/handlerappuserverify.h \
   handler/handlergetallapps.h \
   handler/handlergetapp.h \
   handler/handlerloginuser.h \

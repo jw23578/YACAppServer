@@ -1,25 +1,25 @@
-#include "handlerverifyuser.h"
+#include "handlerappuserverify.h"
 #include "extmap.h"
 
-HandlerVerifyUser::HandlerVerifyUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
-                                     PistacheServerInterface &serverInterface):
+HandlerAppUserVerify::HandlerAppUserVerify(DatabaseLogicAppUser &databaseLogicAppUser,
+                                           PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
-                             "/verifyUser",
+                             "/verifyAppUser",
                              TypePost,
                              TypeNoLoginNeeded),
-    databaseLogicUserAndApp(databaseLogicUserAndApp)
+    databaseLogicAppUser(databaseLogicAppUser)
 {
 
 }
 
-void HandlerVerifyUser::method()
+void HandlerAppUserVerify::method()
 {
     MACRO_GetMandatoryPostString(loginEMail);
     MACRO_GetMandatoryPostString(verifyToken);
 
     std::string message;
     std::string loginToken;
-    if (databaseLogicUserAndApp.verifyUser(loginEMail,
+    if (databaseLogicAppUser.verifyAppUser(loginEMail,
                                            verifyToken,
                                            message,
                                            loginToken))

@@ -9,6 +9,7 @@
 #include "handler/handlergetallapps.h"
 #include "handler/handlergetapp.h"
 #include "handler/handlerappuserregister.h"
+#include "handler/handlerappuserverify.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
@@ -27,6 +28,7 @@ class YACAppServer: public PistacheServerInterface
     HandlerUploadApp handlerUploadApp;
 
     HandlerAppUserRegister handlerAppUserRegister;
+    HandlerAppUserVerify handlerAppUserVerify;
 
 
 public:
