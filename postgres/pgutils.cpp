@@ -153,6 +153,18 @@ bool PGUtils::entryExists(const std::string &tableName,
     return e.size() > 0;
 }
 
+size_t PGUtils::countEntries(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
+{
+    PGSqlString sql("select count(*) from ");
+    sql += tableName;
+    sql += " where ";
+    sql += ExtString::lower(needleField);
+    sql += " = :";
+    sql += ExtString::lower(needleField);
+    PGExecutor e(pool, sql);
+    return e.get_size_t("count");
+}
+
 PGSqlString PGUtils::createInsertString(const std::string &tableName)
 {
     std::map<std::string, PGSqlString>::iterator it(tableName2InsertString.find(tableName));

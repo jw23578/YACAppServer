@@ -74,6 +74,10 @@ public:
                      const std::string &needleField,
                      const std::string &needleValue);
 
+    size_t countEntries(const std::string &tableName,
+                        const std::string &needleField,
+                        const std::string &needleValue);
+
     PGSqlString createInsertString(const std::string &tableName);
     PGSqlString createUpdateString(const std::string &tableName,
                                    const std::string &needleField);
