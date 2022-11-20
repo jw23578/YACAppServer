@@ -17,6 +17,12 @@ public:
 
     size_t exec(PGSqlString const &sql);
 
+    size_t login(const std::string &tableName,
+                 const std::string &passwordHashfield,
+                 const std::string &password,
+                 const std::string &loginField,
+                 const std::string &loginValue);
+
     size_t select(const std::string &tableName,
                   const std::string &needleField,
                   const std::string &needleValue);
@@ -41,6 +47,7 @@ public:
     std::chrono::system_clock::time_point timepoint(const std::string &fieldname);
     sole::uuid uuid(const std::string &fieldname);
     pqxx::oid oid(const std::string &fieldname);
+
 };
 
 #endif // PGEXECUTOR_H

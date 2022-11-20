@@ -25,6 +25,25 @@ size_t PGExecutor::exec(const PGSqlString &sql)
     return size();
 }
 
+size_t PGExecutor::login(const std::string &tableName,
+                         const std::string &passwordHashfield,
+                         const std::string &password,
+                         const std::string &loginField,
+                         const std::string &loginValue)
+{
+    PGSqlString sql("select *, ");
+    sql += passwordHashfield;
+    sql += " = crypt(:password, ";
+    sql += passwordHashfield;
+    sql += ") as login_ok from ";
+    sql += tableName;
+    sql += " where ";
+    sql += loginField + " = :" + loginField;
+    sql.set(loginField, loginValue);
+    sql.set("password", password);
+    return exec(sql);
+}
+
 size_t PGExecutor::select(const std::string &tableName,
                           const std::string &needleField,
                           const std::string &needleValue)
@@ -34,8 +53,7 @@ size_t PGExecutor::select(const std::string &tableName,
     sql += " where " + needleField;
     sql += " = :" + needleField;
     sql.set(needleField, needleValue);
-    PGCommandTransactor ct(pool, sql, result);
-    return size();
+    return exec(sql);
 }
 
 void PGExecutor::erase(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
@@ -45,7 +63,7 @@ void PGExecutor::erase(const std::string &tableName, const std::string &needleFi
     sql += " where " + needleField;
     sql += " = :" + needleField;
     sql.set(needleField, needleValue);
-    PGCommandTransactor ct(pool, sql, result);
+    exec(sql);
 }
 
 size_t PGExecutor::size()

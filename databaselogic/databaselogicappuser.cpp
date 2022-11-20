@@ -124,3 +124,43 @@ bool DatabaseLogicAppUser::verifyAppUser(const std::string &loginEMail,
     return true;
 }
 
+bool DatabaseLogicAppUser::loginAppUser(const std::string &loginEMail,
+                                        const std::string &password,
+                                        std::string &message,
+                                        std::string &loginToken)
+{
+    PGExecutor appUser(pool);
+    if (!appUser.select(tableNames.t0003_appuser_profiles,
+                 "loginemail",
+                 loginEMail))
+    {
+        message = "LoginEMail/User not found";
+        return false;
+    }
+    if (appUser.isNull("verified"))
+    {
+        message = "LoginEMail/User not yet verified";
+        return false;
+    }
+    PGExecutor login(pool);
+    sole::uuid appUserId(appUser.uuid("id"));
+    if (!login.login(tableNames.t0004_appuser_passwordhashes,
+                     "password_hash",
+                     password,
+                     "appuser_id",
+                     appUserId.str()))
+    {
+        message = "LoginEMail/User not found";
+        return false;
+
+    }
+    if (!login.boolean("login_ok"))
+    {
+        message = "Password is wrong";
+        return false;
+    }
+
+    loginSuccessful(appUserId, loginToken);
+    return true;
+}
+
