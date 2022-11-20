@@ -10,11 +10,13 @@
 #include "handler/handlergetapp.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "databaselogic.h"
+#include "databaselogic/databaselogictables.h"
 #include "emaillogic.h"
 #include "loggedinuserscontainer.h"
 
 class YACAppServer: public PistacheServerInterface
 {
+    DatabaseLogicTables &databaseLogicTables;
     DatabaseLogic &databaseLogic;
     EMailLogic &emailLogic;
     LoggedInUsersContainer loggedInUsersContainer;
@@ -28,7 +30,8 @@ class YACAppServer: public PistacheServerInterface
 
 
 public:
-    YACAppServer(DatabaseLogic &databaseLogic,
+    YACAppServer(DatabaseLogicTables &databaseLogicTables,
+                 DatabaseLogic &databaseLogic,
                  EMailLogic &emailLogic,
                  int port);
 };

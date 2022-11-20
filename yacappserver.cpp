@@ -2,10 +2,12 @@
 #include "serverHeader/loginemailheader.h"
 #include "serverHeader/logintokenheader.h"
 
-YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
+YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
+                           DatabaseLogic &databaseLogic,
                            EMailLogic &emailLogic,
                            int port):
     PistacheServerInterface(port),
+    databaseLogicTables(databaseLogicTables),
     databaseLogic(databaseLogic),
     emailLogic(emailLogic),
     loggedInUsersContainer(databaseLogic),
@@ -31,7 +33,7 @@ YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
     Pistache::Http::Header::Registrar<LoginTokenHeader>();
 
     std::cout << "Checking Databaseconnection\n";
-    if (!databaseLogic.connectionOk())
+    if (!databaseLogicTables.connectionOk())
     {
         std::cout << "Databaseconnection is not ok\n";
         std::cout << "exiting\n";
@@ -39,14 +41,14 @@ YACAppServer::YACAppServer(DatabaseLogic &databaseLogic,
     }
     std::cout << "Databaseconnection is ok\n";
     std::cout << "Checking for PGCrypto installed\n";
-    if (!databaseLogic.pgCryptoInstalled())
+    if (!databaseLogicTables.pgCryptoInstalled())
     {
         std::cout << "PGCrypto is not installed\n";
         std::cout << "exiting\n";
         return;
     }
     std::cout << "PGCrypto is installed\n";
-    databaseLogic.createDatabaseTables();
+    databaseLogicTables.createDatabaseTables();
     std::cout << "Start Serving on Port: " << port << "\n";
     serve();
 }

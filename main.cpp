@@ -9,6 +9,7 @@
 #include "emaillogic.h"
 #include "logstat/logstatcontroller.h"
 #include "logstat/filelogger.h"
+#include "databaselogic/databaselogictables.h"
 
 using namespace std;
 
@@ -51,8 +52,11 @@ int main(int argc, char **argv)
                           json.getString("postgresPassword"),
                           10,
                           logStatController);
-    DatabaseLogic databaseLogic(logStatController,
+    DatabaseLogicTables databaseLogicTables(logStatController,
+                                            pool);
+    DatabaseLogic databaseLogic(logStatController,                                
                                 pool);
+
     EMailLogic emailLogic(json.getString("smtpSenderName"),
                           json.getString("smtpSenderEMail"),
                           json.getString("smtpReplyTo"),
@@ -60,7 +64,8 @@ int main(int argc, char **argv)
                           json.getString("smtpUser"),
                           json.getString("smtpPassword"));
 
-    YACAppServer server(databaseLogic,
+    YACAppServer server(databaseLogicTables,
+                        databaseLogic,
                         emailLogic,
                         json.getInt("serverPort"));
     return 0;

@@ -5,30 +5,23 @@
 #include "sole/sole.hpp"
 #include "rapidjson/document.h"
 #include "logstat/logstatcontroller.h"
+#include "pgutils.h"
+#include "databaselogic/tablenames.h"
 
 
 class DatabaseLogic
 {
     LogStatController &logStatController;
     PGConnectionPool &pool;
+    PGUtils utils;
+    TableNames tableNames;
     void loginSuccessful(const std::string &loginEMail,
                          std::string &loginToken);
 
-    const std::string t0001_users = {"t0001_users"};
-    const std::string t0002_apps = {"t0002_apps"};
-    const std::string t0003_appuser_profiles = {"t0003_appuser_profiles"};
-    const std::string t0004_appuser_passwordhashes = {"t0004_appuser_passwordhashes"};
-    const std::string t0005_group_of_appusers = {"t0005_group_of_appusers"};
-    const std::string t0006_appuser2group = {"t0006_appuser2group"};
-    const std::string t0007_messages = {"t0007_messages"};
-    const std::string t0008_message_state {"t0008_message_state"};
 public:
     DatabaseLogic(LogStatController &logStatController,
                   PGConnectionPool &pool);
 
-    bool connectionOk();
-    bool pgCryptoInstalled();
-    void createDatabaseTables();
     bool userExists(const std::string &loginEMail);
     std::string createUser(const std::string &loginEMail,
                            const std::string &password);
@@ -66,6 +59,7 @@ public:
     bool fetchOneApp(const std::string &app_id,
                      const int current_installed_version,
                      rapidjson::Document &target);
+
 };
 
 #endif // DATABASELOGIC_H
