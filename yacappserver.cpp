@@ -4,14 +4,12 @@
 
 YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+                           DatabaseLogicAppUser &databaseLogicAppUser,
                            EMailLogic &emailLogic,
                            int port):
     PistacheServerInterface(port),
-    databaseLogicTables(databaseLogicTables),
-    databaseLogicUserAndApp(databaseLogicUserAndApp),
-    emailLogic(emailLogic),
     loggedInUsersContainer(databaseLogicUserAndApp),
-    handlerRegister(databaseLogicUserAndApp,
+    handlerUserRegister(databaseLogicUserAndApp,
                     emailLogic,
                     *this),
     handlerVerifyUser(databaseLogicUserAndApp,
@@ -26,7 +24,10 @@ YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
                   *this),
     handlerUploadApp(databaseLogicUserAndApp,
                      *this,
-                     loggedInUsersContainer)
+                     loggedInUsersContainer),
+    handlerAppUserRegister(databaseLogicAppUser,
+                           emailLogic,
+                           *this)
 
 {
     Pistache::Http::Header::Registrar<LoginEMailHeader>();

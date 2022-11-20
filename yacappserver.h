@@ -2,12 +2,13 @@
 #define YACAPPSERVER_H
 
 #include "interfaces/pistacheserverinterface.h"
-#include "handler/handlerregisteruser.h"
+#include "handler/handleruserregister.h"
 #include "handler/handlerverifyuser.h"
 #include "handler/handlerloginuser.h"
 #include "handler/handleruserloggedin.h"
 #include "handler/handlergetallapps.h"
 #include "handler/handlergetapp.h"
+#include "handler/handlerappuserregister.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
@@ -16,11 +17,8 @@
 
 class YACAppServer: public PistacheServerInterface
 {
-    DatabaseLogicTables &databaseLogicTables;
-    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
-    EMailLogic &emailLogic;
     LoggedInUsersContainer loggedInUsersContainer;
-    HandlerRegisterUser handlerRegister;
+    HandlerUserRegister handlerUserRegister;
     HandlerVerifyUser handlerVerifyUser;
     HandlerLoginUser handlerLoginUser;
     HandlerUserLoggedIn handlerUserLoggedIn;
@@ -28,10 +26,13 @@ class YACAppServer: public PistacheServerInterface
     HandlerGetAPP handlerGetAPP;
     HandlerUploadApp handlerUploadApp;
 
+    HandlerAppUserRegister handlerAppUserRegister;
+
 
 public:
     YACAppServer(DatabaseLogicTables &databaseLogicTables,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+                 DatabaseLogicAppUser &databaseLogicAppUser,
                  EMailLogic &emailLogic,
                  int port);
 };

@@ -10,6 +10,7 @@
 #include "logstat/logstatcontroller.h"
 #include "logstat/filelogger.h"
 #include "databaselogictables.h"
+#include "databaselogicappuser.h"
 
 using namespace std;
 
@@ -56,6 +57,8 @@ int main(int argc, char **argv)
                                             pool);
     DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
                                                     pool);
+    DatabaseLogicAppUser databaseLogicAppUser(logStatController,
+                                              pool);
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),
                           json.getString("smtpSenderEMail"),
@@ -66,6 +69,7 @@ int main(int argc, char **argv)
 
     YACAppServer server(databaseLogicTables,
                         databaseLogicUserAndApp,
+                        databaseLogicAppUser,
                         emailLogic,
                         json.getInt("serverPort"));
     return 0;

@@ -1,6 +1,6 @@
-#include "handlerregisteruser.h"
+#include "handleruserregister.h"
 
-HandlerRegisterUser::HandlerRegisterUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+HandlerUserRegister::HandlerUserRegister(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                                  EMailLogic &emailLogic,
                                  PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
@@ -13,7 +13,7 @@ HandlerRegisterUser::HandlerRegisterUser(DatabaseLogicUserAndApp &databaseLogicU
 
 }
 
-void HandlerRegisterUser::method()
+void HandlerUserRegister::method()
 {
     MACRO_GetMandatoryPostString(loginEMail);
     MACRO_GetMandatoryPostString(password);

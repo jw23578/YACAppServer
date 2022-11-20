@@ -28,11 +28,12 @@ SOURCES += \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
+        handler/handlerappuserregister.cpp \
         handler/handlergetallapps.cpp \
         handler/handlergetapp.cpp \
         handler/handlerloginuser.cpp \
-        handler/handlerregisteruser.cpp \
         handler/handleruserloggedin.cpp \
+        handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
@@ -73,11 +74,12 @@ HEADERS += \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/tablenames.h \
   emaillogic.h \
+  handler/handlerappuserregister.h \
   handler/handlergetallapps.h \
   handler/handlergetapp.h \
   handler/handlerloginuser.h \
-  handler/handlerregisteruser.h \
   handler/handleruserloggedin.h \
+  handler/handleruserregister.h \
   handler/handlerverifyuser.h \
   handlerLoggedIn/handlerloggedininterface.h \
   handlerLoggedIn/handleruploadapp.h \
