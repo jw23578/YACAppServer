@@ -164,3 +164,36 @@ bool DatabaseLogicAppUser::loginAppUser(const std::string &loginEMail,
     return true;
 }
 
+bool DatabaseLogicAppUser::appUserLoggedIn(const std::string &loginEMail,
+                                           const std::string &loginToken,
+                                           sole::uuid &userId,
+                                           std::chrono::system_clock::time_point &loginTokenValidUntil)
+{
+    PGExecutor appUser(pool);
+    if (!appUser.select(tableNames.t0003_appuser_profiles,
+                 "loginemail",
+                 loginEMail))
+    {
+        return false;
+    }
+    if (appUser.isNull("verified"))
+    {
+        return false;
+    }
+    userId = appUser.uuid("id");
+    PGSqlString sql("select * from ");
+    sql += tableNames.t0009_appuser_logintoken;
+    sql += " where appuser_id = :appuser_id "
+           "and login_token = :login_token";
+    sql.set("appuser_id", userId);
+    sql.set("login_token", loginToken);
+    PGExecutor e(pool, sql);
+    if (e.size() == 0)
+    {
+        return false;
+    }
+    userId = e.uuid("id");
+    loginTokenValidUntil = e.timepoint("login_token_valid_until");
+    return true;
+}
+
