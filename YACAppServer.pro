@@ -102,6 +102,7 @@ HEADERS += \
   yacappserver.h
 
 DISTFILES += \
+  .gitignore \
   YACAppServerConfig.json \
   curl-format.txt \
   deployToJW78.sh \
