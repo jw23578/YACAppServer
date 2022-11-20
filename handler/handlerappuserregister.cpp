@@ -17,14 +17,24 @@ void HandlerAppUserRegister::method()
 {
     MACRO_GetMandatoryPostString(loginEMail);
     MACRO_GetMandatoryPostString(password);
+    MACRO_GetMandatoryPostString(appId);
 
     if (databaseLogicAppUser.appUserExists(loginEMail))
     {
         answer(Pistache::Http::Code::Bad_Request, "loginEMail already exists and cannot be registered again");
         return;
     }
-    std::string verifyToken(databaseLogicAppUser.createAppUser(loginEMail, password));
+    std::string verifyToken;
+    std::string message;
+    if (!databaseLogicAppUser.createAppUser(sole::rebuild(appId),
+                                            loginEMail,
+                                            password,
+                                            message,
+                                            verifyToken))
+    {
+        answer(Pistache::Http::Code::Bad_Request, message);
+        return;
+    }
     emailLogic.sendPleaseVerifyMail(loginEMail, verifyToken);
     answer(Pistache::Http::Code::Ok, "appuser registered, please verify");
-
 }

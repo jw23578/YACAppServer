@@ -29,8 +29,11 @@ public:
                          PGConnectionPool &pool);
 
     bool appUserExists(const std::string &loginEMail);
-    std::string createAppUser(const std::string &loginEMail,
-                              const std::string &password);
+    bool createAppUser(const sole::uuid &appId,
+                       const std::string &loginEMail,
+                       const std::string &password,
+                       std::string &message,
+                       std::string &verifyToken);
     bool verifyAppUser(const std::string &loginEMail,
                        const std::string &verifyToken,
                        std::string &message,

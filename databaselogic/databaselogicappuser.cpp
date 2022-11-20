@@ -64,16 +64,25 @@ bool DatabaseLogicAppUser::appUserExists(const std::string &loginEMail)
     return utils.entryExists(tableNames.t0003_appuser_profiles, "loginemail", loginEMail);
 }
 
-std::string DatabaseLogicAppUser::createAppUser(const std::string &loginEMail,
-                                                const std::string &password)
+bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
+                                                const std::string &loginEMail,
+                                                const std::string &password,
+                                                std::string &message,
+                                                std::string &verifyToken)
 {
+    if (!utils.entryExists(tableNames.t0002_apps, "id", appId.str()))
+    {
+        message = "App with id: " + appId.str() + " does not exist";
+        return false;
+    }
     sole::uuid appUserId(sole::uuid4());
-    std::string verify_token(ExtString::randomString(0, 0, 4, 0));
+    verifyToken = ExtString::randomString(0, 0, 4, 0);
     {
         PGSqlString sql(utils.createInsertString(tableNames.t0003_appuser_profiles));
         sql.set("id", appUserId);
+        sql.set("app_id", appId);
         sql.set("loginemail", loginEMail);
-        sql.set("verify_token", verify_token);
+        sql.set("verify_token", verifyToken);
         sql.set("verify_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
         PGExecutor e(pool, sql);
     }
@@ -89,7 +98,7 @@ std::string DatabaseLogicAppUser::createAppUser(const std::string &loginEMail,
         PGExecutor e(pool, sql);
     }
 
-    return verify_token;
+    return true;
 }
 
 bool DatabaseLogicAppUser::verifyAppUser(const std::string &loginEMail,
