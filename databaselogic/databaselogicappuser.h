@@ -19,6 +19,11 @@ class DatabaseLogicAppUser
     TableNames tableNames;
     void loginSuccessful(const sole::uuid &appUserId,
                          std::string &loginToken);
+
+    std::map<std::string, sole::uuid> loginEMail2AppUserId;
+    bool lookupAppUser(const std::string &loginEMail,
+                       sole::uuid &appUserId,
+                       std::string &message);
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);

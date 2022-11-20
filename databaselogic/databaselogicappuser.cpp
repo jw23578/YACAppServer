@@ -17,6 +17,39 @@ void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
     PGExecutor e(pool, sql);
 }
 
+bool DatabaseLogicAppUser::lookupAppUser(const std::string &loginEMail,
+                                         sole::uuid &appUserId,
+                                         std::string &message)
+{
+    auto it(loginEMail2AppUserId.find(loginEMail));
+    if (it != loginEMail2AppUserId.end())
+    {
+        appUserId = it->second;
+        return true;
+    }
+    std::map<std::string, sole::uuid> loginEMail2AppUserId;
+    PGExecutor appUser(pool);
+    if (!appUser.select(tableNames.t0003_appuser_profiles,
+                        "loginemail",
+                        loginEMail))
+    {
+        message = "LoginEMail/User not found";
+        return false;
+    }
+    if (appUser.size() > 1)
+    {
+        message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
+        return false;
+    }
+    if (appUser.isNull("verified"))
+    {
+        message = "LoginEMail/User not yet verified";
+        return false;
+    }
+    loginEMail2AppUserId[loginEMail] = appUser.uuid("id");
+    return true;
+}
+
 DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
                                            PGConnectionPool &pool):
     logStatController(logStatController),
@@ -129,21 +162,12 @@ bool DatabaseLogicAppUser::loginAppUser(const std::string &loginEMail,
                                         std::string &message,
                                         std::string &loginToken)
 {
-    PGExecutor appUser(pool);
-    if (!appUser.select(tableNames.t0003_appuser_profiles,
-                 "loginemail",
-                 loginEMail))
+    sole::uuid appUserId;
+    if (!lookupAppUser(loginEMail, appUserId, message))
     {
-        message = "LoginEMail/User not found";
-        return false;
-    }
-    if (appUser.isNull("verified"))
-    {
-        message = "LoginEMail/User not yet verified";
         return false;
     }
     PGExecutor login(pool);
-    sole::uuid appUserId(appUser.uuid("id"));
     if (!login.login(tableNames.t0004_appuser_passwordhashes,
                      "password_hash",
                      password,
@@ -169,18 +193,11 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const std::string &loginEMail,
                                            sole::uuid &userId,
                                            std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
-    PGExecutor appUser(pool);
-    if (!appUser.select(tableNames.t0003_appuser_profiles,
-                 "loginemail",
-                 loginEMail))
+    std::string ignored;
+    if (!lookupAppUser(loginEMail, userId, ignored))
     {
         return false;
     }
-    if (appUser.isNull("verified"))
-    {
-        return false;
-    }
-    userId = appUser.uuid("id");
     PGSqlString sql("select * from ");
     sql += tableNames.t0009_appuser_logintoken;
     sql += " where appuser_id = :appuser_id "
@@ -195,5 +212,27 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const std::string &loginEMail,
     userId = e.uuid("id");
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
     return true;
+}
+
+void DatabaseLogicAppUser::refreshAppUserLoginToken(const std::string &loginEMail,
+                                                    std::chrono::system_clock::time_point &loginTokenValidUntil)
+{
+    std::string ignored;
+    sole::uuid appUserId;
+    if (!lookupAppUser(loginEMail, appUserId, ignored))
+    {
+        return;
+    }
+
+    PGSqlString sql("update ");
+    sql += tableNames.t0009_appuser_logintoken;
+    sql += " set login_token_valid_until = now() + interval '1 hour' *:validhours "
+           "where appuser_id = :appuserid "
+           "returning login_token_valid_until";
+    MACRO_set(appUserId);
+    int validHours(24 * 7);
+    MACRO_set(validHours);
+    PGExecutor e(pool, sql);
+    loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
 
