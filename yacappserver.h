@@ -17,7 +17,7 @@
 class YACAppServer: public PistacheServerInterface
 {
     DatabaseLogicTables &databaseLogicTables;
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
     EMailLogic &emailLogic;
     LoggedInUsersContainer loggedInUsersContainer;
     HandlerRegisterUser handlerRegister;
@@ -31,7 +31,7 @@ class YACAppServer: public PistacheServerInterface
 
 public:
     YACAppServer(DatabaseLogicTables &databaseLogicTables,
-                 DatabaseLogic &databaseLogic,
+                 DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  EMailLogic &emailLogic,
                  int port);
 };

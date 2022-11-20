@@ -54,8 +54,8 @@ int main(int argc, char **argv)
                           logStatController);
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool);
-    DatabaseLogic databaseLogic(logStatController,                                
-                                pool);
+    DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
+                                                    pool);
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),
                           json.getString("smtpSenderEMail"),
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
                           json.getString("smtpPassword"));
 
     YACAppServer server(databaseLogicTables,
-                        databaseLogic,
+                        databaseLogicUserAndApp,
                         emailLogic,
                         json.getInt("serverPort"));
     return 0;

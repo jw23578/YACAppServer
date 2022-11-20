@@ -6,9 +6,9 @@
 
 class HandlerUploadApp : public HandlerLoggedInInterface
 {
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
 public:
-    HandlerUploadApp(DatabaseLogic &databaseLogic,
+    HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                      PistacheServerInterface &serverInterface,
                      LoggedInUsersContainer &loggedInUsersContainer);
 

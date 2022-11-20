@@ -1,12 +1,12 @@
 #include "handlergetallapps.h"
 
-HandlerGetAllApps::HandlerGetAllApps(DatabaseLogic &databaseLogic,
+HandlerGetAllApps::HandlerGetAllApps(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                                      PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/getAllAPPs",
                              TypeGet,
                              TypeNoLoginNeeded),
-    databaseLogic(databaseLogic)
+    databaseLogicUserAndApp(databaseLogicUserAndApp)
 {
 
 }
@@ -14,6 +14,6 @@ HandlerGetAllApps::HandlerGetAllApps(DatabaseLogic &databaseLogic,
 void HandlerGetAllApps::method()
 {
     rapidjson::Document allAPPsObject;
-    databaseLogic.fetchAllAPPs(allAPPsObject);
+    databaseLogicUserAndApp.fetchAllAPPs(allAPPsObject);
     answer(Pistache::Http::Code::Ok, allAPPsObject);
 }

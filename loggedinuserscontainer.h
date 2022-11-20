@@ -5,7 +5,7 @@
 
 class LoggedInUsersContainer
 {
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogic;
     struct SData
     {
         sole::uuid userId;
@@ -15,7 +15,7 @@ class LoggedInUsersContainer
     typedef std::map<std::string, SData> LoggedInUsersMap;
     LoggedInUsersMap loggedInUsers;
 public:
-    LoggedInUsersContainer(DatabaseLogic &databaseLogic);
+    LoggedInUsersContainer(DatabaseLogicUserAndApp &databaseLogic);
 
     bool isLoggedIn(const std::string &loginEMail,
                     const std::string &loginToken,

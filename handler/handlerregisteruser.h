@@ -7,10 +7,10 @@
 
 class HandlerRegisterUser : public PistacheHandlerInterface
 {
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
     EMailLogic &emailLogic;
 public:
-    HandlerRegisterUser(DatabaseLogic &databaseLogic,
+    HandlerRegisterUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                     EMailLogic &emailLogic,
                     PistacheServerInterface &serverInterface);
 

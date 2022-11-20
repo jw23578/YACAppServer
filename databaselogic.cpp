@@ -7,7 +7,7 @@
 #include "pgoidloader.h"
 #include "databaselogic/databaselogictables.h"
 
-void DatabaseLogic::loginSuccessful(const std::string &loginEMail,
+void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
                                     std::string &loginToken)
 {
     if (loginToken.size() == 0)
@@ -25,7 +25,7 @@ void DatabaseLogic::loginSuccessful(const std::string &loginEMail,
     PGExecutor e(pool, sql);
 }
 
-DatabaseLogic::DatabaseLogic(LogStatController &logStatController,
+DatabaseLogicUserAndApp::DatabaseLogicUserAndApp(LogStatController &logStatController,
                              PGConnectionPool &pool):
     logStatController(logStatController),
     pool(pool),
@@ -34,12 +34,12 @@ DatabaseLogic::DatabaseLogic(LogStatController &logStatController,
 
 }
 
-bool DatabaseLogic::userExists(const std::string &loginEMail)
+bool DatabaseLogicUserAndApp::userExists(const std::string &loginEMail)
 {
     return utils.entryExists(tableNames.t0001_users, "loginemail", loginEMail);
 }
 
-std::string DatabaseLogic::createUser(const std::string &loginEMail,
+std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
                                       const std::string &password)
 {
     PGSqlString sql("insert into t0001_users "
@@ -61,7 +61,7 @@ std::string DatabaseLogic::createUser(const std::string &loginEMail,
     return verify_token;
 }
 
-bool DatabaseLogic::verfiyUser(const std::string &loginEMail,
+bool DatabaseLogicUserAndApp::verfiyUser(const std::string &loginEMail,
                                const std::string &verifyToken,
                                std::string &message,
                                std::string &loginToken)
@@ -124,7 +124,7 @@ bool DatabaseLogic::verfiyUser(const std::string &loginEMail,
     return true;
 }
 
-bool DatabaseLogic::loginUser(const std::string &loginEMail,
+bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
                               const std::string &password,
                               std::string &message,
                               std::string &loginToken)
@@ -155,7 +155,7 @@ bool DatabaseLogic::loginUser(const std::string &loginEMail,
     return true;
 }
 
-bool DatabaseLogic::userLoggedIn(const std::string &loginEMail,
+bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
                                  const std::string &loginToken,
                                  sole::uuid &userId,
                                  std::chrono::system_clock::time_point &loginTokenValidUntil)
@@ -175,7 +175,7 @@ bool DatabaseLogic::userLoggedIn(const std::string &loginEMail,
     return true;
 }
 
-void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
+void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
                                       std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     PGSqlString sql("update t0001_users "
@@ -190,7 +190,7 @@ void DatabaseLogic::refreshLoginToken(const std::string &loginEMail,
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
 
-bool DatabaseLogic::saveApp(const sole::uuid owner_id,
+bool DatabaseLogicUserAndApp::saveApp(const sole::uuid owner_id,
                             const std::string &app_id,
                             const std::string &app_name,
                             const int app_version,
@@ -236,7 +236,7 @@ bool DatabaseLogic::saveApp(const sole::uuid owner_id,
     return true;
 }
 
-size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
+size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
 {
     auto &alloc(target.GetAllocator());
     PGSqlString sql("select app_id "
@@ -265,7 +265,7 @@ size_t DatabaseLogic::fetchAllAPPs(rapidjson::Document &target)
     return e.size();
 }
 
-bool DatabaseLogic::fetchOneApp(const std::string &app_id,
+bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
                                 const int current_installed_version,
                                 rapidjson::Document &target)
 {

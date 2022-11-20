@@ -6,9 +6,9 @@
 
 class HandlerLoginUser : public PistacheHandlerInterface
 {
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
 public:
-    HandlerLoginUser(DatabaseLogic &databaseLogic,
+    HandlerLoginUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                      PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface

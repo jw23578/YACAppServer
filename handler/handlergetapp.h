@@ -6,10 +6,10 @@
 
 class HandlerGetAPP : public PistacheHandlerInterface
 {
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
 
 public:
-    HandlerGetAPP(DatabaseLogic &databaseLogic,
+    HandlerGetAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                   PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface

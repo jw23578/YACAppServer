@@ -6,9 +6,9 @@
 
 class HandlerVerifyUser : public PistacheHandlerInterface
 {
-    DatabaseLogic &databaseLogic;
+    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
 public:
-    HandlerVerifyUser(DatabaseLogic &databaseLogic,
+    HandlerVerifyUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                       PistacheServerInterface &serverInterface);
     // PistacheHandlerInterface interface
 public:

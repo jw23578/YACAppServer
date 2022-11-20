@@ -1,13 +1,13 @@
 #include "handleruploadapp.h"
 
-HandlerUploadApp::HandlerUploadApp(DatabaseLogic &databaseLogic,
+HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                                    PistacheServerInterface &serverInterface,
                                    LoggedInUsersContainer &loggedInUsersContainer):
     HandlerLoggedInInterface(serverInterface,
                              "/uploadApp",
                              TypePost,
                              loggedInUsersContainer),
-    databaseLogic(databaseLogic)
+    databaseLogicUserAndApp(databaseLogicUserAndApp)
 {
 
 }
@@ -24,7 +24,7 @@ void HandlerUploadApp::method()
     MACRO_GetMandatoryBool(is_template_app);
 
     std::string message;
-    if (!databaseLogic.saveApp(userId,
+    if (!databaseLogicUserAndApp.saveApp(userId,
                                app_id,
                                app_name,
                                app_version,

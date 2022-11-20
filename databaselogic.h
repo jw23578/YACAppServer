@@ -9,7 +9,7 @@
 #include "databaselogic/tablenames.h"
 
 
-class DatabaseLogic
+class DatabaseLogicUserAndApp
 {
     LogStatController &logStatController;
     PGConnectionPool &pool;
@@ -19,7 +19,7 @@ class DatabaseLogic
                          std::string &loginToken);
 
 public:
-    DatabaseLogic(LogStatController &logStatController,
+    DatabaseLogicUserAndApp(LogStatController &logStatController,
                   PGConnectionPool &pool);
 
     bool userExists(const std::string &loginEMail);
