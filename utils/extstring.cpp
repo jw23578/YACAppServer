@@ -453,3 +453,11 @@ std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &
 //    std::chrono::system_clock::time_point tp(milliseconds);
 //    return tp;
 }
+
+
+
+bool ExtString::emailIsValid(const std::string &email)
+{
+    static const std::regex pattern("^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,63})$");
+    return regex_match(email, pattern);
+}
