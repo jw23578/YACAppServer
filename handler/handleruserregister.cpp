@@ -15,8 +15,8 @@ HandlerUserRegister::HandlerUserRegister(DatabaseLogicUserAndApp &databaseLogicU
 
 void HandlerUserRegister::method()
 {
-    MACRO_GetMandatoryPostString(loginEMail);
-    MACRO_GetMandatoryPostString(password);
+    MACRO_GetMandatoryEMail(loginEMail);
+    MACRO_GetMandatoryString(password);
 
     if (databaseLogicUserAndApp.userExists(loginEMail))
     {

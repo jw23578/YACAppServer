@@ -6,20 +6,18 @@
 #include "pistacheserverinterface.h"
 
 #define MACRO_GetMandatoryString(targetName) std::string targetName; \
-    if (handlerType == TypeGet) \
+    if (!getString(#targetName, targetName, true) || !targetName.size()) \
     { \
-        if (!getString(#targetName, targetName, true) || !targetName.size()) \
-        { \
-            return; \
-        } \
-    } \
-    else \
-    { \
-        if (!getPostString(#targetName, targetName, true) || !targetName.size()) \
-        { \
-            return; \
-        } \
+        return; \
     }
+
+#define MACRO_GetMandatoryEMail(targetName) MACRO_GetMandatoryString(targetName) \
+    if (!ExtString::emailIsValid(targetName)) \
+    { \
+        answer(Pistache::Http::Code::Bad_Request, "this is not a valid email-adress: " + targetName); \
+        return; \
+    }
+
 
 #define MACRO_GetMandatoryBool(targetName) bool targetName; \
     if (!getBool(#targetName, targetName, true)) \
@@ -33,18 +31,6 @@
     { \
         return; \
     }
-
-#define MACRO_GetMandatoryPostString(targetName) std::string targetName; \
-    if (!getPostString(#targetName, targetName, true) || !targetName.size()) \
-{ \
-    return; \
-}
-
-#define MACRO_GetMandatoryGetString(targetName) std::string targetName; \
-    if (!getString(#targetName, targetName, true) || !targetName.size()) \
-{ \
-    return; \
-}
 
 class PistacheHandlerInterface
 {
@@ -91,9 +77,6 @@ public:
     bool getString(std::string const &name,
                    std::string &target,
                    bool ifMissingThenSendResponse);
-    bool getPostString(const std::string &name,
-                       std::string &target,
-                       bool ifMissingThenSendResponse);
     virtual void method() = 0;
     virtual bool checkLogin();
 

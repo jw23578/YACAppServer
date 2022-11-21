@@ -14,8 +14,8 @@ HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogicAppUser &databaseLogicAppU
 
 void HandlerAppUserLogin::method()
 {
-    MACRO_GetMandatoryPostString(loginEMail);
-    MACRO_GetMandatoryPostString(password);
+    MACRO_GetMandatoryEMail(loginEMail);
+    MACRO_GetMandatoryString(password);
 
     if (!ExtString::emailIsValid(loginEMail))
     {

@@ -13,8 +13,8 @@ HandlerUserLoggedIn::HandlerUserLoggedIn(PistacheServerInterface &serverInterfac
 
 void HandlerUserLoggedIn::method()
 {
-    MACRO_GetMandatoryGetString(loginEMail);
-    MACRO_GetMandatoryGetString(loginToken);
+    MACRO_GetMandatoryEMail(loginEMail);
+    MACRO_GetMandatoryString(loginToken);
     if (loggedInUsersContainer.isLoggedIn(loginEMail,
                                           loginToken))
     {

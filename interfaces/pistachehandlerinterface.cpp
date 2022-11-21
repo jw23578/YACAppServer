@@ -107,15 +107,16 @@ bool PistacheHandlerInterface::getString(const std::string &name,
                                          std::string &target,
                                          bool ifMissingThenSendResponse)
 {
-    return ExtPistache::getString(*request, *response, name, target, ifMissingThenSendResponse);
-}
-
-bool PistacheHandlerInterface::getPostString(const std::string &name,
-                                             std::string &target,
-                                             bool ifMissingThenSendResponse)
-{
-    ExtRapidJSON postData(postedData);
-    return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
+    if (handlerType == TypeGet)
+    {
+        return ExtPistache::getString(*request, *response, name, target, ifMissingThenSendResponse);
+    }
+    if (handlerType == TypePost)
+    {
+        ExtRapidJSON postData(postedData);
+        return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
+    }
+    return "";
 }
 
 bool PistacheHandlerInterface::checkLogin()

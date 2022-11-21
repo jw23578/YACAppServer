@@ -13,14 +13,8 @@ HandlerAppUserLoggedIn::HandlerAppUserLoggedIn(LoggedInAppUsersContainer &logged
 
 void HandlerAppUserLoggedIn::method()
 {
-    MACRO_GetMandatoryGetString(loginEMail);
-    MACRO_GetMandatoryGetString(loginToken);
-
-    if (!ExtString::emailIsValid(loginEMail))
-    {
-        answer(Pistache::Http::Code::Bad_Request, "this is not a valid email-adress: " + loginEMail);
-        return;
-    }
+    MACRO_GetMandatoryEMail(loginEMail);
+    MACRO_GetMandatoryString(loginToken);
 
     if (loggedInAppUsersContainer.isLoggedIn(loginEMail,
                                              loginToken))

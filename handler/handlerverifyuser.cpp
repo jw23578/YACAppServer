@@ -14,8 +14,8 @@ HandlerVerifyUser::HandlerVerifyUser(DatabaseLogicUserAndApp &databaseLogicUserA
 
 void HandlerVerifyUser::method()
 {
-    MACRO_GetMandatoryPostString(loginEMail);
-    MACRO_GetMandatoryPostString(verifyToken);
+    MACRO_GetMandatoryEMail(loginEMail);
+    MACRO_GetMandatoryString(verifyToken);
 
     std::string message;
     std::string loginToken;

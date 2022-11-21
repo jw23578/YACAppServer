@@ -14,8 +14,9 @@ HandlerUserLogin::HandlerUserLogin(DatabaseLogicUserAndApp &databaseLogicUserAnd
 
 void HandlerUserLogin::method()
 {
-    MACRO_GetMandatoryPostString(loginEMail);
-    MACRO_GetMandatoryPostString(password);
+    MACRO_GetMandatoryEMail(loginEMail);
+    MACRO_GetMandatoryString(password);
+
     std::string message;
     std::string loginToken;
     if (!databaseLogicUserAndApp.loginUser(loginEMail,
