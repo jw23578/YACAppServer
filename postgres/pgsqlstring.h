@@ -51,6 +51,9 @@ public:
     char &operator[](size_t i);
     std::string str() const;
     size_t size() const;
+
+    void replace(const std::string &needle,
+                 const std::string &value);
 };
 
 #endif // JW78CORE_SQL_STRING_H

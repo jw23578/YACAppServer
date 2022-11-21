@@ -368,7 +368,7 @@ std::string PGColumnAndType::toString() const
         break;
     case pg_bool: s += "bool";
         break;
-    case pg_timestamp: s += "timestamp";
+    case pg_timestamp: s += "timestamp with time zone";
         break;
     case pg_uuid: s += "uuid";
         break;

@@ -430,14 +430,26 @@ std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &
 {
     std::stringstream ss(s);
     std::tm tm;
-    strptime(s.c_str(), "%F %TZ", &tm);
+    strptime(s.c_str(), "%F %T", &tm);
     time_t t = mktime(&tm);
 
     std::chrono::time_point<std::chrono::system_clock> time;
-    time = std::chrono::system_clock::from_time_t(t);    auto timeMs = std::chrono::time_point_cast<std::chrono::milliseconds>(time);
+    time = std::chrono::system_clock::from_time_t(t);
+    auto timeMs = std::chrono::time_point_cast<std::chrono::milliseconds>(time);
 
     int value = std::stoi(s.substr(20,3));
     timeMs += std::chrono::milliseconds(value);
+
+    int timeZone(std::stoi(s.substr(24, 2)));
+    if (s.substr(23, 1) == "+")
+    {
+      timeMs += std::chrono::hours(timeZone);
+    }
+    if (s.substr(23, 1) == "-")
+    {
+      timeMs -= std::chrono::hours(timeZone);
+    }
+
 
     return timeMs;
 

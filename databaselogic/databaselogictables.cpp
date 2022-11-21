@@ -40,9 +40,9 @@ void DatabaseLogicTables::createDatabaseTables()
                            " password_hash text, "
                            " verified timestamp, "
                            " verify_token text, "
-                           " verify_token_valid_until timestamp, "
+                           " verify_token_valid_until timestamp with time zone, "
                            " login_token text, "
-                           " login_token_valid_until timestamp,"
+                           " login_token_valid_until timestamp with time zone,"
                            " primary key (id)) ");
         PGExecutor e(pool, sql);
     }

@@ -13,7 +13,7 @@ void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
     PGSqlString sql(utils.createInsertString(tableNames.t0009_appuser_logintoken));
     sql.set("id", sole::uuid4());
     sql.set("appuser_id", appUserId);
-    sql.set("logintoken", loginToken);
+    sql.set("login_token", loginToken);
     sql.set("login_token_valid_until", std::chrono::system_clock::now() + std::chrono::hours(1) * validHours);
     PGExecutor e(pool, sql);
 }
@@ -163,10 +163,10 @@ bool DatabaseLogicAppUser::verifyAppUser(const std::string &loginEMail,
     {
         PGSqlString sql("update ");
         sql += tableNames.t0003_appuser_profiles;
-        sql += "set verified = now(), "
-               "verify_token = '', "
-               "verify_token_valid_until = null "
-               "where loginemail = :loginemail ";
+        sql += " set verified = now(), "
+               " verify_token = '', "
+               " verify_token_valid_until = null "
+               " where loginemail = :loginemail ";
         sql.set("loginemail", loginEMail);
         PGExecutor e(pool, sql);
     }

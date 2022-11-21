@@ -177,3 +177,9 @@ size_t PGSqlString::size() const
 {
     return sql.size();
 }
+
+void PGSqlString::replace(const std::string &needle,
+                          const std::string &value)
+{
+    ExtString::replaceAll(sql, needle, value);
+}

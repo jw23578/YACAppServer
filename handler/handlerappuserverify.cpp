@@ -17,6 +17,12 @@ void HandlerAppUserVerify::method()
     MACRO_GetMandatoryPostString(loginEMail);
     MACRO_GetMandatoryPostString(verifyToken);
 
+    if (!ExtString::emailIsValid(loginEMail))
+    {
+        answer(Pistache::Http::Code::Bad_Request, "this is not a valid email-adress: " + loginEMail);
+        return;
+    }
+
     std::string message;
     std::string loginToken;
     if (databaseLogicAppUser.verifyAppUser(loginEMail,
