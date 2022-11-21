@@ -28,6 +28,7 @@ SOURCES += \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
+        handler/handlerappuserloggedin.cpp \
         handler/handlerappuserlogin.cpp \
         handler/handlerappuserregister.cpp \
         handler/handlerappuserverify.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
+        loggedinappuserscontainer.cpp \
         loggedinuserscontainer.cpp \
         logstat/filelogger.cpp \
         logstat/loggerstatterinterface.cpp \
@@ -76,6 +78,7 @@ HEADERS += \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/tablenames.h \
   emaillogic.h \
+  handler/handlerappuserloggedin.h \
   handler/handlerappuserlogin.h \
   handler/handlerappuserregister.h \
   handler/handlerappuserverify.h \
@@ -90,6 +93,7 @@ HEADERS += \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
+  loggedinappuserscontainer.h \
   loggedinuserscontainer.h \
   logstat/filelogger.h \
   logstat/loggerstatterinterface.h \

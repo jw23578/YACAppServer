@@ -11,26 +11,30 @@
 #include "handler/handlerappuserregister.h"
 #include "handler/handlerappuserverify.h"
 #include "handler/handlerappuserlogin.h"
+#include "handler/handlerappuserloggedin.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "emaillogic.h"
 #include "loggedinuserscontainer.h"
+#include "loggedinappuserscontainer.h"
 
 class YACAppServer: public PistacheServerInterface
 {
     LoggedInUsersContainer loggedInUsersContainer;
+    LoggedInAppUsersContainer loggedInAppUsersContainer;
     HandlerUserRegister handlerUserRegister;
     HandlerVerifyUser handlerVerifyUser;
     HandlerUserLogin handlerUserLogin;
     HandlerUserLoggedIn handlerUserLoggedIn;
     HandlerGetAllApps handlerGetAllApps;
     HandlerGetAPP handlerGetAPP;
-    HandlerUploadApp handlerUploadApp;
+    HandlerUploadApp handlerUploadApp;    
 
     HandlerAppUserRegister handlerAppUserRegister;
     HandlerAppUserVerify handlerAppUserVerify;
     HandlerAppUserLogin handlerAppUserLogin;
+    HandlerAppUserLoggedIn handlerAppUserLoggedIn;
 
 
 public:
