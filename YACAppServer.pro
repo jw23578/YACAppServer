@@ -24,6 +24,7 @@ SOURCES += \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
         databaselogic/databaselogicappuser.cpp \
+        databaselogic/databaselogicmessages.cpp \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/tablenames.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \
   databaselogic/databaselogicappuser.h \
+  databaselogic/databaselogicmessages.h \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/tablenames.h \

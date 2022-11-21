@@ -3,7 +3,6 @@
 
 #include "postgres/pgconnectionpool.h"
 #include "sole/sole.hpp"
-#include "rapidjson/document.h"
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"

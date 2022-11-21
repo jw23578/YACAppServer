@@ -45,6 +45,8 @@ public:
              std::chrono::system_clock::time_point const &tp);
     void set(std::string const &param,
              std::vector<uint64_t> const &v);
+    void set(const std::string &param,
+             const std::set<sole::uuid> &uuids);
     PGSqlString &operator=(std::string const &s);
     PGSqlString &operator+=(std::string const &s);
     PGSqlString &operator+=(PGSqlString const &s);

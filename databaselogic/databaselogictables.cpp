@@ -103,11 +103,10 @@ void DatabaseLogicTables::createDatabaseTables()
 
     utils.createTableIfNeeded(tableNames.t0007_messages,
                               {{"id", pg_uuid, true},
-                               {"message_id", pg_uuid, false, true},
                                {"sender_id", pg_uuid, false, true},
                                {"to_id", pg_uuid, false, true},
                                {"sended_datetime", pg_timestamp},
-                               {"content", pg_text}});
+                               {"content_base64", pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0008_message_state,
                               {{"id", pg_uuid, true},

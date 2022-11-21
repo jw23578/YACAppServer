@@ -143,6 +143,28 @@ void PGSqlString::set(const std::string &param,
     variable2Values[param] = value.str();
 }
 
+void PGSqlString::set(const std::string &param,
+                      const std::set<sole::uuid> &uuids)
+{
+    if (uuids.size() == 0)
+    {
+        variable2Values[param] = "null";
+        return;
+    }
+    std::stringstream value;
+    bool first(true);
+    for (const auto &u : uuids)
+    {
+        if (!first)
+        {
+            value << ", ";
+        }
+        first = false;
+        value << quote(u.str());
+    }
+    variable2Values[param] = value.str();
+}
+
 
 PGSqlString &PGSqlString::operator=(std::string const &s)
 {
