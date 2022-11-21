@@ -1,7 +1,7 @@
-#include "handlerloginuser.h"
+#include "handleruserlogin.h"
 #include "extmap.h"
 
-HandlerLoginUser::HandlerLoginUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+HandlerUserLogin::HandlerUserLogin(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                                    PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/loginUser",
@@ -12,7 +12,7 @@ HandlerLoginUser::HandlerLoginUser(DatabaseLogicUserAndApp &databaseLogicUserAnd
 
 }
 
-void HandlerLoginUser::method()
+void HandlerUserLogin::method()
 {
     MACRO_GetMandatoryPostString(loginEMail);
     MACRO_GetMandatoryPostString(password);

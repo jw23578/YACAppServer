@@ -47,7 +47,7 @@ bool DatabaseLogicAppUser::lookupAppUser(const std::string &loginEMail,
         message = "LoginEMail/User not yet verified";
         return false;
     }
-    loginEMail2AppUserId[loginEMail] = appUser.uuid("id");
+    loginEMail2AppUserId[loginEMail] = appUserId = appUser.uuid("id");
     return true;
 }
 

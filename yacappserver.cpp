@@ -14,7 +14,7 @@ YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
                     *this),
     handlerVerifyUser(databaseLogicUserAndApp,
                       *this),
-    handlerLoginUser(databaseLogicUserAndApp,
+    handlerUserLogin(databaseLogicUserAndApp,
                      *this),
     handlerUserLoggedIn(*this,
                         loggedInUsersContainer),
@@ -29,7 +29,9 @@ YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
                            emailLogic,
                            *this),
     handlerAppUserVerify(databaseLogicAppUser,
-                         *this)
+                         *this),
+    handlerAppUserLogin(databaseLogicAppUser,
+                        *this)
 
 {
     Pistache::Http::Header::Registrar<LoginEMailHeader>();

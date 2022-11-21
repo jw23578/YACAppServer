@@ -4,12 +4,13 @@
 #include "interfaces/pistacheserverinterface.h"
 #include "handler/handleruserregister.h"
 #include "handler/handlerverifyuser.h"
-#include "handler/handlerloginuser.h"
+#include "handler/handleruserlogin.h"
 #include "handler/handleruserloggedin.h"
 #include "handler/handlergetallapps.h"
 #include "handler/handlergetapp.h"
 #include "handler/handlerappuserregister.h"
 #include "handler/handlerappuserverify.h"
+#include "handler/handlerappuserlogin.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
@@ -21,7 +22,7 @@ class YACAppServer: public PistacheServerInterface
     LoggedInUsersContainer loggedInUsersContainer;
     HandlerUserRegister handlerUserRegister;
     HandlerVerifyUser handlerVerifyUser;
-    HandlerLoginUser handlerLoginUser;
+    HandlerUserLogin handlerUserLogin;
     HandlerUserLoggedIn handlerUserLoggedIn;
     HandlerGetAllApps handlerGetAllApps;
     HandlerGetAPP handlerGetAPP;
@@ -29,6 +30,7 @@ class YACAppServer: public PistacheServerInterface
 
     HandlerAppUserRegister handlerAppUserRegister;
     HandlerAppUserVerify handlerAppUserVerify;
+    HandlerAppUserLogin handlerAppUserLogin;
 
 
 public:

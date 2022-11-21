@@ -1,14 +1,14 @@
-#ifndef HANDLERLOGINUSER_H
-#define HANDLERLOGINUSER_H
+#ifndef HANDLERUSERLOGIN_H
+#define HANDLERUSERLOGIN_H
 
 #include "interfaces/pistachehandlerinterface.h"
 #include "databaselogicuserandapp.h"
 
-class HandlerLoginUser : public PistacheHandlerInterface
+class HandlerUserLogin : public PistacheHandlerInterface
 {
     DatabaseLogicUserAndApp &databaseLogicUserAndApp;
 public:
-    HandlerLoginUser(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+    HandlerUserLogin(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                      PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
@@ -16,4 +16,4 @@ public:
     void method();
 };
 
-#endif // HANDLERLOGINUSER_H
+#endif // HANDLERUSERLOGIN_H
