@@ -59,6 +59,7 @@ SOURCES += \
         serverHeader/loginemailheader.cpp \
         serverHeader/logintokenheader.cpp \
         sole/sole.cpp \
+        tests/testdatabaselogicmessages.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
         utils/extrapidjson.cpp \
@@ -111,6 +112,7 @@ HEADERS += \
   serverHeader/loginemailheader.h \
   serverHeader/logintokenheader.h \
   sole/sole.hpp \
+  tests/testdatabaselogicmessages.h \
   utils/base64.h \
   utils/definitions.h \
   utils/extmap.h \

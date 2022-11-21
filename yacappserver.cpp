@@ -40,23 +40,6 @@ YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
     Pistache::Http::Header::Registrar<LoginEMailHeader>();
     Pistache::Http::Header::Registrar<LoginTokenHeader>();
 
-    std::cout << "Checking Databaseconnection\n";
-    if (!databaseLogicTables.connectionOk())
-    {
-        std::cout << "Databaseconnection is not ok\n";
-        std::cout << "exiting\n";
-        return;
-    }
-    std::cout << "Databaseconnection is ok\n";
-    std::cout << "Checking for PGCrypto installed\n";
-    if (!databaseLogicTables.pgCryptoInstalled())
-    {
-        std::cout << "PGCrypto is not installed\n";
-        std::cout << "exiting\n";
-        return;
-    }
-    std::cout << "PGCrypto is installed\n";
-    databaseLogicTables.createDatabaseTables();
     std::cout << "Start Serving on Port: " << port << "\n";
     serve();
 }

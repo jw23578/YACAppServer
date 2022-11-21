@@ -11,6 +11,8 @@
 #include "logstat/filelogger.h"
 #include "databaselogictables.h"
 #include "databaselogicappuser.h"
+#include "databaselogicmessages.h"
+#include "tests/testdatabaselogicmessages.h"
 
 using namespace std;
 
@@ -53,12 +55,38 @@ int main(int argc, char **argv)
                           json.getString("postgresPassword"),
                           10,
                           logStatController);
+
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool);
+
+    std::cout << "Checking Databaseconnection\n";
+    if (!databaseLogicTables.connectionOk())
+    {
+        std::cout << "Databaseconnection is not ok\n";
+        std::cout << "exiting\n";
+        return 1;
+    }
+    std::cout << "Databaseconnection is ok\n";
+    std::cout << "Checking for PGCrypto installed\n";
+    if (!databaseLogicTables.pgCryptoInstalled())
+    {
+        std::cout << "PGCrypto is not installed\n";
+        std::cout << "exiting\n";
+        return 1;
+    }
+    std::cout << "PGCrypto is installed\n";
+    databaseLogicTables.createDatabaseTables();
+
+
     DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
                                                     pool);
     DatabaseLogicAppUser databaseLogicAppUser(logStatController,
                                               pool);
+
+    DatabaseLogicMessages databaseLogicMessages(logStatController,
+                                                pool);
+    TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
+
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),
                           json.getString("smtpSenderEMail"),

@@ -25,6 +25,15 @@ void DatabaseLogicMessages::storeMessage(const sole::uuid &id,
     PGExecutor e(pool, sql);
 }
 
+void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
+{
+    PGSqlString sql("delete from ");
+    sql += tableNames.t0007_messages;
+    sql += " where id = :id";
+    MACRO_set(id);
+    PGExecutor e(pool, sql);
+}
+
 void DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
                                           const std::chrono::system_clock::time_point &since,
                                           std::vector<Message> &messages)

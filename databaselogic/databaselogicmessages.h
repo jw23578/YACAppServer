@@ -31,6 +31,8 @@ public:
                       const sole::uuid &to_id,
                       const std::string &content_base64);
 
+    void deleteMessage(const sole::uuid &id);
+
     void fetchMessages(const sole::uuid &fetcher_id,
                        const std::chrono::system_clock::time_point &since,
                        std::vector<Message> &messages);
