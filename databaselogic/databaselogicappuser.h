@@ -9,10 +9,12 @@
 #include "tablenames.h"
 
 
-
+class LoggedInAppUsersContainer;
 
 class DatabaseLogicAppUser
 {
+    friend LoggedInAppUsersContainer;
+
     LogStatController &logStatController;
     PGConnectionPool &pool;
     PGUtils utils;
@@ -24,6 +26,8 @@ class DatabaseLogicAppUser
     bool lookupAppUser(const std::string &loginEMail,
                        sole::uuid &appUserId,
                        std::string &message);
+    void refreshAppUserLoginToken(const std::string &loginEMail,
+                                  std::chrono::system_clock::time_point &loginTokenValidUntil);
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);
@@ -48,8 +52,6 @@ public:
                          sole::uuid &userId,
                          std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    void refreshAppUserLoginToken(const std::string &loginEMail,
-                                  std::chrono::system_clock::time_point &loginTokenValidUntil);
 
 };
 
