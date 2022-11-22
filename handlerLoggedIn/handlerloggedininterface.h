@@ -2,11 +2,11 @@
 #define HANDLERLOGGEDININTERFACE_H
 
 #include <pistachehandlerinterface.h>
-#include "loggedincontainer/loggedinuserscontainer.h"
+#include "loggedincontainer/loggedincontainerinterface.h".h"
 
 class HandlerLoggedInInterface : public PistacheHandlerInterface
 {
-    LoggedInUsersContainer &loggedInUsersContainer;
+    LoggedInContainerInterface &loggedInContainer;
     std::string loginEMail;
     std::string loginToken;
 protected:
@@ -15,7 +15,7 @@ public:
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                              const std::string &methodName,
                              HandlerType type,
-                             LoggedInUsersContainer &loggedInUsersContainer);
+                             LoggedInContainerInterface &loggedInContainer);
 
     // PistacheHandlerInterface interface
 public:

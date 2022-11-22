@@ -5,9 +5,9 @@
 HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                                                    const std::string &methodName,
                                                    HandlerType type,
-                                                   LoggedInUsersContainer &loggedInUsersContainer):
+                                                   LoggedInContainerInterface &loggedInContainer):
     PistacheHandlerInterface(serverInterface, methodName, type, TypeLoginNeeded),
-    loggedInUsersContainer(loggedInUsersContainer)
+    loggedInContainer(loggedInContainer)
 {
 
 }
@@ -22,9 +22,9 @@ bool HandlerLoggedInInterface::checkLogin()
     {
         return false;
     }
-    if (!loggedInUsersContainer.isLoggedIn(loginEMail,
-                                           loginToken,
-                                           userId))
+    if (!loggedInContainer.isLoggedIn(loginEMail,
+                                      loginToken,
+                                      userId))
     {
         answer(Pistache::Http::Code::Bad_Request, "not logged in");
         return false;

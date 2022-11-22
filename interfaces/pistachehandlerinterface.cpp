@@ -1,6 +1,7 @@
 #include "pistachehandlerinterface.h"
 #include "extpistache.h"
 #include "rapidjson/error/en.h"
+#include "definitions.h"
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
@@ -22,6 +23,11 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
         }
     }
     method();
+}
+
+void PistacheHandlerInterface::answerOk(const std::string &message)
+{
+    ExtPistache::answer(*response, Pistache::Http::Code::Ok, message);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
@@ -117,6 +123,22 @@ bool PistacheHandlerInterface::getString(const std::string &name,
         return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
     }
     return "";
+}
+
+bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &target, bool ifMissingThenSendReponse)
+{
+    std::string temp;
+    if (!getString(name, temp, ifMissingThenSendReponse))
+    {
+        return false;
+    }
+    target = sole::rebuild(temp);
+    if (target == NullUuid && ifMissingThenSendReponse)
+    {
+        ExtPistache::answer(*response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name);
+        return false;
+    }
+    return true;
 }
 
 bool PistacheHandlerInterface::checkLogin()

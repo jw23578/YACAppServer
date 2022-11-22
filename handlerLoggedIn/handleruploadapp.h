@@ -3,6 +3,7 @@
 
 #include "handlerloggedininterface.h"
 #include "databaselogicuserandapp.h"
+#include "loggedincontainer/loggedinuserscontainer.h"
 
 class HandlerUploadApp : public HandlerLoggedInInterface
 {

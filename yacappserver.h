@@ -13,8 +13,10 @@
 #include "handler/handlerappuserlogin.h"
 #include "handler/handlerappuserloggedin.h"
 #include "handlerLoggedIn/handleruploadapp.h"
+#include "handlerLoggedIn/handlerstoremessage.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
+#include "databaselogicmessages.h"
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinuserscontainer.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
@@ -36,11 +38,14 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserLogin handlerAppUserLogin;
     HandlerAppUserLoggedIn handlerAppUserLoggedIn;
 
+    HandlerStoreMessage handlerStoreMesage;
+
 
 public:
     YACAppServer(DatabaseLogicTables &databaseLogicTables,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,
+                 DatabaseLogicMessages &databaseLogicMessages,
                  EMailLogic &emailLogic,
                  int port);
 };

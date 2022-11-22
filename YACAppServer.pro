@@ -40,6 +40,7 @@ SOURCES += \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
+        handlerLoggedIn/handlerstoremessage.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
   handlerLoggedIn/handlerloggedininterface.h \
+  handlerLoggedIn/handlerstoremessage.h \
   handlerLoggedIn/handleruploadapp.h \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \

@@ -98,6 +98,7 @@ int main(int argc, char **argv)
     YACAppServer server(databaseLogicTables,
                         databaseLogicUserAndApp,
                         databaseLogicAppUser,
+                        databaseLogicMessages,
                         emailLogic,
                         json.getInt("serverPort"));
     return 0;

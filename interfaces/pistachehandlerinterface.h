@@ -1,6 +1,7 @@
 #ifndef PISTACHEHANDLERINTERFACE_H
 #define PISTACHEHANDLERINTERFACE_H
 
+#include "sole/sole.hpp"
 #include "pistache/router.h"
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
@@ -17,6 +18,13 @@
         answer(Pistache::Http::Code::Bad_Request, "this is not a valid email-adress: " + targetName); \
         return; \
     }
+
+#define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName; \
+    if (!getUuid(#targetName, targetName, true)) \
+    { \
+        return; \
+    }
+
 
 
 #define MACRO_GetMandatoryBool(targetName) bool targetName; \
@@ -39,6 +47,7 @@ class PistacheHandlerInterface
     rapidjson::Document postedData;
     void internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
 protected:
+    void answerOk(const std::string &message);
     void answer(Pistache::Http::Code code, const std::string &message);
     void answer(Pistache::Http::Code code, rapidjson::Document &d);
     void answer(Pistache::Http::Code code,
@@ -77,6 +86,11 @@ public:
     bool getString(std::string const &name,
                    std::string &target,
                    bool ifMissingThenSendResponse);
+
+    bool getUuid(std::string const &name,
+                 sole::uuid &target,
+                 bool ifMissingThenSendReponse);
+
     virtual void method() = 0;
     virtual bool checkLogin();
 
