@@ -44,8 +44,9 @@ SOURCES += \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
-        loggedinappuserscontainer.cpp \
-        loggedinuserscontainer.cpp \
+        loggedincontainer/loggedinappuserscontainer.cpp \
+        loggedincontainer/loggedincontainerinterface.cpp \
+        loggedincontainer/loggedinuserscontainer.cpp \
         logstat/filelogger.cpp \
         logstat/loggerstatterinterface.cpp \
         logstat/logstatcontroller.cpp \
@@ -96,8 +97,9 @@ HEADERS += \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
-  loggedinappuserscontainer.h \
-  loggedinuserscontainer.h \
+  loggedincontainer/loggedinappuserscontainer.h \
+  loggedincontainer/loggedincontainerinterface.h \
+  loggedincontainer/loggedinuserscontainer.h \
   logstat/filelogger.h \
   logstat/loggerstatterinterface.h \
   logstat/logstatcontroller.h \

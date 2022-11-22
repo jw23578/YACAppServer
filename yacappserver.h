@@ -16,8 +16,8 @@
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "emaillogic.h"
-#include "loggedinuserscontainer.h"
-#include "loggedinappuserscontainer.h"
+#include "loggedincontainer/loggedinuserscontainer.h"
+#include "loggedincontainer/loggedinappuserscontainer.h"
 
 class YACAppServer: public PistacheServerInterface
 {

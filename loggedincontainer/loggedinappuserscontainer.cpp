@@ -1,6 +1,7 @@
 #include "loggedinappuserscontainer.h"
 
 LoggedInAppUsersContainer::LoggedInAppUsersContainer(DatabaseLogicAppUser &databaseLogicAppUser):
+    LoggedInContainerInterface(),
     databaseLogicAppUser(databaseLogicAppUser)
 {
 

@@ -1,11 +1,12 @@
-#ifndef LOGGEDINAPPUSERSCONTAINER_H
-#define LOGGEDINAPPUSERSCONTAINER_H
+#ifndef LOGGEDINUSERSCONTAINER_H
+#define LOGGEDINUSERSCONTAINER_H
 
-#include "databaselogicappuser.h"
+#include "databaselogicuserandapp.h"
+#include "loggedincontainerinterface.h"
 
-class LoggedInAppUsersContainer
+class LoggedInUsersContainer: public LoggedInContainerInterface
 {
-    DatabaseLogicAppUser &databaseLogicAppUser;
+    DatabaseLogicUserAndApp &databaseLogic;
     struct SData
     {
         sole::uuid userId;
@@ -15,7 +16,7 @@ class LoggedInAppUsersContainer
     typedef std::map<std::string, SData> LoggedInUsersMap;
     LoggedInUsersMap loggedInUsers;
 public:
-    LoggedInAppUsersContainer(DatabaseLogicAppUser &databaseLogicAppUser);
+    LoggedInUsersContainer(DatabaseLogicUserAndApp &databaseLogic);
 
     bool isLoggedIn(const std::string &loginEMail,
                     const std::string &loginToken,
@@ -25,4 +26,4 @@ public:
                     const std::string &loginToken);
 };
 
-#endif // LOGGEDINAPPUSERSCONTAINER_H
+#endif // LOGGEDINUSERSCONTAINER_H

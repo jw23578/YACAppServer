@@ -1,4 +1,5 @@
 #include "testdatabaselogicmessages.h"
+#include <iostream>
 
 TestDatabaseLogicMessages::TestDatabaseLogicMessages(DatabaseLogicMessages &databaseLogicMessage)
 {
@@ -10,6 +11,20 @@ TestDatabaseLogicMessages::TestDatabaseLogicMessages(DatabaseLogicMessages &data
                                       sender_id,
                                       to_id,
                                       content_base64);
+
+    std::vector<DatabaseLogicMessages::Message> messages;
+    databaseLogicMessage.fetchMessages(to_id, std::chrono::system_clock::now() - std::chrono::minutes(10),
+                                       messages);
+
+    if (messages.size() != 1)
+    {
+        exit(1);
+    }
+
+    for (const auto &m : messages)
+    {
+        std::cout << m.content_base64 << std::endl;
+    }
 
     databaseLogicMessage.deleteMessage(message_id);
 }

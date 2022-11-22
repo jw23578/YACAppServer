@@ -14,6 +14,7 @@ class DatabaseLogicMessages
     PGUtils utils;
     TableNames tableNames;
 
+public:
     struct Message
     {
         sole::uuid id;
@@ -22,7 +23,6 @@ class DatabaseLogicMessages
         std::string content_base64;
     };
 
-public:
     DatabaseLogicMessages(LogStatController &logStatController,
                           PGConnectionPool &pool);
 
