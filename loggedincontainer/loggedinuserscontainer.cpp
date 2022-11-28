@@ -7,7 +7,8 @@ LoggedInUsersContainer::LoggedInUsersContainer(DatabaseLogicUserAndApp &database
 
 }
 
-bool LoggedInUsersContainer::isLoggedIn(const std::string &loginEMail,
+bool LoggedInUsersContainer::isLoggedIn(const sole::uuid &appId,
+                                        const std::string &loginEMail,
                                         const std::string &loginToken,
                                         sole::uuid &userId)
 {
@@ -40,9 +41,10 @@ bool LoggedInUsersContainer::isLoggedIn(const std::string &loginEMail,
     return true;
 }
 
-bool LoggedInUsersContainer::isLoggedIn(const std::string &loginEMail,
+bool LoggedInUsersContainer::isLoggedIn(const sole::uuid &appId,
+                                        const std::string &loginEMail,
                                         const std::string &loginToken)
 {
     sole::uuid userId;
-    return isLoggedIn(loginEMail, loginToken, userId);
+    return isLoggedIn(appId, loginEMail, loginToken, userId);
 }

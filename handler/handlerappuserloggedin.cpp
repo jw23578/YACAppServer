@@ -15,8 +15,10 @@ void HandlerAppUserLoggedIn::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(loginToken);
+    MACRO_GetMandatoryUuid(appId);
 
-    if (loggedInAppUsersContainer.isLoggedIn(loginEMail,
+    if (loggedInAppUsersContainer.isLoggedIn(appId,
+                                             loginEMail,
                                              loginToken))
     {
         answer(Pistache::Http::Code::Ok, "user logged in");

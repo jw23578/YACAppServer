@@ -13,11 +13,14 @@
 #include "databaselogicappuser.h"
 #include "databaselogicmessages.h"
 #include "tests/testdatabaselogicmessages.h"
+#include "tests/testtimepoint.h"
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
+    TestTimepoint ttp;
+
     std::string configFilename("YACAppServerConfig.json");
     if (argc > 1)
     {

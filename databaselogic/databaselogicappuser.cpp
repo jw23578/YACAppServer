@@ -18,12 +18,13 @@ void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
     PGExecutor e(pool, sql);
 }
 
-bool DatabaseLogicAppUser::lookupAppUser(const std::string &loginEMail,
+bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,
+                                         const std::string &loginEMail,
                                          sole::uuid &appUserId,
                                          std::string &message)
 {
-    auto it(loginEMail2AppUserId.find(loginEMail));
-    if (it != loginEMail2AppUserId.end())
+    auto it(loginEMailAndAppId2AppUserId.find(loginEMail + appId.str()));
+    if (it != loginEMailAndAppId2AppUserId.end())
     {
         appUserId = it->second;
         return true;
@@ -32,7 +33,9 @@ bool DatabaseLogicAppUser::lookupAppUser(const std::string &loginEMail,
     PGExecutor appUser(pool);
     if (!appUser.select(tableNames.t0003_appuser_profiles,
                         "loginemail",
-                        loginEMail))
+                        loginEMail,
+                        "app_id",
+                        appId.str()))
     {
         message = "LoginEMail/User not found";
         return false;
@@ -47,7 +50,7 @@ bool DatabaseLogicAppUser::lookupAppUser(const std::string &loginEMail,
         message = "LoginEMail/User not yet verified";
         return false;
     }
-    loginEMail2AppUserId[loginEMail] = appUserId = appUser.uuid("id");
+    loginEMail2AppUserId[loginEMail + appId.str()] = appUserId = appUser.uuid("id");
     return true;
 }
 
@@ -106,14 +109,18 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::verifyAppUser(const std::string &loginEMail,
+bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
+                                         const std::string &loginEMail,
                                          const std::string &verifyToken,
-                                         std::string &message, std::string &loginToken)
+                                         std::string &message,
+                                         std::string &loginToken)
 {
     PGExecutor e(pool);
     e.select(tableNames.t0003_appuser_profiles,
              "loginemail",
-             loginEMail);
+             loginEMail,
+             "app_id",
+             appId.str());
     if (e.size() == 0)
     {
         message = std::string("no appuser with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
@@ -174,20 +181,21 @@ bool DatabaseLogicAppUser::verifyAppUser(const std::string &loginEMail,
     return true;
 }
 
-bool DatabaseLogicAppUser::loginAppUser(const std::string &loginEMail,
+bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
+                                        const std::string &loginEMail,
                                         const std::string &password,
                                         std::string &message,
                                         std::string &loginToken)
 {
     sole::uuid appUserId;
-    if (!lookupAppUser(loginEMail, appUserId, message))
+    if (!lookupAppUser(appId, loginEMail, appUserId, message))
     {
         return false;
     }
     PGExecutor login(pool);
     if (!login.login(tableNames.t0004_appuser_passwordhashes,
                      "password_hash",
-                     password,
+                     password,                     
                      "appuser_id",
                      appUserId.str()))
     {
@@ -205,13 +213,14 @@ bool DatabaseLogicAppUser::loginAppUser(const std::string &loginEMail,
     return true;
 }
 
-bool DatabaseLogicAppUser::appUserLoggedIn(const std::string &loginEMail,
+bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
+                                           const std::string &loginEMail,
                                            const std::string &loginToken,
                                            sole::uuid &userId,
                                            std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     std::string ignored;
-    if (!lookupAppUser(loginEMail, userId, ignored))
+    if (!lookupAppUser(appId, loginEMail, userId, ignored))
     {
         return false;
     }
@@ -231,12 +240,13 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const std::string &loginEMail,
     return true;
 }
 
-void DatabaseLogicAppUser::refreshAppUserLoginToken(const std::string &loginEMail,
+void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
+                                                    const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     std::string ignored;
     sole::uuid appUserId;
-    if (!lookupAppUser(loginEMail, appUserId, ignored))
+    if (!lookupAppUser(appId, loginEMail, appUserId, ignored))
     {
         return;
     }

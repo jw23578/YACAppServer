@@ -7,7 +7,8 @@ LoggedInAppUsersContainer::LoggedInAppUsersContainer(DatabaseLogicAppUser &datab
 
 }
 
-bool LoggedInAppUsersContainer::isLoggedIn(const std::string &loginEMail,
+bool LoggedInAppUsersContainer::isLoggedIn(const sole::uuid &appId,
+                                           const std::string &loginEMail,
                                            const std::string &loginToken,
                                            sole::uuid &userId)
 {
@@ -16,7 +17,8 @@ bool LoggedInAppUsersContainer::isLoggedIn(const std::string &loginEMail,
     if (it == loggedInUsers.end() || it->second.loginTokenValidUntil < std::chrono::system_clock::now())
     {
         std::chrono::system_clock::time_point loginTokenValidUntil;
-        if (!databaseLogicAppUser.appUserLoggedIn(loginEMail,
+        if (!databaseLogicAppUser.appUserLoggedIn(appId,
+                                                  loginEMail,
                                                   loginToken,
                                                   userId,
                                                   loginTokenValidUntil))
@@ -33,17 +35,19 @@ bool LoggedInAppUsersContainer::isLoggedIn(const std::string &loginEMail,
     }
     if (it->second.loginTokenValidUntil < std::chrono::system_clock::now() + std::chrono::hours(24 * 3))
     {
-        databaseLogicAppUser.refreshAppUserLoginToken(loginEMail,
+        databaseLogicAppUser.refreshAppUserLoginToken(appId,
+                                                      loginEMail,
                                                       it->second.loginTokenValidUntil);
     }
     userId = it->second.userId;
     return true;
 }
 
-bool LoggedInAppUsersContainer::isLoggedIn(const std::string &loginEMail,
+bool LoggedInAppUsersContainer::isLoggedIn(const sole::uuid &appId,
+                                           const std::string &loginEMail,
                                            const std::string &loginToken)
 {
     sole::uuid userId;
-    return isLoggedIn(loginEMail, loginToken, userId);
+    return isLoggedIn(appId, loginEMail, loginToken, userId);
 }
 

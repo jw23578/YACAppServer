@@ -3,11 +3,11 @@
 
 HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogicAppUser &databaseLogicAppUser,
                                          PistacheServerInterface &serverInterface):
-          PistacheHandlerInterface(serverInterface,
-                                   "/loginAppUser",
-                                   TypePost,
-                                   TypeNoLoginNeeded),
-          databaseLogicAppUser(databaseLogicAppUser)
+    PistacheHandlerInterface(serverInterface,
+                             "/loginAppUser",
+                             TypePost,
+                             TypeNoLoginNeeded),
+    databaseLogicAppUser(databaseLogicAppUser)
 {
 
 }
@@ -16,6 +16,7 @@ void HandlerAppUserLogin::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(password);
+    MACRO_GetMandatoryUuid(appId);
 
     if (!ExtString::emailIsValid(loginEMail))
     {
@@ -25,7 +26,8 @@ void HandlerAppUserLogin::method()
 
     std::string message;
     std::string loginToken;
-    if (!databaseLogicAppUser.loginAppUser(loginEMail,
+    if (!databaseLogicAppUser.loginAppUser(appId,
+                                           loginEMail,
                                            password,
                                            message,
                                            loginToken))

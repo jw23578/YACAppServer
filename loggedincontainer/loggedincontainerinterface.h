@@ -8,11 +8,13 @@ class LoggedInContainerInterface
 public:
     LoggedInContainerInterface();
 
-    virtual bool isLoggedIn(const std::string &loginEMail,
+    virtual bool isLoggedIn(const sole::uuid &appId,
+                            const std::string &loginEMail,
                             const std::string &loginToken,
                             sole::uuid &userId) = 0;
 
-    virtual bool isLoggedIn(const std::string &loginEMail,
+    virtual bool isLoggedIn(const sole::uuid &appId,
+                            const std::string &loginEMail,
                             const std::string &loginToken) = 0;
 };
 

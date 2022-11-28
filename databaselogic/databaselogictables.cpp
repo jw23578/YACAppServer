@@ -54,7 +54,6 @@ void DatabaseLogicTables::createDatabaseTables()
         PGSqlString sql("create table ");
         sql += tableNames.t0002_apps;
         sql += std::string("( id uuid, "
-                           "app_id uuid, "
                            "owner_id uuid, "
                            "app_name text, "
                            "app_version int, "
@@ -66,9 +65,6 @@ void DatabaseLogicTables::createDatabaseTables()
                            "primary key (id))");
         PGExecutor e(pool, sql);
     }
-
-    std::string t0002_apps_i1("t0002_apps_i1");
-    utils.createIndex(tableNames.t0002_apps, t0002_apps_i1, "(app_id)");
 
     utils.createTableIfNeeded(tableNames.t0003_appuser_profiles,
                               {{"id", pg_uuid, true},

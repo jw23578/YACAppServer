@@ -1,4 +1,5 @@
 #include "handleruserloggedin.h"
+#include "definitions.h"
 
 HandlerUserLoggedIn::HandlerUserLoggedIn(PistacheServerInterface &serverInterface,
                                          LoggedInUsersContainer &loggedInUsersContainer):
@@ -15,7 +16,8 @@ void HandlerUserLoggedIn::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(loginToken);
-    if (loggedInUsersContainer.isLoggedIn(loginEMail,
+    if (loggedInUsersContainer.isLoggedIn(NullUuid,
+                                          loginEMail,
                                           loginToken))
     {
         answer(Pistache::Http::Code::Ok, "user logged in");

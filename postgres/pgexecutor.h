@@ -27,6 +27,12 @@ public:
                   const std::string &needleField,
                   const std::string &needleValue);
 
+    size_t select(const std::string &tableName,
+                  const std::string &needleField,
+                  const std::string &needleValue,
+                  const std::string &needleField2,
+                  const std::string &needleValue2);
+
     void erase(const std::string &tableName,
                const std::string &needleField,
                const std::string &needleValue);

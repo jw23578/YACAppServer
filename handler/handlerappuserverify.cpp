@@ -16,10 +16,12 @@ void HandlerAppUserVerify::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(verifyToken);
+    MACRO_GetMandatoryUuid(appId);
 
     std::string message;
     std::string loginToken;
-    if (databaseLogicAppUser.verifyAppUser(loginEMail,
+    if (databaseLogicAppUser.verifyAppUser(appId,
+                                           loginEMail,
                                            verifyToken,
                                            message,
                                            loginToken))

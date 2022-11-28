@@ -58,10 +58,12 @@ SOURCES += \
         postgres/pgoidstorer.cpp \
         postgres/pgsqlstring.cpp \
         postgres/pgutils.cpp \
+        serverHeader/appidheader.cpp \
         serverHeader/loginemailheader.cpp \
         serverHeader/logintokenheader.cpp \
         sole/sole.cpp \
         tests/testdatabaselogicmessages.cpp \
+        tests/testtimepoint.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
         utils/extrapidjson.cpp \
@@ -113,10 +115,12 @@ HEADERS += \
   postgres/pgoidstorer.h \
   postgres/pgsqlstring.h \
   postgres/pgutils.h \
+  serverHeader/appidheader.h \
   serverHeader/loginemailheader.h \
   serverHeader/logintokenheader.h \
   sole/sole.hpp \
   tests/testdatabaselogicmessages.h \
+  tests/testtimepoint.h \
   utils/base64.h \
   utils/definitions.h \
   utils/extmap.h \

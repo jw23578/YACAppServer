@@ -200,10 +200,10 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid owner_id,
                             const std::string &yacpck_base64,
                             std::string &message)
 {
-    std::string app_id_field("app_id");
+    std::string app_id_field("id");
     PGUtils utils(pool);
     PGSqlString sql(utils.createEntryExistsString(tableNames.t0002_apps, app_id_field));
-    MACRO_set(app_id);
+    sql.set("id", app_id);
     PGExecutor e(pool, sql);
     if (e.size())
     {
@@ -213,18 +213,16 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid owner_id,
             return false;
         }
         sql = utils.createUpdateString(tableNames.t0002_apps, app_id_field);
-        sql.set("id", e.uuid("id"));
     }
     else
     {
         sql = utils.createInsertString(tableNames.t0002_apps);
-        sql.set("id", sole::uuid4());
     }
     pqxx::oid oid;
     PGOidStorer storeOid(pool, yacpck_base64, oid);
     sql.set("yacpck_base64", oid);
     sql.set("owner_id", owner_id);
-    MACRO_set(app_id);
+    sql.set("id", app_id);
     MACRO_set(app_name);
     MACRO_set(app_version);
     MACRO_set(app_logo_url);
@@ -238,7 +236,7 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid owner_id,
 size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
 {
     auto &alloc(target.GetAllocator());
-    PGSqlString sql("select app_id "
+    PGSqlString sql("select id "
                     ", app_name "
                     ", app_version "
                     ", app_logo_url "
@@ -251,7 +249,7 @@ size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
     {
         rapidjson::Value appObject;
         appObject.SetObject();
-        appObject.AddMember("app_id", e.string("app_id"), alloc);
+        appObject.AddMember("app_id", e.string("id"), alloc);
         appObject.AddMember("app_name", e.string("app_name"), alloc);
         appObject.AddMember("app_version", e.integer("app_version"), alloc);
         appObject.AddMember("app_logo_url", e.string("app_logo_url"), alloc);
@@ -276,7 +274,7 @@ bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
                     ", json_yacapp "
                     ", yacpck_base64 "
                     "from t0002_apps "
-                    "where app_id = :app_id ");
+                    "where id = :app_id ");
     MACRO_set(app_id);
     PGExecutor e(pool, sql);
     if (!e.size())

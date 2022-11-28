@@ -1,6 +1,7 @@
 #include "yacappserver.h"
 #include "serverHeader/loginemailheader.h"
 #include "serverHeader/logintokenheader.h"
+#include "serverHeader/appidheader.h"
 
 YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,
@@ -43,6 +44,7 @@ YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
 {
     Pistache::Http::Header::Registrar<LoginEMailHeader>();
     Pistache::Http::Header::Registrar<LoginTokenHeader>();
+    Pistache::Http::Header::Registrar<AppIdHeader>();
 
     std::cout << "Start Serving on Port: " << port << "\n";
     serve();
