@@ -428,8 +428,8 @@ std::string ExtString::urlDecode(std::string &src)
 
 std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &s)
 {
-    std::stringstream ss(s);
     std::tm tm;
+    memset(&tm, 0, sizeof(tm));
     strptime(s.c_str(), "%F %T", &tm);
     time_t t = mktime(&tm);
 
