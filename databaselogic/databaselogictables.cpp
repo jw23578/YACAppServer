@@ -75,7 +75,10 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"loginemail", pg_text, false, true},
                                {"verified", pg_timestamp},
                                {"verify_token", pg_text},
-                               {"verify_token_valid_until", pg_timestamp}});
+                               {"verify_token_valid_until", pg_timestamp},
+                               {"update_password_token", pg_text},
+                               {"update_password_token_valid_until", pg_timestamp},
+                               {"deleted", pg_timestamp}});
 
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
                               {{"id", pg_uuid, true},
