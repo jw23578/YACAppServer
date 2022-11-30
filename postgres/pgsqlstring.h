@@ -56,6 +56,19 @@ public:
 
     void replace(const std::string &needle,
                  const std::string &value);
+
+    template <class T>
+    void addCompare(const std::string &connector,
+                    const std::string &needle,
+                    const std::string &comparator,
+                    const T &value)
+    {
+        sql += " " + connector;
+        sql += " " + needle;
+        sql += " " + comparator;
+        sql += " :" + needle;
+        set(needle, value);
+    }
 };
 
 #endif // JW78CORE_SQL_STRING_H

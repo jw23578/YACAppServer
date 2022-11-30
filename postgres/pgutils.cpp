@@ -178,6 +178,40 @@ bool PGUtils::entryExists(const std::string &tableName,
     return e.size() > 0;
 }
 
+bool PGUtils::entryExists(const std::string &tableName,
+                          const std::string &needleField,
+                          const std::string &needleValue,
+                          const std::string &needleField2,
+                          const std::string &needleValue2)
+{
+    PGSqlString sql("select * from ");
+    sql += tableName;
+    sql.addCompare("where", needleField, "=", needleValue);
+    sql.addCompare("where", needleField2, "=", needleValue2);
+    sql += " limit 1";
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
+}
+
+bool PGUtils::entryExists(const std::string &tableName,
+                          const std::string &needleField,
+                          const std::string &needleValue,
+                          const std::string &needleField2,
+                          const std::string &needleValue2,
+                          const std::string &needleField3,
+                          const std::chrono::system_clock::time_point &needleValue3)
+{
+    PGSqlString sql("select * from ");
+    sql += tableName;
+    sql.addCompare("where", needleField, "=", needleValue);
+    sql.addCompare("where", needleField2, "=", needleValue2);
+    sql.addCompare("where", needleField3, "=", needleValue3);
+    sql += " limit 1";
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
+
+}
+
 size_t PGUtils::countEntries(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
 {
     PGSqlString sql("select count(*) from ");

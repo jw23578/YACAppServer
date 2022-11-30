@@ -50,9 +50,24 @@ public:
 
     PGSqlString createEntryExistsString(const std::string &tableName,
                                         const std::string &needleField);
+
     bool entryExists(const std::string &tableName,
                      const std::string &needleField,
                      const std::string &needleValue);
+
+    bool entryExists(const std::string &tableName,
+                     const std::string &needleField,
+                     const std::string &needleValue,
+                     const std::string &needleField2,
+                     const std::string &needleValue2);
+
+    bool entryExists(const std::string &tableName,
+                     const std::string &needleField,
+                     const std::string &needleValue,
+                     const std::string &needleField2,
+                     const std::string &needleValue2,
+                     const std::string &needleField3,
+                     const std::chrono::system_clock::time_point &needleValue3);
 
     size_t countEntries(const std::string &tableName,
                         const std::string &needleField,

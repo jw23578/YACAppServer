@@ -79,15 +79,9 @@ size_t PGExecutor::select(const std::string &tableName,
 {
     PGSqlString sql("select * from ");
     sql += tableName;
-    sql += " where " + needleField;
-    sql += " = :" + needleField;
-    sql.set(needleField, needleValue);
-    sql += " and " + needleField2;
-    sql += " = :" + needleField2;
-    sql.set(needleField2, needleValue2);
-    sql += " and " + needleField3;
-    sql += " = :" + needleField3;
-    sql.set(needleField3, needleValue3);
+    sql.addCompare("where", needleField, "=", needleValue);
+    sql.addCompare("and", needleField2, "=", needleValue2);
+    sql.addCompare("and", needleField3, "=", needleValue3);
     return exec(sql);
 }
 
