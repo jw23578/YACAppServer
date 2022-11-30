@@ -20,9 +20,9 @@ void HandlerUserLogin::method()
     std::string message;
     std::string loginToken;
     if (!databaseLogicUserAndApp.loginUser(loginEMail,
-                                 password,
-                                 message,
-                                 loginToken))
+                                           password,
+                                           message,
+                                           loginToken))
     {
         answer(Pistache::Http::Code::Bad_Request, message);
     }
