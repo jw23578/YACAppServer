@@ -69,6 +69,28 @@ size_t PGExecutor::select(const std::string &tableName,
     return exec(sql);
 }
 
+size_t PGExecutor::select(const std::string &tableName,
+                          const std::string &needleField,
+                          const std::string &needleValue,
+                          const std::string &needleField2,
+                          const std::string &needleValue2,
+                          const std::string &needleField3,
+                          const std::chrono::system_clock::time_point &needleValue3)
+{
+    PGSqlString sql("select * from ");
+    sql += tableName;
+    sql += " where " + needleField;
+    sql += " = :" + needleField;
+    sql.set(needleField, needleValue);
+    sql += " and " + needleField2;
+    sql += " = :" + needleField2;
+    sql.set(needleField2, needleValue2);
+    sql += " and " + needleField3;
+    sql += " = :" + needleField3;
+    sql.set(needleField3, needleValue3);
+    return exec(sql);
+}
+
 void PGExecutor::erase(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
 {
     PGSqlString sql("delete from ");
@@ -119,7 +141,7 @@ bool PGExecutor::boolean(const std::string &fieldname)
 
 std::string PGExecutor::string(const std::string &fieldname)
 {
-    const pqxx::row &row(result[currentRow]);
+    const pqxx::row &row(result[currentRow]);    
     return row[fieldname].get<std::string>().value();
 }
 

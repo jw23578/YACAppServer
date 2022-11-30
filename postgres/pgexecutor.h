@@ -33,6 +33,14 @@ public:
                   const std::string &needleField2,
                   const std::string &needleValue2);
 
+    size_t select(const std::string &tableName,
+                  const std::string &needleField,
+                  const std::string &needleValue,
+                  const std::string &needleField2,
+                  const std::string &needleValue2,
+                  const std::string &needleField3,
+                  const std::chrono::system_clock::time_point &needleValue3);
+
     void erase(const std::string &tableName,
                const std::string &needleField,
                const std::string &needleValue);
