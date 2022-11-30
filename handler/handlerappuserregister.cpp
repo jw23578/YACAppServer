@@ -17,17 +17,18 @@ void HandlerAppUserRegister::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(password);
-    MACRO_GetMandatoryString(appId);
+    MACRO_GetMandatoryUuid(appId);
 
 
-    if (databaseLogicAppUser.appUserExists(loginEMail))
+    if (databaseLogicAppUser.appUserExists(appId,
+                                           loginEMail))
     {
         answer(Pistache::Http::Code::Bad_Request, "loginEMail already exists and cannot be registered again");
         return;
     }
     std::string verifyToken;
     std::string message;
-    if (!databaseLogicAppUser.createAppUser(sole::rebuild(appId),
+    if (!databaseLogicAppUser.createAppUser(appId,
                                             loginEMail,
                                             password,
                                             message,
