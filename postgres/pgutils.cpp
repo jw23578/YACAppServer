@@ -2,14 +2,7 @@
 #include "pgcommandtransactor.h"
 #include "utils/extstring.h"
 #include "pgexecutor.h"
-
-const std::map<PGTypes, std::string> PGColumnAndType::typeToString = {{pg_int, "int"},
-                                                                      {pg_bigint, "bigint"},
-                                                                      {pg_text, "text"},
-                                                                      {pg_float, "float"},
-                                                                      {pg_bool, "bool"},
-                                                                      {pg_timestamp, "timestamp with time zone"},
-                                                                      {pg_uuid, "uuid"}};
+#include "definitions.h"
 
 std::map<std::string, PGSqlString> PGUtils::tableName2InsertString;
 std::map<std::string, PGSqlString> PGUtils::tableName2UpdateString;
@@ -205,7 +198,7 @@ bool PGUtils::entryExists(const std::string &tableName,
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
     sql.addCompare("where", needleField2, "=", needleValue2);
-    sql.addCompare("where", needleField3, "=", needleValue3);
+    sql.addCompare("where", needleField3, needleValue3 == TimePointPostgreSqlNull ? "is" : "=", needleValue3);
     sql += " limit 1";
     PGExecutor e(pool, sql);
     return e.size() > 0;

@@ -14,11 +14,13 @@
 #include "databaselogicmessages.h"
 #include "tests/testdatabaselogicmessages.h"
 #include "tests/testtimepoint.h"
+#include "tests/testdatabaselogicappuser.h"
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
+    std::srand(std::time(nullptr));
     TestTimepoint ttp;
 
     std::string configFilename("YACAppServerConfig.json");
@@ -89,6 +91,7 @@ int main(int argc, char **argv)
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
     TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
+    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
 
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),

@@ -15,6 +15,7 @@
 class PGSqlString
 {
     std::string sql;
+    bool firstSetField;
     void rawReplace(std::string &sql,
                     std::string const &param,
                     std::string value) const;
@@ -25,6 +26,8 @@ class PGSqlString
 public:
     PGSqlString();
     PGSqlString(std::string const &s);
+    void update(std::string const &tableName);
+
     void set(std::string const &param,
              std::string const &value);
     void set(std::string const &param,
@@ -68,6 +71,17 @@ public:
         sql += " " + comparator;
         sql += " :" + needle;
         set(needle, value);
+    }
+
+    template <class T>
+    void addSet(const std::string &needle,
+                const T &value)
+    {
+        addCompare(firstSetField ? "" : ", ",
+                   needle,
+                   "=",
+                   value);
+        firstSetField = false;
     }
 };
 

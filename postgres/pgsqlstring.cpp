@@ -3,14 +3,22 @@
 #include "utils/extstring.h"
 #include "utils/definitions.h"
 
-PGSqlString::PGSqlString()
+PGSqlString::PGSqlString():
+    firstSetField(true)
 {
 }
 
 PGSqlString::PGSqlString(std::string const &s):
-    sql(s)
+    sql(s),
+    firstSetField(true)
 {
 
+}
+
+void PGSqlString::update(const std::string &tableName)
+{
+    firstSetField = true;
+    sql = "update " + tableName + " set ";
 }
 
 void PGSqlString::rawReplace(std::string &sql,

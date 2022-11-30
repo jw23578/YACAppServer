@@ -1,6 +1,7 @@
 #include "pgexecutor.h"
 #include "pgcommandtransactor.h"
 #include "utils/extstring.h"
+#include "definitions.h"
 
 
 PGExecutor::PGExecutor(PGConnectionPool &pool):
@@ -81,7 +82,7 @@ size_t PGExecutor::select(const std::string &tableName,
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
     sql.addCompare("and", needleField2, "=", needleValue2);
-    sql.addCompare("and", needleField3, "=", needleValue3);
+    sql.addCompare("and", needleField3, needleValue3 == TimePointPostgreSqlNull ? "is" : "=", needleValue3);
     return exec(sql);
 }
 

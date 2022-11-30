@@ -63,6 +63,7 @@ SOURCES += \
         serverHeader/loginemailheader.cpp \
         serverHeader/logintokenheader.cpp \
         sole/sole.cpp \
+        tests/testdatabaselogicappuser.cpp \
         tests/testdatabaselogicmessages.cpp \
         tests/testtimepoint.cpp \
         utils/base64.cpp \
@@ -121,6 +122,7 @@ HEADERS += \
   serverHeader/loginemailheader.h \
   serverHeader/logintokenheader.h \
   sole/sole.hpp \
+  tests/testdatabaselogicappuser.h \
   tests/testdatabaselogicmessages.h \
   tests/testtimepoint.h \
   utils/base64.h \

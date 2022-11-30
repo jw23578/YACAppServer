@@ -259,6 +259,26 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::initUpdatePassword(const sole::uuid &appId,
+                                              const std::string &loginEMail,
+                                              std::string &updatePasswordToken,
+                                              std::string &message)
+{
+    sole::uuid userId;
+    if (!lookupAppUser(appId, loginEMail, userId, message))
+    {
+        return false;
+    }
+    updatePasswordToken = ExtString::randomString(0, 0, 4, 0);
+    PGSqlString sql;
+    sql.update(tableNames.t0003_appuser_profiles);
+    sql.addSet("update_password_token", updatePasswordToken);
+    sql.addSet("update_password_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
+    sql.addCompare("where", "id", "=", userId);
+    PGExecutor e(pool, sql);
+    return true;
+}
+
 void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
                                                     const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)

@@ -1,5 +1,14 @@
 #include "pgcolumnandtype.h"
 
+const std::map<PGTypes, std::string> PGColumnAndType::typeToString = {{pg_int, "int"},
+                                                                      {pg_bigint, "bigint"},
+                                                                      {pg_text, "text"},
+                                                                      {pg_float, "float"},
+                                                                      {pg_bool, "bool"},
+                                                                      {pg_timestamp, "timestamp with time zone"},
+                                                                      {pg_uuid, "uuid"}};
+
+
 PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type):
     column(column),
     type(type),
