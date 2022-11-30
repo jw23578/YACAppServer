@@ -20,17 +20,15 @@ void HandlerAppUserVerify::method()
 
     std::string message;
     std::string loginToken;
-    if (databaseLogicAppUser.verifyAppUser(appId,
+    if (!databaseLogicAppUser.verifyAppUser(appId,
                                            loginEMail,
                                            verifyToken,
                                            message,
                                            loginToken))
     {
-        MACRO_CreateDataMAP(loginToken);
-        answer(Pistache::Http::Code::Ok, message, data);
+        answerBad(message);
+        return;
     }
-    else
-    {
-        answer(Pistache::Http::Code::Bad_Request, message);
-    }
+    MACRO_CreateDataMAP(loginToken);
+    answerOk(message, data);
 }

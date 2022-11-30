@@ -7,14 +7,6 @@
 class LoggedInUsersContainer: public LoggedInContainerInterface
 {
     DatabaseLogicUserAndApp &databaseLogic;
-    struct SData
-    {
-        sole::uuid userId;
-        std::chrono::system_clock::time_point loginTokenValidUntil;
-    };
-
-    typedef std::map<std::string, SData> LoggedInUsersMap;
-    LoggedInUsersMap loggedInUsers;
 public:
     LoggedInUsersContainer(DatabaseLogicUserAndApp &databaseLogic);
 

@@ -47,7 +47,10 @@ class PistacheHandlerInterface
     rapidjson::Document postedData;
     void internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
 protected:
+    void answerBad(const std::string &message);
     void answerOk(const std::string &message);
+    void answerOk(const std::string &message,
+                  std::map<std::string, std::string> &data);
     void answer(Pistache::Http::Code code, const std::string &message);
     void answer(Pistache::Http::Code code, rapidjson::Document &d);
     void answer(Pistache::Http::Code code,

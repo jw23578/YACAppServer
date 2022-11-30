@@ -279,6 +279,71 @@ bool DatabaseLogicAppUser::initUpdatePassword(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
+                                          const std::string &loginEMail,
+                                          const std::string &updatePasswordToken,
+                                          const std::string &password,
+                                          std::string &message,
+                                          std::string &loginToken,
+                                          sole::uuid &userId)
+{
+    PGExecutor e(pool);
+    e.select(tableNames.t0003_appuser_profiles,
+             "loginemail",
+             loginEMail,
+             "app_id",
+             appId.str(),
+             "deleted",
+             TimePointPostgreSqlNull);
+    if (e.size() == 0)
+    {
+        message = std::string("no appuser with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
+        return false;
+    }
+    if (e.size() > 1)
+    {
+        message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
+        return false;
+    }
+    if (e.isNull("update_password_token_valid_until"))
+    {
+        message = std::string("not update password token requested");
+        return false;
+    }
+    userId = e.uuid("id");
+    std::chrono::system_clock::time_point update_password_token_valid_until(e.timepoint("update_password_token_valid_until"));
+    std::chrono::system_clock::time_point now(std::chrono::system_clock::now());
+    if (update_password_token_valid_until < now)
+    {
+        message = std::string("update password token not valid any more, please init update password again.");
+        resetUpdatePasswordToken(userId);
+        return false;
+    }
+    if (e.string("update_password_token") != updatePasswordToken)
+    {
+        message = std::string("wrong updatePasswordToken");
+        return false;
+    }
+    resetUpdatePasswordToken(userId);
+
+    {
+        PGSqlString sql;
+        sql.update(tableNames.t0004_appuser_passwordhashes);
+        sql += " password_hash = crypt(:password, gen_salt('bf')) ";
+        sql.set("password", password);
+        sql.addCompare("where", "appuser_id", "=", userId);
+        PGExecutor e(pool, sql);
+    }
+    {
+        PGExecutor erase(pool);
+        erase.erase(tableNames.t0009_appuser_logintoken, "appuser_id", userId.str());
+    }
+    loginSuccessful(userId, loginToken);
+    message = "update password successful";
+    return true;
+
+}
+
 void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
                                                     const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)
@@ -300,5 +365,16 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
     MACRO_set(validHours);
     PGExecutor e(pool, sql);
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
+}
+
+void DatabaseLogicAppUser::resetUpdatePasswordToken(const sole::uuid &userId)
+{
+    PGSqlString sql;
+    sql.update(tableNames.t0003_appuser_profiles);
+    sql.addSet("update_password_token", "");
+    sql.addSet("update_password_token_valid_until", TimePointPostgreSqlNull);
+    sql.addCompare("where", "id", "=", userId);
+    PGExecutor e(pool, sql);
+
 }
 

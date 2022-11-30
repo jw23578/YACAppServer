@@ -29,6 +29,7 @@ class DatabaseLogicAppUser
     void refreshAppUserLoginToken(const sole::uuid &appId,
                                   const std::string &loginEMail,
                                   std::chrono::system_clock::time_point &loginTokenValidUntil);
+    void resetUpdatePasswordToken(const sole::uuid &userId);
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);
@@ -66,7 +67,9 @@ public:
                         const std::string &loginEMail,
                         const std::string &updatePasswordToken,
                         const std::string &password,
-                        std::string &message);
+                        std::string &message,
+                        std::string &loginToken,
+                        sole::uuid &userId);
 
     bool deleteAppUser(const sole::uuid &appId,
                        const std::string &loginEMail,

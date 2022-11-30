@@ -25,9 +25,20 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
     method();
 }
 
+void PistacheHandlerInterface::answerBad(const std::string &message)
+{
+    answer(Pistache::Http::Code::Bad_Request, message);
+}
+
 void PistacheHandlerInterface::answerOk(const std::string &message)
 {
-    ExtPistache::answer(*response, Pistache::Http::Code::Ok, message);
+    answer(Pistache::Http::Code::Ok, message);
+}
+
+void PistacheHandlerInterface::answerOk(const std::string &message,
+                                        std::map<std::string, std::string> &data)
+{
+    answer(Pistache::Http::Code::Ok, message, data);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,

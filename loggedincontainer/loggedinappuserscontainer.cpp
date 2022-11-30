@@ -50,4 +50,3 @@ bool LoggedInAppUsersContainer::isLoggedIn(const sole::uuid &appId,
     sole::uuid userId;
     return isLoggedIn(appId, loginEMail, loginToken, userId);
 }
-

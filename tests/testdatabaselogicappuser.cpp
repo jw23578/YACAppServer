@@ -14,4 +14,13 @@ TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databas
     {
         exit(1);
     }
+    std::string loginToken;
+    sole::uuid userId;
+    databaseLogicAppUser.updatePassword(appId,
+                                        loginEMail,
+                                        updatePasswordToken,
+                                        "1234",
+                                        message,
+                                        loginToken,
+                                        userId);
 }
