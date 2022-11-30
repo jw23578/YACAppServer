@@ -33,7 +33,8 @@ public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);
 
-    bool appUserExists(const std::string &loginEMail);
+    bool appUserExists(const sole::uuid &appId,
+                       const std::string &loginEMail);
     bool createAppUser(const sole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &password,
@@ -56,6 +57,21 @@ public:
                          sole::uuid &userId,
                          std::chrono::system_clock::time_point &loginTokenValidUntil);
 
+    bool initUpdatePassword(const sole::uuid &appId,
+                            const std::string &loginEMail,
+                            std::string &updatePasswordToken,
+                            std::string &message);
+
+    bool updatePassword(const sole::uuid &appId,
+                        const std::string &loginEMail,
+                        const std::string &updatePasswordToken,
+                        const std::string &password,
+                        std::string &message);
+
+    bool deleteAppUser(const sole::uuid &appId,
+                       const std::string &loginEMail,
+                       const std::string &loginToken,
+                       std::string &message);
 
 };
 

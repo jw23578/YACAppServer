@@ -51,6 +51,7 @@ SOURCES += \
         logstat/filelogger.cpp \
         logstat/loggerstatterinterface.cpp \
         logstat/logstatcontroller.cpp \
+        postgres/pgcolumnandtype.cpp \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
         postgres/pgexecutor.cpp \
@@ -107,6 +108,7 @@ HEADERS += \
   logstat/filelogger.h \
   logstat/loggerstatterinterface.h \
   logstat/logstatcontroller.h \
+  postgres/pgcolumnandtype.h \
   postgres/pgcommandtransactor.h \
   postgres/pgconnection.h \
   postgres/pgconnectionpool.h \

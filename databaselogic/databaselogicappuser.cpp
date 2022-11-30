@@ -35,7 +35,9 @@ bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,
                         "loginemail",
                         loginEMail,
                         "app_id",
-                        appId.str()))
+                        appId.str(),
+                        "deleted",
+                        TimePointPostgreSqlNull))
     {
         message = "LoginEMail/User not found";
         return false;
@@ -63,9 +65,15 @@ DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
 
 }
 
-bool DatabaseLogicAppUser::appUserExists(const std::string &loginEMail)
+bool DatabaseLogicAppUser::appUserExists(const sole::uuid &appId,
+                                         const std::string &loginEMail)
 {
-    return utils.entryExists(tableNames.t0003_appuser_profiles, "loginemail", loginEMail);
+    return utils.entryExists(tableNames.t0003_appuser_profiles,
+                             "loginemail", loginEMail,
+                             "app_id",
+                             appId.str(),
+                             "deleted",
+                             TimePointPostgreSqlNull);
 }
 
 bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
@@ -92,6 +100,9 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         sql.set("loginemail", loginEMail);
         sql.set("verify_token", verifyToken);
         sql.set("verify_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
+        sql.set("update_password_token", "");
+        sql.set("update_password_token_valid_until", TimePointPostgreSqlNull);
+        sql.set("deleted", TimePointPostgreSqlNull);
         PGExecutor e(pool, sql);
     }
 
@@ -120,7 +131,9 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
              "loginemail",
              loginEMail,
              "app_id",
-             appId.str());
+             appId.str(),
+             "deleted",
+             TimePointPostgreSqlNull);
     if (e.size() == 0)
     {
         message = std::string("no appuser with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
@@ -131,6 +144,12 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
         return false;
     }
+    if (!e.isNull("verified"))
+    {
+        message = ExtString::quote(loginEMail) + " already verified, please login.";
+        return false;
+    }
+    sole::uuid id(e.uuid("id"));
     logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
                           std::string("verify_token_valid_until as string: ") + e.string("verify_token_valid_until"));
     std::chrono::system_clock::time_point verify_token_valid_until(e.timepoint("verify_token_valid_until"));
@@ -154,11 +173,11 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         message = std::string("verify token not valid any more, please register again");
         PGExecutor erase(pool);
         erase.erase(tableNames.t0003_appuser_profiles,
-                    "loginemail",
-                    loginEMail);
+                    "id",
+                    id.str());
         erase.erase(tableNames.t0004_appuser_passwordhashes,
                     "appuser_id",
-                    e.uuid("id").str());
+                    id.str());
         return false;
     }
     if (e.string("verify_token") != verifyToken)
@@ -173,11 +192,11 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         sql += " set verified = now(), "
                " verify_token = '', "
                " verify_token_valid_until = null "
-               " where loginemail = :loginemail ";
-        sql.set("loginemail", loginEMail);
+               " where id = :id ";
+        sql.set("id", id.str());
         PGExecutor e(pool, sql);
     }
-    loginSuccessful(e.uuid("id"), loginToken);
+    loginSuccessful(id, loginToken);
     return true;
 }
 
@@ -195,7 +214,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
     PGExecutor login(pool);
     if (!login.login(tableNames.t0004_appuser_passwordhashes,
                      "password_hash",
-                     password,                     
+                     password,
                      "appuser_id",
                      appUserId.str()))
     {
