@@ -3,6 +3,13 @@
 #include "utils/extstring.h"
 #include "pgexecutor.h"
 
+const std::map<PGTypes, std::string> PGColumnAndType::typeToString = {{pg_int, "int"},
+                                                                      {pg_bigint, "bigint"},
+                                                                      {pg_text, "text"},
+                                                                      {pg_float, "float"},
+                                                                      {pg_bool, "bool"},
+                                                                      {pg_timestamp, "timestamp with time zone"},
+                                                                      {pg_uuid, "uuid"}};
 
 std::map<std::string, PGSqlString> PGUtils::tableName2InsertString;
 std::map<std::string, PGSqlString> PGUtils::tableName2UpdateString;
@@ -46,8 +53,25 @@ void PGUtils::alterTableAddColumnIfNeeded(const std::string &tableName,
     alterTableAddColumn(tableName, columnName, columnType);
 }
 
+void PGUtils::alterTableAddColumnIfNeeded(const std::string &tableName,
+                                          const PGColumnAndType &columnAndType) const
+{
+    alterTableAddColumnIfNeeded(tableName,
+                                columnAndType.column,
+                                columnAndType.typeString());
+}
+
+void PGUtils::alterTableAddColumnsIfNeeded(const std::string &tableName,
+                                           const std::vector<PGColumnAndType> &columnsAndTypes) const
+{
+    for (const auto &cat : columnsAndTypes)
+    {
+        alterTableAddColumnIfNeeded(tableName, cat);
+    }
+}
+
 bool PGUtils::createTable(const std::string &tableName,
-                          const std::vector<PGColumnAndType> &columnsAndTypes)
+                          const std::vector<PGColumnAndType> &columnsAndTypes) const
 {
     PGSqlString sql("create table ");
     sql += tableName;
@@ -79,10 +103,11 @@ bool PGUtils::createTable(const std::string &tableName,
 }
 
 void PGUtils::createTableIfNeeded(const std::string &tableName,
-                                  const std::vector<PGColumnAndType> &columnsAndTypes)
+                                  const std::vector<PGColumnAndType> &columnsAndTypes) const
 {
     if (tableExists(tableName))
     {
+        alterTableAddColumnsIfNeeded(tableName, columnsAndTypes);
         return;
     }
     createTable(tableName,
@@ -326,61 +351,4 @@ bool PGUtils::dropRole(const std::string &name) const
                            sql,
                            result);
     return result.size() > 0;
-}
-
-PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type):
-    column(column),
-    type(type),
-    primaryKey(false),
-    index(false)
-{
-
-}
-
-PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey):
-    column(column),
-    type(type),
-    primaryKey(primaryKey),
-    index(false)
-{
-
-}
-
-PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey, const bool index):
-    column(column), type(type), primaryKey(primaryKey), index(index)
-{
-
-}
-
-std::string PGColumnAndType::toString() const
-{
-    std::string s(column);
-    s += " ";
-    switch (type)
-    {
-    case pg_int: s += "int";
-        break;
-    case pg_bigint: s += "bigint";
-        break;
-    case pg_text: s += "text";
-        break;
-    case pg_float: s += "float";
-        break;
-    case pg_bool: s += "bool";
-        break;
-    case pg_timestamp: s += "timestamp with time zone";
-        break;
-    case pg_uuid: s += "uuid";
-        break;
-    }
-    return s;
-}
-
-std::string PGColumnAndType::primaryKeyString() const
-{
-    if (!primaryKey)
-    {
-        return "";
-    }
-    return std::string("primary key (") + column + ")";
 }

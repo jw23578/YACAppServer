@@ -3,31 +3,7 @@
 
 #include "pgconnectionpool.h"
 #include "pgsqlstring.h"
-
-enum PGTypes
-{
-    pg_int,
-    pg_bigint,
-    pg_text,
-    pg_float,
-    pg_bool,
-    pg_timestamp,
-    pg_uuid
-};
-
-class PGColumnAndType
-{
-  public:
-    const std::string column;
-    const PGTypes type;
-    const bool primaryKey;
-    const bool index;
-    PGColumnAndType(const std::string &column, PGTypes type);
-    PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey);
-    PGColumnAndType(const std::string &column, PGTypes type, const bool primaryKey, const bool index);
-    std::string toString() const;
-    std::string primaryKeyString() const;
-};
+#include "pgcolumnandtype.h"
 
 class PGUtils
 {
@@ -44,10 +20,14 @@ public:
     void alterTableAddColumnIfNeeded(std::string const &tableName,
                                      std::string const &columnName,
                                      std::string const &columnType) const;
+    void alterTableAddColumnIfNeeded(std::string const &tableName,
+                                     const PGColumnAndType &columnAndType) const;
+    void alterTableAddColumnsIfNeeded(std::string const &tableName,
+                                     const std::vector<PGColumnAndType> &columnsAndTypes) const;
     bool createTable(const std::string &tableName,
-                     const std::vector<PGColumnAndType> &columnsAndTypes);
+                     const std::vector<PGColumnAndType> &columnsAndTypes) const;
     void createTableIfNeeded(const std::string &tableName,
-                             const std::vector<PGColumnAndType> &columnsAndTypes);
+                             const std::vector<PGColumnAndType> &columnsAndTypes) const;
     bool tableExists(std::string const &tableName) const;
     bool tableEmpty(std::string const &tableName) const;
     bool databaseExists(const std::string &databaseName) const;
