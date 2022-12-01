@@ -6,7 +6,7 @@ TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databas
     std::string loginEMail("jens@wienoebst.com");
     std::string updatePasswordToken;
     std::string message;
-    databaseLogicAppUser.initUpdatePassword(appId,
+    databaseLogicAppUser.requestUpdatePassword(appId,
                                             loginEMail,
                                             updatePasswordToken,
                                             message);

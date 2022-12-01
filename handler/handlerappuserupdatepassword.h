@@ -13,6 +13,7 @@ public:
     HandlerAppUserUpdatePassword(DatabaseLogicAppUser &databaseLogicAppUser,
                                  LoggedInAppUsersContainer &loggedInAppUsersContainer,
                                  PistacheServerInterface &serverInterface);
+    void method() override;
 };
 
 #endif // HANDLERAPPUSERUPDATEPASSWORD_H

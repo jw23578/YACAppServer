@@ -11,6 +11,10 @@ HandlerAppUserUpdatePassword::HandlerAppUserUpdatePassword(DatabaseLogicAppUser 
     databaseLogicAppUser(databaseLogicAppUser),
     loggedInAppUsersContainer(loggedInAppUsersContainer)
 {
+}
+
+void HandlerAppUserUpdatePassword::method()
+{
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(password);
     MACRO_GetMandatoryUuid(appId);
@@ -33,5 +37,4 @@ HandlerAppUserUpdatePassword::HandlerAppUserUpdatePassword(DatabaseLogicAppUser 
     loggedInAppUsersContainer.clear(userId);
     MACRO_CreateDataMAP(loginToken);
     answerOk(message, data);
-
 }

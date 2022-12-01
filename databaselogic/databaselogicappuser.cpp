@@ -259,7 +259,7 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::initUpdatePassword(const sole::uuid &appId,
+bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
                                               const std::string &loginEMail,
                                               std::string &updatePasswordToken,
                                               std::string &message)

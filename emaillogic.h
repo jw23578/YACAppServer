@@ -21,6 +21,10 @@ public:
 
     void sendPleaseVerifyMail(const std::string &loginEMail,
                               const std::string &verifyToken);
+
+    void sendPleaseUpdatePasswordMail(const std::string &loginEMail,
+                                      const std::string &updatePasswordToken);
+
 };
 
 #endif // EMAILLOGIC_H

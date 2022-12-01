@@ -12,6 +12,8 @@
 #include "handler/handlerappuserverify.h"
 #include "handler/handlerappuserlogin.h"
 #include "handler/handlerappuserloggedin.h"
+#include "handler/handlerappuserrequestupdatepassword.h"
+#include "handler/handlerappuserupdatepassword.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "handlerLoggedIn/handlerstoremessage.h"
 #include "databaselogicuserandapp.h"
@@ -37,6 +39,8 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserVerify handlerAppUserVerify;
     HandlerAppUserLogin handlerAppUserLogin;
     HandlerAppUserLoggedIn handlerAppUserLoggedIn;
+    HandlerAppUserRequestUpdatePassword handlerAppUserRequestUpdatePassword;
+    HandlerAppUserUpdatePassword handlerAppUserUpdatePassword;
 
     HandlerStoreMessage handlerStoreMesage;
 

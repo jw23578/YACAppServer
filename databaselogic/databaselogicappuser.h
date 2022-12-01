@@ -58,7 +58,7 @@ public:
                          sole::uuid &userId,
                          std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    bool initUpdatePassword(const sole::uuid &appId,
+    bool requestUpdatePassword(const sole::uuid &appId,
                             const std::string &loginEMail,
                             std::string &updatePasswordToken,
                             std::string &message);

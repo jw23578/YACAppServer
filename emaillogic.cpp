@@ -32,3 +32,19 @@ void EMailLogic::sendPleaseVerifyMail(const std::string &loginEMail,
     smtp->password = smtpPassword;
     smtp->send();
 }
+
+void EMailLogic::sendPleaseUpdatePasswordMail(const std::string &loginEMail,
+                                              const std::string &updatePasswordToken)
+{
+    jw78::SMTPWrapper *smtp(new jw78::SMTPWrapper);
+    smtp->createEmptyEMail("Change your Password",
+                           updatePasswordToken,
+                           smtpSenderName,
+                           smtpSenderEMail);
+    smtp->to_addr.push_back(loginEMail);
+    smtp->reply_to = smtpReplyTo;
+    smtp->host = smtpHost;
+    smtp->user = smtpUser;
+    smtp->password = smtpPassword;
+    smtp->send();
+}

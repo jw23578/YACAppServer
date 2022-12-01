@@ -32,6 +32,7 @@ SOURCES += \
         handler/handlerappuserloggedin.cpp \
         handler/handlerappuserlogin.cpp \
         handler/handlerappuserregister.cpp \
+        handler/handlerappuserrequestupdatepassword.cpp \
         handler/handlerappuserupdatepassword.cpp \
         handler/handlerappuserverify.cpp \
         handler/handlergetallapps.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
   handler/handlerappuserloggedin.h \
   handler/handlerappuserlogin.h \
   handler/handlerappuserregister.h \
+  handler/handlerappuserrequestupdatepassword.h \
   handler/handlerappuserupdatepassword.h \
   handler/handlerappuserverify.h \
   handler/handlergetallapps.h \
