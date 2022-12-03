@@ -15,7 +15,7 @@
 #define MACRO_GetMandatoryEMail(targetName) MACRO_GetMandatoryString(targetName) \
     if (!ExtString::emailIsValid(targetName)) \
     { \
-        answer(Pistache::Http::Code::Bad_Request, "this is not a valid email-adress: " + targetName); \
+        answerBad("this is not a valid email-adress: " + targetName); \
         return; \
     }
 
@@ -46,16 +46,29 @@ class PistacheHandlerInterface
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;
     void internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
-protected:
-    void answerBad(const std::string &message);
-    void answerOk(const std::string &message);
-    void answerOk(const std::string &message,
-                  std::map<std::string, std::string> &data);
-    void answer(Pistache::Http::Code code, const std::string &message);
-    void answer(Pistache::Http::Code code, rapidjson::Document &d);
+
     void answer(Pistache::Http::Code code,
                 const std::string &message,
+                bool success);
+    void answer(Pistache::Http::Code code,
+                bool success,
+                rapidjson::Document &d);
+    void answer(Pistache::Http::Code code,
+                const std::string &message,
+                bool success,
                 std::map<std::string, std::string> &data);
+
+protected:
+    void answerBad(const std::string &message);
+    void answerBad(const std::string &message,
+                   std::map<std::string, std::string> &data);
+    void answerOk(const std::string &message,
+                  bool success);
+    void answerOk(const std::string &message,
+                  bool success,
+                  std::map<std::string, std::string> &data);
+    void answerOk(bool success,
+                  rapidjson::Document &d);
 public:
     enum HandlerType
     {
@@ -106,7 +119,7 @@ public:
         {
             if (ifMissingThenSendResponse)
             {
-                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name());
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name(), false);
             }
             return false;
         }
@@ -115,7 +128,7 @@ public:
         {
             if (ifMissingThenSendResponse)
             {
-                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name());
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name(), false);
             }
             return false;
         }

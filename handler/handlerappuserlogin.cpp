@@ -26,12 +26,12 @@ void HandlerAppUserLogin::method()
                                            message,
                                            loginToken))
     {
-        answer(Pistache::Http::Code::Bad_Request, message);
+        answerBad(message);
     }
     else
     {
         MACRO_CreateDataMAP(loginToken);
-        answer(Pistache::Http::Code::Ok, "Login successful", data);
+        answerOk("Login successful", true, data);
     }
 
 }

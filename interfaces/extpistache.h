@@ -12,13 +12,16 @@ public:
 
     static void answer(Pistache::Http::ResponseWriter &response,
                        Pistache::Http::Code code,
-                       std::string const &message);
+                       std::string const &message,
+                       bool success);
     static void answer(Pistache::Http::ResponseWriter &response,
                        Pistache::Http::Code code,
                        std::string const &message,
+                       bool success,
                        std::map<std::string, std::string> &data);
     static void answer(Pistache::Http::ResponseWriter &response,
                        Pistache::Http::Code code,
+                       bool success,
                        rapidjson::Document &d);
 
     static bool getString(const Pistache::Rest::Request &request,

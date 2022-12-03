@@ -25,10 +25,10 @@ void HandlerVerifyUser::method()
                                            loginToken))
     {
         MACRO_CreateDataMAP(loginToken);
-        answer(Pistache::Http::Code::Ok, message, data);
+        answerOk(message, true, data);
     }
     else
     {
-        answer(Pistache::Http::Code::Bad_Request, message);
+        answerBad(message);
     }
 }

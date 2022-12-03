@@ -35,9 +35,9 @@ void HandlerUploadApp::method()
                                yacpck_base64,
                                message))
     {
-        answer(Pistache::Http::Code::Bad_Request, message);
+        answerBad(message);
         return;
     }
 
-    answer(Pistache::Http::Code::Ok, "new yacApp stored");
+    answerOk("new yacApp stored", true);
 }

@@ -23,5 +23,5 @@ void HandlerStoreMessage::method()
                                        to_id,
                                        content_base64);
 
-    answerOk("message stored");
+    answerOk("message stored", true);
 }

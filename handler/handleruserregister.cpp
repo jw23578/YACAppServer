@@ -20,10 +20,10 @@ void HandlerUserRegister::method()
 
     if (databaseLogicUserAndApp.userExists(loginEMail))
     {
-        answer(Pistache::Http::Code::Bad_Request, "loginEMail already exists and cannot be registered again");
+        answerBad("loginEMail already exists and cannot be registered again");
         return;
     }
     std::string verifyToken(databaseLogicUserAndApp.createUser(loginEMail, password));
     emailLogic.sendPleaseVerifyMail(loginEMail, verifyToken);
-    answer(Pistache::Http::Code::Ok, "user registered, please verify");
+    answerOk("user registered, please verify", true);
 }

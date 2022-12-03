@@ -36,5 +36,5 @@ void HandlerAppUserUpdatePassword::method()
     }
     loggedInAppUsersContainer.clear(userId);
     MACRO_CreateDataMAP(loginToken);
-    answerOk(message, data);
+    answerOk(message, true, data);
 }

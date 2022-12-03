@@ -12,7 +12,7 @@ TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databas
                                             message);
     if (updatePasswordToken.size() == 0)
     {
-        exit(1);
+        return;
     }
     std::string loginToken;
     sole::uuid userId;

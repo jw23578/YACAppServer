@@ -15,5 +15,5 @@ void HandlerGetAllApps::method()
 {
     rapidjson::Document allAPPsObject;
     databaseLogicUserAndApp.fetchAllAPPs(allAPPsObject);
-    answer(Pistache::Http::Code::Ok, allAPPsObject);
+    answerOk(true, allAPPsObject);
 }

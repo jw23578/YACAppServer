@@ -18,7 +18,7 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
         {
             std::map<std::string, std::string> answerData;
             answerData["error"] = rapidjson::GetParseError_En(postedData.GetParseError());
-            answer(Pistache::Http::Code::Bad_Request, "data is not valid json", answerData);
+            answerBad("data is not valid json", answerData);
             return;
         }
     }
@@ -27,37 +27,54 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
 
 void PistacheHandlerInterface::answerBad(const std::string &message)
 {
-    answer(Pistache::Http::Code::Bad_Request, message);
+    answer(Pistache::Http::Code::Bad_Request, message, false);
 }
 
-void PistacheHandlerInterface::answerOk(const std::string &message)
+void PistacheHandlerInterface::answerBad(const std::string &message,
+                                         std::map<std::string, std::string> &data)
 {
-    answer(Pistache::Http::Code::Ok, message);
+    answer(Pistache::Http::Code::Bad_Request, message, false, data);
 }
 
 void PistacheHandlerInterface::answerOk(const std::string &message,
+                                        bool success)
+{
+    answer(Pistache::Http::Code::Ok, message, success);
+}
+
+void PistacheHandlerInterface::answerOk(const std::string &message,
+                                        bool success,
                                         std::map<std::string, std::string> &data)
 {
-    answer(Pistache::Http::Code::Ok, message, data);
+    answer(Pistache::Http::Code::Ok, message, success, data);
 }
 
-void PistacheHandlerInterface::answer(Pistache::Http::Code code,
-                                      const std::string &message)
+void PistacheHandlerInterface::answerOk(bool success,
+                                        rapidjson::Document &d)
 {
-    ExtPistache::answer(*response, code, message);
-}
-
-void PistacheHandlerInterface::answer(Pistache::Http::Code code,
-                                      rapidjson::Document &d)
-{
-    ExtPistache::answer(*response, code, d);
+    answer(Pistache::Http::Code::Ok, success, d);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       const std::string &message,
+                                      bool success)
+{
+    ExtPistache::answer(*response, code, message, success);
+}
+
+void PistacheHandlerInterface::answer(Pistache::Http::Code code,
+                                      bool success,
+                                      rapidjson::Document &d)
+{
+    ExtPistache::answer(*response, code, success, d);
+}
+
+void PistacheHandlerInterface::answer(Pistache::Http::Code code,
+                                      const std::string &message,
+                                      bool success,
                                       std::map<std::string, std::string> &data)
 {
-    ExtPistache::answer(*response, code, message, data);
+    ExtPistache::answer(*response, code, message, success, data);
 }
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
@@ -114,7 +131,7 @@ bool PistacheHandlerInterface::getInteger(const std::string &name,
     }
     if (target == 0 && !zeroAllowed)
     {
-        answer(Pistache::Http::Code::Bad_Request, name + std::string(" must be != 0"));
+        answerBad(name + std::string(" must be != 0"));
         return false;
     }
     return true;
@@ -146,7 +163,7 @@ bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &targ
     target = sole::rebuild(temp);
     if (target == NullUuid && ifMissingThenSendReponse)
     {
-        ExtPistache::answer(*response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name);
+        answerBad(std::string("Missing ") + name);
         return false;
     }
     return true;

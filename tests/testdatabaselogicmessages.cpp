@@ -18,7 +18,7 @@ TestDatabaseLogicMessages::TestDatabaseLogicMessages(DatabaseLogicMessages &data
 
     if (messages.size() != 1)
     {
-        exit(1);
+        return;
     }
 
     for (const auto &m : messages)

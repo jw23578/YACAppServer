@@ -31,7 +31,7 @@ bool HandlerLoggedInInterface::checkLogin()
                                       loginToken,
                                       userId))
     {
-        answer(Pistache::Http::Code::Bad_Request, "not logged in");
+        answerBad("not logged in");
         return false;
     }
     return true;

@@ -23,7 +23,7 @@ void HandlerAppUserRegister::method()
     if (databaseLogicAppUser.appUserExists(appId,
                                            loginEMail))
     {
-        answer(Pistache::Http::Code::Bad_Request, "loginEMail already exists and cannot be registered again");
+        answerBad("loginEMail already exists and cannot be registered again");
         return;
     }
     std::string verifyToken;
@@ -34,9 +34,9 @@ void HandlerAppUserRegister::method()
                                             message,
                                             verifyToken))
     {
-        answer(Pistache::Http::Code::Bad_Request, message);
+        answerBad(message);
         return;
     }
     emailLogic.sendPleaseVerifyMail(loginEMail, verifyToken);
-    answer(Pistache::Http::Code::Ok, "appuser registered, please verify");
+    answerOk("appuser registered, please verify", true);
 }

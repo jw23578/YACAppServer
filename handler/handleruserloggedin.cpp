@@ -20,8 +20,8 @@ void HandlerUserLoggedIn::method()
                                           loginEMail,
                                           loginToken))
     {
-        answer(Pistache::Http::Code::Ok, "user logged in");
+        answerOk("user logged in", true);
         return;
     }
-    answer(Pistache::Http::Code::Ok, "user not logged in");
+    answerOk("user not logged in", false);
 }

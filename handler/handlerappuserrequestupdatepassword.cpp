@@ -30,6 +30,6 @@ void HandlerAppUserRequestUpdatePassword::method()
     }
     emailLogic.sendPleaseUpdatePasswordMail(loginEMail, updatePasswordToken);
     message = "e-mail with updatePasswordToken sended";
-    answerOk(message);
+    answerOk(message, true);
 
 }
