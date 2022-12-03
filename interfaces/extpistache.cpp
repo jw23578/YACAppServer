@@ -41,7 +41,7 @@ void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
                          bool success,
                          rapidjson::Document &d)
 {
-    d.AddMember("succcess", success, d.GetAllocator());
+    d.AddMember("success", success, d.GetAllocator());
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
     d.Accept(writer);
