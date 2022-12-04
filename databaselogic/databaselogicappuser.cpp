@@ -39,7 +39,7 @@ bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,
                         "deleted",
                         TimePointPostgreSqlNull))
     {
-        message = "LoginEMail/User not found";
+        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
         return false;
     }
     if (appUser.size() > 1)
@@ -218,7 +218,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
                      "appuser_id",
                      appUserId.str()))
     {
-        message = "LoginEMail/User not found";
+        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
         return false;
 
     }

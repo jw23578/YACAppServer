@@ -136,7 +136,7 @@ bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
     PGExecutor e(pool, sql);
     if (!e.size())
     {
-        message = "LoginEMail/User not found";
+        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
         return false;
     }
     if (e.isNull("verified"))

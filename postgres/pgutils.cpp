@@ -180,7 +180,7 @@ bool PGUtils::entryExists(const std::string &tableName,
     PGSqlString sql("select * from ");
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
-    sql.addCompare("where", needleField2, "=", needleValue2);
+    sql.addCompare("and", needleField2, "=", needleValue2);
     sql += " limit 1";
     PGExecutor e(pool, sql);
     return e.size() > 0;
@@ -197,8 +197,8 @@ bool PGUtils::entryExists(const std::string &tableName,
     PGSqlString sql("select * from ");
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
-    sql.addCompare("where", needleField2, "=", needleValue2);
-    sql.addCompare("where", needleField3, needleValue3 == TimePointPostgreSqlNull ? "is" : "=", needleValue3);
+    sql.addCompare("and", needleField2, "=", needleValue2);
+    sql.addCompare("and", needleField3, needleValue3 == TimePointPostgreSqlNull ? "is" : "=", needleValue3);
     sql += " limit 1";
     PGExecutor e(pool, sql);
     return e.size() > 0;

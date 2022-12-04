@@ -23,7 +23,7 @@ void HandlerAppUserRegister::method()
     if (databaseLogicAppUser.appUserExists(appId,
                                            loginEMail))
     {
-        answerBad("loginEMail already exists and cannot be registered again");
+        answerBad("LoginEMail already exists and cannot be registered again. Please verify your account.");
         return;
     }
     std::string verifyToken;
