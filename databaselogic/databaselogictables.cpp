@@ -78,7 +78,9 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"verify_token_valid_until", pg_timestamp},
                                {"update_password_token", pg_text},
                                {"update_password_token_valid_until", pg_timestamp},
-                               {"deleted", pg_timestamp}});
+                               {"deleted", pg_timestamp},
+                               {"searching_exactly_allowed", pg_bool},
+                               {"searching_fuzzy_allowed", pg_bool}});
 
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
                               {{"id", pg_uuid, true},

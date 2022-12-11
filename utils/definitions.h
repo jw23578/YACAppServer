@@ -4,6 +4,8 @@
 #include <chrono>
 #include "sole/sole.hpp"
 
+#define MACRO_NameValue(variable) #variable, variable
+
 const std::chrono::system_clock::time_point TimePointPostgreSqlNull = std::chrono::system_clock::time_point::min();
 const std::chrono::system_clock::time_point TimePointPostgreSqlNow = std::chrono::system_clock::time_point::min() + std::chrono::microseconds(1);
 

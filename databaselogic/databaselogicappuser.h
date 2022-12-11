@@ -6,6 +6,7 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
+#include "rapidjson/document.h"
 
 
 class LoggedInAppUsersContainer;
@@ -52,6 +53,15 @@ public:
                       std::string &message,
                       std::string &loginToken);
 
+    bool updateAppUser(const sole::uuid &appId,
+                       const sole::uuid &userId,
+                       const std::string &fstname,
+                       const std::string &surname,
+                       const std::string &visible_name,
+                       const bool searching_exactly_allowed,
+                       const bool searching_fuzzy_allowed,
+                       std::string &message);
+
     bool appUserLoggedIn(const sole::uuid &appId,
                          const std::string &loginEMail,
                          const std::string &loginToken,
@@ -75,6 +85,12 @@ public:
                        const std::string &loginEMail,
                        const std::string &loginToken,
                        std::string &message);
+
+    bool searchProfiles(const sole::uuid &appId,
+                        const std::string &needle,
+                        std::string &message,
+                        rapidjson::Value &target,
+                        rapidjson::MemoryPoolAllocator<> &alloc);
 
 };
 

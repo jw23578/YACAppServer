@@ -232,6 +232,29 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
+                                         const sole::uuid &userId,
+                                         const std::string &fstname,
+                                         const std::string &surname,
+                                         const std::string &visible_name,
+                                         const bool searching_exactly_allowed,
+                                         const bool searching_fuzzy_allowed,
+                                         std::string &message)
+{
+    PGSqlString sql;
+    sql.update(tableNames.t0003_appuser_profiles);
+    sql.addSet(MACRO_NameValue(fstname));
+    sql.addSet(MACRO_NameValue(surname));
+    sql.addSet(MACRO_NameValue(visible_name));
+    sql.addSet(MACRO_NameValue(searching_exactly_allowed));
+    sql.addSet(MACRO_NameValue(searching_fuzzy_allowed));
+    sql.addCompare("where", "app_id", "=", appId);
+    sql.addCompare("and", "id", "=", userId);
+    PGExecutor e(pool, sql);
+    message = "profile updated";
+    return true;
+}
+
 bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
                                            const std::string &loginEMail,
                                            const std::string &loginToken,
@@ -245,10 +268,8 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
     }
     PGSqlString sql("select * from ");
     sql += tableNames.t0009_appuser_logintoken;
-    sql += " where appuser_id = :appuser_id "
-           "and login_token = :login_token";
-    sql.set("appuser_id", userId);
-    sql.set("login_token", loginToken);
+    sql.addCompare("where", "appuser_id", "=", userId);
+    sql.addCompare("and", "login_token", "=", loginToken);
     PGExecutor e(pool, sql);
     if (e.size() == 0)
     {
@@ -342,6 +363,42 @@ bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
     message = "update password successful";
     return true;
 
+}
+
+bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
+                                          const std::string &needle,
+                                          std::string &message,
+                                          rapidjson::Value &target,
+                                          rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    if (!needle.size())
+    {
+        message = "you must provide a needle to search for";
+        return false;
+    }
+    std::vector<std::string> needles;
+    ExtString::split(needle, " ", needles);
+    PGSqlString sql("select id, visible_name from ");
+    sql += tableNames.t0003_appuser_profiles;
+    sql.addCompare("where", "app_id", "=", appId);
+    sql.addCompare("and", "verified", "is not", TimePointPostgreSqlNull);
+    sql += " and ( ";
+    sql += " ( searching_fuzzy_allowed ";
+    int index(0);
+    for (const auto &n : needles)
+    {
+        std::string variable(std::string("v") + ExtString::toString(index));
+        sql += std::string(" and visible_name like :") + variable;
+        sql.set(variable, std::string("%") + n + std::string("%"));
+        ++index;
+    }
+    sql += " ) or ( ";
+    sql += " searching_exactly_allowed and visible_name = :needle ";
+    sql.set("needle", needle);
+    sql += " ) ) ";
+    PGExecutor e(pool, sql);
+    e.toJsonArray(target, alloc);
+    return true;
 }
 
 void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,

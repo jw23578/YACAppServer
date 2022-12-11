@@ -18,6 +18,8 @@ public:
     bool isLoggedIn(const sole::uuid &appId,
                     const std::string &loginEMail,
                     const std::string &loginToken) override;
+
+    bool appIdMandatory() const override;
 };
 
 #endif // LOGGEDINAPPUSERSCONTAINER_H

@@ -169,3 +169,29 @@ pqxx::oid PGExecutor::oid(const std::string &fieldname)
     const pqxx::row &row(result[currentRow]);
     return row[fieldname].get<pqxx::oid>().value();
 }
+
+void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    const pqxx::row &row(result[currentRow]);
+    for (pqxx::row::size_type i(0); i < row.size(); ++i)
+    {
+        rapidjson::Value name(row[i].name(), alloc);
+        std::string data(row[i].get<std::string>().value());
+        object.AddMember(name, data, alloc);
+    }
+}
+
+size_t PGExecutor::toJsonArray(rapidjson::Value &target, rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    target.SetArray();
+    for (size_t r(0); r < size(); ++r)
+    {
+        rapidjson::Value object(rapidjson::kObjectType);
+        object.SetObject();
+        toJsonObject(object, alloc);
+        target.PushBack(object, alloc);
+        next();
+    }
+    return size();
+
+}

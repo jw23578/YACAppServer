@@ -21,6 +21,8 @@ protected:
 public:
     LoggedInContainerInterface();
 
+    virtual bool appIdMandatory() const = 0;
+
     virtual bool isLoggedIn(const sole::uuid &appId,
                             const std::string &loginEMail,
                             const std::string &loginToken,

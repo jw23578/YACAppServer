@@ -16,6 +16,7 @@ INCLUDEPATH += postgres
 INCLUDEPATH += curlWrapper
 INCLUDEPATH += interfaces
 INCLUDEPATH += databaselogic
+INCLUDEPATH += rapidjson/include
 
 SOURCES += \
         curlWrapper/jw78curlwrapper.cpp \
@@ -41,6 +42,8 @@ SOURCES += \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
+        handlerLoggedIn/handlerappusersearchprofiles.cpp \
+        handlerLoggedIn/handlerappuserupdateprofile.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
         handlerLoggedIn/handlerstoremessage.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
@@ -101,6 +104,8 @@ HEADERS += \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
+  handlerLoggedIn/handlerappusersearchprofiles.h \
+  handlerLoggedIn/handlerappuserupdateprofile.h \
   handlerLoggedIn/handlerloggedininterface.h \
   handlerLoggedIn/handlerstoremessage.h \
   handlerLoggedIn/handleruploadapp.h \

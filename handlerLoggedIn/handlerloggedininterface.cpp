@@ -24,7 +24,10 @@ bool HandlerLoggedInInterface::checkLogin()
         return false;
     }
     std::string temp;
-    getHeaderString<AppIdHeader>(temp, false);
+    if (!getHeaderString<AppIdHeader>(temp, loggedInContainer.appIdMandatory()) && loggedInContainer.appIdMandatory())
+    {
+        return false;
+    }
     appId = sole::rebuild(temp);
     if (!loggedInContainer.isLoggedIn(appId,
                                       loginEMail,

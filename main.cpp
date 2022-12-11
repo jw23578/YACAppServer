@@ -90,8 +90,8 @@ int main(int argc, char **argv)
 
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
-    TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
-    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
+//    TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
+//    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
 
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),

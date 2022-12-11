@@ -4,6 +4,7 @@
 #include "pqxx/pqxx"
 #include "pgconnectionpool.h"
 #include "pgsqlstring.h"
+#include "rapidjson/document.h"
 
 class PGExecutor
 {
@@ -62,6 +63,8 @@ public:
     sole::uuid uuid(const std::string &fieldname);
     pqxx::oid oid(const std::string &fieldname);
 
+    size_t toJsonArray(rapidjson::Value &target, rapidjson::MemoryPoolAllocator<> &alloc);
+    void toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc);
 };
 
 #endif // PGEXECUTOR_H
