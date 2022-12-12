@@ -35,6 +35,8 @@ public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);
 
+    sole::uuid getUserId(const sole::uuid &appId,
+                         const std::string &loginEMail);
     bool appUserExists(const sole::uuid &appId,
                        const std::string &loginEMail);
     bool createAppUser(const sole::uuid &appId,

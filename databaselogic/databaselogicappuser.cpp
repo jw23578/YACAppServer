@@ -65,6 +65,20 @@ DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
 
 }
 
+sole::uuid DatabaseLogicAppUser::getUserId(const sole::uuid &appId,
+                                           const std::string &loginEMail)
+{
+    PGSqlString sql("select id from ");
+    sql += tableNames.t0001_users;
+    sql.addCompare("where", "loginemail", "=", loginEMail);
+    PGExecutor e(pool, sql);
+    if (e.size() == 0)
+    {
+        return sole::uuid0();
+    }
+    return e.uuid("id");
+}
+
 bool DatabaseLogicAppUser::appUserExists(const sole::uuid &appId,
                                          const std::string &loginEMail)
 {

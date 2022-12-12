@@ -115,5 +115,33 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"receiver_id", pg_uuid, false, true},
                                {"received_datetime", pg_timestamp},
                                {"read_datetime", pg_timestamp}});
+
+    const std::string id("id");
+    const std::string task("task");
+    const std::string creater_id("creater_id");
+    const std::string created("created");
+    const std::string finished("finished");
+    utils.createTableIfNeeded(tableNames.t0010_task,
+                              {{id, pg_uuid, true},
+                               {task, pg_text},
+                               {creater_id, pg_uuid, false, true},
+                               {created, pg_timestamp},
+                               {finished, pg_timestamp}});
+
+    const std::string user_id("user_id");
+    const std::string start("start");
+    const std::string end("end");
+    utils.createTableIfNeeded(tableNames.t0011_task_time,
+                              {{id, pg_uuid, true},
+                               {user_id, pg_uuid, false, true},
+                               {start, pg_timestamp},
+                               {end, pg_timestamp}});
+    const std::string ts("ts");
+    const std::string type("type");
+    utils.createTableIfNeeded(tableNames.t0012_worktime,
+                              {{id, pg_uuid, true},
+                               {user_id, pg_uuid, false, true},
+                               {ts, pg_timestamp, false, true},
+                               {type, pg_int, false, true}});
 }
 

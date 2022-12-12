@@ -15,6 +15,9 @@ public:
     const std::string t0006_appuser2group = {"t0006_appuser2group"};
     const std::string t0007_messages = {"t0007_messages"};
     const std::string t0008_message_state {"t0008_message_state"};
+    const std::string t0010_task {"t0010_task"};
+    const std::string t0011_task_time {"t0011_task_time"};
+    const std::string t0012_worktime {"t0012_worktime"};
 
     TableNames();
 };

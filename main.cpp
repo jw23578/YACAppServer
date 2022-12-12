@@ -12,9 +12,11 @@
 #include "databaselogictables.h"
 #include "databaselogicappuser.h"
 #include "databaselogicmessages.h"
+#include "databaselogics.h"
 #include "tests/testdatabaselogicmessages.h"
 #include "tests/testtimepoint.h"
 #include "tests/testdatabaselogicappuser.h"
+#include "tests/testdatabaselogicworktime.h"
 
 using namespace std;
 
@@ -85,13 +87,15 @@ int main(int argc, char **argv)
 
     DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
                                                     pool);
-    DatabaseLogicAppUser databaseLogicAppUser(logStatController,
-                                              pool);
+    DatabaseLogics databaseLogics(logStatController,
+                                  pool);
 
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
 //    TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
 //    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
+    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController,
+                                                        databaseLogics);
 
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),
@@ -103,7 +107,7 @@ int main(int argc, char **argv)
 
     YACAppServer server(databaseLogicTables,
                         databaseLogicUserAndApp,
-                        databaseLogicAppUser,
+                        databaseLogics.databaseLogicAppUser,
                         databaseLogicMessages,
                         emailLogic,
                         json.getInt("serverPort"));

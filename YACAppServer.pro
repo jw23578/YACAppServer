@@ -26,8 +26,10 @@ SOURCES += \
         curlWrapper/jw78smtpwrapper.cpp \
         databaselogic/databaselogicappuser.cpp \
         databaselogic/databaselogicmessages.cpp \
+        databaselogic/databaselogics.cpp \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
+        databaselogic/databaselogicworktime.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerappuserloggedin.cpp \
@@ -70,6 +72,7 @@ SOURCES += \
         sole/sole.cpp \
         tests/testdatabaselogicappuser.cpp \
         tests/testdatabaselogicmessages.cpp \
+        tests/testdatabaselogicworktime.cpp \
         tests/testtimepoint.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
@@ -88,8 +91,10 @@ HEADERS += \
   curlWrapper/jw78smtpwrapper.h \
   databaselogic/databaselogicappuser.h \
   databaselogic/databaselogicmessages.h \
+  databaselogic/databaselogics.h \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
+  databaselogic/databaselogicworktime.h \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerappuserloggedin.h \
@@ -133,6 +138,7 @@ HEADERS += \
   sole/sole.hpp \
   tests/testdatabaselogicappuser.h \
   tests/testdatabaselogicmessages.h \
+  tests/testdatabaselogicworktime.h \
   tests/testtimepoint.h \
   utils/base64.h \
   utils/definitions.h \

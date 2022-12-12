@@ -12,6 +12,10 @@
 #define MACRO_set(fieldValue) \
     sql.set(ExtString::lower(#fieldValue), fieldValue);
 
+#define MACRO_setId() \
+    sql.set("id", sole::uuid4());
+
+
 class PGSqlString
 {
     std::string sql;
