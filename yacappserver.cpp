@@ -3,7 +3,8 @@
 #include "serverHeader/logintokenheader.h"
 #include "serverHeader/appidheader.h"
 
-YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
+YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
+                           DatabaseLogicTables &databaseLogicTables,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                            DatabaseLogicAppUser &databaseLogicAppUser,
                            DatabaseLogicMessages &databaseLogicMessages,
@@ -49,6 +50,9 @@ YACAppServer::YACAppServer(DatabaseLogicTables &databaseLogicTables,
     handlerAppUserSearchProfiles(*this,
                                  databaseLogicAppUser,
                                  loggedInAppUsersContainer),
+    handlerAppUserGetWorktimeState(databaseLogics,
+                                   *this,
+                                   loggedInAppUsersContainer),
     handlerStoreMesage(databaseLogicMessages,
                        *this,
                        loggedInAppUsersContainer)

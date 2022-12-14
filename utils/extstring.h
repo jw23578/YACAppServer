@@ -107,6 +107,7 @@ public:
     }
     static std::string urlDecode(std::string &src);
 
+    static std::string timepointToISO(const std::chrono::system_clock::time_point &tp);
     static std::chrono::system_clock::time_point toTimepoint(const std::string &s);
     static bool emailIsValid(const std::string &email);
 };

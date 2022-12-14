@@ -18,9 +18,11 @@
 #include "handlerLoggedIn/handlerstoremessage.h"
 #include "handlerLoggedIn/handlerappuserupdateprofile.h"
 #include "handlerLoggedIn/handlerappusersearchprofiles.h"
+#include "handlerLoggedIn/handlerappusergetworktimestate.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "databaselogicmessages.h"
+#include "databaselogics.h"
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinuserscontainer.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
@@ -45,12 +47,14 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserUpdatePassword handlerAppUserUpdatePassword;
     HandlerAppUserUpdateProfile handlerAppUserUpdateProfile;
     HandlerAppUserSearchProfiles handlerAppUserSearchProfiles;
+    HandlerAppUserGetWorktimeState handlerAppUserGetWorktimeState;
 
     HandlerStoreMessage handlerStoreMesage;
 
 
 public:
-    YACAppServer(DatabaseLogicTables &databaseLogicTables,
+    YACAppServer(DatabaseLogics &databaseLogics,
+                 DatabaseLogicTables &databaseLogicTables,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,
                  DatabaseLogicMessages &databaseLogicMessages,

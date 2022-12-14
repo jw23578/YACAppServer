@@ -426,6 +426,18 @@ std::string ExtString::urlDecode(std::string &src)
     return ret;
 }
 
+std::string ExtString::timepointToISO(const std::chrono::system_clock::time_point &tp)
+{
+    if (tp == std::chrono::system_clock::time_point())
+    {
+        return "";
+    }
+    std::time_t t = std::chrono::system_clock::to_time_t(tp);
+    std::ostringstream ss;
+    ss << std::put_time(gmtime(&t), "%FT%TZ");
+    return ss.str();
+}
+
 std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &s)
 {
     std::tm tm;

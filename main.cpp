@@ -105,7 +105,8 @@ int main(int argc, char **argv)
                           json.getString("smtpUser"),
                           json.getString("smtpPassword"));
 
-    YACAppServer server(databaseLogicTables,
+    YACAppServer server(databaseLogics,
+                        databaseLogicTables,
                         databaseLogicUserAndApp,
                         databaseLogics.databaseLogicAppUser,
                         databaseLogicMessages,

@@ -44,6 +44,7 @@ SOURCES += \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
+        handlerLoggedIn/handlerappusergetworktimestate.cpp \
         handlerLoggedIn/handlerappusersearchprofiles.cpp \
         handlerLoggedIn/handlerappuserupdateprofile.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
@@ -109,6 +110,7 @@ HEADERS += \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
+  handlerLoggedIn/handlerappusergetworktimestate.h \
   handlerLoggedIn/handlerappusersearchprofiles.h \
   handlerLoggedIn/handlerappuserupdateprofile.h \
   handlerLoggedIn/handlerloggedininterface.h \
