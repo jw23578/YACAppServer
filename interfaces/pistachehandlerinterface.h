@@ -25,13 +25,16 @@
         return; \
     }
 
-#define MACRO_GetMandatoryBool(targetName) bool targetName; \
+#define MACRO_GetMandatoryBool(targetName) bool targetName(false); \
     if (!getBool(#targetName, targetName, true)) \
     { \
         return; \
     }
 
-#define MACRO_GetMandatoryInt(targetName, zeroAllowed) int targetName; \
+#define MACRO_GetInt(targetName) int targetName(0); \
+    getInteger(#targetName, targetName, true, false);
+
+#define MACRO_GetMandatoryInt(targetName, zeroAllowed) int targetName(0); \
     if (!getInteger(#targetName, targetName, zeroAllowed, true)) \
     { \
         return; \

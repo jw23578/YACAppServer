@@ -90,6 +90,8 @@ public:
 
     bool searchProfiles(const sole::uuid &appId,
                         const std::string &needle,
+                        size_t limit,
+                        const size_t offset,
                         std::string &message,
                         rapidjson::Value &target,
                         rapidjson::MemoryPoolAllocator<> &alloc);

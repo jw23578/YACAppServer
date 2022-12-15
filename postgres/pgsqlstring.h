@@ -87,6 +87,8 @@ public:
                    value);
         firstSetField = false;
     }
+
+    void limit(const size_t limit, const size_t offset);
 };
 
 #endif // JW78CORE_SQL_STRING_H

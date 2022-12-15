@@ -213,3 +213,9 @@ void PGSqlString::replace(const std::string &needle,
 {
     ExtString::replaceAll(sql, needle, value);
 }
+
+void PGSqlString::limit(const size_t limit, const size_t offset)
+{
+    sql += " limit " + ExtString::toString(limit);
+    sql += " offset " + ExtString::toString(offset);
+}

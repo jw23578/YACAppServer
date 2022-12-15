@@ -381,6 +381,8 @@ bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
 
 bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
                                           const std::string &needle,
+                                          size_t limit,
+                                          const size_t offset,
                                           std::string &message,
                                           rapidjson::Value &target,
                                           rapidjson::MemoryPoolAllocator<> &alloc)
@@ -389,6 +391,10 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     {
         message = "you must provide a needle to search for";
         return false;
+    }
+    if (limit == 0)
+    {
+        limit = 50;
     }
     std::vector<std::string> needles;
     ExtString::split(needle, " ", needles);
@@ -410,6 +416,7 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     sql += " searching_exactly_allowed and visible_name = :needle ";
     sql.set("needle", needle);
     sql += " ) ) ";
+    sql.limit(limit, offset);
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
     return true;

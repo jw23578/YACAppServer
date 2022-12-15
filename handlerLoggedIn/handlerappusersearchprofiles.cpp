@@ -15,6 +15,8 @@ HandlerAppUserSearchProfiles::HandlerAppUserSearchProfiles(PistacheServerInterfa
 void HandlerAppUserSearchProfiles::method()
 {
     MACRO_GetMandatoryString(needle);
+    MACRO_GetInt(limit);
+    MACRO_GetInt(offset);
 
     std::string message;
     rapidjson::Document answer;
@@ -22,6 +24,8 @@ void HandlerAppUserSearchProfiles::method()
     rapidjson::Value profiles;
     bool success(databaseLogicAppUser.searchProfiles(appId,
                                                      needle,
+                                                     limit,
+                                                     offset,
                                                      message,
                                                      profiles,
                                                      answer.GetAllocator()));
