@@ -18,7 +18,7 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
     PGSqlString sql("select * from ( ");
     for (int wt(WorkStartType); wt < WorktimeTypeCount; ++wt)
     {
-        if (wt > 0)
+        if (wt > 1)
         {
             sql += std::string(" union ");
         }

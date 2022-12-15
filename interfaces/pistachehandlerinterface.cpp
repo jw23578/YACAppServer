@@ -2,6 +2,7 @@
 #include "extpistache.h"
 #include "rapidjson/error/en.h"
 #include "definitions.h"
+#include "extstring.h"
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
@@ -153,19 +154,32 @@ bool PistacheHandlerInterface::getString(const std::string &name,
     return "";
 }
 
-bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &target, bool ifMissingThenSendReponse)
+bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &target, bool ifMissingThenSendResponse)
 {
     std::string temp;
-    if (!getString(name, temp, ifMissingThenSendReponse))
+    if (!getString(name, temp, ifMissingThenSendResponse))
     {
         return false;
     }
     target = sole::rebuild(temp);
-    if (target == NullUuid && ifMissingThenSendReponse)
+    if (target == NullUuid && ifMissingThenSendResponse)
     {
         answerBad(std::string("Missing ") + name);
         return false;
     }
+    return true;
+}
+
+bool PistacheHandlerInterface::getTimePointFromISO(const std::string &name,
+                                                   std::chrono::system_clock::time_point &tp,
+                                                   bool ifMissingThenSendResponse)
+{
+    std::string temp;
+    if (!getString(name, temp, ifMissingThenSendResponse))
+    {
+        return false;
+    }
+    tp = ExtString::toTimepoint(temp);
     return true;
 }
 

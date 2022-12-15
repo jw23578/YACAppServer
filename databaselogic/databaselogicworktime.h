@@ -20,7 +20,7 @@ public:
 
     enum WorktimeType
     {
-        WorkStartType = 0,
+        WorkStartType = 1,
         WorkEndType,
         PauseStartType,
         PauseEndType,

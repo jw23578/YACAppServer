@@ -25,17 +25,20 @@
         return; \
     }
 
-
-
 #define MACRO_GetMandatoryBool(targetName) bool targetName; \
     if (!getBool(#targetName, targetName, true)) \
     { \
         return; \
     }
 
-
 #define MACRO_GetMandatoryInt(targetName, zeroAllowed) int targetName; \
     if (!getInteger(#targetName, targetName, zeroAllowed, true)) \
+    { \
+        return; \
+    }
+
+#define MACRO_GetMandatoryTimePointFromISO(targetName) std::chrono::system_clock::time_point targetName; \
+    if (!getTimePointFromISO(#targetName, targetName, true)) \
     { \
         return; \
     }
@@ -105,7 +108,11 @@ public:
 
     bool getUuid(std::string const &name,
                  sole::uuid &target,
-                 bool ifMissingThenSendReponse);
+                 bool ifMissingThenSendResponse);
+
+    bool getTimePointFromISO(std::string const &name,
+                             std::chrono::system_clock::time_point &tp,
+                             bool ifMissingThenSendResponse);
 
     virtual void method() = 0;
     virtual bool checkLogin();
