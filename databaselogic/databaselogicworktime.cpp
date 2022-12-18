@@ -28,7 +28,7 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
         sql += std::string(" order by ts desc limit 1) a") + ExtString::toString(wt) + " ";
         sql.set(std::string("type") + ExtString::toString(wt), wt);
     }
-    sql += std::string(" ) worktimes order by type");
+    sql += std::string(" ) worktimes order by ts");
     sql.set("user_id", user_id);
 
     PGExecutor e(pool, sql);

@@ -289,7 +289,6 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
     {
         return false;
     }
-    userId = e.uuid("id");
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
     return true;
 }
