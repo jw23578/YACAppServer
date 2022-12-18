@@ -442,7 +442,12 @@ std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &
 {
     std::tm tm;
     memset(&tm, 0, sizeof(tm));
-    strptime(s.c_str(), "%F %T", &tm);
+    std::string format("%F %T");
+    if (s.size() >= 11)
+    {
+        format[2] = s[10];
+    }
+    strptime(s.c_str(), format.c_str(), &tm);
     time_t t = mktime(&tm);
 
     std::chrono::time_point<std::chrono::system_clock> time;
