@@ -52,11 +52,11 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
 bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
                                            const std::chrono::system_clock::time_point ts,
                                            const WorktimeType type,
+                                           std::chrono::system_clock::time_point &workStart,
+                                           std::chrono::system_clock::time_point &pauseStart,
+                                           std::chrono::system_clock::time_point &offSiteWorkStart,
                                            std::string &message)
 {
-    std::chrono::system_clock::time_point workStart;
-    std::chrono::system_clock::time_point pauseStart;
-    std::chrono::system_clock::time_point offSiteWorkStart;
     if (!currentState(user_id, workStart, pauseStart, offSiteWorkStart))
     {
         message = "could not retrieve current state";
@@ -139,6 +139,17 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
             message = "please start your offSiteWork before";
             return false;
         }
+    }
+
+    switch (type)
+    {
+    case WorkStartType: workStart = ts; break;
+    case WorkEndType: workStart = std::chrono::system_clock::time_point(); break;
+    case PauseStartType: pauseStart = ts; break;
+    case PauseEndType: pauseStart = std::chrono::system_clock::time_point(); break;
+    case OffSiteWorkStartType: offSiteWorkStart = ts; break;
+    case OffSiteWorkEndType: offSiteWorkStart = std::chrono::system_clock::time_point(); break;
+    case WorktimeTypeCount: break;
     }
 
     PGSqlString sql("insert into ");

@@ -94,8 +94,7 @@ int main(int argc, char **argv)
                                                 pool);
 //    TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
 //    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
-    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController,
-                                                        databaseLogics);
+//    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController, databaseLogics);
 
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),

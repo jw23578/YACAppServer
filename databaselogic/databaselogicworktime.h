@@ -37,6 +37,9 @@ public:
     bool insertWorktime(const sole::uuid &user_id,
                         const std::chrono::system_clock::time_point ts,
                         const WorktimeType type,
+                        std::chrono::system_clock::time_point &workStart,
+                        std::chrono::system_clock::time_point &pauseStart,
+                        std::chrono::system_clock::time_point &offSiteWorkStart,
                         std::string &message);
 };
 

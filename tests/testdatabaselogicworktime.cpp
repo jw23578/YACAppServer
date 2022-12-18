@@ -17,14 +17,26 @@ TestDatabaseLogicWorktime::TestDatabaseLogicWorktime(LogStatController &logStatC
         return;
     }
     std::string message;
-    databaseLogics.databaseLogicWorktime.insertWorktime(userId, std::chrono::system_clock::now(), DatabaseLogicWorktime::OffSiteWorkEndType, message);
+    databaseLogics.databaseLogicWorktime.insertWorktime(userId, std::chrono::system_clock::now(), DatabaseLogicWorktime::OffSiteWorkEndType,
+                                                        workStart,
+                                                        pauseStart,
+                                                        offSiteWorkStart,
+                                                        message);
     logStatController.log(__FILE__, __LINE__, LogStatController::info, message);
 
     message = "";
-    databaseLogics.databaseLogicWorktime.insertWorktime(userId, std::chrono::system_clock::now(), DatabaseLogicWorktime::OffSiteWorkStartType, message);
+    databaseLogics.databaseLogicWorktime.insertWorktime(userId, std::chrono::system_clock::now(), DatabaseLogicWorktime::OffSiteWorkStartType,
+                                                        workStart,
+                                                        pauseStart,
+                                                        offSiteWorkStart,
+                                                        message);
     logStatController.log(__FILE__, __LINE__, LogStatController::info, message);
 
     message = "";
-    databaseLogics.databaseLogicWorktime.insertWorktime(userId, std::chrono::system_clock::now(), DatabaseLogicWorktime::WorkStartType, message);
+    databaseLogics.databaseLogicWorktime.insertWorktime(userId, std::chrono::system_clock::now(), DatabaseLogicWorktime::WorkStartType,
+                                                        workStart,
+                                                        pauseStart,
+                                                        offSiteWorkStart,
+                                                        message);
     logStatController.log(__FILE__, __LINE__, LogStatController::info, message);
 }

@@ -17,6 +17,20 @@ void HandlerAppUserInsertWorktime::method()
     MACRO_GetMandatoryTimePointFromISO(ts);
     MACRO_GetMandatoryInt(worktimeType, false);
     std::string message;
-    answerOk(message, databaseLogics.databaseLogicWorktime.insertWorktime(userId, ts,
-                                                                          static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType), message));
+    std::chrono::system_clock::time_point workStart;
+    std::chrono::system_clock::time_point pauseStart;
+    std::chrono::system_clock::time_point offSiteWorkStart;
+    bool success(databaseLogics.databaseLogicWorktime.insertWorktime(userId, ts,
+                                                                     static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
+                                                                     workStart,
+                                                                     pauseStart,
+                                                                     offSiteWorkStart,
+                                                                     message));
+    std::map<std::string, std::string> data;
+    data["workStart"] = ExtString::timepointToISO(workStart);
+    data["pauseStart"] = ExtString::timepointToISO(pauseStart);
+    data["offSiteWorkStart"] = ExtString::timepointToISO(offSiteWorkStart);
+    answerOk(message,
+             success,
+             data);
 }
