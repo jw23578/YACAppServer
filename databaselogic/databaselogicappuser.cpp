@@ -407,7 +407,7 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     for (const auto &n : needles)
     {
         std::string variable(std::string("v") + ExtString::toString(index));
-        sql += std::string(" and visible_name like :") + variable;
+        sql += std::string(" and lower(visible_name) like lower(:") + variable + ") ";
         sql.set(variable, std::string("%") + n + std::string("%"));
         ++index;
     }
