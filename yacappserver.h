@@ -20,6 +20,7 @@
 #include "handlerLoggedIn/handlerappusersearchprofiles.h"
 #include "handlerLoggedIn/handlerappusergetworktimestate.h"
 #include "handlerLoggedIn/handlerappuserinsertworktime.h"
+#include "handlerLoggedIn/handlerappuserfetchprofile.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "databaselogicmessages.h"
@@ -50,6 +51,7 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserSearchProfiles handlerAppUserSearchProfiles;
     HandlerAppUserGetWorktimeState handlerAppUserGetWorktimeState;
     HandlerAppUserInsertWorktime handlerAppUserInsertWorktime;
+    HandlerAppUserFetchProfile handlerAppUserFetchProfile;
 
     HandlerStoreMessage handlerStoreMesage;
 

@@ -96,6 +96,12 @@ public:
                         rapidjson::Value &target,
                         rapidjson::MemoryPoolAllocator<> &alloc);
 
+    bool fetchProfile(const sole::uuid &appId,
+                      const sole::uuid &userId,
+                      std::string &message,
+                      rapidjson::Value &target,
+                      rapidjson::MemoryPoolAllocator<> &alloc);
+
 };
 
 #endif // DATABASELOGICAPPUSER_H

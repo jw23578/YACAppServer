@@ -136,8 +136,13 @@ bool PGExecutor::boolean(const std::string &fieldname)
 
 std::string PGExecutor::string(const std::string &fieldname)
 {
-    const pqxx::row &row(result[currentRow]);    
-    return row[fieldname].get<std::string>().value();
+    const pqxx::row &row(result[currentRow]);
+    const pqxx::row::size_type columNumber(row.column_number(fieldname));
+    if (row[columNumber].is_null())
+    {
+        return "";
+    }
+    return row[columNumber].get<std::string>().value();
 }
 
 int PGExecutor::integer(const std::string &fieldname)

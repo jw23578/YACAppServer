@@ -421,6 +421,29 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
+                                        const sole::uuid &userId,
+                                        std::string &message,
+                                        rapidjson::Value &target,
+                                        rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    PGExecutor e(pool);
+    e.select(tableNames.t0003_appuser_profiles,
+             "app_id", appId.str(),
+             "id", userId.str());
+    if (!e.size())
+    {
+        message = "could not find user with id: " + userId.str();
+        return false;
+    }
+    target.SetObject();
+    target.AddMember("id", e.string("id"), alloc);
+    target.AddMember("visible_name", e.string("visible_name"), alloc);
+    e.string("public_key_base64");
+    target.AddMember("public_key_base64", "", alloc);
+    target.AddMember("image_id", e.string("image_id"), alloc);
+}
+
 void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
                                                     const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)

@@ -12,7 +12,8 @@ enum PGTypes
     pg_float,
     pg_bool,
     pg_timestamp,
-    pg_uuid
+    pg_uuid,
+    pg_blob
 };
 
 class PGColumnAndType

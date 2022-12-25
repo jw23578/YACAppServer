@@ -6,7 +6,8 @@ const std::map<PGTypes, std::string> PGColumnAndType::typeToString = {{pg_int, "
                                                                       {pg_float, "float"},
                                                                       {pg_bool, "bool"},
                                                                       {pg_timestamp, "timestamp with time zone"},
-                                                                      {pg_uuid, "uuid"}};
+                                                                      {pg_uuid, "uuid"},
+                                                                      {pg_blob, "oid"}};
 
 
 PGColumnAndType::PGColumnAndType(const std::string &column, PGTypes type):

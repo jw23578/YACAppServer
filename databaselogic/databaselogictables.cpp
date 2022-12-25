@@ -80,7 +80,9 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"update_password_token_valid_until", pg_timestamp},
                                {"deleted", pg_timestamp},
                                {"searching_exactly_allowed", pg_bool},
-                               {"searching_fuzzy_allowed", pg_bool}});
+                               {"searching_fuzzy_allowed", pg_bool},
+                               {"public_key_base64", pg_text},
+                               {"image_id", pg_uuid}});
 
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
                               {{"id", pg_uuid, true},
@@ -143,5 +145,10 @@ void DatabaseLogicTables::createDatabaseTables()
                                {user_id, pg_uuid, false, true},
                                {ts, pg_timestamp, false, true},
                                {type, pg_int, false, true}});
+
+    const std::string data("data");
+    utils.createTableIfNeeded(tableNames.t0013_images,
+                              {{id, pg_uuid, true},
+                               {data, pg_blob}});
 }
 

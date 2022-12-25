@@ -18,6 +18,7 @@ public:
     const std::string t0010_task {"t0010_task"};
     const std::string t0011_task_time {"t0011_task_time"};
     const std::string t0012_worktime {"t0012_worktime"};
+    const std::string t0013_images {"t0013_images"};
 
     TableNames();
 };
