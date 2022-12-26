@@ -67,8 +67,8 @@ void DatabaseLogicTables::createDatabaseTables()
     }
 
     utils.createTableIfNeeded(tableNames.t0003_appuser_profiles,
-                              {{"id", pg_uuid, true},
-                               {"app_id", pg_uuid, false, true},
+                              {{tableFields.id, pg_uuid, true},
+                               {tableFields.app_id, pg_uuid, false, true},
                                {"fstname", pg_text},
                                {"surname", pg_text},
                                {"visible_name", pg_text},
@@ -82,49 +82,48 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"searching_exactly_allowed", pg_bool},
                                {"searching_fuzzy_allowed", pg_bool},
                                {"public_key_base64", pg_text},
-                               {"image_id", pg_uuid}});
+                               {tableFields.image_id, pg_uuid}});
 
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
-                              {{"id", pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {"appuser_id", pg_uuid, false, true},
                                {"login_token", pg_text},
                                {"login_token_valid_until", pg_timestamp}});
 
     utils.createTableIfNeeded(tableNames.t0004_appuser_passwordhashes,
-                              {{"id", pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {"appuser_id", pg_uuid, false, true},
                                {"password_hash", pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0005_group_of_appusers,
-                              {{"id", pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {"name", pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0006_appuser2group,
-                              {{"id", pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {"appuser_id", pg_uuid, false, true},
                                {"group_id", pg_uuid, false, true}});
 
     utils.createTableIfNeeded(tableNames.t0007_messages,
-                              {{"id", pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {"sender_id", pg_uuid, false, true},
                                {"to_id", pg_uuid, false, true},
                                {"sended_datetime", pg_timestamp},
                                {"content_base64", pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0008_message_state,
-                              {{"id", pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {"message_id", pg_uuid, false, true},
                                {"receiver_id", pg_uuid, false, true},
                                {"received_datetime", pg_timestamp},
                                {"read_datetime", pg_timestamp}});
 
-    const std::string id("id");
     const std::string task("task");
     const std::string creater_id("creater_id");
     const std::string created("created");
     const std::string finished("finished");
     utils.createTableIfNeeded(tableNames.t0010_task,
-                              {{id, pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {task, pg_text},
                                {creater_id, pg_uuid, false, true},
                                {created, pg_timestamp},
@@ -134,21 +133,20 @@ void DatabaseLogicTables::createDatabaseTables()
     const std::string start("start");
     const std::string end("end");
     utils.createTableIfNeeded(tableNames.t0011_task_time,
-                              {{id, pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {user_id, pg_uuid, false, true},
                                {start, pg_timestamp},
                                {end, pg_timestamp}});
     const std::string ts("ts");
     const std::string type("type");
     utils.createTableIfNeeded(tableNames.t0012_worktime,
-                              {{id, pg_uuid, true},
+                              {{tableFields.id, pg_uuid, true},
                                {user_id, pg_uuid, false, true},
                                {ts, pg_timestamp, false, true},
                                {type, pg_int, false, true}});
 
-    const std::string data("data");
     utils.createTableIfNeeded(tableNames.t0013_images,
-                              {{id, pg_uuid, true},
-                               {data, pg_blob}});
+                              {{tableFields.id, pg_uuid, true},
+                               {tableFields.data, pg_blob}});
 }
 

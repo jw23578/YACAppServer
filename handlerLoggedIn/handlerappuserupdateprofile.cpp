@@ -1,13 +1,15 @@
 #include "handlerappuserupdateprofile.h"
+#include "base64.h"
+#include "definitions.h"
 
 HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface &serverInterface,
-                                                         DatabaseLogicAppUser &databaseLogicAppUser,
+                                                         DatabaseLogics &databaseLogics,
                                                          LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
                              "/updateAppUserProfile",
                              TypePost,
                              loggedInAppUsersContainer),
-    databaseLogicAppUser(databaseLogicAppUser)
+    databaseLogics(databaseLogics)
 {
 
 }
@@ -19,16 +21,35 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetMandatoryString(visible_name);
     MACRO_GetMandatoryBool(searching_exactly_allowed);
     MACRO_GetMandatoryBool(searching_fuzzy_allowed);
+    MACRO_GetBool(with_image);
+    MACRO_GetString(image_data_base64);
+
+    sole::uuid imageId(NullUuid);
+    if (with_image && image_data_base64.size())
+    {
+        std::string image_data(base64_decode(image_data_base64));
+        std::string message;
+        if (!databaseLogics.databaseLogicImageTable.storeImage(image_data,
+                                                          message,
+                                                          imageId))
+        {
+            answerOk(message, false);
+            return;
+        }
+    }
+
 
     std::string message;
-    if (!databaseLogicAppUser.updateAppUser(appId,
-                                       userId,
-                                       fstname,
-                                       surname,
-                                       visible_name,
-                                       searching_exactly_allowed,
-                                       searching_fuzzy_allowed,
-                                       message))
+    if (!databaseLogics.databaseLogicAppUser.updateAppUser(appId,
+                                                           userId,
+                                                           fstname,
+                                                           surname,
+                                                           visible_name,
+                                                           searching_exactly_allowed,
+                                                           searching_fuzzy_allowed,
+                                                           with_image,
+                                                           imageId,
+                                                           message))
     {
         answerOk(message, false);
         return;

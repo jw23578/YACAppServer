@@ -59,7 +59,7 @@ YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
     handlerAppUserFetchProfile(databaseLogics,
                                *this,
                                loggedInAppUsersContainer),
-    handlerStoreMesage(databaseLogicMessages,
+    handlerStoreMesage(databaseLogics,
                        *this,
                        loggedInAppUsersContainer)
 

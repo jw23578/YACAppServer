@@ -25,11 +25,13 @@ SOURCES += \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
         databaselogic/databaselogicappuser.cpp \
+        databaselogic/databaselogicimagetable.cpp \
         databaselogic/databaselogicmessages.cpp \
         databaselogic/databaselogics.cpp \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
+        databaselogic/tablefields.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerappuserloggedin.cpp \
@@ -93,11 +95,13 @@ HEADERS += \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \
   databaselogic/databaselogicappuser.h \
+  databaselogic/databaselogicimagetable.h \
   databaselogic/databaselogicmessages.h \
   databaselogic/databaselogics.h \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
+  databaselogic/tablefields.h \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerappuserloggedin.h \

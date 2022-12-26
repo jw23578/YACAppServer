@@ -3,14 +3,14 @@
 
 #include "handlerloggedininterface.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
-#include "databaselogicappuser.h"
+#include "databaselogics.h"
 
 class HandlerAppUserUpdateProfile : public HandlerLoggedInInterface
 {
-    DatabaseLogicAppUser &databaseLogicAppUser;
+    DatabaseLogics &databaseLogics;
 public:
     HandlerAppUserUpdateProfile(PistacheServerInterface &serverInterface,
-                                DatabaseLogicAppUser &databaseLogicAppUser,
+                                DatabaseLogics &databaseLogics,
                                 LoggedInAppUsersContainer &loggedInAppUsersContainer);
 
     void method() override;

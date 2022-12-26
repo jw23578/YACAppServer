@@ -21,6 +21,12 @@ void PGSqlString::update(const std::string &tableName)
     sql = "update " + tableName + " set ";
 }
 
+void PGSqlString::insert(const std::string &tableName)
+{
+    firstSetField = true;
+    sql = "insert into " + tableName + " ";
+}
+
 void PGSqlString::rawReplace(std::string &sql,
                              std::string const &param,
                              std::string value) const
@@ -35,6 +41,12 @@ void PGSqlString::rawReplace(std::string &sql,
 std::string PGSqlString::replaceVariables() const
 {
     std::string copy(sql);
+    if (insert2ndPart.size())
+    {
+        copy += ") values (";
+        copy += insert2ndPart;
+        copy += ")";
+    }
     std::vector<std::string> variableNames;
     variableNames.reserve(variable2Values.size());
     for (auto const &v : variable2Values)

@@ -6,6 +6,7 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
+#include "tablefields.h"
 #include "rapidjson/document.h"
 
 
@@ -19,6 +20,7 @@ class DatabaseLogicAppUser
     PGConnectionPool &pool;
     PGUtils utils;
     TableNames tableNames;
+    TableFields tableFields;
     void loginSuccessful(const sole::uuid &appUserId,
                          std::string &loginToken);
 
@@ -62,6 +64,8 @@ public:
                        const std::string &visible_name,
                        const bool searching_exactly_allowed,
                        const bool searching_fuzzy_allowed,
+                       const bool with_image,
+                       const sole::uuid imageId,
                        std::string &message);
 
     bool appUserLoggedIn(const sole::uuid &appId,

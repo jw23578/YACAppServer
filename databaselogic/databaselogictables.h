@@ -5,6 +5,7 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
+#include "tablefields.h"
 
 
 class DatabaseLogicTables
@@ -13,6 +14,7 @@ class DatabaseLogicTables
     PGConnectionPool &pool;
     PGUtils utils;
     TableNames tableNames;
+    TableFields tableFields;
 public:
     DatabaseLogicTables(LogStatController &logStatController,
                         PGConnectionPool &pool);

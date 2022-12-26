@@ -31,6 +31,12 @@
         return; \
     }
 
+#define MACRO_GetString(targetName) std::string targetName; \
+    getString(#targetName, targetName, false);
+
+#define MACRO_GetBool(targetName) bool targetName(false); \
+    getBool(#targetName, targetName, false);
+
 #define MACRO_GetInt(targetName) int targetName(0); \
     getInteger(#targetName, targetName, true, false);
 

@@ -7,7 +7,9 @@ DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
     databaseLogicAppUser(logStatController,
                          pool),
     databaseLogicWorktime(logStatController,
-                          pool)
+                          pool),
+    databaseLogicImageTable(logStatController,
+                            pool)
 {
 
 }

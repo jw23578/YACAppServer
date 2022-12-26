@@ -253,6 +253,8 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
                                          const std::string &visible_name,
                                          const bool searching_exactly_allowed,
                                          const bool searching_fuzzy_allowed,
+                                         const bool with_image,
+                                         const sole::uuid imageId,
                                          std::string &message)
 {
     PGSqlString sql;
@@ -262,8 +264,12 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
     sql.addSet(MACRO_NameValue(visible_name));
     sql.addSet(MACRO_NameValue(searching_exactly_allowed));
     sql.addSet(MACRO_NameValue(searching_fuzzy_allowed));
-    sql.addCompare("where", "app_id", "=", appId);
-    sql.addCompare("and", "id", "=", userId);
+    if (with_image)
+    {
+        sql.addSet(tableFields.image_id, imageId);
+    }
+    sql.addCompare("where", tableFields.app_id, "=", appId);
+    sql.addCompare("and", tableFields.id, "=", userId);
     PGExecutor e(pool, sql);
     message = "profile updated";
     return true;

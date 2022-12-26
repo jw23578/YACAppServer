@@ -6,6 +6,7 @@
 
 #include "databaselogicappuser.h"
 #include "databaselogicworktime.h"
+#include "databaselogicimagetable.h"
 
 class DatabaseLogics
 {
@@ -15,6 +16,7 @@ class DatabaseLogics
 public:
     DatabaseLogicAppUser databaseLogicAppUser;
     DatabaseLogicWorktime databaseLogicWorktime;
+    DatabaseLogicImageTable databaseLogicImageTable;
 
     DatabaseLogics(LogStatController &logStatController,
                    PGConnectionPool &pool);

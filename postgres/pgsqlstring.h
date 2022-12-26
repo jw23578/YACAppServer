@@ -19,6 +19,7 @@
 class PGSqlString
 {
     std::string sql;
+    std::string insert2ndPart;
     bool firstSetField;
     void rawReplace(std::string &sql,
                     std::string const &param,
@@ -31,6 +32,7 @@ public:
     PGSqlString();
     PGSqlString(std::string const &s);
     void update(std::string const &tableName);
+    void insert(std::string const &tableName);
 
     void set(std::string const &param,
              std::string const &value);
@@ -86,6 +88,21 @@ public:
                    "=",
                    value);
         firstSetField = false;
+    }
+
+    template <class T>
+    void addInsert(const std::string &field,
+                   const T &value)
+    {
+        if (!firstSetField)
+        {
+            sql += ", ";
+            insert2ndPart += ", :";
+        }
+        firstSetField = false;
+        sql += field;
+        insert2ndPart += field;
+        set(field, value);
     }
 
     void limit(const size_t limit, const size_t offset);
