@@ -134,15 +134,21 @@ bool PGExecutor::boolean(const std::string &fieldname)
     return row[fieldname].get<bool>().value();
 }
 
-std::string PGExecutor::string(const std::string &fieldname)
+std::string PGExecutor::string(const pqxx::row::size_type columnNumber)
 {
     const pqxx::row &row(result[currentRow]);
-    const pqxx::row::size_type columNumber(row.column_number(fieldname));
-    if (row[columNumber].is_null())
+    if (row[columnNumber].is_null())
     {
         return "";
     }
-    return row[columNumber].get<std::string>().value();
+    return row[columnNumber].get<std::string>().value();
+}
+
+std::string PGExecutor::string(const std::string &fieldname)
+{
+    const pqxx::row &row(result[currentRow]);
+    const pqxx::row::size_type columnNumber(row.column_number(fieldname));
+    return string(columnNumber);
 }
 
 int PGExecutor::integer(const std::string &fieldname)
@@ -181,7 +187,7 @@ void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAll
     for (pqxx::row::size_type i(0); i < row.size(); ++i)
     {
         rapidjson::Value name(row[i].name(), alloc);
-        std::string data(row[i].get<std::string>().value());
+        std::string data(string(i));
         object.AddMember(name, data, alloc);
     }
 }

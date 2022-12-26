@@ -397,7 +397,7 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     }
     std::vector<std::string> needles;
     ExtString::split(needle, " ", needles);
-    PGSqlString sql("select id, visible_name from ");
+    PGSqlString sql("select id, visible_name, image_id from ");
     sql += tableNames.t0003_appuser_profiles;
     sql.addCompare("where", "app_id", "=", appId);
     sql.addCompare("and", "verified", "is not", TimePointPostgreSqlNull);

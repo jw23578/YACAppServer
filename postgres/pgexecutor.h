@@ -56,6 +56,7 @@ public:
     bool isNull(const std::string &fieldname);
     bool isNullOrEmpty(const std::string &fieldname);
     bool boolean(const std::string &fieldname);
+    std::string string(const pqxx::row::size_type columnNumber);
     std::string string(const std::string &fieldname);
     int integer(const std::string &fieldname);
     size_t get_size_t(const std::string &fieldname);
