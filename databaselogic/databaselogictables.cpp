@@ -111,12 +111,19 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"sended_datetime", pg_timestamp},
                                {"content_base64", pg_text}});
 
-    utils.createTableIfNeeded(tableNames.t0008_message_state,
+    utils.createTableIfNeeded(tableNames.t0008_message_received,
                               {{tableFields.id, pg_uuid, true},
-                               {"message_id", pg_uuid, false, true},
-                               {"receiver_id", pg_uuid, false, true},
-                               {"received_datetime", pg_timestamp},
-                               {"read_datetime", pg_timestamp}});
+                               {tableFields.message_id, pg_uuid, false, true},
+                               {tableFields.receiver_id, pg_uuid, false, true},
+                               {tableFields.received_datetime, pg_timestamp}},
+                              {{tableFields.message_id, tableFields.receiver_id}});
+
+    utils.createTableIfNeeded(tableNames.t0014_message_read,
+                              {{tableFields.id, pg_uuid, true},
+                               {tableFields.message_id, pg_uuid, false, true},
+                               {tableFields.reader_id, pg_uuid, false, true},
+                               {tableFields.read_datetime, pg_timestamp}},
+                              {{tableFields.message_id, tableFields.reader_id}});
 
     const std::string task("task");
     const std::string creater_id("creater_id");

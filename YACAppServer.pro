@@ -10,6 +10,7 @@ LIBS += \
     -L /usr/local/lib \
     -lpqxx -lpq \
     -lcurl -lpthread
+LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
 
 INCLUDEPATH += utils
 INCLUDEPATH += postgres
@@ -17,6 +18,7 @@ INCLUDEPATH += curlWrapper
 INCLUDEPATH += interfaces
 INCLUDEPATH += databaselogic
 INCLUDEPATH += rapidjson/include
+INCLUDEPATH += /usr/include/opencv4
 
 SOURCES += \
         curlWrapper/jw78curlwrapper.cpp \
@@ -46,10 +48,13 @@ SOURCES += \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
+        handlerLoggedIn/handlerappuserfetchimage.cpp \
+        handlerLoggedIn/handlerappuserfetchmessageupdates.cpp \
         handlerLoggedIn/handlerappuserfetchprofile.cpp \
         handlerLoggedIn/handlerappusergetworktimestate.cpp \
         handlerLoggedIn/handlerappuserinsertworktime.cpp \
         handlerLoggedIn/handlerappusersearchprofiles.cpp \
+        handlerLoggedIn/handlerappuserupdatemessagestates.cpp \
         handlerLoggedIn/handlerappuserupdateprofile.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
         handlerLoggedIn/handlerstoremessage.cpp \
@@ -63,6 +68,7 @@ SOURCES += \
         logstat/filelogger.cpp \
         logstat/loggerstatterinterface.cpp \
         logstat/logstatcontroller.cpp \
+        opencvwrapper/opencvwrapper.cpp \
         postgres/pgcolumnandtype.cpp \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
@@ -116,10 +122,13 @@ HEADERS += \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
+  handlerLoggedIn/handlerappuserfetchimage.h \
+  handlerLoggedIn/handlerappuserfetchmessageupdates.h \
   handlerLoggedIn/handlerappuserfetchprofile.h \
   handlerLoggedIn/handlerappusergetworktimestate.h \
   handlerLoggedIn/handlerappuserinsertworktime.h \
   handlerLoggedIn/handlerappusersearchprofiles.h \
+  handlerLoggedIn/handlerappuserupdatemessagestates.h \
   handlerLoggedIn/handlerappuserupdateprofile.h \
   handlerLoggedIn/handlerloggedininterface.h \
   handlerLoggedIn/handlerstoremessage.h \
@@ -133,6 +142,7 @@ HEADERS += \
   logstat/filelogger.h \
   logstat/loggerstatterinterface.h \
   logstat/logstatcontroller.h \
+  opencvwrapper/opencvwrapper.h \
   postgres/pgcolumnandtype.h \
   postgres/pgcommandtransactor.h \
   postgres/pgconnection.h \
@@ -164,7 +174,8 @@ DISTFILES += \
   YACAppServerConfig.json \
   curl-format.txt \
   deployToJW78.sh \
-  intern_doc.txt
+  intern_doc.txt \
+  updateProfile.json
 
 contains(DEFINES,WITH_INFLUX){
 SOURCES += logstat/influxlogger.cpp

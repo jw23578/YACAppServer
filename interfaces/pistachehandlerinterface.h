@@ -6,29 +6,35 @@
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
 
+#define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
+    if (!getByteString(#targetName, targetName, true) || !targetName.size()) \
+{ \
+    return; \
+    }
+
 #define MACRO_GetMandatoryString(targetName) std::string targetName; \
     if (!getString(#targetName, targetName, true) || !targetName.size()) \
-    { \
-        return; \
+{ \
+    return; \
     }
 
 #define MACRO_GetMandatoryEMail(targetName) MACRO_GetMandatoryString(targetName) \
     if (!ExtString::emailIsValid(targetName)) \
-    { \
-        answerBad("this is not a valid email-adress: " + targetName); \
-        return; \
+{ \
+    answerBad("this is not a valid email-adress: " + targetName); \
+    return; \
     }
 
 #define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName; \
     if (!getUuid(#targetName, targetName, true)) \
-    { \
-        return; \
+{ \
+    return; \
     }
 
 #define MACRO_GetMandatoryBool(targetName) bool targetName(false); \
     if (!getBool(#targetName, targetName, true)) \
-    { \
-        return; \
+{ \
+    return; \
     }
 
 #define MACRO_GetString(targetName) std::string targetName; \
@@ -42,14 +48,14 @@
 
 #define MACRO_GetMandatoryInt(targetName, zeroAllowed) int targetName(0); \
     if (!getInteger(#targetName, targetName, zeroAllowed, true)) \
-    { \
-        return; \
+{ \
+    return; \
     }
 
 #define MACRO_GetMandatoryTimePointFromISO(targetName) std::chrono::system_clock::time_point targetName; \
     if (!getTimePointFromISO(#targetName, targetName, true)) \
-    { \
-        return; \
+{ \
+    return; \
     }
 
 class PistacheHandlerInterface
@@ -57,6 +63,7 @@ class PistacheHandlerInterface
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;
+    const rapidjson::Value emptyValue;
     void internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
 
     void answer(Pistache::Http::Code code,
@@ -102,6 +109,8 @@ public:
                              HandlerType type,
                              LoginNeededType loginNeeded);
 
+    const rapidjson::Value &getPostedJsonValue(std::string const &name);
+
     bool getBool(std::string const &name,
                  bool &target,
                  bool ifMissingThenSendResponse);
@@ -110,6 +119,10 @@ public:
                     int &target,
                     bool zeroAllowed,
                     bool ifMissingThenSendResponse);
+
+    bool getByteString(std::string const &name,
+                       std::basic_string<std::byte> &target,
+                       bool ifMissingThenSendResponse);
 
     bool getString(std::string const &name,
                    std::string &target,
@@ -128,7 +141,7 @@ public:
 
     template<class T>
     bool getHeaderString(std::string &target,
-                                bool ifMissingThenSendResponse)
+                         bool ifMissingThenSendResponse)
     {
         auto &headers(request->headers());
         if (!headers.has<T>())

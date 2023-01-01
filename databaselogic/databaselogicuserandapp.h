@@ -52,7 +52,7 @@ public:
                  const std::string &app_color_name,
                  const bool is_template_app,
                  const std::string &json_yacapp,
-                 const std::string &yacpck_base64,
+                 const std::basic_string<std::byte> &yacpck_base64,
                  std::string &message);
 
     size_t fetchAllAPPs(rapidjson::Document &target);

@@ -2,12 +2,12 @@
 #include "pgconnection.h"
 
 PGOidStorer::PGOidStorer(PGConnectionPool &pool,
-                         const std::string &data,
+                         const std::basic_string<std::byte> &data,
                          pqxx::oid &result)
 {
     PGConnection conn(pool);
     pqxx::work w(*conn.getConnection());
-    const std::basic_string<std::byte> byteData(reinterpret_cast<const std::byte*>(&data[0]), data.size());
-    result = pqxx::blob::from_buf(w, byteData);
+    result = pqxx::blob::from_buf(w, data);
     w.commit();
 }
+

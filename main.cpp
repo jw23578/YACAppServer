@@ -22,8 +22,15 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+    bool runTests(false);
+    for (int i(0); i < argc; ++i)
+    {
+        if (std::string(argv[i]) == "runTests")
+        {
+            runTests = true;
+        }
+    }
     std::srand(std::time(nullptr));
-    TestTimepoint ttp;
 
     std::string configFilename("YACAppServerConfig.json");
     if (argc > 1)
@@ -92,7 +99,12 @@ int main(int argc, char **argv)
 
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
-//    TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
+
+    if (runTests)
+    {
+        TestTimepoint ttp;
+        TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
+    }
 //    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
 //    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController, databaseLogics);
 

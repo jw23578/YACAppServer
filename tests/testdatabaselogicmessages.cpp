@@ -12,19 +12,35 @@ TestDatabaseLogicMessages::TestDatabaseLogicMessages(DatabaseLogicMessages &data
                                       to_id,
                                       content_base64);
 
-    std::vector<DatabaseLogicMessages::Message> messages;
+    rapidjson::Document document;
+    rapidjson::Value messages;
     databaseLogicMessage.fetchMessages(to_id, std::chrono::system_clock::now() - std::chrono::minutes(10),
-                                       messages);
+                                       messages,
+                                       document.GetAllocator());
 
-    if (messages.size() != 1)
+    if (messages.GetArray().Size() != 1)
     {
         return;
     }
 
-    for (const auto &m : messages)
+    for (const auto &m : messages.GetArray())
     {
-        std::cout << m.content_base64 << std::endl;
+        std::cout << m["content_base64"].GetString()   << std::endl;
     }
 
     databaseLogicMessage.deleteMessage(message_id);
+
+    databaseLogicMessage.setRead(message_id, message_id, std::chrono::system_clock::now());
+    databaseLogicMessage.setRead(message_id, message_id, std::chrono::system_clock::now());
+    databaseLogicMessage.setRead(message_id, message_id, std::chrono::system_clock::now());
+
+    rapidjson::Value readMessages;
+    databaseLogicMessage.fetchReadMessages(message_id,
+                                          std::chrono::system_clock::now() - std::chrono::minutes(100),
+                                          readMessages,
+                                           document.GetAllocator());
+    for (const auto &m : messages.GetArray())
+    {
+        std::cout << m["id"].GetString()   << std::endl;
+    }
 }

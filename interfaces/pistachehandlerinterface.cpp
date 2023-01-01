@@ -100,6 +100,15 @@ PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serv
     }
 }
 
+const rapidjson::Value &PistacheHandlerInterface::getPostedJsonValue(const std::string &name)
+{
+    if (!postedData.HasMember(name))
+    {
+        return emptyValue;
+    }
+    return postedData[name];
+}
+
 bool PistacheHandlerInterface::getBool(const std::string &name,
                                        bool &target,
                                        bool ifMissingThenSendResponse)
@@ -138,6 +147,34 @@ bool PistacheHandlerInterface::getInteger(const std::string &name,
     return true;
 }
 
+bool PistacheHandlerInterface::getByteString(const std::string &name,
+                                             std::basic_string<std::byte> &target,
+                                             bool ifMissingThenSendResponse)
+{
+    if (handlerType == TypeGet)
+    {
+        std::string temp;
+        if (!ExtPistache::getString(*request, *response, name, temp, ifMissingThenSendResponse))
+        {
+            return false;
+        }
+        target = std::basic_string<std::byte>(reinterpret_cast<std::byte*>(temp.data()), temp.size());
+        return true;
+    }
+    if (handlerType == TypePost)
+    {
+        ExtRapidJSON postData(postedData);
+        std::string temp;
+        if (!ExtPistache::getPostString(postData, *response, name, temp, ifMissingThenSendResponse))
+        {
+            return false;
+        }
+        target = std::basic_string<std::byte>(reinterpret_cast<std::byte*>(temp.data()), temp.size());
+        return true;
+    }
+    return true;
+}
+
 bool PistacheHandlerInterface::getString(const std::string &name,
                                          std::string &target,
                                          bool ifMissingThenSendResponse)
@@ -151,7 +188,7 @@ bool PistacheHandlerInterface::getString(const std::string &name,
         ExtRapidJSON postData(postedData);
         return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
     }
-    return "";
+    return true;
 }
 
 bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &target, bool ifMissingThenSendResponse)

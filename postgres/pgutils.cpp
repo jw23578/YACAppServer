@@ -3,6 +3,7 @@
 #include "utils/extstring.h"
 #include "pgexecutor.h"
 #include "definitions.h"
+#include "utils/extvector.h"
 
 std::map<std::string, PGSqlString> PGUtils::tableName2InsertString;
 std::map<std::string, PGSqlString> PGUtils::tableName2UpdateString;
@@ -64,7 +65,8 @@ void PGUtils::alterTableAddColumnsIfNeeded(const std::string &tableName,
 }
 
 bool PGUtils::createTable(const std::string &tableName,
-                          const std::vector<PGColumnAndType> &columnsAndTypes) const
+                          const std::vector<PGColumnAndType> &columnsAndTypes,
+                          const std::vector<std::vector<std::string> > &uniques) const
 {
     PGSqlString sql("create table ");
     sql += tableName;
@@ -93,10 +95,17 @@ bool PGUtils::createTable(const std::string &tableName,
             createIndex(tableName, tableName + "_" + cat.column, std::string("(") + cat.column + ")");
         }
     }
+    for (const auto &vec: uniques)
+    {
+        std::string columns(ExtVector::concat(vec, ", ", "(", ")"));
+        std::string columnsName(ExtVector::concat(vec, "_", "", ""));
+        createUniqueIndex(tableName, tableName + "_" + columnsName, columns);
+    }
 }
 
 void PGUtils::createTableIfNeeded(const std::string &tableName,
-                                  const std::vector<PGColumnAndType> &columnsAndTypes) const
+                                  const std::vector<PGColumnAndType> &columnsAndTypes,
+                                  const std::vector<std::vector<std::string> > &uniques) const
 {
     if (tableExists(tableName))
     {
@@ -104,7 +113,8 @@ void PGUtils::createTableIfNeeded(const std::string &tableName,
         return;
     }
     createTable(tableName,
-                columnsAndTypes);
+                columnsAndTypes,
+                uniques);
 }
 
 bool PGUtils::tableExists(const std::string &tableName) const
@@ -140,6 +150,23 @@ void PGUtils::createIndex(const std::string &tableName, const std::string &index
         return;
     }
     PGSqlString sql("create index ");
+    sql += indexName;
+    sql += " on ";
+    sql += tableName;
+    sql += " ";
+    sql += definition;
+    PGExecutor e(pool, sql);
+}
+
+void PGUtils::createUniqueIndex(const std::string &tableName,
+                                const std::string &indexName,
+                                const std::string &definition) const
+{
+    if (indexExists(tableName, indexName))
+    {
+        return;
+    }
+    PGSqlString sql("create unique index ");
     sql += indexName;
     sql += " on ";
     sql += tableName;

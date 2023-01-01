@@ -25,13 +25,20 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetString(image_data_base64);
 
     sole::uuid imageId(NullUuid);
-    if (with_image && image_data_base64.size())
+    if (with_image)
     {
-        std::string image_data(base64_decode(image_data_base64));
+        if (image_data_base64.size() == 0)
+        {
+            answerOk("missing image data", false);
+            return;
+        }
+        std::vector<char> data;
+        bin_base64_decode(image_data_base64, data);
+        std::basic_string<std::byte> image_data(reinterpret_cast<std::byte*>(data.data()), data.size());
         std::string message;
         if (!databaseLogics.databaseLogicImageTable.storeImage(image_data,
-                                                          message,
-                                                          imageId))
+                                                               message,
+                                                               imageId))
         {
             answerOk(message, false);
             return;

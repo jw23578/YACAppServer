@@ -23,11 +23,13 @@ public:
     void alterTableAddColumnIfNeeded(std::string const &tableName,
                                      const PGColumnAndType &columnAndType) const;
     void alterTableAddColumnsIfNeeded(std::string const &tableName,
-                                     const std::vector<PGColumnAndType> &columnsAndTypes) const;
+                                      const std::vector<PGColumnAndType> &columnsAndTypes) const;
     bool createTable(const std::string &tableName,
-                     const std::vector<PGColumnAndType> &columnsAndTypes) const;
+                     const std::vector<PGColumnAndType> &columnsAndTypes,
+                     const std::vector<std::vector<std::string> > &uniques = std::vector<std::vector<std::string> >()) const;
     void createTableIfNeeded(const std::string &tableName,
-                             const std::vector<PGColumnAndType> &columnsAndTypes) const;
+                             const std::vector<PGColumnAndType> &columnsAndTypes,
+                             const std::vector<std::vector<std::string> > &uniques = std::vector<std::vector<std::string> >()) const;
     bool tableExists(std::string const &tableName) const;
     bool tableEmpty(std::string const &tableName) const;
     bool databaseExists(const std::string &databaseName) const;
@@ -47,6 +49,9 @@ public:
     void createIndex(const std::string &tableName,
                      const std::string &indexName,
                      const std::string &definition) const;
+    void createUniqueIndex(const std::string &tableName,
+                           const std::string &indexName,
+                           const std::string &definition) const;
 
     PGSqlString createEntryExistsString(const std::string &tableName,
                                         const std::string &needleField);

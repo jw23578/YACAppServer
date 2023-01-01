@@ -8,7 +8,7 @@ class PGOidStorer
 {
 public:
     PGOidStorer(PGConnectionPool &pool,
-                std::string const &data,
+                const std::basic_string<std::byte> &data,
                 pqxx::oid &result);
 };
 

@@ -43,18 +43,6 @@ size_t PGExecutor::login(const std::string &tableName,
 
 size_t PGExecutor::select(const std::string &tableName,
                           const std::string &needleField,
-                          const std::string &needleValue)
-{
-    PGSqlString sql("select * from ");
-    sql += tableName;
-    sql += " where " + needleField;
-    sql += " = :" + needleField;
-    sql.set(needleField, needleValue);
-    return exec(sql);
-}
-
-size_t PGExecutor::select(const std::string &tableName,
-                          const std::string &needleField,
                           const std::string &needleValue,
                           const std::string &needleField2,
                           const std::string &needleValue2)

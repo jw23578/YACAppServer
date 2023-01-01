@@ -24,7 +24,16 @@ void PGSqlString::update(const std::string &tableName)
 void PGSqlString::insert(const std::string &tableName)
 {
     firstSetField = true;
-    sql = "insert into " + tableName + " ";
+    sql = "insert into " + tableName + " ( ";
+}
+
+void PGSqlString::addOnConflict(const std::string &target,
+                                PGSqlString &onConflict)
+{
+    conflictAction = " on conflict (";
+    conflictAction += target;
+    conflictAction += " ) ";
+    conflictAction += onConflict.str();
 }
 
 void PGSqlString::rawReplace(std::string &sql,
@@ -45,7 +54,11 @@ std::string PGSqlString::replaceVariables() const
     {
         copy += ") values (";
         copy += insert2ndPart;
-        copy += ")";
+        copy += ") ";
+        if (conflictAction.size())
+        {
+            copy += conflictAction;
+        }
     }
     std::vector<std::string> variableNames;
     variableNames.reserve(variable2Values.size());
@@ -184,7 +197,6 @@ void PGSqlString::set(const std::string &param,
     }
     variable2Values[param] = value.str();
 }
-
 
 PGSqlString &PGSqlString::operator=(std::string const &s)
 {

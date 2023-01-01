@@ -10,6 +10,11 @@ public:
     const std::string app_id = {"app_id"};
     const std::string data = {"data"};
     const std::string image_id = {"image_id"};
+    const std::string message_id = {"message_id"};
+    const std::string receiver_id = {"receiver_id"};
+    const std::string received_datetime = {"received_datetime"};
+    const std::string read_datetime = {"read_datetime"};
+    const std::string reader_id = {"reader_id"};
 
     TableFields();
 };

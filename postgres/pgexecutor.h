@@ -24,9 +24,18 @@ public:
                  const std::string &loginField,
                  const std::string &loginValue);
 
+    template <class NV1>
     size_t select(const std::string &tableName,
                   const std::string &needleField,
-                  const std::string &needleValue);
+                  const NV1 &needleValue)
+    {
+        PGSqlString sql("select * from ");
+        sql += tableName;
+        sql += " where " + needleField;
+        sql += " = :" + needleField;
+        sql.set(needleField, needleValue);
+        return exec(sql);
+    }
 
     size_t select(const std::string &tableName,
                   const std::string &needleField,

@@ -14,11 +14,12 @@ public:
     const std::string t0005_group_of_appusers = {"t0005_group_of_appusers"};
     const std::string t0006_appuser2group = {"t0006_appuser2group"};
     const std::string t0007_messages = {"t0007_messages"};
-    const std::string t0008_message_state {"t0008_message_state"};
+    const std::string t0008_message_received {"t0008_message_received"};
     const std::string t0010_task {"t0010_task"};
     const std::string t0011_task_time {"t0011_task_time"};
     const std::string t0012_worktime {"t0012_worktime"};
     const std::string t0013_images {"t0013_images"};
+    const std::string t0014_message_read {"t0014_message_read"};
 
     TableNames();
 };

@@ -16,7 +16,7 @@ void HandlerUploadApp::method()
 {
     MACRO_GetMandatoryString(app_id);
     MACRO_GetMandatoryString(json_yacapp);
-    MACRO_GetMandatoryString(yacpck_base64);
+    MACRO_GetMandatoryByteString(yacpck_base64);
     MACRO_GetMandatoryString(app_name);
     MACRO_GetMandatoryInt(app_version, false);
     MACRO_GetMandatoryString(app_logo_url);

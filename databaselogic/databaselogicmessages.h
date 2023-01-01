@@ -6,6 +6,8 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
+#include "tablefields.h"
+#include "rapidjson/document.h"
 
 class DatabaseLogicMessages
 {
@@ -13,15 +15,16 @@ class DatabaseLogicMessages
     PGConnectionPool &pool;
     PGUtils utils;
     TableNames tableNames;
+    TableFields tableFields;
 
 public:
-    struct Message
-    {
-        sole::uuid id;
-        sole::uuid sender_id;
-        std::chrono::system_clock::time_point sended_datetime;
-        std::string content_base64;
-    };
+    //    struct Message
+    //    {
+    //        sole::uuid id;
+    //        sole::uuid sender_id;
+    //        std::chrono::system_clock::time_point sended_datetime;
+    //        std::string content_base64;
+    //    };
 
     DatabaseLogicMessages(LogStatController &logStatController,
                           PGConnectionPool &pool);
@@ -33,11 +36,26 @@ public:
 
     void deleteMessage(const sole::uuid &id);
 
-    void fetchMessages(const sole::uuid &fetcher_id,
+    bool fetchMessages(const sole::uuid &fetcher_id,
                        const std::chrono::system_clock::time_point &since,
-                       std::vector<Message> &messages);
+                       rapidjson::Value &target,
+                       rapidjson::MemoryPoolAllocator<> &alloc);
+    bool fetchReceivedMessages(const sole::uuid &receiver_id,
+                               const std::chrono::system_clock::time_point &since,
+                               rapidjson::Value &target,
+                               rapidjson::MemoryPoolAllocator<> &alloc);
+    bool fetchReadMessages(const sole::uuid &reader_id,
+                           const std::chrono::system_clock::time_point &since,
+                           rapidjson::Value &target,
+                           rapidjson::MemoryPoolAllocator<> &alloc);
+
     void setReceived(const sole::uuid &receiver_id,
-                     const std::set<sole::uuid> &message_ids);
+                     const sole::uuid &message_id,
+                     const std::chrono::system_clock::time_point &received_datetime);
+
+    void setRead(const sole::uuid &reader_id,
+                 const sole::uuid &message_id,
+                 const std::chrono::system_clock::time_point &read_datetime);
 };
 
 #endif // DATABASELOGICMESSAGES_H

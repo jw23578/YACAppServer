@@ -20,6 +20,7 @@ class PGSqlString
 {
     std::string sql;
     std::string insert2ndPart;
+    std::string conflictAction;
     bool firstSetField;
     void rawReplace(std::string &sql,
                     std::string const &param,
@@ -33,6 +34,8 @@ public:
     PGSqlString(std::string const &s);
     void update(std::string const &tableName);
     void insert(std::string const &tableName);
+
+    void addOnConflict(const std::string &target, PGSqlString &onConflict);
 
     void set(std::string const &param,
              std::string const &value);
@@ -97,11 +100,11 @@ public:
         if (!firstSetField)
         {
             sql += ", ";
-            insert2ndPart += ", :";
+            insert2ndPart += ", ";
         }
         firstSetField = false;
         sql += field;
-        insert2ndPart += field;
+        insert2ndPart += ":" + field;
         set(field, value);
     }
 

@@ -9,7 +9,9 @@ DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
     databaseLogicWorktime(logStatController,
                           pool),
     databaseLogicImageTable(logStatController,
-                            pool)
+                            pool),
+    databaseLogicMessages(logStatController,
+                          pool)
 {
 
 }
