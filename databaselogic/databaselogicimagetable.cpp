@@ -8,7 +8,7 @@ bool DatabaseLogicImageTable::lookUpOid(const sole::uuid &imageId,
 {
     PGExecutor e(pool);
     e.select(tableNames.t0013_images,
-             tableFields.image_id,
+             tableFields.id,
              imageId);
     if (!e.size())
     {

@@ -122,7 +122,7 @@ void DatabaseLogicMessages::setRead(const sole::uuid &reader_id,
 {
     PGSqlString sql;
     sql.insert(tableNames.t0014_message_read);
-        sql.addInsert(tableFields.id, sole::uuid4());
+    sql.addInsert(tableFields.id, sole::uuid4());
     sql.addInsert(tableFields.reader_id, reader_id);
     sql.addInsert(tableFields.message_id, message_id);
     sql.addInsert(tableFields.read_datetime, read_datetime);
