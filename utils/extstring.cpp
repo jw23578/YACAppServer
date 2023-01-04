@@ -336,12 +336,12 @@ std::string& ExtString::trim(std::string &str, const std::string& chars)
 
 std::string ExtString::constLTrim(const std::string &str, const std::string &chars)
 {
-    return str.substr(0, str.find_first_not_of(chars));
+    return str.substr(str.find_first_not_of(chars));
 }
 
 std::string ExtString::constRTrim(const std::string &str, const std::string &chars)
 {
-    return str.substr(str.find_last_not_of(chars) + 1);
+    return str.substr(0, str.find_last_not_of(chars) + 1);
 }
 
 std::string ExtString::constTrim(const std::string &str, const std::string &chars)

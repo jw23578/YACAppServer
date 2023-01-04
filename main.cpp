@@ -1,4 +1,7 @@
 #include <iostream>
+#define DOCTEST_CONFIG_IMPLEMENT
+#include "thirds/doctest/doctest/doctest.h"
+
 #include "yacappserver.h"
 #include "rapidjson/document.h"
 #include <rapidjson/istreamwrapper.h>
@@ -14,7 +17,6 @@
 #include "databaselogicmessages.h"
 #include "databaselogics.h"
 #include "tests/testdatabaselogicmessages.h"
-#include "tests/testtimepoint.h"
 #include "tests/testdatabaselogicappuser.h"
 #include "tests/testdatabaselogicworktime.h"
 
@@ -31,6 +33,18 @@ int main(int argc, char **argv)
         }
     }
     std::srand(std::time(nullptr));
+    if (runTests)
+    {
+        doctest::Context context;
+        context.applyCommandLine(argc, argv);
+        context.setOption("no-breaks", true);
+        int res = context.run();
+
+        if (res != 0)
+        {
+            return res;
+        }
+    }
 
     std::string configFilename("YACAppServerConfig.json");
     if (argc > 1)
@@ -102,7 +116,6 @@ int main(int argc, char **argv)
 
     if (runTests)
     {
-        TestTimepoint ttp;
         TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
     }
 //    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);

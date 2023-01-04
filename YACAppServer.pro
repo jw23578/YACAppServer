@@ -84,6 +84,7 @@ SOURCES += \
         tests/testdatabaselogicappuser.cpp \
         tests/testdatabaselogicmessages.cpp \
         tests/testdatabaselogicworktime.cpp \
+        tests/testextstring.cpp \
         tests/testtimepoint.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
@@ -159,6 +160,7 @@ HEADERS += \
   tests/testdatabaselogicappuser.h \
   tests/testdatabaselogicmessages.h \
   tests/testdatabaselogicworktime.h \
+  tests/testextstring.h \
   tests/testtimepoint.h \
   utils/base64.h \
   utils/definitions.h \

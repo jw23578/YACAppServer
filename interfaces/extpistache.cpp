@@ -71,6 +71,7 @@ bool ExtPistache::getString(const Pistache::Rest::Request &request,
         return false;
     }
     target = ExtString::urlDecode(target);
+    ExtString::trim(target);
     return true;
 }
 
@@ -124,6 +125,7 @@ bool ExtPistache::getPostString(ExtRapidJSON &postData,
         return false;
     }
     target = ExtString::urlDecode(target);
+    ExtString::trim(target);
     return true;
 }
 
