@@ -1,8 +1,8 @@
 # YACAppServer
 
-after cloning update submodules with:
+after cloning update submodules with:  
 git submodule update --init --recursive
-update submodules with
+update submodules with  
 git submodule update --remote --merge
 
 ## used submodules:
