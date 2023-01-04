@@ -329,9 +329,24 @@ std::string& ExtString::rtrim(std::string& str, const std::string& chars)
     return str;
 }
 
-std::string& ExtString::trim(std::string& str, const std::string& chars)
+std::string& ExtString::trim(std::string &str, const std::string& chars)
 {
     return ltrim(rtrim(str, chars), chars);
+}
+
+std::string ExtString::constLTrim(const std::string &str, const std::string &chars)
+{
+    return str.substr(0, str.find_first_not_of(chars));
+}
+
+std::string ExtString::constRTrim(const std::string &str, const std::string &chars)
+{
+    return str.substr(str.find_last_not_of(chars) + 1);
+}
+
+std::string ExtString::constTrim(const std::string &str, const std::string &chars)
+{
+    return constLTrim(constRTrim(str, chars), chars);
 }
 
 std::string ExtString::lower(const std::string &s)

@@ -67,9 +67,13 @@ public:
     static bool isNumeric(std::string const &s);
 
 
-    static std::string &ltrim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
-    static std::string &rtrim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
-    static std::string &trim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
+    static std::string &ltrim(std::string &str, const std::string& chars = "\t\n\v\f\r ");
+    static std::string &rtrim(std::string &str, const std::string& chars = "\t\n\v\f\r ");
+    static std::string &trim(std::string &str, const std::string& chars = "\t\n\v\f\r ");
+
+    static std::string constLTrim(const std::string &str, const std::string& chars = "\t\n\v\f\r ");
+    static std::string constRTrim(const std::string &str, const std::string& chars = "\t\n\v\f\r ");
+    static std::string constTrim(const std::string &str, const std::string& chars = "\t\n\v\f\r ");
 
     static std::string lower(const std::string &s);
     static std::string upper(const std::string &s);
