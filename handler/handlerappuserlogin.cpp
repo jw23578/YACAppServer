@@ -19,18 +19,17 @@ void HandlerAppUserLogin::method()
     MACRO_GetMandatoryUuid(appId);
 
     std::string message;
-    std::string loginToken;
+    std::map<std::string, std::string> data;
     if (!databaseLogicAppUser.loginAppUser(appId,
                                            loginEMail,
                                            password,
                                            message,
-                                           loginToken))
+                                           data))
     {
         answerBad(message);
     }
     else
     {
-        MACRO_CreateDataMAP(loginToken);
         answerOk("Login successful", true, data);
     }
 

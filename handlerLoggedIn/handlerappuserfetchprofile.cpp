@@ -19,10 +19,10 @@ void HandlerAppUserFetchProfile::method()
     rapidjson::Document profile;
     std::string message;
     if (databaseLogics.databaseLogicAppUser.fetchProfile(appId,
-                                                          userId,
-                                                          message,
-                                                          profile,
-                                                          profile.GetAllocator()))
+                                                         userId,
+                                                         message,
+                                                         profile,
+                                                         profile.GetAllocator()))
     {
         answerOk(message, false);
         return;

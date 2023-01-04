@@ -218,7 +218,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
                                         const std::string &loginEMail,
                                         const std::string &password,
                                         std::string &message,
-                                        std::string &loginToken)
+                                        std::map<std::string, std::string> &data)
 {
     sole::uuid appUserId;
     if (!lookupAppUser(appId, loginEMail, appUserId, message))
@@ -241,8 +241,20 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
         message = "Password is wrong";
         return false;
     }
-
+    PGExecutor select(pool);
+    if (!select.select(tableNames.t0003_appuser_profiles,
+                  tableFields.id,
+                  appUserId))
+    {
+        message = "Fatal error, could not load profile data";
+        return false;
+    }
+    std::string loginToken;
     loginSuccessful(appUserId, loginToken);
+    data["loginToken"] = loginToken;
+    data[tableFields.fstname] = select.string(tableFields.fstname);
+    data[tableFields.surname] = select.string(tableFields.surname);
+    data[tableFields.visible_name] = select.string(tableFields.visible_name);
     return true;
 }
 

@@ -55,7 +55,7 @@ public:
                       const std::string &loginEMail,
                       const std::string &password,
                       std::string &message,
-                      std::string &loginToken);
+                      std::map<std::string, std::string> &data);
 
     bool updateAppUser(const sole::uuid &appId,
                        const sole::uuid &userId,

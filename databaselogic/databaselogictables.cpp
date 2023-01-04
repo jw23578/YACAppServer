@@ -69,9 +69,9 @@ void DatabaseLogicTables::createDatabaseTables()
     utils.createTableIfNeeded(tableNames.t0003_appuser_profiles,
                               {{tableFields.id, pg_uuid, true},
                                {tableFields.app_id, pg_uuid, false, true},
-                               {"fstname", pg_text},
-                               {"surname", pg_text},
-                               {"visible_name", pg_text},
+                               {tableFields.fstname, pg_text},
+                               {tableFields.surname, pg_text},
+                               {tableFields.visible_name, pg_text},
                                {"loginemail", pg_text, false, true},
                                {"verified", pg_timestamp},
                                {"verify_token", pg_text},
@@ -125,30 +125,26 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.read_datetime, pg_timestamp}},
                               {{tableFields.message_id, tableFields.reader_id}});
 
-    const std::string task("task");
     const std::string creater_id("creater_id");
     const std::string created("created");
     const std::string finished("finished");
     utils.createTableIfNeeded(tableNames.t0010_task,
                               {{tableFields.id, pg_uuid, true},
-                               {task, pg_text},
+                               {tableFields.task, pg_text},
                                {creater_id, pg_uuid, false, true},
                                {created, pg_timestamp},
                                {finished, pg_timestamp}});
 
-    const std::string user_id("user_id");
-    const std::string start("start");
-    const std::string end("end");
     utils.createTableIfNeeded(tableNames.t0011_task_time,
                               {{tableFields.id, pg_uuid, true},
-                               {user_id, pg_uuid, false, true},
-                               {start, pg_timestamp},
-                               {end, pg_timestamp}});
+                               {tableFields.user_id, pg_uuid, false, true},
+                               {tableFields.task_start, pg_timestamp},
+                               {tableFields.task_end, pg_timestamp}});
     const std::string ts("ts");
     const std::string type("type");
     utils.createTableIfNeeded(tableNames.t0012_worktime,
                               {{tableFields.id, pg_uuid, true},
-                               {user_id, pg_uuid, false, true},
+                               {tableFields.user_id, pg_uuid, false, true},
                                {ts, pg_timestamp, false, true},
                                {type, pg_int, false, true}});
 
