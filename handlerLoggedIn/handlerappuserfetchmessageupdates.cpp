@@ -4,7 +4,7 @@ HandlerAppUserFetchMessageUpdates::HandlerAppUserFetchMessageUpdates(PistacheSer
                                                                      DatabaseLogics &databaseLogics,
                                                                      LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                             "/fetchMessageUpdats",
+                             "/fetchMessageUpdates",
                              TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
