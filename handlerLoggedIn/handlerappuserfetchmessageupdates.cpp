@@ -17,7 +17,9 @@ void HandlerAppUserFetchMessageUpdates::method()
     MACRO_GetMandatoryTimePointFromISO(updatesSinceISO);
 
     rapidjson::Document document;
-    document.AddMember("serverNowISO", ExtString::timepointToISO(std::chrono::system_clock::now()), document.GetAllocator());
+    document.SetObject();
+    std::string serverNowISO(ExtString::timepointToISO(std::chrono::system_clock::now()));
+    document.AddMember("serverNowISO", serverNowISO, document.GetAllocator());
     rapidjson::Value messages;
     if (!databaseLogics.databaseLogicMessages.fetchMessages(userId,
                                                             updatesSinceISO,
