@@ -29,7 +29,7 @@ void HandlerAppUserFetchMessageUpdates::method()
         answerOk("error on fetching messages", false);
         return;
     }
-    document.AddMember("messsages", messages, document.GetAllocator());
+    document.AddMember("messages", messages, document.GetAllocator());
     rapidjson::Value readMessages;
     if (!databaseLogics.databaseLogicMessages.fetchReadMessages(userId,
                                                                 updatesSinceISO,

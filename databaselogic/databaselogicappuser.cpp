@@ -448,7 +448,8 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     PGExecutor e(pool);
     e.select(tableNames.t0003_appuser_profiles,
              "app_id", appId.str(),
-             "id", userId.str());
+             "id", userId.str(),
+             "deleted", TimePointPostgreSqlNull);
     if (!e.size())
     {
         message = "could not find user with id: " + userId.str();
@@ -460,6 +461,7 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     e.string("public_key_base64");
     target.AddMember("public_key_base64", "", alloc);
     target.AddMember("image_id", e.string("image_id"), alloc);
+    return true;
 }
 
 void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,

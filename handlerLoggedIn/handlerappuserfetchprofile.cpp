@@ -14,15 +14,16 @@ HandlerAppUserFetchProfile::HandlerAppUserFetchProfile(DatabaseLogics &databaseL
 
 void HandlerAppUserFetchProfile::method()
 {
-    MACRO_GetMandatoryUuid(userId);
+    MACRO_GetMandatoryUuid(profileId);
 
     rapidjson::Document profile;
+    profile.SetObject();
     std::string message;
-    if (databaseLogics.databaseLogicAppUser.fetchProfile(appId,
-                                                         userId,
-                                                         message,
-                                                         profile,
-                                                         profile.GetAllocator()))
+    if (!databaseLogics.databaseLogicAppUser.fetchProfile(appId,
+                                                          profileId,
+                                                          message,
+                                                          profile,
+                                                          profile.GetAllocator()))
     {
         answerOk(message, false);
         return;
