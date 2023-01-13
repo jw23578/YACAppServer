@@ -1,6 +1,6 @@
 #include "tablefields.h"
 
-TableFields::TableFields()
+TableFields::TableFields() noexcept
 {
 
 }

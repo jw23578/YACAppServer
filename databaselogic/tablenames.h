@@ -2,24 +2,26 @@
 #define TABLENAMES_H
 
 #include <string>
+#include <jw78Macros.h>
 
 class TableNames
 {
 public:
-    const std::string t0001_users = "t0001_users";
-    const std::string t0002_apps = {"t0002_apps"};
-    const std::string t0003_appuser_profiles = {"t0003_appuser_profiles"};
-    const std::string t0009_appuser_logintoken = {"t0009_appuser_logintoken"};
-    const std::string t0004_appuser_passwordhashes = {"t0004_appuser_passwordhashes"};
-    const std::string t0005_group_of_appusers = {"t0005_group_of_appusers"};
-    const std::string t0006_appuser2group = {"t0006_appuser2group"};
-    const std::string t0007_messages = {"t0007_messages"};
-    const std::string t0008_message_received {"t0008_message_received"};
-    const std::string t0010_task {"t0010_task"};
-    const std::string t0011_task_time {"t0011_task_time"};
-    const std::string t0012_worktime {"t0012_worktime"};
-    const std::string t0013_images {"t0013_images"};
-    const std::string t0014_message_read {"t0014_message_read"};
+    MACRO_ConstString(t0001_users);
+    MACRO_ConstString(t0002_apps);
+    MACRO_ConstString(t0003_appuser_profiles);
+    MACRO_ConstString(t0009_appuser_logintoken);
+    MACRO_ConstString(t0004_appuser_passwordhashes);
+    MACRO_ConstString(t0005_group_of_appusers);
+    MACRO_ConstString(t0006_appuser2group);
+    MACRO_ConstString(t0007_messages);
+    MACRO_ConstString(t0008_message_received);
+    MACRO_ConstString(t0010_task);
+    MACRO_ConstString(t0011_task_time);
+    MACRO_ConstString(t0012_worktime);
+    MACRO_ConstString(t0013_images);
+    MACRO_ConstString(t0014_message_read);
+    MACRO_ConstString(t0015_appuser_devicetoken);
 
     TableNames();
 };

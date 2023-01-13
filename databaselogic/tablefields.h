@@ -2,28 +2,30 @@
 #define TABLEFIELDS_H
 
 #include <string>
+#include <jw78Macros.h>
 
 class TableFields
 {
 public:
-    const std::string id = {"id"};
-    const std::string app_id = {"app_id"};
-    const std::string data = {"data"};
-    const std::string image_id = {"image_id"};
-    const std::string message_id = {"message_id"};
-    const std::string receiver_id = {"receiver_id"};
-    const std::string received_datetime = {"received_datetime"};
-    const std::string read_datetime = {"read_datetime"};
-    const std::string reader_id = {"reader_id"};
-    const std::string fstname = {"fstname"};
-    const std::string surname = {"surname"};
-    const std::string visible_name = {"visible_name"};
-    const std::string task_start = {"task_start"};
-    const std::string task_end = {"task_end"};
-    const std::string user_id = {"user_id"};
-    const std::string task = {"task"};
+    MACRO_ConstString(id);
+    MACRO_ConstString(app_id);
+    MACRO_ConstString(data);
+    MACRO_ConstString(image_id);
+    MACRO_ConstString(message_id);
+    MACRO_ConstString(receiver_id);
+    MACRO_ConstString(received_datetime);
+    MACRO_ConstString(read_datetime);
+    MACRO_ConstString(reader_id);
+    MACRO_ConstString(fstname);
+    MACRO_ConstString(surname);
+    MACRO_ConstString(visible_name);
+    MACRO_ConstString(task_start);
+    MACRO_ConstString(task_end);
+    MACRO_ConstString(user_id);
+    MACRO_ConstString(task);
+    MACRO_ConstString(device_token);
 
-    TableFields();
+    TableFields() noexcept;
 };
 
 #endif // TABLEFIELDS_H
