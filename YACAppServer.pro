@@ -168,6 +168,7 @@ HEADERS += \
   utils/extrapidjson.h \
   utils/extstring.h \
   utils/extvector.h \
+  utils/jw78Macros.h \
   utils/threadsafequeue.h \
   yacappserver.h
 
