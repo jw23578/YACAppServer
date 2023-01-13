@@ -117,8 +117,12 @@ int main(int argc, char **argv)
     if (runTests)
     {
         TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
+        TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogics.databaseLogicAppUser);
+        if (!testDatabaseLogicAppUser)
+        {
+            return 1;
+        }
     }
-//    TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogicAppUser);
 //    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController, databaseLogics);
 
 
@@ -137,4 +141,9 @@ int main(int argc, char **argv)
                         emailLogic,
                         json.getInt("serverPort"));
     return 0;
+}
+
+TEST_CASE("test")
+{
+
 }

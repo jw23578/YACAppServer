@@ -106,6 +106,14 @@ public:
                       rapidjson::Value &target,
                       rapidjson::MemoryPoolAllocator<> &alloc);
 
+    bool storeDeviceToken(const sole::uuid &userId,
+                          const std::string &device_token);
+
+    bool removeDeviceToken(const sole::uuid &userId,
+                           const std::string &device_token);
+
+    size_t fetchDeviceToken(const sole::uuid &userId,
+                            std::set<std::string> &device_token);
 };
 
 #endif // DATABASELOGICAPPUSER_H

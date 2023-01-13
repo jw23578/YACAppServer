@@ -5,8 +5,11 @@
 
 class TestDatabaseLogicAppUser
 {
+    bool error{false};
 public:
     TestDatabaseLogicAppUser(DatabaseLogicAppUser &databaseLogicAppUser);
+
+    operator bool() const {return error;}
 };
 
 #endif // TESTDATABASELOGICAPPUSER_H

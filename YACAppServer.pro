@@ -21,6 +21,8 @@ INCLUDEPATH += rapidjson/include
 INCLUDEPATH += /usr/include/opencv4
 
 SOURCES += \
+        caches/cacheinterface.cpp \
+        caches/devicetokencache.cpp \
         curlWrapper/jw78curlwrapper.cpp \
         curlWrapper/jw78emailwrapper.cpp \
         curlWrapper/jw78imapwrapper.cpp \
@@ -96,6 +98,8 @@ SOURCES += \
         yacappserver.cpp
 
 HEADERS += \
+  caches/cacheinterface.h \
+  caches/devicetokencache.h \
   curlWrapper/jw78curlwrapper.h \
   curlWrapper/jw78emailwrapper.h \
   curlWrapper/jw78imapwrapper.h \

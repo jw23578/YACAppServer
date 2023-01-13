@@ -464,6 +464,47 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::storeDeviceToken(const sole::uuid &userId,
+                                            const std::string &device_token)
+{
+    PGSqlString sql;
+    sql.insert(tableNames.t0015_appuser_devicetoken);
+    sql.addInsert(tableFields.id, sole::uuid4());
+    sql.addInsert(tableFields.user_id, userId);
+    sql.addInsert(tableFields.device_token, device_token);
+    PGExecutor e(pool,
+                 sql);
+    return true;
+}
+
+bool DatabaseLogicAppUser::removeDeviceToken(const sole::uuid &userId,
+                                             const std::string &device_token)
+{
+    PGSqlString sql;
+    sql.delet(tableNames.t0015_appuser_devicetoken);
+    sql.addCompare(" where ", tableFields.user_id, " = ", userId);
+    sql.addCompare(" and ", tableFields.device_token, " = ", device_token);
+    PGExecutor e(pool,
+                 sql);
+    return true;
+}
+
+size_t DatabaseLogicAppUser::fetchDeviceToken(const sole::uuid &userId,
+                                              std::set<std::string> &device_token)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0015_appuser_devicetoken);
+    sql.addCompare(" where ", tableFields.user_id, " = ", userId);
+    PGExecutor e(pool,
+                 sql);
+    for (size_t i(0); i < e.size(); ++i)
+    {
+        device_token.insert(e.string(tableFields.device_token));
+        e.next();
+    }
+    return e.size();
+}
+
 void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
                                                     const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)

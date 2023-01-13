@@ -32,8 +32,10 @@ class PGSqlString
 public:
     PGSqlString();
     PGSqlString(std::string const &s);
+    void select(std::string const &tableName);
     void update(std::string const &tableName);
     void insert(std::string const &tableName);
+    void delet(std::string const &tableName);
 
     void addOnConflict(const std::string &target, PGSqlString &onConflict);
 

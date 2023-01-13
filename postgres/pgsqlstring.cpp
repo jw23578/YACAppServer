@@ -15,6 +15,11 @@ PGSqlString::PGSqlString(std::string const &s):
 
 }
 
+void PGSqlString::select(const std::string &tableName)
+{
+    sql = "select * from " + tableName;
+}
+
 void PGSqlString::update(const std::string &tableName)
 {
     firstSetField = true;
@@ -25,6 +30,11 @@ void PGSqlString::insert(const std::string &tableName)
 {
     firstSetField = true;
     sql = "insert into " + tableName + " ( ";
+}
+
+void PGSqlString::delet(const std::string &tableName)
+{
+    sql = "delete from " + tableName;
 }
 
 void PGSqlString::addOnConflict(const std::string &target,

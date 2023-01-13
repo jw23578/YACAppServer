@@ -5,7 +5,7 @@
 class TestExtString
 {
 public:
-    TestExtString();
+    TestExtString(){};
 };
 
 #endif // TESTEXTSTRING_H
