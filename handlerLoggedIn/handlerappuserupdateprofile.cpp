@@ -4,18 +4,31 @@
 
 HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface &serverInterface,
                                                          DatabaseLogics &databaseLogics,
+                                                         DeviceTokenCache &deviceTokenCache,
                                                          LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
                              "/updateAppUserProfile",
                              TypePost,
                              loggedInAppUsersContainer),
-    databaseLogics(databaseLogics)
+    databaseLogics(databaseLogics),
+    deviceTokenCache(deviceTokenCache)
 {
-
+    addMethod(serverInterface,
+              "/updateDeviceToken",
+              TypePost);
 }
 
 void HandlerAppUserUpdateProfile::method()
 {
+    if (getMethodName() == "/updateDeviceToken")
+    {
+        MACRO_GetMandatoryString(deviceToken);
+        deviceTokenCache.add(userId,
+                             deviceToken);
+        answerOk("deviceToken stored",
+                 true);
+        return;
+    }
     MACRO_GetMandatoryString(fstname);
     MACRO_GetMandatoryString(surname);
     MACRO_GetMandatoryString(visible_name);

@@ -30,9 +30,12 @@
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinuserscontainer.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
+#include "caches/devicetokencache.h"
 
 class YACAppServer: public PistacheServerInterface
 {
+    DeviceTokenCache deviceTokenCache;
+
     LoggedInUsersContainer loggedInUsersContainer;
     LoggedInAppUsersContainer loggedInAppUsersContainer;
     HandlerUserRegister handlerUserRegister;

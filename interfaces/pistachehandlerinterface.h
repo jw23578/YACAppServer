@@ -59,7 +59,7 @@
     }
 
 class PistacheHandlerInterface
-{
+{    
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;
@@ -77,6 +77,13 @@ class PistacheHandlerInterface
                 bool success,
                 std::map<std::string, std::string> &data);
 
+public:
+    enum HandlerType
+    {
+        TypeGet,
+        TypePost,
+        TypeDelete
+    };
 protected:
     void answerBad(const std::string &message);
     void answerBad(const std::string &message,
@@ -88,13 +95,11 @@ protected:
                   std::map<std::string, std::string> &data);
     void answerOk(bool success,
                   rapidjson::Document &d);
+    const std::string &getMethodName() const;
+    void addMethod(PistacheServerInterface &serverInterface,
+                   std::string const &methodName,
+                   HandlerType type);
 public:
-    enum HandlerType
-    {
-        TypeGet,
-        TypePost,
-        TypeDelete
-    };
     HandlerType handlerType;
 
     enum LoginNeededType

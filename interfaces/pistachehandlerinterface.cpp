@@ -56,6 +56,11 @@ void PistacheHandlerInterface::answerOk(bool success,
     answer(Pistache::Http::Code::Ok, success, d);
 }
 
+const std::string &PistacheHandlerInterface::getMethodName() const
+{
+    return request->resource();
+}
+
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       const std::string &message,
                                       bool success)
@@ -78,11 +83,9 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
     ExtPistache::answer(*response, code, message, success, data);
 }
 
-PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
-                                                   std::string const &methodName,
-                                                   HandlerType type,
-                                                   LoginNeededType loginNeeded):request(0), response(0), handlerType(type),
-    loginNeeded(loginNeeded)
+void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterface,
+                                         std::string const &methodName,
+                                         HandlerType type)
 {
     if (type == TypeDelete)
     {
@@ -98,6 +101,19 @@ PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serv
     {
         Pistache::Rest::Routes::Get(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
     }
+
+}
+
+PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                                                   std::string const &methodName,
+                                                   HandlerType type,
+                                                   LoginNeededType loginNeeded):
+    request(0), response(0), handlerType(type),
+    loginNeeded(loginNeeded)
+{
+    addMethod(serverInterface,
+              methodName,
+              type);
 }
 
 const rapidjson::Value &PistacheHandlerInterface::getPostedJsonValue(const std::string &name)

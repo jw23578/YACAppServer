@@ -11,6 +11,7 @@ YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
                            EMailLogic &emailLogic,
                            int port):
     PistacheServerInterface(port),
+    deviceTokenCache(databaseLogics),
     loggedInUsersContainer(databaseLogicUserAndApp),
     loggedInAppUsersContainer(databaseLogicAppUser),
     handlerUserRegister(databaseLogicUserAndApp,
@@ -46,6 +47,7 @@ YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
                                  *this),
     handlerAppUserUpdateProfile(*this,
                                 databaseLogics,
+                                deviceTokenCache,
                                 loggedInAppUsersContainer),
     handlerAppUserSearchProfiles(*this,
                                  databaseLogicAppUser,
@@ -68,7 +70,6 @@ YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
     handlerStoreMesage(databaseLogicMessages,
                        *this,
                        loggedInAppUsersContainer)
-
 {
     Pistache::Http::Header::Registrar<LoginEMailHeader>();
     Pistache::Http::Header::Registrar<LoginTokenHeader>();
