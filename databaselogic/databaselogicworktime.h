@@ -4,15 +4,15 @@
 #include "postgres/pgconnectionpool.h"
 #include "sole/sole.hpp"
 #include "logstat/logstatcontroller.h"
-#include "pgutils.h"
 #include "tablenames.h"
+#include "tablefields.h"
 
 class DatabaseLogicWorktime
 {
     LogStatController &logStatController;
     PGConnectionPool &pool;
-    PGUtils utils;
     TableNames tableNames;
+    TableFields tableFields;
 
 public:
     DatabaseLogicWorktime(LogStatController &logStatController,
@@ -28,6 +28,25 @@ public:
         OffSiteWorkEndType,
         WorktimeTypeCount
     };
+    enum UserMood
+    {
+        UserMoodUnknown = 0,
+        UserMood1Best,
+        UserMood2,
+        UserMood3,
+        UserMood4,
+        UserMood5
+    };
+
+    enum DayRating
+    {
+        DayRatingUnknown = 0,
+        DayRating1Best,
+        DayRating2,
+        DayRating3,
+        DayRating4,
+        DayRating5
+    };
 
     bool currentState(const sole::uuid &user_id,
                       std::chrono::system_clock::time_point &workStart,
@@ -37,6 +56,8 @@ public:
     bool insertWorktime(const sole::uuid &user_id,
                         const std::chrono::system_clock::time_point ts,
                         const WorktimeType type,
+                        const UserMood user_mood,
+                        const DayRating day_rating,
                         std::chrono::system_clock::time_point &workStart,
                         std::chrono::system_clock::time_point &pauseStart,
                         std::chrono::system_clock::time_point &offSiteWorkStart,

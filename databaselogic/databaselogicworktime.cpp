@@ -4,8 +4,7 @@
 DatabaseLogicWorktime::DatabaseLogicWorktime(LogStatController &logStatController,
                                              PGConnectionPool &pool):
     logStatController(logStatController),
-    pool(pool),
-    utils(pool)
+    pool(pool)
 {
 
 }
@@ -52,6 +51,8 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
 bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
                                            const std::chrono::system_clock::time_point ts,
                                            const WorktimeType type,
+                                           const UserMood user_mood,
+                                           const DayRating day_rating,
                                            std::chrono::system_clock::time_point &workStart,
                                            std::chrono::system_clock::time_point &pauseStart,
                                            std::chrono::system_clock::time_point &offSiteWorkStart,
@@ -152,16 +153,14 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
     case WorktimeTypeCount: break;
     }
 
-    PGSqlString sql("insert into ");
-    sql += tableNames.t0012_worktime;
-    sql += std::string(" (id, user_id, ts, type) ");
-    sql += std::string(" values ");
-    sql += std::string(" (:id, :user_id, :ts, :type) ");
-
-    MACRO_setId();
-    MACRO_set(user_id);
-    MACRO_set(ts);
-    MACRO_set(type);
+    PGSqlString sql;
+    sql.insert(tableNames.t0012_worktime);
+    sql.addInsert(tableFields.id, sole::uuid4());
+    sql.addInsert(tableFields.user_id, user_id);
+    sql.addInsert(tableFields.ts, ts);
+    sql.addInsert(tableFields.type, type);
+    sql.addInsert(tableFields.user_mood, user_mood);
+    sql.addInsert(tableFields.day_rating, day_rating);
 
     PGExecutor e(pool, sql);
     return true;
