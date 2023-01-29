@@ -1,5 +1,10 @@
 #include "databaselogics.h"
 
+LogStatController &DatabaseLogics::getLogStat()
+{
+    return logStatController;
+}
+
 DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
                                PGConnectionPool &pool):
     logStatController(logStatController),

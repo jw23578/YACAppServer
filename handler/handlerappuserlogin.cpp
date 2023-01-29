@@ -1,13 +1,15 @@
 #include "handlerappuserlogin.h"
 #include "extmap.h"
 
-HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogicAppUser &databaseLogicAppUser,
+HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogics &databaseLogics,
+                                         DeviceTokenCache &deviceTokenCache,
                                          PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/loginAppUser",
                              TypePost,
                              TypeNoLoginNeeded),
-    databaseLogicAppUser(databaseLogicAppUser)
+    databaseLogics(databaseLogics),
+    deviceTokenCache(deviceTokenCache)
 {
 
 }
@@ -20,16 +22,24 @@ void HandlerAppUserLogin::method()
 
     std::string message;
     std::map<std::string, std::string> data;
-    if (!databaseLogicAppUser.loginAppUser(appId,
-                                           loginEMail,
-                                           password,
-                                           message,
-                                           data))
+    sole::uuid appUserId;
+    if (!databaseLogics.databaseLogicAppUser.loginAppUser(appId,
+                                                          loginEMail,
+                                                          password,
+                                                          message,
+                                                          data,
+                                                          appUserId))
     {
         answerBad(message);
     }
     else
     {
+        MACRO_GetString(deviceToken);
+        if (deviceToken.size())
+        {
+            deviceTokenCache.add(appUserId,
+                                 deviceToken);
+        }
         answerOk("Login successful", true, data);
     }
 

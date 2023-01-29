@@ -36,6 +36,7 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetMandatoryBool(searching_fuzzy_allowed);
     MACRO_GetBool(with_image);
     MACRO_GetString(image_data_base64);
+    MACRO_GetString(public_key_base64);
 
     sole::uuid imageId(NullUuid);
     if (with_image)
@@ -56,8 +57,14 @@ void HandlerAppUserUpdateProfile::method()
             answerOk(message, false);
             return;
         }
-    }
+    }       
 
+    MACRO_GetString(deviceToken);
+    if (deviceToken.size())
+    {
+        deviceTokenCache.add(userId,
+                             deviceToken);
+    }
 
     std::string message;
     if (!databaseLogics.databaseLogicAppUser.updateAppUser(appId,
@@ -67,6 +74,7 @@ void HandlerAppUserUpdateProfile::method()
                                                            visible_name,
                                                            searching_exactly_allowed,
                                                            searching_fuzzy_allowed,
+                                                           public_key_base64,
                                                            with_image,
                                                            imageId,
                                                            message))

@@ -56,6 +56,7 @@ public:
     static size_t globalInitCount;
     CurlWrapper();
     ~CurlWrapper();
+    std::vector<std::string> headers;
 
     void setUserAndPassword(std::string const &user,
                             std::string const &password);

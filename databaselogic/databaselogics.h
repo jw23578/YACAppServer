@@ -20,6 +20,8 @@ public:
     DatabaseLogicImageTable databaseLogicImageTable;
     DatabaseLogicMessages databaseLogicMessages;
 
+    LogStatController &getLogStat();
+
     DatabaseLogics(LogStatController &logStatController,
                    PGConnectionPool &pool);
 };

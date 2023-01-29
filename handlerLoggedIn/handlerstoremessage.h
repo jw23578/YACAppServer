@@ -3,13 +3,18 @@
 
 #include "handlerloggedininterface.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
-#include "databaselogic/databaselogicmessages.h"
+#include "databaselogic/databaselogics.h"
+#include "caches/devicetokencache.h"
 
 class HandlerStoreMessage : public HandlerLoggedInInterface
 {
-    DatabaseLogicMessages &databaseLogicMessages;
+    const std::string firebaseApiKey;
+    DeviceTokenCache &deviceTokenCache;
+    DatabaseLogics &databaseLogics;
 public:
-    HandlerStoreMessage(DatabaseLogicMessages &databaseLogicMessages,
+    HandlerStoreMessage(const std::string &firebaseKey,
+                        DeviceTokenCache &deviceTokenCache,
+                        DatabaseLogics &databaseLogics,
                         PistacheServerInterface &serverInterface,
                         LoggedInAppUsersContainer &loggedInAppUsersContainer);
 

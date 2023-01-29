@@ -3,7 +3,8 @@
 #include "serverHeader/logintokenheader.h"
 #include "serverHeader/appidheader.h"
 
-YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
+YACAppServer::YACAppServer(const std::string &firebaseApiKey,
+                           DatabaseLogics &databaseLogics,
                            DatabaseLogicTables &databaseLogicTables,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                            DatabaseLogicAppUser &databaseLogicAppUser,
@@ -35,7 +36,8 @@ YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
                            *this),
     handlerAppUserVerify(databaseLogicAppUser,
                          *this),
-    handlerAppUserLogin(databaseLogicAppUser,
+    handlerAppUserLogin(databaseLogics,
+                        deviceTokenCache,
                         *this),
     handlerAppUserLoggedIn(loggedInAppUsersContainer,
                            *this),
@@ -67,7 +69,9 @@ YACAppServer::YACAppServer(DatabaseLogics &databaseLogics,
     handlerAppUserFetchImage(*this,
                              databaseLogics,
                              loggedInAppUsersContainer),
-    handlerStoreMesage(databaseLogicMessages,
+    handlerStoreMesage(firebaseApiKey,
+                       deviceTokenCache,
+                       databaseLogics,
                        *this,
                        loggedInAppUsersContainer)
 {

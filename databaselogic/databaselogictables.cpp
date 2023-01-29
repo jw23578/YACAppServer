@@ -81,7 +81,7 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"deleted", pg_timestamp},
                                {"searching_exactly_allowed", pg_bool},
                                {"searching_fuzzy_allowed", pg_bool},
-                               {"public_key_base64", pg_text},
+                               {tableFields.public_key_base64, pg_text},
                                {tableFields.image_id, pg_uuid}});
 
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,

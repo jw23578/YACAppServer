@@ -20,10 +20,31 @@
 #include "tests/testdatabaselogicappuser.h"
 #include "tests/testdatabaselogicworktime.h"
 
+#include "curlWrapper/jw78firebasewrapper.h"
+#include "rapidjson/writer.h"
+
 using namespace std;
 
 int main(int argc, char **argv)
 {
+//    jw78::FirebaseWrapper fw;
+//    rapidjson::Document payloadJson(rapidjson::kObjectType);
+//    payloadJson.SetObject();
+//    payloadJson.AddMember("to", "eOrIOdVARfadbJe31LIVrt:APA91bFW9jqxF2gjtBkpqDL7rJCwUonF3HySQ97TAPRt8plBzG72i2u84RQZTV7ForosKvdLFKcsiDH_zZcLIr68YFV8peDZtuH8qyTI79xF44vHVm6hr7iTsl_pkQuPO2Cq4FjEQhmh", payloadJson.GetAllocator());
+//    rapidjson::Value notification;
+//    notification.SetObject();
+//    notification.AddMember("title", "test", payloadJson.GetAllocator());
+//    notification.AddMember("body", "body", payloadJson.GetAllocator());
+//    payloadJson.AddMember("notification", notification, payloadJson.GetAllocator());
+//    rapidjson::StringBuffer buffer;
+//    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+//    payloadJson.Accept(writer);
+//    std::string result;
+//    if (fw.legacySend("AAAAum_AIhE:APA91bFr2QuTxHylxPgoWfTHVmko3IiYDEl2p6fM8voDRQDi6TxLPmKZebK9Xm6NRuwFTFT0A3A0cPvke_Ih7Zk_jB5hgG5ha02ZhQ-ObExKt7pRSyGudUfvnrA1wTAiIppOYVl-4sYN",
+//                      buffer.GetString(),
+//                      result))
+//    return 0;
+
     bool runTests(false);
     for (int i(0); i < argc; ++i)
     {
@@ -133,7 +154,8 @@ int main(int argc, char **argv)
                           json.getString("smtpUser"),
                           json.getString("smtpPassword"));
 
-    YACAppServer server(databaseLogics,
+    YACAppServer server(json.getString("firebaseApiKey"),
+                        databaseLogics,
                         databaseLogicTables,
                         databaseLogicUserAndApp,
                         databaseLogics.databaseLogicAppUser,

@@ -2,13 +2,17 @@
 #define HANDLERAPPUSERLOGIN_H
 
 #include <pistachehandlerinterface.h>
-#include "databaselogicappuser.h"
+#include "databaselogics.h"
+#include "caches/devicetokencache.h"
 
 class HandlerAppUserLogin : public PistacheHandlerInterface
 {
-    DatabaseLogicAppUser &databaseLogicAppUser;
+    DatabaseLogics &databaseLogics;
+    DeviceTokenCache &deviceTokenCache;
+
 public:
-    HandlerAppUserLogin(DatabaseLogicAppUser &databaseLogicAppUser,
+    HandlerAppUserLogin(DatabaseLogics &databaseLogics,
+                        DeviceTokenCache &deviceTokenCache,
                         PistacheServerInterface &serverInterface);
 
 

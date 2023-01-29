@@ -21,6 +21,8 @@ int jw78::myDebugFunction(CURL *handle,
 {
     jw78::CurlWrapper::sTarget *target(static_cast<jw78::CurlWrapper::sTarget*>(userptr));
     target->addDebug(data, size);
+    std::string help(data, size);
+    std::cout << help << std::endl;
     return 0;
 }
 
@@ -215,9 +217,22 @@ bool jw78::CurlWrapper::httpsPost(const std::string &url,
 
 CURLcode jw78::CurlWrapper::curlPerformToString(std::string &result)
 {
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
     sTarget target(result);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&target);
     curl_easy_setopt(curl, CURLOPT_DEBUGDATA, (void *)&target);
+
+    struct curl_slist* requestHeaders(NULL);
+    for (const auto &h: headers)
+    {
+        requestHeaders = curl_slist_append(requestHeaders, h.c_str());
+    }
+    if (headers.size())
+    {
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, requestHeaders);
+    }
+
     CURLcode code(curl_easy_perform(curl));
+    curl_slist_free_all(requestHeaders);
     return code;
 }

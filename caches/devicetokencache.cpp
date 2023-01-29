@@ -57,4 +57,5 @@ size_t DeviceTokenCache::get(const sole::uuid &userId,
     {
         userId2DeviceToken[userId] = deviceToken;
     }
+    return deviceToken.size();
 }

@@ -64,7 +64,8 @@ class YACAppServer: public PistacheServerInterface
 
 
 public:
-    YACAppServer(DatabaseLogics &databaseLogics,
+    YACAppServer(const std::string &firebaseApiKey,
+                 DatabaseLogics &databaseLogics,
                  DatabaseLogicTables &databaseLogicTables,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,

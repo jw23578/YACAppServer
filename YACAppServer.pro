@@ -25,6 +25,7 @@ SOURCES += \
         caches/devicetokencache.cpp \
         curlWrapper/jw78curlwrapper.cpp \
         curlWrapper/jw78emailwrapper.cpp \
+        curlWrapper/jw78firebasewrapper.cpp \
         curlWrapper/jw78imapwrapper.cpp \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
   caches/devicetokencache.h \
   curlWrapper/jw78curlwrapper.h \
   curlWrapper/jw78emailwrapper.h \
+  curlWrapper/jw78firebasewrapper.h \
   curlWrapper/jw78imapwrapper.h \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \

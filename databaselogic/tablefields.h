@@ -24,6 +24,8 @@ public:
     MACRO_ConstString(user_id);
     MACRO_ConstString(task);
     MACRO_ConstString(device_token);
+    MACRO_ConstString(public_key_base64);
+    MACRO_ConstString(deleted);
 
     TableFields() noexcept;
 };

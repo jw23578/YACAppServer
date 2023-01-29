@@ -218,9 +218,9 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
                                         const std::string &loginEMail,
                                         const std::string &password,
                                         std::string &message,
-                                        std::map<std::string, std::string> &data)
+                                        std::map<std::string, std::string> &data,
+                                        sole::uuid &appUserId)
 {
-    sole::uuid appUserId;
     if (!lookupAppUser(appId, loginEMail, appUserId, message))
     {
         return false;
@@ -265,6 +265,7 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
                                          const std::string &visible_name,
                                          const bool searching_exactly_allowed,
                                          const bool searching_fuzzy_allowed,
+                                         const std::string &public_key_base64,
                                          const bool with_image,
                                          const sole::uuid imageId,
                                          std::string &message)
@@ -276,6 +277,7 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
     sql.addSet(MACRO_NameValue(visible_name));
     sql.addSet(MACRO_NameValue(searching_exactly_allowed));
     sql.addSet(MACRO_NameValue(searching_fuzzy_allowed));
+    sql.addSet(MACRO_NameValue(public_key_base64));
     if (with_image)
     {
         sql.addSet(tableFields.image_id, imageId);
@@ -447,9 +449,9 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
 {
     PGExecutor e(pool);
     e.select(tableNames.t0003_appuser_profiles,
-             "app_id", appId.str(),
-             "id", userId.str(),
-             "deleted", TimePointPostgreSqlNull);
+             tableFields.app_id, appId.str(),
+             tableFields.id, userId.str(),
+             tableFields.deleted, TimePointPostgreSqlNull);
     if (!e.size())
     {
         message = "could not find user with id: " + userId.str();
@@ -458,8 +460,7 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     target.SetObject();
     target.AddMember("id", e.string("id"), alloc);
     target.AddMember("visible_name", e.string("visible_name"), alloc);
-    e.string("public_key_base64");
-    target.AddMember("public_key_base64", "", alloc);
+    target.AddMember("public_key_base64", e.string("public_key_base64"), alloc);
     target.AddMember("image_id", e.string("image_id"), alloc);
     return true;
 }

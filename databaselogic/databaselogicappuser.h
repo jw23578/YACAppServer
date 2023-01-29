@@ -55,7 +55,8 @@ public:
                       const std::string &loginEMail,
                       const std::string &password,
                       std::string &message,
-                      std::map<std::string, std::string> &data);
+                      std::map<std::string, std::string> &data,
+                      sole::uuid &appUserId);
 
     bool updateAppUser(const sole::uuid &appId,
                        const sole::uuid &userId,
@@ -64,6 +65,7 @@ public:
                        const std::string &visible_name,
                        const bool searching_exactly_allowed,
                        const bool searching_fuzzy_allowed,
+                       const std::string &public_key_base64,
                        const bool with_image,
                        const sole::uuid imageId,
                        std::string &message);
