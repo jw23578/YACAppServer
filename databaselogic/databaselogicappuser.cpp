@@ -117,9 +117,14 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         sql.set("update_password_token", "");
         sql.set("update_password_token_valid_until", TimePointPostgreSqlNull);
         sql.set("deleted", TimePointPostgreSqlNull);
+        sql.set("searching_exactly_allowed", false); // FIXME
+        sql.set("searching_fuzzy_allowed", true); // FIXME
+        sql.set("public_key_base64" ,""); // FIXME
+        sql.set("image_id", NullUuid); // FIXME
         PGExecutor e(pool, sql);
     }
 
+    if (password.size())
     {
         PGSqlString sql("insert into t0004_appuser_passwordhashes "
                         " (id, appuser_id, password_hash) "

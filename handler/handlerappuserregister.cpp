@@ -16,14 +16,14 @@ HandlerAppUserRegister::HandlerAppUserRegister(DatabaseLogicAppUser &databaseLog
 void HandlerAppUserRegister::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
-    MACRO_GetMandatoryString(password);
+    MACRO_GetString(password);
     MACRO_GetMandatoryUuid(appId);
 
 
     if (databaseLogicAppUser.appUserExists(appId,
                                            loginEMail))
     {
-        answerBad("LoginEMail already exists and cannot be registered again. Please verify your account.");
+        answerOk("LoginEMail already exists.", false);
         return;
     }
     std::string verifyToken;
