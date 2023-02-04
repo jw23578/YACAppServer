@@ -181,11 +181,6 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
         return false;
     }
-    if (!e.isNull(tableFields.verified))
-    {
-        message = ExtString::quote(loginEMail) + " already verified, please login.";
-        return false;
-    }
     sole::uuid id(e.uuid(tableFields.id));
     logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
                           std::string("verify_token_valid_until as string: ") + e.string("verify_token_valid_until"));
@@ -207,30 +202,22 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
     }
     if (verify_token_valid_until < now)
     {
-        message = std::string("verify token not valid any more, please register again");
-        PGExecutor erase(pool);
-        erase.erase(tableNames.t0003_appuser_profiles,
-                    tableFields.id,
-                    id.str());
-        erase.erase(tableNames.t0004_appuser_passwordhashes,
-                    tableFields.appuser_id,
-                    id.str());
+        message = std::string("Token not valid any more, please request new Token.");
         return false;
     }
     if (e.string("verify_token") != verifyToken)
     {
-        message = std::string("wrong verifyToken");
+        message = std::string("wrong token");
         return false;
     }
 
     {
-        PGSqlString sql("update ");
-        sql += tableNames.t0003_appuser_profiles;
-        sql += " set verified = now(), "
-               " verify_token = '', "
-               " verify_token_valid_until = null "
-               " where id = :id ";
-        sql.set("id", id.str());
+        PGSqlString sql;
+        sql.update(tableNames.t0003_appuser_profiles);
+        sql.addSet(tableFields.verified, TimePointPostgreSqlNow);
+        sql.addSet(tableFields.verify_token, "");
+        sql.addSet(tableFields.verify_token_valid_until, TimePointPostgreSqlNull);
+        sql.addCompare("where", tableFields.id, "=", id);
         PGExecutor e(pool, sql);
     }
     loginSuccessful(id, loginToken);
