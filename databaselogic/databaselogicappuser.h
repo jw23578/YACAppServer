@@ -33,19 +33,24 @@ class DatabaseLogicAppUser
                                   const std::string &loginEMail,
                                   std::chrono::system_clock::time_point &loginTokenValidUntil);
     void resetUpdatePasswordToken(const sole::uuid &userId);
+
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool);
 
-    sole::uuid getUserId(const sole::uuid &appId,
+    sole::uuid getAppUserId(const sole::uuid &appId,
                          const std::string &loginEMail);
-    bool appUserExists(const sole::uuid &appId,
-                       const std::string &loginEMail);
     bool createAppUser(const sole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &password,
                        std::string &message,
                        std::string &verifyToken);
+
+    bool createVerifyToken(const sole::uuid &appId,
+                           const std::string &loginEMail,
+                           std::string &message,
+                           std::string &verifyToken);
+
     bool verifyAppUser(const sole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &verifyToken,

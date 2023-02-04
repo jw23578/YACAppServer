@@ -16,6 +16,13 @@ EMailLogic::EMailLogic(std::string smtpSenderName,
 {
 
 }
+void EMailLogic::sendVerifyTokenMail(const std::string &loginEMail,
+                                     const std::string &verifyToken)
+{
+    // TODo Implement E-Mails
+    sendPleaseVerifyMail(loginEMail,
+                         verifyToken);
+}
 
 void EMailLogic::sendPleaseVerifyMail(const std::string &loginEMail,
                                       const std::string &verifyToken)

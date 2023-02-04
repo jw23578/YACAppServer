@@ -2,16 +2,16 @@
 #define HANDLERAPPUSERREGISTER_H
 
 #include "interfaces/pistachehandlerinterface.h"
-#include "databaselogicappuser.h"
+#include "databaselogics.h".h"
 #include "emaillogic.h"
 
 
 class HandlerAppUserRegister : public PistacheHandlerInterface
 {
-    DatabaseLogicAppUser &databaseLogicAppUser;
+    DatabaseLogics &databaseLogics;
     EMailLogic &emailLogic;
 public:
-    HandlerAppUserRegister(DatabaseLogicAppUser &databaseLogicAppUser,
+    HandlerAppUserRegister(DatabaseLogics &databaseLogics,
                            EMailLogic &emailLogic,
                            PistacheServerInterface &serverInterface);
 

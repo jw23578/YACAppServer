@@ -1,40 +1,53 @@
 #include "handlerappuserregister.h"
 
-HandlerAppUserRegister::HandlerAppUserRegister(DatabaseLogicAppUser &databaseLogicAppUser,
+HandlerAppUserRegister::HandlerAppUserRegister(DatabaseLogics &databaseLogics,
                                                EMailLogic &emailLogic,
                                                PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/registerAppUser",
                              TypePost,
                              TypeNoLoginNeeded),
-    databaseLogicAppUser(databaseLogicAppUser),
+    databaseLogics(databaseLogics),
     emailLogic(emailLogic)
 {
-
+    addMethod(serverInterface,
+              "/requestVerifyToken",
+              TypePost);
 }
 
 void HandlerAppUserRegister::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
-    MACRO_GetString(password);
     MACRO_GetMandatoryUuid(appId);
-
-
-    if (databaseLogicAppUser.appUserExists(appId,
-                                           loginEMail))
+    if (getMethodName() == "/requestVerifyToken")
     {
-        answerOk("LoginEMail already exists.", false);
+        std::string verifyToken;
+        std::string message;
+        if (!databaseLogics.databaseLogicAppUser.createVerifyToken(appId,
+                                                                   loginEMail,
+                                                                   message,
+                                                                   verifyToken))
+        {
+            answerOk(message, false);
+            return;
+        }
+        emailLogic.sendVerifyTokenMail(loginEMail, verifyToken);
+        answerOk("verifyToken created and sended",
+                 true);
         return;
     }
+    MACRO_GetString(password);
+
+
     std::string verifyToken;
     std::string message;
-    if (!databaseLogicAppUser.createAppUser(appId,
-                                            loginEMail,
-                                            password,
-                                            message,
-                                            verifyToken))
+    if (!databaseLogics.databaseLogicAppUser.createAppUser(appId,
+                                                           loginEMail,
+                                                           password,
+                                                           message,
+                                                           verifyToken))
     {
-        answerBad(message);
+        answerOk(message, false);
         return;
     }
     emailLogic.sendPleaseVerifyMail(loginEMail, verifyToken);

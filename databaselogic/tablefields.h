@@ -36,6 +36,10 @@ public:
     MACRO_ConstString(creater_id);
     MACRO_ConstString(created);
     MACRO_ConstString(finished);
+    MACRO_ConstString(verify_token);
+    MACRO_ConstString(verify_token_valid_until);
+    MACRO_ConstString(loginemail);
+    MACRO_ConstString(verified);
 
     TableFields() noexcept;
 };

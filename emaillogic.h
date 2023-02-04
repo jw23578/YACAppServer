@@ -19,6 +19,9 @@ public:
                std::string smtpUser,
                std::string smtpPassword);
 
+    void sendVerifyTokenMail(const std::string &loginEMail,
+                             const std::string &verifyToken);
+
     void sendPleaseVerifyMail(const std::string &loginEMail,
                               const std::string &verifyToken);
 
