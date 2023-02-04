@@ -161,30 +161,30 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
                                          const std::string &loginEMail,
                                          const std::string &verifyToken,
                                          std::string &message,
-                                         std::string &loginToken)
+                                         std::map<std::string, std::string> &data)
 {
-    PGExecutor e(pool);
-    e.select(tableNames.t0003_appuser_profiles,
+    PGExecutor select(pool);
+    select.select(tableNames.t0003_appuser_profiles,
              tableFields.loginemail,
              loginEMail,
              tableFields.app_id,
              appId.str(),
              tableFields.deleted,
              TimePointPostgreSqlNull);
-    if (e.size() == 0)
+    if (select.size() == 0)
     {
         message = std::string("no appuser with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
         return false;
     }
-    if (e.size() > 1)
+    if (select.size() > 1)
     {
         message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
         return false;
     }
-    sole::uuid id(e.uuid(tableFields.id));
+    sole::uuid id(select.uuid(tableFields.id));
     logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                          std::string("verify_token_valid_until as string: ") + e.string("verify_token_valid_until"));
-    std::chrono::system_clock::time_point verify_token_valid_until(e.timepoint("verify_token_valid_until"));
+                          std::string("verify_token_valid_until as string: ") + select.string("verify_token_valid_until"));
+    std::chrono::system_clock::time_point verify_token_valid_until(select.timepoint("verify_token_valid_until"));
     {
         std::time_t t = std::chrono::system_clock::to_time_t(verify_token_valid_until);
         std::stringstream ss;
@@ -205,7 +205,7 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         message = std::string("Token not valid any more, please request new Token.");
         return false;
     }
-    if (e.string("verify_token") != verifyToken)
+    if (select.string("verify_token") != verifyToken)
     {
         message = std::string("wrong token");
         return false;
@@ -220,7 +220,12 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         sql.addCompare("where", tableFields.id, "=", id);
         PGExecutor e(pool, sql);
     }
+    std::string loginToken;
     loginSuccessful(id, loginToken);
+    data["loginToken"] = loginToken;
+    data[tableFields.fstname] = select.string(tableFields.fstname);
+    data[tableFields.surname] = select.string(tableFields.surname);
+    data[tableFields.visible_name] = select.string(tableFields.visible_name);
     return true;
 }
 

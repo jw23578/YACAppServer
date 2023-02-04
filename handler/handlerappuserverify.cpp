@@ -19,16 +19,15 @@ void HandlerAppUserVerify::method()
     MACRO_GetMandatoryUuid(appId);
 
     std::string message;
-    std::string loginToken;
+    std::map<std::string, std::string> data;
     if (!databaseLogicAppUser.verifyAppUser(appId,
                                            loginEMail,
                                            verifyToken,
                                            message,
-                                           loginToken))
+                                           data))
     {
         answerBad(message);
         return;
     }
-    MACRO_CreateDataMAP(loginToken);
     answerOk(message, true, data);
 }

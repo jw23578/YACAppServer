@@ -55,7 +55,7 @@ public:
                        const std::string &loginEMail,
                        const std::string &verifyToken,
                        std::string &message,
-                       std::string &loginToken);
+                       std::map<std::string, std::string> &data);
     bool loginAppUser(const sole::uuid &appId,
                       const std::string &loginEMail,
                       const std::string &password,
