@@ -5,9 +5,11 @@
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "databaselogics.h"
 #include "caches/devicetokencache.h"
+#include "yacappservermethodnames.h"
 
 class HandlerAppUserUpdateProfile : public HandlerLoggedInInterface
 {
+    YACAPPServerMethodNames methodNames;
     DatabaseLogics &databaseLogics;
     DeviceTokenCache &deviceTokenCache;
 public:

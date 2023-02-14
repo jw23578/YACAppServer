@@ -96,7 +96,8 @@ SOURCES += \
         main.cpp \
         postgres/pgconnectionpool.cpp \
         utils/extvector.cpp \
-        yacappserver.cpp
+        yacappserver.cpp \
+        yacappservermethodnames.cpp
 
 HEADERS += \
   caches/cacheinterface.h \
@@ -176,7 +177,8 @@ HEADERS += \
   utils/extvector.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \
-  yacappserver.h
+  yacappserver.h \
+  yacappservermethodnames.h
 
 DISTFILES += \
   .gitignore \

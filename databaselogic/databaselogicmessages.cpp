@@ -41,7 +41,7 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
 {
     PGSqlString sql("select * from ");
     sql += tableNames.t0007_messages;
-    sql += " where (to_id = :fetcher_id ";
+    sql += " where (sender_id = :fetcher_id or to_id = :fetcher_id ";
     sql += " or to_id in (select group_id from  ";
     sql += tableNames.t0006_appuser2group;
     sql += " where appuser_id = :fetcher_id)) ";

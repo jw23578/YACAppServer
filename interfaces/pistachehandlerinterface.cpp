@@ -56,7 +56,12 @@ void PistacheHandlerInterface::answerOk(bool success,
     answer(Pistache::Http::Code::Ok, success, d);
 }
 
-const std::string &PistacheHandlerInterface::getMethodName() const
+bool PistacheHandlerInterface::isMethod(const std::string &method) const
+{
+    return request->resource() == method || request->resource() == "/" + method;
+}
+
+const std::string &PistacheHandlerInterface::d_getMethodName() const
 {
     return request->resource();
 }
@@ -87,21 +92,29 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
                                          std::string const &methodName,
                                          HandlerType type)
 {
+    if (!methodName.size())
+    {
+        return;
+    }
+    std::string slash;
+    if (methodName[0] != '/')
+    {
+        slash = "/";
+    }
     if (type == TypeDelete)
     {
-        Pistache::Rest::Routes::Delete(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        Pistache::Rest::Routes::Delete(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
     if (type == TypePost)
     {
-        Pistache::Rest::Routes::Post(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        Pistache::Rest::Routes::Post(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
     if (type == TypeGet)
     {
-        Pistache::Rest::Routes::Get(serverInterface.router, methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        Pistache::Rest::Routes::Get(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
     }
-
 }
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,

@@ -4,14 +4,14 @@ HandlerAppUserRegister::HandlerAppUserRegister(DatabaseLogics &databaseLogics,
                                                EMailLogic &emailLogic,
                                                PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
-                             "/registerAppUser",
+                             methodNames.registerAppUser,
                              TypePost,
                              TypeNoLoginNeeded),
     databaseLogics(databaseLogics),
     emailLogic(emailLogic)
 {
     addMethod(serverInterface,
-              "/requestVerifyToken",
+              methodNames.requestVerifyToken,
               TypePost);
 }
 
@@ -19,7 +19,7 @@ void HandlerAppUserRegister::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryUuid(appId);
-    if (getMethodName() == "/requestVerifyToken")
+    if (isMethod(methodNames.requestVerifyToken))
     {
         std::string verifyToken;
         std::string message;

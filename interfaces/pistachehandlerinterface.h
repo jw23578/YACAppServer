@@ -95,7 +95,8 @@ protected:
                   std::map<std::string, std::string> &data);
     void answerOk(bool success,
                   rapidjson::Document &d);
-    const std::string &getMethodName() const;
+    bool isMethod(const std::string &method) const;
+    const std::string &d_getMethodName() const;
     void addMethod(PistacheServerInterface &serverInterface,
                    std::string const &methodName,
                    HandlerType type);
