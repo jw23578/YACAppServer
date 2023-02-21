@@ -42,11 +42,6 @@ bool DatabaseLogicImageTable::storeImage(const std::basic_string<std::byte> &dat
     sql.addInsert(tableFields.data, imageOid);
     PGExecutor e(pool,
                  sql);
-    if (!e.size())
-    {
-        message = "could not store image";
-        return false;
-    }
     imageId2oid[imageId] = imageOid;
     return true;
 }

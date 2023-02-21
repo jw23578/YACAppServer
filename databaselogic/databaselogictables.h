@@ -5,7 +5,7 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
-#include "tablefields.h"
+#include "yacAppAndServer/tablefields.h"
 
 
 class DatabaseLogicTables

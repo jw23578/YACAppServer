@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 DEFINES += RAPIDJSON_HAS_STDSTRING
+DEFINES += YACAPPServer
 
 LIBS += \
     -lpistache \
@@ -36,7 +37,6 @@ SOURCES += \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
-        databaselogic/tablefields.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerappuserloggedin.cpp \
@@ -85,6 +85,7 @@ SOURCES += \
         serverHeader/logintokenheader.cpp \
         sole/sole.cpp \
         tests/testdatabaselogicappuser.cpp \
+        tests/testdatabaselogicimagetable.cpp \
         tests/testdatabaselogicmessages.cpp \
         tests/testdatabaselogicworktime.cpp \
         tests/testextstring.cpp \
@@ -96,6 +97,7 @@ SOURCES += \
         main.cpp \
         postgres/pgconnectionpool.cpp \
         utils/extvector.cpp \
+        yacAppAndServer/tablefields.cpp \
         yacappserver.cpp \
         yacappservermethodnames.cpp
 
@@ -115,7 +117,6 @@ HEADERS += \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
-  databaselogic/tablefields.h \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerappuserloggedin.h \
@@ -165,6 +166,7 @@ HEADERS += \
   serverHeader/logintokenheader.h \
   sole/sole.hpp \
   tests/testdatabaselogicappuser.h \
+  tests/testdatabaselogicimagetable.h \
   tests/testdatabaselogicmessages.h \
   tests/testdatabaselogicworktime.h \
   tests/testextstring.h \
@@ -177,6 +179,7 @@ HEADERS += \
   utils/extvector.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \
+  yacAppAndServer/tablefields.h \
   yacappserver.h \
   yacappservermethodnames.h
 

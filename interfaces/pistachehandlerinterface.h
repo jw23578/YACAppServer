@@ -5,6 +5,7 @@
 #include "pistache/router.h"
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
+#include "yacappservermethodnames.h"
 
 #define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
     if (!getByteString(#targetName, targetName, true) || !targetName.size()) \
@@ -60,6 +61,9 @@
 
 class PistacheHandlerInterface
 {    
+public:
+    YACAPPServerMethodNames methodNames;
+private:
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;

@@ -19,6 +19,7 @@
 #include "tests/testdatabaselogicmessages.h"
 #include "tests/testdatabaselogicappuser.h"
 #include "tests/testdatabaselogicworktime.h"
+#include "tests/testdatabaselogicimagetable.h"
 
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
@@ -121,6 +122,7 @@ int main(int argc, char **argv)
     {
         TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
         TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogics.databaseLogicAppUser);
+        TestDatabaseLogicImageTable testDatabaseLogicImageTable(databaseLogics.databaseLogicImageTable);
         if (!testDatabaseLogicAppUser)
         {
             return 1;

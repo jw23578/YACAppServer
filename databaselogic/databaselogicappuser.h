@@ -6,7 +6,7 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
-#include "tablefields.h"
+#include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
 
 
@@ -39,7 +39,7 @@ public:
                          PGConnectionPool &pool);
 
     sole::uuid getAppUserId(const sole::uuid &appId,
-                         const std::string &loginEMail);
+                            const std::string &loginEMail);
     bool createAppUser(const sole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &password,
@@ -82,9 +82,9 @@ public:
                          std::chrono::system_clock::time_point &loginTokenValidUntil);
 
     bool requestUpdatePassword(const sole::uuid &appId,
-                            const std::string &loginEMail,
-                            std::string &updatePasswordToken,
-                            std::string &message);
+                               const std::string &loginEMail,
+                               std::string &updatePasswordToken,
+                               std::string &message);
 
     bool updatePassword(const sole::uuid &appId,
                         const std::string &loginEMail,
@@ -103,6 +103,12 @@ public:
                         const std::string &needle,
                         size_t limit,
                         const size_t offset,
+                        std::string &message,
+                        rapidjson::Value &target,
+                        rapidjson::MemoryPoolAllocator<> &alloc);
+
+    bool fetchMyProfile(const sole::uuid &appId,
+                        const sole::uuid &userId,
                         std::string &message,
                         rapidjson::Value &target,
                         rapidjson::MemoryPoolAllocator<> &alloc);

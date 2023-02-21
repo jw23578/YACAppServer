@@ -104,18 +104,18 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         PGSqlString sql(utils.createInsertString(tableNames.t0003_appuser_profiles));
         sql.set(tableFields.id, appUserId);
         sql.set(tableFields.app_id, appId);
-        sql.set("fstname", "");
-        sql.set("surname", "");
-        sql.set("visible_name", "");
-        sql.set("verified", TimePointPostgreSqlNull);
+        sql.set(tableFields.fstname, "");
+        sql.set(tableFields.surname, "");
+        sql.set(tableFields.visible_name, "");
+        sql.set(tableFields.verified, TimePointPostgreSqlNull);
         sql.set(tableFields.loginemail, loginEMail);
         sql.set(tableFields.verify_token, verifyToken);
         sql.set(tableFields.verify_token_valid_until, std::chrono::system_clock::now() + std::chrono::minutes(60));
         sql.set("update_password_token", "");
         sql.set("update_password_token_valid_until", TimePointPostgreSqlNull);
         sql.set("deleted", TimePointPostgreSqlNull);
-        sql.set("searching_exactly_allowed", false); // FIXME
-        sql.set("searching_fuzzy_allowed", true); // FIXME
+        sql.set(tableFields.searching_exactly_allowed, false); // FIXME
+        sql.set(tableFields.searching_fuzzy_allowed, true); // FIXME
         sql.set("public_key_base64" ,""); // FIXME
         sql.set("image_id", NullUuid); // FIXME
         PGExecutor e(pool, sql);
@@ -456,6 +456,32 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::fetchMyProfile(const sole::uuid &appId,
+                                          const sole::uuid &userId,
+                                          std::string &message,
+                                          rapidjson::Value &target,
+                                          rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    PGExecutor e(pool);
+    e.select(tableNames.t0003_appuser_profiles,
+             tableFields.app_id, appId.str(),
+             tableFields.id, userId.str(),
+             tableFields.deleted, TimePointPostgreSqlNull);
+    if (!e.size())
+    {
+        message = "could not find user with id: " + userId.str();
+        return false;
+    }
+    target.SetObject();
+    target.AddMember(rapidjson::StringRef(tableFields.fstname), e.string(tableFields.fstname), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.surname), e.string(tableFields.surname), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.visible_name), e.string(tableFields.visible_name), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.image_id), e.string(tableFields.image_id), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.searching_exactly_allowed), e.boolean(tableFields.searching_exactly_allowed), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.searching_fuzzy_allowed), e.boolean(tableFields.searching_fuzzy_allowed), alloc);
+    return true;
+}
+
 bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
                                         const sole::uuid &userId,
                                         std::string &message,
@@ -474,9 +500,9 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     }
     target.SetObject();
     target.AddMember("id", e.string("id"), alloc);
-    target.AddMember("visible_name", e.string("visible_name"), alloc);
-    target.AddMember("public_key_base64", e.string("public_key_base64"), alloc);
-    target.AddMember("image_id", e.string("image_id"), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.visible_name), e.string(tableFields.visible_name), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.public_key_base64), e.string(tableFields.public_key_base64), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.image_id), e.string(tableFields.image_id), alloc);
     return true;
 }
 
@@ -541,7 +567,7 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
     int validHours(24 * 7);
     MACRO_set(validHours);
     PGExecutor e(pool, sql);
-    loginTokenValidUntil = e.timepoint("login_token_valid_until");
+    loginTokenValidUntil = e.timepoint(tableFields.login_token_valid_until);
 }
 
 void DatabaseLogicAppUser::resetUpdatePasswordToken(const sole::uuid &userId)

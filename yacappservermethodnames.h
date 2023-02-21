@@ -10,6 +10,8 @@ public:
     MACRO_ConstString(updateAppUserProfile);
     MACRO_ConstString(requestVerifyToken);
     MACRO_ConstString(registerAppUser);
+    MACRO_ConstString(fetchProfile);
+    MACRO_ConstString(fetchMyProfile);
     YACAPPServerMethodNames();
 };
 

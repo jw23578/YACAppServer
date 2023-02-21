@@ -4,29 +4,46 @@ HandlerAppUserFetchProfile::HandlerAppUserFetchProfile(DatabaseLogics &databaseL
                                                        PistacheServerInterface &serverInterface,
                                                        LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                             "/fetchProfile",
+                             methodNames.fetchProfile,
                              TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
-
+    addMethod(serverInterface,
+              methodNames.fetchMyProfile,
+              TypeGet);
 }
 
 void HandlerAppUserFetchProfile::method()
 {
-    MACRO_GetMandatoryUuid(profileId);
-
     rapidjson::Document profile;
     profile.SetObject();
-    std::string message;
-    if (!databaseLogics.databaseLogicAppUser.fetchProfile(appId,
-                                                          profileId,
-                                                          message,
-                                                          profile,
-                                                          profile.GetAllocator()))
+    if (isMethod(methodNames.fetchMyProfile))
     {
-        answerOk(message, false);
-        return;
+        std::string message;
+        if (!databaseLogics.databaseLogicAppUser.fetchMyProfile(appId,
+                                                                userId,
+                                                                message,
+                                                                profile,
+                                                                profile.GetAllocator()))
+        {
+            answerOk(message, false);
+            return;
+        }
+    }
+    if (isMethod(methodNames.fetchProfile))
+    {
+        MACRO_GetMandatoryUuid(profileId);
+        std::string message;
+        if (!databaseLogics.databaseLogicAppUser.fetchProfile(appId,
+                                                              profileId,
+                                                              message,
+                                                              profile,
+                                                              profile.GetAllocator()))
+        {
+            answerOk(message, false);
+            return;
+        }
     }
     answerOk(true, profile);
 }

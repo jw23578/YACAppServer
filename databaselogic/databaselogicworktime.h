@@ -5,7 +5,7 @@
 #include "sole/sole.hpp"
 #include "logstat/logstatcontroller.h"
 #include "tablenames.h"
-#include "tablefields.h"
+#include "yacAppAndServer/tablefields.h"
 
 class DatabaseLogicWorktime
 {

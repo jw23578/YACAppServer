@@ -1,3 +1,6 @@
 [submodule "thirds/doctest"]
 	path = thirds/doctest
 	url = https://github.com/doctest/doctest.git
+[submodule "yacAppAndServer"]
+	path = yacAppAndServer
+	url = https://github.com/jw23578/yacAppAndServer.git

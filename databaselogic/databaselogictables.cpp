@@ -79,8 +79,8 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"update_password_token", pg_text},
                                {"update_password_token_valid_until", pg_timestamp},
                                {tableFields.deleted, pg_timestamp},
-                               {"searching_exactly_allowed", pg_bool},
-                               {"searching_fuzzy_allowed", pg_bool},
+                               {tableFields.searching_exactly_allowed, pg_bool},
+                               {tableFields.searching_fuzzy_allowed, pg_bool},
                                {tableFields.public_key_base64, pg_text},
                                {tableFields.image_id, pg_uuid}});
 
