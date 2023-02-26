@@ -17,7 +17,7 @@ void HandlerAppUserGetWorktimeState::method()
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    if (!databaseLogics.databaseLogicWorktime.currentState(userId,
+    if (!databaseLogics.databaseLogicWorktime.currentState(loggedInUserId,
                                                            workStart,
                                                            pauseStart,
                                                            offSiteWorkStart))

@@ -17,10 +17,10 @@ void DatabaseLogicMessages::storeMessage(const sole::uuid &id,
                                          const std::string &content_base64)
 {
     PGSqlString sql(utils.createInsertString(tableNames.t0007_messages));
-    MACRO_set(id);
-    MACRO_set(sender_id);
-    MACRO_set(to_id);
-    MACRO_set(content_base64);
+    MACRO_set(sql, id);
+    MACRO_set(sql, sender_id);
+    MACRO_set(sql, to_id);
+    MACRO_set(sql, content_base64);
     sql.set("sended_datetime", TimePointPostgreSqlNow);
     PGExecutor e(pool, sql);
 }
@@ -30,7 +30,7 @@ void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
     PGSqlString sql("delete from ");
     sql += tableNames.t0007_messages;
     sql += " where id = :id";
-    MACRO_set(id);
+    MACRO_set(sql, id);
     PGExecutor e(pool, sql);
 }
 
@@ -46,8 +46,8 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
     sql += tableNames.t0006_appuser2group;
     sql += " where appuser_id = :fetcher_id)) ";
     sql += " and sended_datetime >= :since";
-    MACRO_set(fetcher_id);
-    MACRO_set(since);
+    MACRO_set(sql, fetcher_id);
+    MACRO_set(sql, since);
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
 //    for (size_t i(0); i < e.size(); ++i)

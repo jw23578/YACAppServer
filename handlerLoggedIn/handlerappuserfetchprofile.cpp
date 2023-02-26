@@ -22,7 +22,7 @@ void HandlerAppUserFetchProfile::method()
     {
         std::string message;
         if (!databaseLogics.databaseLogicAppUser.fetchMyProfile(appId,
-                                                                userId,
+                                                                loggedInUserId,
                                                                 message,
                                                                 profile,
                                                                 profile.GetAllocator()))

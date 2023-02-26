@@ -12,13 +12,13 @@ class PGUtils
     PGConnectionPool &pool;
 public:
     PGUtils(PGConnectionPool &pool);
-    bool tableHasColumn(std::string const &tableName,
-                        std::string const &columnName) const;
-    void alterTableAddColumn(std::string const &tableName,
-                             std::string const &columnName,
+    bool tableHasColumn(std::string const &table_name,
+                        std::string const &column_name) const;
+    void alterTableAddColumn(std::string const &table_name,
+                             std::string const &column_name,
                              std::string const &columnType) const;
-    void alterTableAddColumnIfNeeded(std::string const &tableName,
-                                     std::string const &columnName,
+    void alterTableAddColumnIfNeeded(std::string const &table_name,
+                                     std::string const &column_name,
                                      std::string const &columnType) const;
     void alterTableAddColumnIfNeeded(std::string const &tableName,
                                      const PGColumnAndType &columnAndType) const;

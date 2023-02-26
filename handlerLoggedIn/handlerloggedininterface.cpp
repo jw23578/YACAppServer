@@ -32,7 +32,7 @@ bool HandlerLoggedInInterface::checkLogin()
     if (!loggedInContainer.isLoggedIn(appId,
                                       loginEMail,
                                       loginToken,
-                                      userId))
+                                      loggedInUserId))
     {
         answerBad("not logged in");
         return false;

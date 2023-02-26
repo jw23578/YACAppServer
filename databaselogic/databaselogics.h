@@ -8,6 +8,7 @@
 #include "databaselogicworktime.h"
 #include "databaselogicimagetable.h"
 #include "databaselogicmessages.h"
+#include "databaselogicappointments.h"
 
 class DatabaseLogics
 {
@@ -19,6 +20,7 @@ public:
     DatabaseLogicWorktime databaseLogicWorktime;
     DatabaseLogicImageTable databaseLogicImageTable;
     DatabaseLogicMessages databaseLogicMessages;
+    DatabaseLogicAppointments databaseLogicAppointments;
 
     LogStatController &getLogStat();
 

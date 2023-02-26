@@ -13,38 +13,38 @@ PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 
 }
 
-bool PGUtils::tableHasColumn(const std::string &tableName,
-                             const std::string &columnName) const
+bool PGUtils::tableHasColumn(const std::string &table_name,
+                             const std::string &column_name) const
 {
     PGSqlString sql("select exists ( "
                     "select 1 "
                     "FROM information_schema.columns "
-                    "WHERE table_name= :tablename and column_name= :columnname) ");
-    MACRO_set(tableName);
-    MACRO_set(columnName);
+                    "WHERE table_name= :table_name and column_name= :column_name) ");
+    MACRO_set(sql, table_name);
+    MACRO_set(sql, column_name);
     PGExecutor e(pool, sql);
     return e.boolean("exists");
 }
 
-void PGUtils::alterTableAddColumn(const std::string &tableName,
-                                  const std::string &columnName,
+void PGUtils::alterTableAddColumn(const std::string &table_name,
+                                  const std::string &column_name,
                                   const std::string &columnType) const
 {
     PGSqlString sql("alter table ");
-    sql += tableName;
-    sql += " add column " + columnName + " " + columnType;
+    sql += table_name;
+    sql += " add column " + column_name + " " + columnType;
     PGExecutor e(pool, sql);
 }
 
-void PGUtils::alterTableAddColumnIfNeeded(const std::string &tableName,
-                                          const std::string &columnName,
+void PGUtils::alterTableAddColumnIfNeeded(const std::string &table_name,
+                                          const std::string &column_name,
                                           const std::string &columnType) const
 {
-    if (tableHasColumn(tableName, columnName))
+    if (tableHasColumn(table_name, column_name))
     {
         return;
     }
-    alterTableAddColumn(tableName, columnName, columnType);
+    alterTableAddColumn(table_name, column_name, columnType);
 }
 
 void PGUtils::alterTableAddColumnIfNeeded(const std::string &tableName,

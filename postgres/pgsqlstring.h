@@ -8,13 +8,19 @@
 #include <map>
 #include "sole/sole.hpp"
 #include "extstring.h" // marked as unused but is needed for MACRO_set
+#include "utils/definitions.h"
 
-#define MACRO_set(fieldValue) \
+#define MACRO_set(sql, fieldValue) \
     sql.set(ExtString::lower(#fieldValue), fieldValue);
 
 #define MACRO_setId() \
     sql.set("id", sole::uuid4());
 
+#define MACRO_addInsert(sql, fieldValue) \
+    sql.addInsert(#fieldValue, fieldValue);
+
+#define MACRO_addSet(sql, fieldValue) \
+    sql.addSet(#fieldValue, fieldValue);
 
 class PGSqlString
 {

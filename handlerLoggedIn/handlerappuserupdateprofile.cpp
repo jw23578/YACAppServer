@@ -23,7 +23,7 @@ void HandlerAppUserUpdateProfile::method()
     if (isMethod(methodNames.updateDeviceToken))
     {
         MACRO_GetMandatoryString(deviceToken);
-        deviceTokenCache.add(userId,
+        deviceTokenCache.add(loggedInUserId,
                              deviceToken);
         answerOk("deviceToken stored",
                  true);
@@ -62,13 +62,13 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetString(deviceToken);
     if (deviceToken.size())
     {
-        deviceTokenCache.add(userId,
+        deviceTokenCache.add(loggedInUserId,
                              deviceToken);
     }
 
     std::string message;
     if (!databaseLogics.databaseLogicAppUser.updateAppUser(appId,
-                                                           userId,
+                                                           loggedInUserId,
                                                            fstname,
                                                            surname,
                                                            visible_name,

@@ -181,10 +181,10 @@ void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
                     "set login_token_valid_until = now() + interval '1 hour' *:validhours "
                     "where loginemail = :loginemail "
                     "returning login_token_valid_until");
-    MACRO_set(loginEMail);
+    MACRO_set(sql, loginEMail);
     sql.set("loginEMail", loginEMail);
     int validHours(24 * 7);
-    MACRO_set(validHours);
+    MACRO_set(sql, validHours);
     PGExecutor e(pool, sql);
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
@@ -223,12 +223,12 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid owner_id,
     sql.set("yacpck_base64", oid);
     sql.set("owner_id", owner_id);
     sql.set("id", app_id);
-    MACRO_set(app_name);
-    MACRO_set(app_version);
-    MACRO_set(app_logo_url);
-    MACRO_set(app_color_name);
-    MACRO_set(is_template_app);
-    MACRO_set(json_yacapp);
+    MACRO_set(sql, app_name);
+    MACRO_set(sql, app_version);
+    MACRO_set(sql, app_logo_url);
+    MACRO_set(sql, app_color_name);
+    MACRO_set(sql, is_template_app);
+    MACRO_set(sql, json_yacapp);
     PGExecutor insertOrUpdate(pool, sql);
     return true;
 }
@@ -275,7 +275,7 @@ bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
                     ", yacpck_base64 "
                     "from t0002_apps "
                     "where id = :app_id ");
-    MACRO_set(app_id);
+    MACRO_set(sql, app_id);
     PGExecutor e(pool, sql);
     if (!e.size())
     {

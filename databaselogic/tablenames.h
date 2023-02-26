@@ -22,6 +22,20 @@ public:
     MACRO_ConstString(t0013_images);
     MACRO_ConstString(t0014_message_read);
     MACRO_ConstString(t0015_appuser_devicetoken);
+    MACRO_ConstString(t0016_appointment_templates);
+
+    // AppUers in the following Table are allowed to use the Element
+    // Element can be an AppointmentTemplate for example
+    MACRO_ConstString(t0017_element_usable4appuser);
+
+    MACRO_ConstString(t0018_appointment);
+
+    // AppUers in the following Table are allowed to see the Element
+    // Element can be an AppointmentTemplate for example
+    MACRO_ConstString(t0019_element_visible4appuser);
+
+    MACRO_ConstString(t0020_appointment_participants);
+//    MACRO_ConstString()
 
     TableNames();
 };

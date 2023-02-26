@@ -1,7 +1,6 @@
 #include "pgsqlstring.h"
 #include <algorithm>
 #include "utils/extstring.h"
-#include "utils/definitions.h"
 
 PGSqlString::PGSqlString():
     firstSetField(true)

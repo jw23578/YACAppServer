@@ -16,7 +16,9 @@ DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
     databaseLogicImageTable(logStatController,
                             pool),
     databaseLogicMessages(logStatController,
-                          pool)
+                          pool),
+    databaseLogicAppointments(logStatController,
+                              pool)
 {
 
 }

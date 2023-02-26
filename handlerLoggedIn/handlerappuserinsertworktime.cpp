@@ -22,7 +22,7 @@ void HandlerAppUserInsertWorktime::method()
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    bool success(databaseLogics.databaseLogicWorktime.insertWorktime(userId, ts,
+    bool success(databaseLogics.databaseLogicWorktime.insertWorktime(loggedInUserId, ts,
                                                                      static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
                                                                      static_cast<DatabaseLogicWorktime::UserMood>(userMood),
                                                                      static_cast<DatabaseLogicWorktime::DayRating>(dayRating),

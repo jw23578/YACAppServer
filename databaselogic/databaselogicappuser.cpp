@@ -405,7 +405,7 @@ bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
     }
     {
         PGExecutor erase(pool);
-        erase.erase(tableNames.t0009_appuser_logintoken, "appuser_id", userId.str());
+        erase.delet(tableNames.t0009_appuser_logintoken, "appuser_id", userId.str());
     }
     loginSuccessful(userId, loginToken);
     message = "update password successful";
@@ -563,9 +563,9 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
     sql += " set login_token_valid_until = now() + interval '1 hour' *:validhours "
            "where appuser_id = :appuserid "
            "returning login_token_valid_until";
-    MACRO_set(appUserId);
+    MACRO_set(sql, appUserId);
     int validHours(24 * 7);
-    MACRO_set(validHours);
+    MACRO_set(sql, validHours);
     PGExecutor e(pool, sql);
     loginTokenValidUntil = e.timepoint(tableFields.login_token_valid_until);
 }

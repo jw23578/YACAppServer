@@ -6,6 +6,9 @@
 #include "pgsqlstring.h"
 #include "rapidjson/document.h"
 
+#define MACRO_Uuid_NotEqual(executor, id) \
+    if (executor.uuid(#id) != id)
+
 class PGExecutor
 {
     PGConnectionPool &pool;
@@ -51,9 +54,15 @@ public:
                   const std::string &needleField3,
                   const std::chrono::system_clock::time_point &needleValue3);
 
-    void erase(const std::string &tableName,
+    size_t defaultSelect(const std::string &tableName,
+                         const sole::uuid &id);
+
+    void delet(const std::string &tableName,
                const std::string &needleField,
                const std::string &needleValue);
+
+    void defaultDelete(const std::string &table_name,
+                       const sole::uuid &id);
 
     size_t size();
     size_t columns();

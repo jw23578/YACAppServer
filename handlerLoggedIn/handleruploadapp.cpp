@@ -24,7 +24,7 @@ void HandlerUploadApp::method()
     MACRO_GetMandatoryBool(is_template_app);
 
     std::string message;
-    if (!databaseLogicUserAndApp.saveApp(userId,
+    if (!databaseLogicUserAndApp.saveApp(loggedInUserId,
                                app_id,
                                app_name,
                                app_version,

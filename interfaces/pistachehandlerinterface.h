@@ -5,7 +5,7 @@
 #include "pistache/router.h"
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
-#include "yacappservermethodnames.h"
+#include "yacAppAndServer/yacappservermethodnames.h"
 
 #define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
     if (!getByteString(#targetName, targetName, true) || !targetName.size()) \

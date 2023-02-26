@@ -3,6 +3,8 @@ CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
+include("yacAppAndServer/yacAppAndServer.pri")
+
 DEFINES += RAPIDJSON_HAS_STDSTRING
 DEFINES += YACAPPServer
 
@@ -30,7 +32,9 @@ SOURCES += \
         curlWrapper/jw78imapwrapper.cpp \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
+        databaselogic/databaselogicappointments.cpp \
         databaselogic/databaselogicappuser.cpp \
+        databaselogic/databaselogicelement.cpp \
         databaselogic/databaselogicimagetable.cpp \
         databaselogic/databaselogicmessages.cpp \
         databaselogic/databaselogics.cpp \
@@ -51,6 +55,7 @@ SOURCES += \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
+        handlerLoggedIn/handlerappuserappointments.cpp \
         handlerLoggedIn/handlerappuserfetchimage.cpp \
         handlerLoggedIn/handlerappuserfetchmessageupdates.cpp \
         handlerLoggedIn/handlerappuserfetchprofile.cpp \
@@ -87,6 +92,7 @@ SOURCES += \
         tests/testdatabaselogicappuser.cpp \
         tests/testdatabaselogicimagetable.cpp \
         tests/testdatabaselogicmessages.cpp \
+        tests/testdatabaselogics.cpp \
         tests/testdatabaselogicworktime.cpp \
         tests/testextstring.cpp \
         tests/testtimepoint.cpp \
@@ -97,9 +103,7 @@ SOURCES += \
         main.cpp \
         postgres/pgconnectionpool.cpp \
         utils/extvector.cpp \
-        yacAppAndServer/tablefields.cpp \
-        yacappserver.cpp \
-        yacappservermethodnames.cpp
+        yacappserver.cpp
 
 HEADERS += \
   caches/cacheinterface.h \
@@ -110,7 +114,9 @@ HEADERS += \
   curlWrapper/jw78imapwrapper.h \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \
+  databaselogic/databaselogicappointments.h \
   databaselogic/databaselogicappuser.h \
+  databaselogic/databaselogicelement.h \
   databaselogic/databaselogicimagetable.h \
   databaselogic/databaselogicmessages.h \
   databaselogic/databaselogics.h \
@@ -131,6 +137,7 @@ HEADERS += \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
+  handlerLoggedIn/handlerappuserappointments.h \
   handlerLoggedIn/handlerappuserfetchimage.h \
   handlerLoggedIn/handlerappuserfetchmessageupdates.h \
   handlerLoggedIn/handlerappuserfetchprofile.h \
@@ -168,6 +175,7 @@ HEADERS += \
   tests/testdatabaselogicappuser.h \
   tests/testdatabaselogicimagetable.h \
   tests/testdatabaselogicmessages.h \
+  tests/testdatabaselogics.h \
   tests/testdatabaselogicworktime.h \
   tests/testextstring.h \
   tests/testtimepoint.h \
@@ -179,9 +187,7 @@ HEADERS += \
   utils/extvector.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \
-  yacAppAndServer/tablefields.h \
-  yacappserver.h \
-  yacappservermethodnames.h
+  yacappserver.h
 
 DISTFILES += \
   .gitignore \

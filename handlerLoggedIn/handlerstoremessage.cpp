@@ -25,7 +25,7 @@ void HandlerStoreMessage::method()
     MACRO_GetMandatoryString(content_base64);
 
     databaseLogics.databaseLogicMessages.storeMessage(id,
-                                                      userId,
+                                                      loggedInUserId,
                                                       to_id,
                                                       content_base64);
     std::set<std::string> deviceToken;

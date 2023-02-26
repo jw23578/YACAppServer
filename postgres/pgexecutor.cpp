@@ -74,7 +74,16 @@ size_t PGExecutor::select(const std::string &tableName,
     return exec(sql);
 }
 
-void PGExecutor::erase(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
+size_t PGExecutor::defaultSelect(const std::string &tableName,
+                                 const sole::uuid &id)
+{
+    PGSqlString sql;
+    sql.select(tableName);
+    sql.addCompare("where", "id", "=", id);
+    return exec(sql);
+}
+
+void PGExecutor::delet(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
 {
     PGSqlString sql("delete from ");
     sql += tableName;
@@ -82,6 +91,12 @@ void PGExecutor::erase(const std::string &tableName, const std::string &needleFi
     sql += " = :" + needleField;
     sql.set(needleField, needleValue);
     exec(sql);
+}
+
+void PGExecutor::defaultDelete(const std::string &table_name,
+                               const sole::uuid &id)
+{
+    delet(table_name, "id", id.str());
 }
 
 size_t PGExecutor::size()

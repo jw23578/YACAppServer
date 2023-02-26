@@ -16,6 +16,7 @@
 #include "databaselogicappuser.h"
 #include "databaselogicmessages.h"
 #include "databaselogics.h"
+#include "tests/testdatabaselogics.h"
 #include "tests/testdatabaselogicmessages.h"
 #include "tests/testdatabaselogicappuser.h"
 #include "tests/testdatabaselogicworktime.h"
@@ -120,6 +121,7 @@ int main(int argc, char **argv)
 
     if (runTests)
     {
+        TestDatabaseLogics testDatabaseLogics(databaseLogics);
         TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
         TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogics.databaseLogicAppUser);
         TestDatabaseLogicImageTable testDatabaseLogicImageTable(databaseLogics.databaseLogicImageTable);

@@ -26,7 +26,7 @@ void HandlerAppUserUpdateMessageStates::method()
         if (m.HasMember("readAtISO"))
         {
             std::chrono::system_clock::time_point readAt(ExtString::toTimepoint(m["readAtIDO"].GetString()));
-            databaseLogics.databaseLogicMessages.setRead(userId,
+            databaseLogics.databaseLogicMessages.setRead(loggedInUserId,
                                                          messageId,
                                                          readAt);
         }

@@ -31,6 +31,8 @@ bool DatabaseLogicTables::pgCryptoInstalled()
 
 void DatabaseLogicTables::createDatabaseTables()
 {
+    PGColumnAndType idPrimaryKey({tableFields.id, pg_uuid, true});
+
     if (!utils.tableExists(tableNames.t0001_users))
     {
         PGSqlString sql("create table ");
@@ -88,7 +90,7 @@ void DatabaseLogicTables::createDatabaseTables()
                               {{tableFields.id, pg_uuid, true},
                                {tableFields.appuser_id, pg_uuid, false, true},
                                {"login_token", pg_text},
-                               {"login_token_valid_until", pg_timestamp}});
+                               {tableFields.login_token_valid_until, pg_timestamp}});
 
     utils.createTableIfNeeded(tableNames.t0004_appuser_passwordhashes,
                               {{tableFields.id, pg_uuid, true},
@@ -154,5 +156,43 @@ void DatabaseLogicTables::createDatabaseTables()
                               {{tableFields.id, pg_uuid, true},
                                {tableFields.user_id, pg_uuid, false, true},
                                {tableFields.device_token, pg_text}});
+
+    utils.createTableIfNeeded(tableNames.t0016_appointment_templates,
+                              {idPrimaryKey,
+                               {tableFields.name, pg_text},
+                               {tableFields.default_duration_in_minutes, pg_int},
+                               {tableFields.color, pg_int},
+                               {tableFields.owner_id, pg_uuid}});
+
+    utils.createTableIfNeeded(tableNames.t0017_element_usable4appuser,
+                              {idPrimaryKey,
+                               {tableFields.element_id, pg_uuid, false, true},
+                               {tableFields.appuser_id, pg_uuid, false, true}});
+
+    utils.createTableIfNeeded(tableNames.t0018_appointment,
+                              {idPrimaryKey,
+                               {tableFields.appointment_group_id, pg_uuid, false, true},
+                               {tableFields.appointment_template_id, pg_uuid, false, true},
+                               {tableFields.caption, pg_text},
+                               {tableFields.decription, pg_text},
+                               {tableFields.start_datetime, pg_timestamp},
+                               {tableFields.end_datetime, pg_timestamp},
+                               {tableFields.creater_id, pg_uuid, false, true},
+                               {tableFields.deleted_datetime, pg_timestamp},
+                               {tableFields.history_datetime, pg_timestamp},
+                               {tableFields.max_bookable_count, pg_int},
+                               {tableFields.bookable_since_datetime, pg_timestamp},
+                               {tableFields.bookable_until_datetime, pg_timestamp},
+                               {tableFields.booking_credits, pg_int}});
+
+    utils.createTableIfNeeded(tableNames.t0019_element_visible4appuser,
+                              {idPrimaryKey,
+                               {tableFields.element_id, pg_uuid, false, true},
+                               {tableFields.appuser_id, pg_uuid, false, true}});
+
+    utils.createTableIfNeeded(tableNames.t0020_appointment_participants,
+                              {idPrimaryKey,
+                               {tableFields.appointment_id, pg_uuid, false, true},
+                               {tableFields.appuser_id, pg_uuid, false, true}});
 }
 

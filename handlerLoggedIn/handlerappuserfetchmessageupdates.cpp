@@ -21,7 +21,7 @@ void HandlerAppUserFetchMessageUpdates::method()
     std::string serverNowISO(ExtString::timepointToISO(std::chrono::system_clock::now()));
     document.AddMember("serverNowISO", serverNowISO, document.GetAllocator());
     rapidjson::Value messages;
-    if (!databaseLogics.databaseLogicMessages.fetchMessages(userId,
+    if (!databaseLogics.databaseLogicMessages.fetchMessages(loggedInUserId,
                                                             updatesSinceISO,
                                                             messages,
                                                             document.GetAllocator()))
@@ -31,7 +31,7 @@ void HandlerAppUserFetchMessageUpdates::method()
     }
     document.AddMember("messages", messages, document.GetAllocator());
     rapidjson::Value readMessages;
-    if (!databaseLogics.databaseLogicMessages.fetchReadMessages(userId,
+    if (!databaseLogics.databaseLogicMessages.fetchReadMessages(loggedInUserId,
                                                                 updatesSinceISO,
                                                                 readMessages,
                                                                 document.GetAllocator()))
@@ -41,7 +41,7 @@ void HandlerAppUserFetchMessageUpdates::method()
     }
     document.AddMember("readMessages", readMessages, document.GetAllocator());
     rapidjson::Value receivedMessages;
-    if (!databaseLogics.databaseLogicMessages.fetchReceivedMessages(userId,
+    if (!databaseLogics.databaseLogicMessages.fetchReceivedMessages(loggedInUserId,
                                                                     updatesSinceISO,
                                                                     receivedMessages,
                                                                     document.GetAllocator()))
