@@ -23,6 +23,7 @@
 #include "handlerLoggedIn/handlerappuserfetchprofile.h"
 #include "handlerLoggedIn/handlerappuserfetchmessageupdates.h"
 #include "handlerLoggedIn/handlerappuserfetchimage.h"
+#include "handlerLoggedIn/handlerappuserappointments.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "databaselogicmessages.h"
@@ -60,6 +61,7 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserFetchMessageUpdates handlerAppUserFetchMessageUpdates;
     HandlerAppUserFetchImage handlerAppUserFetchImage;
 
+    HandlerAppUserAppointments handlerAppUserAppointments;
     HandlerStoreMessage handlerStoreMesage;
 
 
