@@ -74,13 +74,39 @@ size_t PGExecutor::select(const std::string &tableName,
     return exec(sql);
 }
 
-size_t PGExecutor::defaultSelect(const std::string &tableName,
-                                 const sole::uuid &id)
+bool PGExecutor::defaultSelect(const std::string &tableName,
+                               const sole::uuid &id,
+                               std::string &message)
 {
     PGSqlString sql;
     sql.select(tableName);
     sql.addCompare("where", "id", "=", id);
-    return exec(sql);
+    exec(sql);
+    if (size() == 0)
+    {
+        message = "no element found";
+        return false;
+    }
+    if (size() > 1)
+    {
+        message = "fatal error, more than one element found";
+        return false;
+    }
+    return true;
+}
+
+bool PGExecutor::defaultSelectToJSON(const std::string &tableName,
+                                     const sole::uuid &id,
+                                     rapidjson::Value &object,
+                                     rapidjson::MemoryPoolAllocator<> &alloc,
+                                     std::string &message)
+{
+    if (!defaultSelect(tableName, id, message))
+    {
+        return false;
+    }
+    toJsonObject(object, alloc);
+    return true;
 }
 
 void PGExecutor::delet(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
@@ -186,6 +212,7 @@ pqxx::oid PGExecutor::oid(const std::string &fieldname)
 
 void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc)
 {
+    object.SetObject();
     const pqxx::row &row(result[currentRow]);
     for (pqxx::row::size_type i(0); i < row.size(); ++i)
     {
@@ -195,15 +222,14 @@ void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAll
     }
 }
 
-size_t PGExecutor::toJsonArray(rapidjson::Value &target, rapidjson::MemoryPoolAllocator<> &alloc)
+size_t PGExecutor::toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    target.SetArray();
+    targetArray.SetArray();
     for (size_t r(0); r < size(); ++r)
     {
         rapidjson::Value object(rapidjson::kObjectType);
-        object.SetObject();
         toJsonObject(object, alloc);
-        target.PushBack(object, alloc);
+        targetArray.PushBack(object, alloc);
         next();
     }
     return size();

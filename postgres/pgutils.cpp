@@ -101,6 +101,7 @@ bool PGUtils::createTable(const std::string &tableName,
         std::string columnsName(ExtVector::concat(vec, "_", "", ""));
         createUniqueIndex(tableName, tableName + "_" + columnsName, columns);
     }
+    return true;
 }
 
 void PGUtils::createTableIfNeeded(const std::string &tableName,

@@ -54,8 +54,15 @@ public:
                   const std::string &needleField3,
                   const std::chrono::system_clock::time_point &needleValue3);
 
-    size_t defaultSelect(const std::string &tableName,
-                         const sole::uuid &id);
+    bool defaultSelect(const std::string &tableName,
+                       const sole::uuid &id,
+                       std::string &message);
+
+    bool defaultSelectToJSON(const std::string &tableName,
+                             const sole::uuid &id,
+                             rapidjson::Value &object,
+                             rapidjson::MemoryPoolAllocator<> &alloc,
+                             std::string &message);
 
     void delet(const std::string &tableName,
                const std::string &needleField,
@@ -82,7 +89,7 @@ public:
     sole::uuid uuid(const std::string &fieldname);
     pqxx::oid oid(const std::string &fieldname);
 
-    size_t toJsonArray(rapidjson::Value &target, rapidjson::MemoryPoolAllocator<> &alloc);
+    size_t toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc);
     void toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc);
 };
 

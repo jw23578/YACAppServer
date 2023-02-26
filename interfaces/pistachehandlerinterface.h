@@ -26,7 +26,7 @@
     return; \
     }
 
-#define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName; \
+#define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName(NullUuid); \
     if (!getUuid(#targetName, targetName, true)) \
 { \
     return; \
@@ -37,6 +37,8 @@
 { \
     return; \
     }
+#define MACRO_GetUuid(targetName) sole::uuid targetName(NullUuid); \
+    getUuid(#targetName, targetName, false);
 
 #define MACRO_GetString(targetName) std::string targetName; \
     getString(#targetName, targetName, false);
@@ -52,6 +54,9 @@
 { \
     return; \
     }
+
+#define MACRO_GetTimePointFromISO(targetName) std::chrono::system_clock::time_point targetName; \
+    getTimePointFromISO(#targetName, targetName, false)
 
 #define MACRO_GetMandatoryTimePointFromISO(targetName) std::chrono::system_clock::time_point targetName; \
     if (!getTimePointFromISO(#targetName, targetName, true)) \
@@ -105,7 +110,6 @@ protected:
                    std::string const &methodName,
                    HandlerType type);
 public:
-    HandlerType handlerType;
 
     enum LoginNeededType
     {

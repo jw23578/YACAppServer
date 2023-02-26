@@ -29,6 +29,9 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
                                   message);
 
     sole::uuid creater_id(sole::uuid4());
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Value appointment;
     dla.insertAppointment(id,
                           id,
                           id,
@@ -41,6 +44,8 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
                           std::chrono::system_clock::now(),
                           std::chrono::system_clock::now(),
                           0,
+                          appointment,
+                          document.GetAllocator(),
                           message);
 
     dla.deleteAppointment(id, id, message);

@@ -20,6 +20,10 @@ class DatabaseLogicAppointments
     bool checkAppointmentCreater(const sole::uuid &id,
                                  const sole::uuid &creater_id,
                                  std::string &message);
+    bool fetchOneAppointment(const sole::uuid &id,
+                             rapidjson::Value &object,
+                             rapidjson::MemoryPoolAllocator<> &alloc,
+                             std::string &message);
 public:
     DatabaseLogicAppointments(LogStatController &logStatController,
                               PGConnectionPool &pool);
@@ -55,6 +59,8 @@ public:
                            const std::chrono::system_clock::time_point &bookable_since_datetime,
                            const std::chrono::system_clock::time_point &bookable_until_datetime,
                            const int booking_credits,
+                           rapidjson::Value &target,
+                           rapidjson::MemoryPoolAllocator<> &alloc,
                            std::string &message);
 
     bool deleteAppointment(const sole::uuid &id,

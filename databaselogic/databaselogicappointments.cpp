@@ -31,23 +31,16 @@ bool DatabaseLogicAppointments::checkAppointmentCreater(const sole::uuid &id,
                                                         std::string &message)
 {
     PGExecutor e(pool);
-    e.defaultSelect(tableNames.t0018_appointment, id);
-    if (!e.size())
-    {
-        message = "no appointment found";
-        return false;
-    }
-    if (e.size() > 1)
-    {
-        message = "fatal error, more than one appointment";
-        return false;
-    }
-    MACRO_Uuid_NotEqual(e, creater_id)
-    {
-        message = "given creater ist not appointment creater";
-        return false;
-    }
-    return true;
+    return e.defaultSelect(tableNames.t0018_appointment, id, message);
+}
+
+bool DatabaseLogicAppointments::fetchOneAppointment(const sole::uuid &id,
+                                                    rapidjson::Value &object,
+                                                    rapidjson::MemoryPoolAllocator<> &alloc,
+                                                    std::string &message)
+{
+    PGExecutor e(pool);
+    return e.defaultSelectToJSON(tableNames.t0018_appointment, id, object, alloc, message);
 }
 
 DatabaseLogicAppointments::DatabaseLogicAppointments(LogStatController &logStatController,
@@ -140,6 +133,8 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
                                                   const std::chrono::system_clock::time_point &bookable_since_datetime,
                                                   const std::chrono::system_clock::time_point &bookable_until_datetime,
                                                   const int booking_credits,
+                                                  rapidjson::Value &object,
+                                                  rapidjson::MemoryPoolAllocator<> &alloc,
                                                   std::string &message)
 {
     {
@@ -189,7 +184,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
     MACRO_addInsert(sql, bookable_until_datetime);
     MACRO_addInsert(sql, booking_credits);
     PGExecutor e(pool, sql);
-    return true;
+    return fetchOneAppointment(id, object, alloc, message);
 }
 
 bool DatabaseLogicAppointments::deleteAppointment(const sole::uuid &id,

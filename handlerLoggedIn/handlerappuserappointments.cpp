@@ -69,44 +69,64 @@ void HandlerAppUserAppointments::method()
         answerOk(true, document);
         return;
     }
-    MACRO_GetMandatoryUuid(id);
     if (isMethod(methodNames.deleteAppointment))
     {
+        MACRO_GetMandatoryUuid(id);
         std::string message("appointment deleted");
         answerOk(message, dla.deleteAppointment(id, loggedInUserId, message));
         return;
     }
     if (isMethod(methodNames.insertAppointment))
     {
-        MACRO_GetMandatoryUuid(appointment_group_id);
-        MACRO_GetMandatoryUuid(appointment_template_id);
+        MACRO_GetUuid(appointment_group_id);
+        MACRO_GetUuid(appointment_template_id);
+        if (appointment_group_id == NullUuid)
+        {
+            appointment_group_id = sole::uuid4();
+        }
+        if (appointment_template_id == NullUuid)
+        {
+            appointment_template_id = sole::uuid4();
+        }
         MACRO_GetMandatoryString(caption);
-        MACRO_GetMandatoryString(decription);
+        MACRO_GetString(decription);
         MACRO_GetMandatoryTimePointFromISO(start_datetime);
         MACRO_GetMandatoryTimePointFromISO(end_datetime);
         MACRO_GetMandatoryInt(max_bookable_count, true);
-        MACRO_GetMandatoryTimePointFromISO(bookable_since_datetime);
-        MACRO_GetMandatoryTimePointFromISO(bookable_until_datetime);
+        MACRO_GetTimePointFromISO(bookable_since_datetime);
+        MACRO_GetTimePointFromISO(bookable_until_datetime);
         MACRO_GetMandatoryInt(booking_credits, true);
 
         std::string message("appointment inserted");
-        answerOk(message, dla.insertAppointment(id,
-                                                appointment_group_id,
-                                                appointment_template_id,
-                                                caption,
-                                                decription,
-                                                start_datetime,
-                                                end_datetime,
-                                                loggedInUserId,
-                                                max_bookable_count,
-                                                bookable_since_datetime,
-                                                bookable_until_datetime,
-                                                booking_credits,
-                                                message));
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value appointment;
+        if (!dla.insertAppointment(sole::uuid4(),
+                                   appointment_group_id,
+                                   appointment_template_id,
+                                   caption,
+                                   decription,
+                                   start_datetime,
+                                   end_datetime,
+                                   loggedInUserId,
+                                   max_bookable_count,
+                                   bookable_since_datetime,
+                                   bookable_until_datetime,
+                                   booking_credits,
+                                   appointment,
+                                   document.GetAllocator(),
+                                   message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        document.AddMember("appointment", appointment, document.GetAllocator());
+        answerOk(true, document);
         return;
     }
     if (isMethod(methodNames.deleteAppointmentTemplate))
     {
+        MACRO_GetMandatoryUuid(id);
         std::string message("appointmentTemplate deleted");
         answerOk(message, dla.deleteAppointmentTemplate(id, loggedInUserId, message));
         return;
@@ -116,7 +136,7 @@ void HandlerAppUserAppointments::method()
     MACRO_GetMandatoryInt(color, true);
     if (isMethod(methodNames.insertAppointmentTemplate))
     {
-        if (!dla.insertAppointmentTemplate(id,
+        if (!dla.insertAppointmentTemplate(sole::uuid4(),
                                            name,
                                            default_duration_in_minutes,
                                            color,
@@ -130,6 +150,7 @@ void HandlerAppUserAppointments::method()
     }
     if (isMethod(methodNames.updateAppointmentTemplate))
     {
+        MACRO_GetMandatoryUuid(id);
         if (!dla.updateAppointmentTemplate(id,
                                            name,
                                            default_duration_in_minutes,

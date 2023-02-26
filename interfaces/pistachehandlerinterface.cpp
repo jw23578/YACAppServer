@@ -12,7 +12,7 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
     {
         return;
     }
-    if (handlerType == TypePost)
+    if (request.method() == Pistache::Http::Method::Post)
     {
         postedData.Parse(request.body().c_str());
         if (postedData.HasParseError())
@@ -121,7 +121,7 @@ PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serv
                                                    std::string const &methodName,
                                                    HandlerType type,
                                                    LoginNeededType loginNeeded):
-    request(0), response(0), handlerType(type),
+    request(0), response(0),
     loginNeeded(loginNeeded)
 {
     addMethod(serverInterface,
@@ -142,11 +142,11 @@ bool PistacheHandlerInterface::getBool(const std::string &name,
                                        bool &target,
                                        bool ifMissingThenSendResponse)
 {
-    if (handlerType == TypeGet)
+    if (request->method() == Pistache::Http::Method::Get)
     {
         return ExtPistache::getBool(*request, *response, name, target, ifMissingThenSendResponse);
     }
-    if (handlerType == TypePost)
+    if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
         return ExtPistache::getPostBool(postData, *response, name, target, ifMissingThenSendResponse);
@@ -159,11 +159,11 @@ bool PistacheHandlerInterface::getInteger(const std::string &name,
                                           bool zeroAllowed,
                                           bool ifMissingThenSendResponse)
 {
-    if (handlerType == TypeGet)
+    if (request->method() == Pistache::Http::Method::Get)
     {
         ExtPistache::getInt(*request, *response, name, target, ifMissingThenSendResponse);
     }
-    if (handlerType == TypePost)
+    if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
         ExtPistache::getPostInt(postData, *response, name, target, ifMissingThenSendResponse);
@@ -180,7 +180,7 @@ bool PistacheHandlerInterface::getByteString(const std::string &name,
                                              std::basic_string<std::byte> &target,
                                              bool ifMissingThenSendResponse)
 {
-    if (handlerType == TypeGet)
+    if (request->method() == Pistache::Http::Method::Get)
     {
         std::string temp;
         if (!ExtPistache::getString(*request, *response, name, temp, ifMissingThenSendResponse))
@@ -190,7 +190,7 @@ bool PistacheHandlerInterface::getByteString(const std::string &name,
         target = std::basic_string<std::byte>(reinterpret_cast<std::byte*>(temp.data()), temp.size());
         return true;
     }
-    if (handlerType == TypePost)
+    if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
         std::string temp;
@@ -208,11 +208,11 @@ bool PistacheHandlerInterface::getString(const std::string &name,
                                          std::string &target,
                                          bool ifMissingThenSendResponse)
 {
-    if (handlerType == TypeGet)
+    if (request->method() == Pistache::Http::Method::Get)
     {
         return ExtPistache::getString(*request, *response, name, target, ifMissingThenSendResponse);
     }
-    if (handlerType == TypePost)
+    if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
         return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
