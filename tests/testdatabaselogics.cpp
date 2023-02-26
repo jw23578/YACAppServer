@@ -32,6 +32,7 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
     rapidjson::Document document;
     document.SetObject();
     rapidjson::Value appointment;
+    bool visible_for_everybody(true);
     dla.insertAppointment(id,
                           id,
                           id,
@@ -44,6 +45,7 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
                           std::chrono::system_clock::now(),
                           std::chrono::system_clock::now(),
                           0,
+                          visible_for_everybody,
                           appointment,
                           document.GetAllocator(),
                           message);

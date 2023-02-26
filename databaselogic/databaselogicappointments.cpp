@@ -133,6 +133,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
                                                   const std::chrono::system_clock::time_point &bookable_since_datetime,
                                                   const std::chrono::system_clock::time_point &bookable_until_datetime,
                                                   const int booking_credits,
+                                                  const bool visible_for_everybody,
                                                   rapidjson::Value &object,
                                                   rapidjson::MemoryPoolAllocator<> &alloc,
                                                   std::string &message)
@@ -183,6 +184,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
     MACRO_addInsert(sql, bookable_since_datetime);
     MACRO_addInsert(sql, bookable_until_datetime);
     MACRO_addInsert(sql, booking_credits);
+    MACRO_addInsert(sql, visible_for_everybody);
     PGExecutor e(pool, sql);
     return fetchOneAppointment(id, object, alloc, message);
 }
@@ -212,6 +214,7 @@ bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
     PGSqlString sql;
     sql.select(tableNames.t0018_appointment);
     sql.addCompare(" where ", tableFields.creater_id, " = ", appuser_id);
+    sql += std::string(" or ") + tableFields.visible_for_everybody;
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
     return true;

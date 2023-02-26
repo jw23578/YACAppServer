@@ -183,7 +183,8 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.max_bookable_count, pg_int},
                                {tableFields.bookable_since_datetime, pg_timestamp},
                                {tableFields.bookable_until_datetime, pg_timestamp},
-                               {tableFields.booking_credits, pg_int}});
+                               {tableFields.booking_credits, pg_int},
+                               {tableFields.visible_for_everybody, pg_bool}});
 
     utils.createTableIfNeeded(tableNames.t0019_element_visible4appuser,
                               {idPrimaryKey,

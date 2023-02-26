@@ -96,6 +96,7 @@ void HandlerAppUserAppointments::method()
         MACRO_GetTimePointFromISO(bookable_since_datetime);
         MACRO_GetTimePointFromISO(bookable_until_datetime);
         MACRO_GetMandatoryInt(booking_credits, true);
+        MACRO_GetMandatoryBool(visible_for_everybody);
 
         std::string message("appointment inserted");
         rapidjson::Document document;
@@ -113,6 +114,7 @@ void HandlerAppUserAppointments::method()
                                    bookable_since_datetime,
                                    bookable_until_datetime,
                                    booking_credits,
+                                   visible_for_everybody,
                                    appointment,
                                    document.GetAllocator(),
                                    message))

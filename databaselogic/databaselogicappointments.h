@@ -59,6 +59,7 @@ public:
                            const std::chrono::system_clock::time_point &bookable_since_datetime,
                            const std::chrono::system_clock::time_point &bookable_until_datetime,
                            const int booking_credits,
+                           const bool visible_for_everybody,
                            rapidjson::Value &target,
                            rapidjson::MemoryPoolAllocator<> &alloc,
                            std::string &message);
