@@ -18,13 +18,13 @@ HandlerAppUserAppointments::HandlerAppUserAppointments(DatabaseLogics &databaseL
               TypePost);
     addMethod(serverInterface,
               methodNames.deleteAppointmentTemplate,
-              TypeDelete);
+              TypePost);
     addMethod(serverInterface,
               methodNames.insertAppointment,
               TypePost);
     addMethod(serverInterface,
               methodNames.deleteAppointment,
-              TypeDelete);
+              TypePost);
     addMethod(serverInterface,
               methodNames.fetchAppointments,
               TypeGet);

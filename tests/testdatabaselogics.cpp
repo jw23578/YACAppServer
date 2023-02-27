@@ -1,4 +1,6 @@
 #include "testdatabaselogics.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
 
 TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
 {
@@ -52,4 +54,20 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
 
     dla.deleteAppointment(id, id, message);
     dla.deleteAppointment(id, creater_id, message);
+
+    DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
+    dlrg.insertRightGroup(id, "group #1", creater_id, message);
+    dlrg.updateRightGroup(id, "right group with new name", id, message);
+    dlrg.updateRightGroup(id, "right group with really new name", creater_id, message);
+    rapidjson::Value rightGroups;
+    dlrg.fetchRightGroups(rightGroups, document.GetAllocator(), message);
+    document.AddMember("rightGroups", rightGroups, document.GetAllocator());
+    dlrg.deleteRightGroup(id, id, message);
+    dlrg.deleteRightGroup(id, creater_id, message);
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+
+    databaseLogics.getLogStat().log(__FILE__, __LINE__, LogStatController::verbose, buffer.GetString());
 }

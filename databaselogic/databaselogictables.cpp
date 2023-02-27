@@ -195,5 +195,32 @@ void DatabaseLogicTables::createDatabaseTables()
                               {idPrimaryKey,
                                {tableFields.appointment_id, pg_uuid, false, true},
                                {tableFields.appuser_id, pg_uuid, false, true}});
+
+    utils.createTableIfNeeded(tableNames.t0021_right_group,
+                              {idPrimaryKey,
+                               {tableFields.name, pg_text, false, true},
+                               {tableFields.creater_id, pg_uuid, false, true},
+                               {tableFields.deleted_datetime, pg_timestamp}});
+
+    utils.createTableIfNeeded(tableNames.t0022_right_group2appuser,
+                              {idPrimaryKey,
+                               {tableFields.right_group_id, pg_uuid, false, true},
+                               {tableFields.appuser_id, pg_uuid, false, true}});
+
+    utils.createTableIfNeeded(tableNames.t0023_right2rightgroup,
+                              {idPrimaryKey,
+                               {tableFields.right_number, pg_uuid, false, true},
+                               {tableFields.right_group_id, pg_uuid, false, true}});
+
+    utils.createTableIfNeeded(tableNames.t0024_space,
+                              {idPrimaryKey,
+                               {tableFields.name, pg_text, false, true},
+                               {tableFields.creater_id, pg_uuid, false, true},
+                               {tableFields.deleted_datetime, pg_timestamp}});
+
+    utils.createTableIfNeeded(tableNames.t0025_space2appuser,
+                              {idPrimaryKey,
+                               {tableFields.space_id, pg_uuid, false, true},
+                               {tableFields.appuser_id, pg_uuid, false, true}});
 }
 

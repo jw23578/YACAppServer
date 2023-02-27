@@ -18,7 +18,10 @@ DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
     databaseLogicMessages(logStatController,
                           pool),
     databaseLogicAppointments(logStatController,
-                              pool)
+                              pool),
+    databaseLogicRightGroup(logStatController,
+                            pool),
+    rightsLogic(databaseLogicRightGroup)
 {
 
 }

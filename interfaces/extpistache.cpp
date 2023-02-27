@@ -10,16 +10,18 @@ ExtPistache::ExtPistache()
 void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
                          Pistache::Http::Code code,
                          const std::string &message,
-                         bool success)
+                         bool success,
+                         int missingRight)
 {
     std::map<std::string, std::string> empty;
-    answer(response, code, message, success, empty);
+    answer(response, code, message, success, missingRight, empty);
 }
 
 void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
                          Pistache::Http::Code code,
                          const std::string &message,
                          bool success,
+                         int missingRight,
                          std::map<std::string, std::string> &data)
 {
     rapidjson::Document d;
@@ -33,14 +35,17 @@ void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
     answer(response,
            code,
            success,
+           missingRight,
            d);
 }
 
 void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
                          Pistache::Http::Code code,
                          bool success,
+                         int missingRight,
                          rapidjson::Document &d)
 {
+    d.AddMember("missingRight", missingRight, d.GetAllocator());
     d.AddMember("success", success, d.GetAllocator());
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
@@ -66,7 +71,8 @@ bool ExtPistache::getString(const Pistache::Rest::Request &request,
     {
         if (ifMissingThenSendResponse)
         {
-            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false);
+            const int missingRight(0);
+            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false, missingRight);
         }
         return false;
     }
@@ -120,7 +126,8 @@ bool ExtPistache::getPostString(ExtRapidJSON &postData,
     {
         if (ifMissingThenSendResponse)
         {
-            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false);
+            const int missingRight(0);
+            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false, missingRight);
         }
         return false;
     }
@@ -139,7 +146,8 @@ bool ExtPistache::getPostInt(ExtRapidJSON &postData,
     {
         if (ifMissingThenSendResponse)
         {
-            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false);
+            const int missingRight(0);
+            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false, missingRight);
         }
         return false;
     }
@@ -157,7 +165,8 @@ bool ExtPistache::getPostBool(ExtRapidJSON &postData,
     {
         if (ifMissingThenSendResponse)
         {
-            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false);
+            const int missingRight(0);
+            answer(response, Pistache::Http::Code::Bad_Request, std::string("Missing ") + name, false, missingRight);
         }
         return false;
     }

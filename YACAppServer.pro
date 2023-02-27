@@ -37,6 +37,7 @@ SOURCES += \
         databaselogic/databaselogicelement.cpp \
         databaselogic/databaselogicimagetable.cpp \
         databaselogic/databaselogicmessages.cpp \
+        databaselogic/databaselogicrightgroup.cpp \
         databaselogic/databaselogics.cpp \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
@@ -61,6 +62,7 @@ SOURCES += \
         handlerLoggedIn/handlerappuserfetchprofile.cpp \
         handlerLoggedIn/handlerappusergetworktimestate.cpp \
         handlerLoggedIn/handlerappuserinsertworktime.cpp \
+        handlerLoggedIn/handlerappuserrightgroup.cpp \
         handlerLoggedIn/handlerappusersearchprofiles.cpp \
         handlerLoggedIn/handlerappuserupdatemessagestates.cpp \
         handlerLoggedIn/handlerappuserupdateprofile.cpp \
@@ -85,6 +87,7 @@ SOURCES += \
         postgres/pgoidstorer.cpp \
         postgres/pgsqlstring.cpp \
         postgres/pgutils.cpp \
+        rightsLogic/rightslogic.cpp \
         serverHeader/appidheader.cpp \
         serverHeader/loginemailheader.cpp \
         serverHeader/logintokenheader.cpp \
@@ -119,6 +122,7 @@ HEADERS += \
   databaselogic/databaselogicelement.h \
   databaselogic/databaselogicimagetable.h \
   databaselogic/databaselogicmessages.h \
+  databaselogic/databaselogicrightgroup.h \
   databaselogic/databaselogics.h \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
@@ -143,6 +147,7 @@ HEADERS += \
   handlerLoggedIn/handlerappuserfetchprofile.h \
   handlerLoggedIn/handlerappusergetworktimestate.h \
   handlerLoggedIn/handlerappuserinsertworktime.h \
+  handlerLoggedIn/handlerappuserrightgroup.h \
   handlerLoggedIn/handlerappusersearchprofiles.h \
   handlerLoggedIn/handlerappuserupdatemessagestates.h \
   handlerLoggedIn/handlerappuserupdateprofile.h \
@@ -168,6 +173,7 @@ HEADERS += \
   postgres/pgoidstorer.h \
   postgres/pgsqlstring.h \
   postgres/pgutils.h \
+  rightsLogic/rightslogic.h \
   serverHeader/appidheader.h \
   serverHeader/loginemailheader.h \
   serverHeader/logintokenheader.h \

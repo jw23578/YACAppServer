@@ -31,7 +31,16 @@ bool DatabaseLogicAppointments::checkAppointmentCreater(const sole::uuid &id,
                                                         std::string &message)
 {
     PGExecutor e(pool);
-    return e.defaultSelect(tableNames.t0018_appointment, id, message);
+    if (!e.defaultSelect(tableNames.t0018_appointment, id, message))
+    {
+        return false;
+    }
+    if (e.uuid(tableFields.creater_id) != creater_id)
+    {
+        message = "you are not the creater of this appointment";
+        return false;
+    }
+    return true;
 }
 
 bool DatabaseLogicAppointments::fetchOneAppointment(const sole::uuid &id,
@@ -213,8 +222,10 @@ bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
 {
     PGSqlString sql;
     sql.select(tableNames.t0018_appointment);
-    sql.addCompare(" where ", tableFields.creater_id, " = ", appuser_id);
+    sql.addCompare(" where ( ", tableFields.creater_id, " = ", appuser_id);
     sql += std::string(" or ") + tableFields.visible_for_everybody;
+    sql += std::string(") and ") + tableFields.deleted_datetime + std::string(" is null ");
+    sql += std::string(" and ") + tableFields.history_datetime + std::string(" is null ");
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
     return true;

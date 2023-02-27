@@ -77,13 +77,16 @@ private:
 
     void answer(Pistache::Http::Code code,
                 const std::string &message,
-                bool success);
+                bool success,
+                int missingRight);
     void answer(Pistache::Http::Code code,
                 bool success,
+                int missingRight,
                 rapidjson::Document &d);
     void answer(Pistache::Http::Code code,
                 const std::string &message,
                 bool success,
+                int missingRight,
                 std::map<std::string, std::string> &data);
 
 public:
@@ -94,6 +97,7 @@ public:
         TypeDelete
     };
 protected:
+    bool missingRight(const int rightNumber);
     void answerBad(const std::string &message);
     void answerBad(const std::string &message,
                    std::map<std::string, std::string> &data);
@@ -162,7 +166,8 @@ public:
         {
             if (ifMissingThenSendResponse)
             {
-                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name(), false);
+                const int missingRight(0);
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name(), false, missingRight);
             }
             return false;
         }
@@ -171,7 +176,8 @@ public:
         {
             if (ifMissingThenSendResponse)
             {
-                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name(), false);
+                const int missingRight(0);
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name(), false, missingRight);
             }
             return false;
         }

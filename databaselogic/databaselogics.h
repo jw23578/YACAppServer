@@ -9,6 +9,8 @@
 #include "databaselogicimagetable.h"
 #include "databaselogicmessages.h"
 #include "databaselogicappointments.h"
+#include "databaselogicrightgroup.h"
+#include "rightsLogic/rightslogic.h"
 
 class DatabaseLogics
 {
@@ -21,6 +23,9 @@ public:
     DatabaseLogicImageTable databaseLogicImageTable;
     DatabaseLogicMessages databaseLogicMessages;
     DatabaseLogicAppointments databaseLogicAppointments;
+    DatabaseLogicRightGroup databaseLogicRightGroup;
+
+    RightsLogic rightsLogic;
 
     LogStatController &getLogStat();
 

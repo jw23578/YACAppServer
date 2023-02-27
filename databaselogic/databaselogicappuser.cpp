@@ -226,6 +226,7 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
     data[tableFields.fstname] = select.string(tableFields.fstname);
     data[tableFields.surname] = select.string(tableFields.surname);
     data[tableFields.visible_name] = select.string(tableFields.visible_name);
+    data[tableFields.id] = select.string(tableFields.id);
     return true;
 }
 
@@ -267,6 +268,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
     std::string loginToken;
     loginSuccessful(appUserId, loginToken);
     data["loginToken"] = loginToken;
+    data[tableFields.id] = select.string(tableFields.id);
     data[tableFields.fstname] = select.string(tableFields.fstname);
     data[tableFields.surname] = select.string(tableFields.surname);
     data[tableFields.visible_name] = select.string(tableFields.visible_name);

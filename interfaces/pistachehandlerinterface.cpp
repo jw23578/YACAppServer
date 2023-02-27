@@ -28,32 +28,37 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
 
 void PistacheHandlerInterface::answerBad(const std::string &message)
 {
-    answer(Pistache::Http::Code::Bad_Request, message, false);
+    const int missingRight(0);
+    answer(Pistache::Http::Code::Bad_Request, message, false, missingRight);
 }
 
 void PistacheHandlerInterface::answerBad(const std::string &message,
                                          std::map<std::string, std::string> &data)
 {
-    answer(Pistache::Http::Code::Bad_Request, message, false, data);
+    const int missingRight(0);
+    answer(Pistache::Http::Code::Bad_Request, message, false, missingRight, data);
 }
 
 void PistacheHandlerInterface::answerOk(const std::string &message,
                                         bool success)
 {
-    answer(Pistache::Http::Code::Ok, message, success);
+    const int missingRight(0);
+    answer(Pistache::Http::Code::Ok, message, success, missingRight);
 }
 
 void PistacheHandlerInterface::answerOk(const std::string &message,
                                         bool success,
                                         std::map<std::string, std::string> &data)
 {
-    answer(Pistache::Http::Code::Ok, message, success, data);
+    const int missingRight(0);
+    answer(Pistache::Http::Code::Ok, message, success, missingRight, data);
 }
 
 void PistacheHandlerInterface::answerOk(bool success,
                                         rapidjson::Document &d)
 {
-    answer(Pistache::Http::Code::Ok, success, d);
+    const int missingRight(0);
+    answer(Pistache::Http::Code::Ok, success, missingRight, d);
 }
 
 bool PistacheHandlerInterface::isMethod(const std::string &method) const
@@ -68,24 +73,39 @@ const std::string &PistacheHandlerInterface::d_getMethodName() const
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       const std::string &message,
-                                      bool success)
+                                      bool success,
+                                      int missingRight)
 {
-    ExtPistache::answer(*response, code, message, success);
+    ExtPistache::answer(*response, code, message, success, missingRight);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       bool success,
+                                      int missingRight,
                                       rapidjson::Document &d)
 {
-    ExtPistache::answer(*response, code, success, d);
+    ExtPistache::answer(*response, code, success, missingRight, d);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       const std::string &message,
                                       bool success,
+                                      int missingRight,
                                       std::map<std::string, std::string> &data)
 {
-    ExtPistache::answer(*response, code, message, success, data);
+    ExtPistache::answer(*response, code, message, success, missingRight, data);
+}
+
+bool PistacheHandlerInterface::missingRight(const int rightNumber)
+{
+    if (!rightNumber)
+    {
+        return false;
+    }
+    std::map<std::string, std::string> data;
+    bool success(false);
+    answer(Pistache::Http::Code::Ok, "missing right", success, rightNumber, data);
+    return true;
 }
 
 void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterface,
