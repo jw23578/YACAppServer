@@ -97,7 +97,7 @@ public:
         TypeDelete
     };
 protected:
-    bool missingRight(const int rightNumber);
+    bool answerMissingRight(const int rightNumber);
     void answerBad(const std::string &message);
     void answerBad(const std::string &message,
                    std::map<std::string, std::string> &data);

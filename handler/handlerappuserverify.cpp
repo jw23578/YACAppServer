@@ -1,13 +1,13 @@
 #include "handlerappuserverify.h"
 #include "extmap.h"
 
-HandlerAppUserVerify::HandlerAppUserVerify(DatabaseLogicAppUser &databaseLogicAppUser,
+HandlerAppUserVerify::HandlerAppUserVerify(DatabaseLogics &databaseLogics,
                                            PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
                              "/verifyAppUser",
                              TypePost,
                              TypeNoLoginNeeded),
-    databaseLogicAppUser(databaseLogicAppUser)
+    databaseLogics(databaseLogics)
 {
 
 }
@@ -19,15 +19,21 @@ void HandlerAppUserVerify::method()
     MACRO_GetMandatoryUuid(appId);
 
     std::string message;
-    std::map<std::string, std::string> data;
-    if (!databaseLogicAppUser.verifyAppUser(appId,
-                                           loginEMail,
-                                           verifyToken,
-                                           message,
-                                           data))
+    rapidjson::Document data;
+    data.SetObject();
+    ExtRapidJSONWriter w(data, data.GetAllocator());
+    sole::uuid appUserId;
+    if (!databaseLogics.databaseLogicAppUser.verifyAppUser(appId,
+                                                           loginEMail,
+                                                           verifyToken,
+                                                           message,
+                                                           w,
+                                                           appUserId))
     {
         answerBad(message);
         return;
     }
-    answerOk(message, true, data);
+    w.addMember("message", message);
+    databaseLogics.rightsLogic.addUserRights(appUserId, data, data.GetAllocator());
+    answerOk(true, data);
 }

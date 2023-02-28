@@ -8,6 +8,7 @@
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
+#include "extrapidjson.h"
 
 
 class LoggedInAppUsersContainer;
@@ -55,12 +56,13 @@ public:
                        const std::string &loginEMail,
                        const std::string &verifyToken,
                        std::string &message,
-                       std::map<std::string, std::string> &data);
+                       ExtRapidJSONWriter &w,
+                       sole::uuid &appUserId);
     bool loginAppUser(const sole::uuid &appId,
                       const std::string &loginEMail,
                       const std::string &password,
                       std::string &message,
-                      std::map<std::string, std::string> &data,
+                      ExtRapidJSONWriter &w,
                       sole::uuid &appUserId);
 
     bool updateAppUser(const sole::uuid &appId,

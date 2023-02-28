@@ -21,13 +21,15 @@ void HandlerAppUserLogin::method()
     MACRO_GetMandatoryUuid(appId);
 
     std::string message;
-    std::map<std::string, std::string> data;
     sole::uuid appUserId;
+    rapidjson::Document data;
+    data.SetObject();
+    ExtRapidJSONWriter w(data, data.GetAllocator());
     if (!databaseLogics.databaseLogicAppUser.loginAppUser(appId,
                                                           loginEMail,
                                                           password,
                                                           message,
-                                                          data,
+                                                          w,
                                                           appUserId))
     {
         answerBad(message);
@@ -40,7 +42,9 @@ void HandlerAppUserLogin::method()
             deviceTokenCache.add(appUserId,
                                  deviceToken);
         }
-        answerOk("Login successful", true, data);
+        w.addMember("message", "Login successful");
+        databaseLogics.rightsLogic.addUserRights(appUserId, data, data.GetAllocator());
+        answerOk(true, data);
     }
 
 }

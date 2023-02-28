@@ -96,7 +96,7 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
     ExtPistache::answer(*response, code, message, success, missingRight, data);
 }
 
-bool PistacheHandlerInterface::missingRight(const int rightNumber)
+bool PistacheHandlerInterface::answerMissingRight(const int rightNumber)
 {
     if (!rightNumber)
     {

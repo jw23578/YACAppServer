@@ -24,9 +24,26 @@ void HandlerAppUserRightGroup::method()
 {
     DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
     RightsLogic &rl(databaseLogics.rightsLogic);
+    if (isMethod(methodNames.fetchRightGroups))
+    {
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value rightgroups;
+        std::string message;
+        if (!dlrg.fetchRightGroups(rightgroups,
+                                   document.GetAllocator(),
+                                   message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        document.AddMember("rightgroups", rightgroups, document.GetAllocator());
+        answerOk(true, document);
+        return;
+    }
     if (isMethod(methodNames.insertRightGroup))
     {
-        if (missingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_insertRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_insertRightGroup)))
         {
             return;
         }
@@ -42,7 +59,7 @@ void HandlerAppUserRightGroup::method()
 
     if (isMethod(methodNames.updateRightGroup))
     {
-        if (missingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_updateRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_updateRightGroup)))
         {
             return;
         }
@@ -59,7 +76,7 @@ void HandlerAppUserRightGroup::method()
 
     if (isMethod(methodNames.deleteRightGroup))
     {
-        if (missingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_deleteRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_deleteRightGroup)))
         {
             return;
         }

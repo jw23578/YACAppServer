@@ -161,7 +161,8 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
                                          const std::string &loginEMail,
                                          const std::string &verifyToken,
                                          std::string &message,
-                                         std::map<std::string, std::string> &data)
+                                         ExtRapidJSONWriter &w,
+                                         sole::uuid &appUserId)
 {
     PGExecutor select(pool);
     select.select(tableNames.t0003_appuser_profiles,
@@ -181,7 +182,7 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
         return false;
     }
-    sole::uuid id(select.uuid(tableFields.id));
+    appUserId = select.uuid(tableFields.id);
     logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
                           std::string("verify_token_valid_until as string: ") + select.string("verify_token_valid_until"));
     std::chrono::system_clock::time_point verify_token_valid_until(select.timepoint("verify_token_valid_until"));
@@ -217,16 +218,16 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
         sql.addSet(tableFields.verified, TimePointPostgreSqlNow);
         sql.addSet(tableFields.verify_token, "");
         sql.addSet(tableFields.verify_token_valid_until, TimePointPostgreSqlNull);
-        sql.addCompare("where", tableFields.id, "=", id);
+        sql.addCompare("where", tableFields.id, "=", appUserId);
         PGExecutor e(pool, sql);
     }
     std::string loginToken;
-    loginSuccessful(id, loginToken);
-    data["loginToken"] = loginToken;
-    data[tableFields.fstname] = select.string(tableFields.fstname);
-    data[tableFields.surname] = select.string(tableFields.surname);
-    data[tableFields.visible_name] = select.string(tableFields.visible_name);
-    data[tableFields.id] = select.string(tableFields.id);
+    loginSuccessful(appUserId, loginToken);
+    w.addMember("loginToken", loginToken);
+    w.addMember(tableFields.id, select.string(tableFields.id));
+    w.addMember(tableFields.fstname, select.string(tableFields.fstname));
+    w.addMember(tableFields.surname, select.string(tableFields.surname));
+    w.addMember(tableFields.visible_name, select.string(tableFields.visible_name));
     return true;
 }
 
@@ -234,7 +235,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
                                         const std::string &loginEMail,
                                         const std::string &password,
                                         std::string &message,
-                                        std::map<std::string, std::string> &data,
+                                        ExtRapidJSONWriter &w,
                                         sole::uuid &appUserId)
 {
     if (!lookupAppUser(appId, loginEMail, appUserId, message))
@@ -267,11 +268,11 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
     }
     std::string loginToken;
     loginSuccessful(appUserId, loginToken);
-    data["loginToken"] = loginToken;
-    data[tableFields.id] = select.string(tableFields.id);
-    data[tableFields.fstname] = select.string(tableFields.fstname);
-    data[tableFields.surname] = select.string(tableFields.surname);
-    data[tableFields.visible_name] = select.string(tableFields.visible_name);
+    w.addMember("loginToken", loginToken);
+    w.addMember(tableFields.id, select.string(tableFields.id));
+    w.addMember(tableFields.fstname, select.string(tableFields.fstname));
+    w.addMember(tableFields.surname, select.string(tableFields.surname));
+    w.addMember(tableFields.visible_name, select.string(tableFields.visible_name));
     return true;
 }
 
