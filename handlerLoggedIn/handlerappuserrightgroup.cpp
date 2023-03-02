@@ -38,28 +38,39 @@ void HandlerAppUserRightGroup::method()
             return;
         }
         document.AddMember("rightgroups", rightgroups, document.GetAllocator());
+        databaseLogics.rightsLogic.addUserRights(loggedInUserId, document, document.GetAllocator());
         answerOk(true, document);
         return;
     }
     if (isMethod(methodNames.insertRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_insertRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_insertRightGroup)))
         {
             return;
         }
         MACRO_GetMandatoryString(name);
-        std::string message;
-        answerOk(message,
-                 dlrg.insertRightGroup(sole::uuid4(),
+        std::string message("rightgroup inserted");
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value rightgroup;
+        if (!dlrg.insertRightGroup(sole::uuid4(),
                                        name,
                                        loggedInUserId,
-                                       message));
+                                       rightgroup,
+                                       document.GetAllocator(),
+                                       message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        document.AddMember("rightgroup", rightgroup, document.GetAllocator());
+        answerOk(true, document);
         return;
     }
 
     if (isMethod(methodNames.updateRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_updateRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_updateRightGroup)))
         {
             return;
         }
@@ -76,7 +87,7 @@ void HandlerAppUserRightGroup::method()
 
     if (isMethod(methodNames.deleteRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, rl.rights.RN_deleteRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_deleteRightGroup)))
         {
             return;
         }

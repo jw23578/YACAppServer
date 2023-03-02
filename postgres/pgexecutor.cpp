@@ -210,6 +210,22 @@ pqxx::oid PGExecutor::oid(const std::string &fieldname)
     return row[fieldname].get<pqxx::oid>().value();
 }
 
+size_t PGExecutor::fill(std::set<int> &target, const std::string &fieldname)
+{
+    target.clear();
+    return append(target, fieldname);
+}
+
+size_t PGExecutor::append(std::set<int> &target, const std::string &fieldname)
+{
+    for (size_t i(0); i < size(); ++i)
+    {
+        target.insert(integer(fieldname));
+        next();
+    }
+    return target.size();
+}
+
 void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc)
 {
     object.SetObject();

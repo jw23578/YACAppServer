@@ -2,7 +2,7 @@
 #define HANDLERAPPUSERVERIFY_H
 
 #include "interfaces/pistachehandlerinterface.h"
-#include "databaselogics.h""
+#include "databaselogics.h"
 
 class HandlerAppUserVerify : public PistacheHandlerInterface
 {

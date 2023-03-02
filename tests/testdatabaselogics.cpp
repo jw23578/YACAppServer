@@ -56,7 +56,8 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
     dla.deleteAppointment(id, creater_id, message);
 
     DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
-    dlrg.insertRightGroup(id, "group #1", creater_id, message);
+    rapidjson::Value rightGroup;
+    dlrg.insertRightGroup(id, "group #1", creater_id, rightGroup, document.GetAllocator(), message);
     dlrg.updateRightGroup(id, "right group with new name", id, message);
     dlrg.updateRightGroup(id, "right group with really new name", creater_id, message);
     rapidjson::Value rightGroups;

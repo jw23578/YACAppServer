@@ -11,9 +11,11 @@ void RightsLogic::fetchRightsForUser(const sole::uuid &appuser_id)
 }
 
 RightsLogic::RightsLogic(DatabaseLogicRightGroup &dlrg):
+    adminExists(false),
     dlrg(dlrg)
 {
-
+    dlrg.checkAndGenerateAdminGroup(Rights::Administrator, Rights::allRightNumbers);
+    adminExists = dlrg.adminExists(Rights::Administrator);
 }
 
 int RightsLogic::appUserMissesRight(const sole::uuid &appuser_id, const RightNumber &rn)
@@ -36,6 +38,18 @@ void RightsLogic::addUserRights(const sole::uuid &appuser_id,
                                 rapidjson::Value &target,
                                 rapidjson::MemoryPoolAllocator<> &alloc)
 {
+    if (!adminExists)
+    {
+        sole::uuid right_group_id;
+        if (dlrg.fetchIDOfOneRightGroupByName(Rights::Administrator, right_group_id))
+        {
+            std::string message;
+            if (dlrg.insertUser(sole::uuid4(), right_group_id, appuser_id, message))
+            {
+                adminExists = true;
+            }
+        }
+    }
     rapidjson::Value rightsArray;
     rightsArray.SetArray();
     fetchRightsForUser(appuser_id);

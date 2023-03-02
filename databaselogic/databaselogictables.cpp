@@ -209,7 +209,7 @@ void DatabaseLogicTables::createDatabaseTables()
 
     utils.createTableIfNeeded(tableNames.t0023_right2rightgroup,
                               {idPrimaryKey,
-                               {tableFields.right_number, pg_uuid, false, true},
+                               {tableFields.right_number, pg_int, false, true},
                                {tableFields.right_group_id, pg_uuid, false, true}});
 
     utils.createTableIfNeeded(tableNames.t0024_space,

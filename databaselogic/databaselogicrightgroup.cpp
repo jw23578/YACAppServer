@@ -16,6 +16,30 @@ bool DatabaseLogicRightGroup::checkRightGroupCreator(const sole::uuid &id, const
     return true;
 }
 
+bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
+                                                 rapidjson::Value &object,
+                                                 rapidjson::MemoryPoolAllocator<> &alloc,
+                                                 std::string &message)
+{
+    PGExecutor e(pool);
+    return e.defaultSelectToJSON(tableNames.t0021_right_group, id, object, alloc, message);
+}
+
+bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const std::string &name, sole::uuid &id)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0021_right_group);
+    sql.addCompare("where", tableFields.name, "=", name);
+    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    PGExecutor e(pool, sql);
+    if (!e.size())
+    {
+        return false;
+    }
+    id = e.uuid(tableFields.id);
+    return true;
+}
+
 DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatController,
                                                  PGConnectionPool &pool):
     logStatController(logStatController),
@@ -24,7 +48,7 @@ DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatContr
 
 }
 
-bool DatabaseLogicRightGroup::insertRightGroup(const sole::uuid &id, const std::string &name, const sole::uuid &creater_id, std::string &message)
+bool DatabaseLogicRightGroup::insertRightGroup(const sole::uuid &id, const std::string &name, const sole::uuid &creater_id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {
     PGSqlString sql;
     sql.insert(tableNames.t0021_right_group);
@@ -32,7 +56,7 @@ bool DatabaseLogicRightGroup::insertRightGroup(const sole::uuid &id, const std::
     MACRO_addInsert(sql, name);
     MACRO_addInsert(sql, creater_id);
     PGExecutor e(pool, sql);
-    return true;
+    return fetchOneRightGroup(id, object, alloc, message);
 }
 
 bool DatabaseLogicRightGroup::updateRightGroup(const sole::uuid &id, const std::string &name, const sole::uuid &creater_id, std::string &message)
@@ -96,7 +120,7 @@ bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id, const sole::uuid
         PGSqlString sql;
         sql.select(tableNames.t0023_right2rightgroup);
         sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-        sql.addCompare("where", tableFields.right_number, "=", right_number);
+        sql.addCompare("and", tableFields.right_number, "=", right_number);
         PGExecutor e(pool, sql);
         if (e.size() > 0)
         {
@@ -118,7 +142,87 @@ bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, cons
     PGSqlString sql;
     sql.delet(tableNames.t0023_right2rightgroup);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-    sql.addCompare("where", tableFields.right_number, "=", right_number);
+    sql.addCompare("and", tableFields.right_number, "=", right_number);
     PGExecutor e(pool, sql);
     return true;
+}
+
+bool DatabaseLogicRightGroup::insertUser(const sole::uuid &id, const sole::uuid &right_group_id, const sole::uuid &appuser_id, std::string &message)
+{
+    {
+        PGSqlString sql;
+        sql.select(tableNames.t0022_right_group2appuser);
+        sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+        sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+        PGExecutor e(pool, sql);
+        if (e.size() > 0)
+        {
+            return true;
+        }
+
+    }
+    PGSqlString sql;
+    sql.insert(tableNames.t0022_right_group2appuser);
+    MACRO_addInsert(sql, id);
+    MACRO_addInsert(sql, right_group_id);
+    MACRO_addInsert(sql, appuser_id);
+    PGExecutor e(pool, sql);
+    return true;
+}
+
+bool DatabaseLogicRightGroup::removeUser(const sole::uuid &right_group_id, const sole::uuid &appuser_id, std::string &message)
+{
+    PGSqlString sql;
+    sql.delet(tableNames.t0022_right_group2appuser);
+    sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    PGExecutor e(pool, sql);
+    return true;
+}
+
+void DatabaseLogicRightGroup::fetchGroupRightNumbers(const sole::uuid &right_group_id,
+                                                     std::set<int> &right_numbers)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0023_right2rightgroup);
+    sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+    PGExecutor e(pool, sql);
+    e.fill(right_numbers, tableFields.right_number);
+}
+
+void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const std::string &adminGroupName, const std::set<int> &right_numbers)
+{
+    sole::uuid id(sole::uuid4());
+    if (!fetchIDOfOneRightGroupByName(adminGroupName, id))
+    {
+        PGSqlString sql;
+        sql.insert(tableNames.t0021_right_group);
+        MACRO_addInsert(sql, id);
+        sql.addInsert(tableFields.name, adminGroupName);
+        sql.addInsert(tableFields.creater_id, NullUuid);
+        PGExecutor e(pool, sql);
+    }
+    std::string message;
+    std::set<int> current_right_numbers;
+    fetchGroupRightNumbers(id, current_right_numbers);
+    for (const auto &rn: right_numbers)
+    {
+        if (current_right_numbers.find(rn) == current_right_numbers.end())
+        {
+            insertRight(sole::uuid4(), id, rn, message);
+        }
+    }
+}
+
+bool DatabaseLogicRightGroup::adminExists(const std::string &adminGroupName)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0022_right_group2appuser);
+    sql += std::string(" where ") + tableFields.right_group_id + std::string(" = (");
+    sql += std::string("select id from ") + tableNames.t0021_right_group;
+    sql.addCompare("where", tableFields.name, "=", adminGroupName);
+    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    sql += std::string(" ) limit 1");
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
 }

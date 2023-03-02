@@ -43,7 +43,8 @@ void HandlerAppUserLogin::method()
                                  deviceToken);
         }
         w.addMember("message", "Login successful");
-        databaseLogics.rightsLogic.addUserRights(appUserId, data, data.GetAllocator());
+        RightsLogic &rl(databaseLogics.rightsLogic);
+        rl.addUserRights(appUserId, data, data.GetAllocator());
         answerOk(true, data);
     }
 
