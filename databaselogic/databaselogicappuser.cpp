@@ -274,6 +274,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
     w.addMember(tableFields.fstname, select.string(tableFields.fstname));
     w.addMember(tableFields.surname, select.string(tableFields.surname));
     w.addMember(tableFields.visible_name, select.string(tableFields.visible_name));
+    w.addMember(tableFields.image_id, select.string(tableFields.image_id));
     return true;
 }
 

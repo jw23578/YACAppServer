@@ -21,13 +21,24 @@ HandlerAppUserSpace::HandlerAppUserSpace(DatabaseLogics &databaseLogics,
     addMethod(serverInterface,
               methodNames.fetchSpace,
               TypeGet);
-
+    addMethod(serverInterface,
+              methodNames.requestSpaceAccess,
+              TypePost);
 }
 
 void HandlerAppUserSpace::method()
 {
     DatabaseLogicSpaces &dls(databaseLogics.databaseLogicSpaces);
     RightsLogic &rl(databaseLogics.rightsLogic);
+    if (isMethod(methodNames.requestSpaceAccess))
+    {
+        MACRO_GetMandatoryUuid(space_id);
+        sole::uuid id(NullUuid);
+        dls.fetchSpaceRequestId(space_id, loggedInUserId, id);
+        dls.insertOrUpdateSpace2AppUser(id, appId, space_id, loggedInUserId, TimePointPostgreSqlNow, TimePointPostgreSqlNull, NullUuid, TimePointPostgreSqlNull, NullUuid);
+        answerOk("request successful", true);
+        return;
+    }
     if (isMethod(methodNames.fetchSpace))
     {
         MACRO_GetMandatoryUuid(id);

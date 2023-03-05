@@ -60,16 +60,19 @@ bool DatabaseLogicSpaces::fetchSpaces(const sole::uuid &app_id,
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
     sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
     sql.addCompare("and", tableFields.approved_datetime, "is not", TimePointPostgreSqlNull);
+    sql += std::string(" and ") + tableFields.space_id + " = t0024.id ";
     sql += ") or creater_id =:appuser_id) as member ";
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
     sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
     sql.addCompare("and", tableFields.denied_datetime, "is not", TimePointPostgreSqlNull);
+    sql += std::string(" and ") + tableFields.space_id + " = t0024.id ";
     sql += ")) as denied ";
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
     sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
     sql.addCompare("and", tableFields.requested_datetime, "is not", TimePointPostgreSqlNull);
+    sql += std::string(" and ") + tableFields.space_id + " = t0024.id ";
     sql += ")) as requested ";
-    sql += std::string(" from ") + tableNames.t0024_space;
+    sql += std::string(" from ") + tableNames.t0024_space + std::string(" as t0024 ");
     sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
     sql.addCompare("and", tableFields.app_id, "=", app_id);
 
@@ -137,5 +140,20 @@ bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &app_id,
     sql.addCompare("where", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
     e.toJsonArray(targetArray, alloc);
+    return true;
+}
+
+bool DatabaseLogicSpaces::fetchSpaceRequestId(const sole::uuid &space_id, const sole::uuid &appuser_id, sole::uuid &id)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0025_space2appuser);
+    sql.addCompare("where", tableFields.space_id, "=", space_id);
+    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    PGExecutor e(pool, sql);
+    if (!e.size())
+    {
+        return false;
+    }
+    id = e.uuid(tableFields.id);
     return true;
 }

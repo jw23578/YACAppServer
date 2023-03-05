@@ -62,6 +62,10 @@ public:
                             rapidjson::MemoryPoolAllocator<> &alloc,
                             std::string &message);
 
+    bool fetchSpaceRequestId(const sole::uuid &space_id,
+                             const sole::uuid &appuser_id,
+                             sole::uuid &id);
+
 };
 
 #endif // DATABASELOGICSPACES_H
