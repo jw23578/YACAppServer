@@ -34,6 +34,6 @@ void HandlerAppUserVerify::method()
         return;
     }
     w.addMember("message", message);
-    databaseLogics.rightsLogic.addUserRights(appUserId, data, data.GetAllocator());
+    databaseLogics.rightsLogic.addUserRights(appId, appUserId, data, data.GetAllocator());
     answerOk(true, data);
 }

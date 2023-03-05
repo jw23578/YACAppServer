@@ -6,8 +6,9 @@
 
 class RightsLogic
 {
-    bool adminExists;
     DatabaseLogicRightGroup &dlrg;
+    std::set<sole::uuid> checkedAppIds;
+    std::set<sole::uuid> appIdsWhereAdminExists;
     std::map<sole::uuid, std::set<int>> appUsers2RightNumbers;
     void fetchRightsForUser(const sole::uuid &appuser_id);
 public:
@@ -16,7 +17,8 @@ public:
     int appUserMissesRight(const sole::uuid &appuser_id, RightNumber const &rn);
     void clear();
 
-    void addUserRights(const sole::uuid &appuser_id, rapidjson::Value &target,
+    void addUserRights(const sole::uuid &app_id,
+                       const sole::uuid &appuser_id, rapidjson::Value &target,
                        rapidjson::MemoryPoolAllocator<> &alloc);
 };
 

@@ -21,6 +21,8 @@ DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
                               pool),
     databaseLogicRightGroup(logStatController,
                             pool),
+    databaseLogicSpaces(logStatController,
+                        pool),
     rightsLogic(databaseLogicRightGroup)
 {
 

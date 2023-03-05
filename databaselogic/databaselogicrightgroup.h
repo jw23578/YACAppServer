@@ -4,10 +4,10 @@
 #include "postgres/pgconnectionpool.h"
 #include "sole/sole.hpp"
 #include "logstat/logstatcontroller.h"
-#include "pgutils.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
+#include <set>
 
 class DatabaseLogicRightGroup
 {
@@ -16,9 +16,6 @@ class DatabaseLogicRightGroup
     TableNames tableNames;
     TableFields tableFields;
 
-    bool checkRightGroupCreator(const sole::uuid &id,
-                                const sole::uuid &creater_id,
-                                std::string &message);
     bool fetchOneRightGroup(const sole::uuid &id,
                             rapidjson::Value &object,
                             rapidjson::MemoryPoolAllocator<> &alloc,
@@ -27,28 +24,32 @@ public:
     DatabaseLogicRightGroup(LogStatController &logStatController,
                             PGConnectionPool &pool);
 
-    bool fetchIDOfOneRightGroupByName(const std::string &name,
+    bool fetchIDOfOneRightGroupByName(const sole::uuid &app_id,
+                                      const std::string &name,
                                       sole::uuid &id);
 
-    bool insertRightGroup(const sole::uuid &id,
-                          const std::string &name,
-                          const sole::uuid &creater_id,
-                          rapidjson::Value &object,
-                          rapidjson::MemoryPoolAllocator<> &alloc,
-                          std::string &message);
-
-    bool updateRightGroup(const sole::uuid &id,
-                          const std::string &name,
-                          const sole::uuid &creater_id,
-                          std::string &message);
+    bool insertOrUpdateRightGroup(sole::uuid &id,
+                                  const sole::uuid &app_id,
+                                  const std::string &name,
+                                  const sole::uuid &creater_id,
+                                  const bool automatic,
+                                  rapidjson::Value &object,
+                                  rapidjson::MemoryPoolAllocator<> &alloc,
+                                  std::string &message);
 
     bool deleteRightGroup(const sole::uuid &id,
-                          const sole::uuid &creater_id,
+                          const sole::uuid &appuser_id,
                           std::string &message);
 
-    bool fetchRightGroups(rapidjson::Value &targetArray,
+    bool fetchRightGroups(const sole::uuid &app_id,
+                          rapidjson::Value &targetArray,
                           rapidjson::MemoryPoolAllocator<> &alloc,
                           std::string &message);
+
+    bool fetchRightGroup(const sole::uuid &right_group_id,
+                         rapidjson::Value &object,
+                         rapidjson::MemoryPoolAllocator<> &alloc,
+                         std::string &message);
 
     void fetchGroupRightNumbers(const sole::uuid &right_group_id,
                                 std::set<int> &right_numbers);
@@ -74,9 +75,11 @@ public:
                     const sole::uuid &appuser_id,
                     std::string &message);
 
-    void checkAndGenerateAdminGroup(const std::string &adminGroupName,
+    void checkAndGenerateAdminGroup(const sole::uuid &app_id,
+                                    const std::string &adminGroupName,
                                     const std::set<int> &right_numbers);
-    bool adminExists(const std::string &adminGroupName);
+    bool adminExists(const sole::uuid &app_id,
+                     const std::string &adminGroupName);
 };
 
 #endif // DATABASELOGICRIGHTGROUP_H

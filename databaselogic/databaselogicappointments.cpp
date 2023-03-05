@@ -61,6 +61,7 @@ DatabaseLogicAppointments::DatabaseLogicAppointments(LogStatController &logStatC
 }
 
 bool DatabaseLogicAppointments::insertAppointmentTemplate(sole::uuid const &id,
+                                                          const sole::uuid &app_id,
                                                           const std::string &name,
                                                           int default_duration_in_minutes,
                                                           int color,
@@ -69,6 +70,7 @@ bool DatabaseLogicAppointments::insertAppointmentTemplate(sole::uuid const &id,
     PGSqlString insert;
     insert.insert(tableNames.t0016_appointment_templates);
     MACRO_addInsert(insert, id);
+    MACRO_addInsert(insert, app_id);
     MACRO_addInsert(insert, name);
     MACRO_addInsert(insert, default_duration_in_minutes);
     MACRO_addInsert(insert, color);
@@ -77,7 +79,7 @@ bool DatabaseLogicAppointments::insertAppointmentTemplate(sole::uuid const &id,
     return true;
 }
 
-bool DatabaseLogicAppointments::updateAppointmentTemplate(const sole::uuid &id,
+bool DatabaseLogicAppointments::updateAppointmentTemplate(const sole::uuid &id, const sole::uuid &app_id,
                                                           const std::string &name,
                                                           int default_duration_in_minutes,
                                                           int color,
@@ -91,6 +93,7 @@ bool DatabaseLogicAppointments::updateAppointmentTemplate(const sole::uuid &id,
     PGSqlString update;
     update.update(tableNames.t0016_appointment_templates);
     MACRO_addSet(update, name);
+    MACRO_addSet(update, app_id);
     MACRO_addSet(update, default_duration_in_minutes);
     MACRO_addSet(update, color);
     MACRO_addSet(update, owner_id);
@@ -115,22 +118,24 @@ bool DatabaseLogicAppointments::deleteAppointmentTemplate(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appuser_id,
+bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appuser_id, const sole::uuid &app_id,
                                                           rapidjson::Value &target,
                                                           rapidjson::MemoryPoolAllocator<> &alloc,
                                                           std::string &message)
 {
     PGSqlString sql;
     sql.select(tableNames.t0016_appointment_templates);
-    sql.addCompare(" where ", tableFields.owner_id, " = ", appuser_id);
-    sql += " or id in (select element_id from t0019_element_visible4appuser where appuser_id = :appuser_id) ";
+    sql.addCompare(" where (", tableFields.owner_id, " = ", appuser_id);
+    sql += " or id in (select element_id from t0019_element_visible4appuser where appuser_id = :appuser_id)) ";
     sql.set("appuser_id", appuser_id);
+    sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
     return true;
 }
 
 bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
+                                                  const sole::uuid &app_id,
                                                   const sole::uuid &appointment_group_id,
                                                   const sole::uuid &appointment_template_id,
                                                   const std::string &caption,
@@ -180,6 +185,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
     PGSqlString sql;
     sql.insert(tableNames.t0018_appointment);
     MACRO_addInsert(sql, id);
+    MACRO_addInsert(sql, app_id);
     MACRO_addInsert(sql, appointment_group_id);
     MACRO_addInsert(sql, appointment_template_id);
     MACRO_addInsert(sql, caption);
@@ -216,6 +222,7 @@ bool DatabaseLogicAppointments::deleteAppointment(const sole::uuid &id,
 }
 
 bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
+                                                  const sole::uuid &app_id,
                                                   rapidjson::Value &target,
                                                   rapidjson::MemoryPoolAllocator<> &alloc,
                                                   std::string &message)
@@ -226,6 +233,7 @@ bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
     sql += std::string(" or ") + tableFields.visible_for_everybody;
     sql += std::string(") and ") + tableFields.deleted_datetime + std::string(" is null ");
     sql += std::string(" and ") + tableFields.history_datetime + std::string(" is null ");
+    sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
     return true;

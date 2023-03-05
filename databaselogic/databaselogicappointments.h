@@ -29,11 +29,13 @@ public:
                               PGConnectionPool &pool);
 
     bool insertAppointmentTemplate(sole::uuid const &id,
+                                   const sole::uuid &app_id,
                                    std::string const &name,
                                    int default_duration_in_minutes,
                                    int color,
                                    sole::uuid const &owner_id);
     bool updateAppointmentTemplate(sole::uuid const &id,
+                                   const sole::uuid &app_id,
                                    std::string const &name,
                                    int default_duration_in_minutes,
                                    int color,
@@ -43,11 +45,13 @@ public:
                                    std::string &message);
 
     bool fetchAppointmentTemplates(const sole::uuid &appuser_id,
+                                   const sole::uuid &app_id,
                                    rapidjson::Value &target,
                                    rapidjson::MemoryPoolAllocator<> &alloc,
                                    std::string &message);
 
     bool insertAppointment(const sole::uuid &id,
+                           const sole::uuid &app_id,
                            const sole::uuid &appointment_group_id,
                            const sole::uuid &appointment_template_id,
                            const std::string &caption,
@@ -69,6 +73,7 @@ public:
                            std::string &message);
 
     bool fetchAppointments(const sole::uuid &appuser_id,
+                           const sole::uuid &app_id,
                            rapidjson::Value &target,
                            rapidjson::MemoryPoolAllocator<> &alloc,
                            std::string &message);

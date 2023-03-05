@@ -240,6 +240,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
 {
     if (!lookupAppUser(appId, loginEMail, appUserId, message))
     {
+        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
         return false;
     }
     PGExecutor login(pool);
@@ -249,7 +250,7 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
                      tableFields.appuser_id,
                      appUserId.str()))
     {
-        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
+        message = "Password not set, please request a Logintoken";
         return false;
 
     }

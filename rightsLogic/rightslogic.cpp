@@ -11,14 +11,12 @@ void RightsLogic::fetchRightsForUser(const sole::uuid &appuser_id)
 }
 
 RightsLogic::RightsLogic(DatabaseLogicRightGroup &dlrg):
-    adminExists(false),
     dlrg(dlrg)
 {
-    dlrg.checkAndGenerateAdminGroup(Rights::Administrator, Rights::allRightNumbers);
-    adminExists = dlrg.adminExists(Rights::Administrator);
 }
 
-int RightsLogic::appUserMissesRight(const sole::uuid &appuser_id, const RightNumber &rn)
+int RightsLogic::appUserMissesRight(const sole::uuid &appuser_id,
+                                    const RightNumber &rn)
 {
     // if right is missing then the right number is returned
     auto appUserRights(appUsers2RightNumbers[appuser_id]);
@@ -31,22 +29,36 @@ int RightsLogic::appUserMissesRight(const sole::uuid &appuser_id, const RightNum
 
 void RightsLogic::clear()
 {
+    checkedAppIds.clear();
     appUsers2RightNumbers.clear();
 }
 
-void RightsLogic::addUserRights(const sole::uuid &appuser_id,
+void RightsLogic::addUserRights(const sole::uuid &app_id,
+                                const sole::uuid &appuser_id,
                                 rapidjson::Value &target,
                                 rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    if (!adminExists)
+    if (checkedAppIds.find(app_id) == checkedAppIds.end())
     {
-        sole::uuid right_group_id;
-        if (dlrg.fetchIDOfOneRightGroupByName(Rights::Administrator, right_group_id))
+        dlrg.checkAndGenerateAdminGroup(app_id, Rights::Administrator, Rights::allRightNumbers);
+    }
+
+    if (appIdsWhereAdminExists.find(app_id) == appIdsWhereAdminExists.end())
+    {
+        if (dlrg.adminExists(app_id, Rights::Administrator))
         {
-            std::string message;
-            if (dlrg.insertUser(sole::uuid4(), right_group_id, appuser_id, message))
+            appIdsWhereAdminExists.insert(app_id);
+        }
+        else
+        {
+            sole::uuid right_group_id;
+            if (dlrg.fetchIDOfOneRightGroupByName(app_id, Rights::Administrator, right_group_id))
             {
-                adminExists = true;
+                std::string message;
+                if (dlrg.insertUser(sole::uuid4(), right_group_id, appuser_id, message))
+                {
+                    appIdsWhereAdminExists.insert(app_id);
+                }
             }
         }
     }

@@ -40,6 +40,7 @@ void HandlerAppUserAppointments::method()
         rapidjson::Value appointment_templates;
         std::string message;
         if (!dla.fetchAppointmentTemplates(loggedInUserId,
+                                           appId,
                                            appointment_templates,
                                            document.GetAllocator(),
                                            message))
@@ -58,6 +59,7 @@ void HandlerAppUserAppointments::method()
         rapidjson::Value appointments;
         std::string message;
         if (!dla.fetchAppointments(loggedInUserId,
+                                   appId,
                                    appointments,
                                    document.GetAllocator(),
                                    message))
@@ -103,6 +105,7 @@ void HandlerAppUserAppointments::method()
         document.SetObject();
         rapidjson::Value appointment;
         if (!dla.insertAppointment(sole::uuid4(),
+                                   appId,
                                    appointment_group_id,
                                    appointment_template_id,
                                    caption,
@@ -139,6 +142,7 @@ void HandlerAppUserAppointments::method()
     if (isMethod(methodNames.insertAppointmentTemplate))
     {
         if (!dla.insertAppointmentTemplate(sole::uuid4(),
+                                           appId,
                                            name,
                                            default_duration_in_minutes,
                                            color,
@@ -154,6 +158,7 @@ void HandlerAppUserAppointments::method()
     {
         MACRO_GetMandatoryUuid(id);
         if (!dla.updateAppointmentTemplate(id,
+                                           appId,
                                            name,
                                            default_duration_in_minutes,
                                            color,

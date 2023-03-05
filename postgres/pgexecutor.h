@@ -92,6 +92,9 @@ public:
     size_t fill(std::set<int> &target, const std::string &fieldname);
     size_t append(std::set<int> &target, const std::string &fieldname);
 
+    size_t fill(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
+    size_t append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
+
     size_t toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc);
     void toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc);
 };

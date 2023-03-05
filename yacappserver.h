@@ -25,6 +25,7 @@
 #include "handlerLoggedIn/handlerappuserfetchimage.h"
 #include "handlerLoggedIn/handlerappuserappointments.h"
 #include "handlerLoggedIn/handlerappuserrightgroup.h"
+#include "handlerLoggedIn/handlerappuserspace.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "databaselogicmessages.h"
@@ -64,6 +65,7 @@ class YACAppServer: public PistacheServerInterface
 
     HandlerAppUserAppointments handlerAppUserAppointments;
     HandlerAppUserRightGroup handlerAppUserRightGroup;
+    HandlerAppUserSpace handlerAppUserSpace;
     HandlerStoreMessage handlerStoreMesage;
 
 

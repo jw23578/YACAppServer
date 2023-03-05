@@ -2,38 +2,53 @@
 #include <algorithm>
 #include "utils/extstring.h"
 
-PGSqlString::PGSqlString():
-    firstSetField(true)
+PGSqlString::PGSqlString()
 {
 }
 
 PGSqlString::PGSqlString(std::string const &s):
-    sql(s),
-    firstSetField(true)
+    sql(s)
 {
 
 }
 
 void PGSqlString::select(const std::string &tableName)
 {
+    selectStatement = true;
     sql = "select * from " + tableName;
 }
 
 void PGSqlString::update(const std::string &tableName)
 {
     firstSetField = true;
+    updateStatement = true;
     sql = "update " + tableName + " set ";
 }
 
 void PGSqlString::insert(const std::string &tableName)
 {
     firstSetField = true;
+    insertStatement = true;
     sql = "insert into " + tableName + " ( ";
 }
 
 void PGSqlString::delet(const std::string &tableName)
 {
+    deleteStatement = true;
     sql = "delete from " + tableName;
+}
+
+void PGSqlString::insertOrUpdate(sole::uuid &id, const std::string &tableName)
+{
+    if (id == NullUuid)
+    {
+        id = sole::uuid4();
+        insert(tableName);
+    }
+    else
+    {
+        update(tableName);
+    }
 }
 
 void PGSqlString::addOnConflict(const std::string &target,

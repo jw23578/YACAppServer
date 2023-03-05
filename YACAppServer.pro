@@ -39,6 +39,7 @@ SOURCES += \
         databaselogic/databaselogicmessages.cpp \
         databaselogic/databaselogicrightgroup.cpp \
         databaselogic/databaselogics.cpp \
+        databaselogic/databaselogicspaces.cpp \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
@@ -64,6 +65,7 @@ SOURCES += \
         handlerLoggedIn/handlerappuserinsertworktime.cpp \
         handlerLoggedIn/handlerappuserrightgroup.cpp \
         handlerLoggedIn/handlerappusersearchprofiles.cpp \
+        handlerLoggedIn/handlerappuserspace.cpp \
         handlerLoggedIn/handlerappuserupdatemessagestates.cpp \
         handlerLoggedIn/handlerappuserupdateprofile.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
@@ -124,6 +126,7 @@ HEADERS += \
   databaselogic/databaselogicmessages.h \
   databaselogic/databaselogicrightgroup.h \
   databaselogic/databaselogics.h \
+  databaselogic/databaselogicspaces.h \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
@@ -149,6 +152,7 @@ HEADERS += \
   handlerLoggedIn/handlerappuserinsertworktime.h \
   handlerLoggedIn/handlerappuserrightgroup.h \
   handlerLoggedIn/handlerappusersearchprofiles.h \
+  handlerLoggedIn/handlerappuserspace.h \
   handlerLoggedIn/handlerappuserupdatemessagestates.h \
   handlerLoggedIn/handlerappuserupdateprofile.h \
   handlerLoggedIn/handlerloggedininterface.h \

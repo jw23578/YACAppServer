@@ -18,19 +18,42 @@ HandlerAppUserRightGroup::HandlerAppUserRightGroup(DatabaseLogics &databaseLogic
     addMethod(serverInterface,
               methodNames.deleteRightGroup,
               TypePost);
+    addMethod(serverInterface,
+              methodNames.fetchRightGroup,
+              TypeGet);
 }
 
 void HandlerAppUserRightGroup::method()
 {
     DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
     RightsLogic &rl(databaseLogics.rightsLogic);
+    if (isMethod(methodNames.fetchRightGroup))
+    {
+        MACRO_GetMandatoryUuid(id);
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value rightgroup;
+        std::string message;
+        if (!dlrg.fetchRightGroup(id,
+                                  rightgroup,
+                                  document.GetAllocator(),
+                                  message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        document.AddMember("rightgroup", rightgroup, document.GetAllocator());
+        answerOk(true, document);
+        return;
+    }
     if (isMethod(methodNames.fetchRightGroups))
     {
         rapidjson::Document document;
         document.SetObject();
         rapidjson::Value rightgroups;
         std::string message;
-        if (!dlrg.fetchRightGroups(rightgroups,
+        if (!dlrg.fetchRightGroups(appId,
+                                   rightgroups,
                                    document.GetAllocator(),
                                    message))
         {
@@ -38,27 +61,31 @@ void HandlerAppUserRightGroup::method()
             return;
         }
         document.AddMember("rightgroups", rightgroups, document.GetAllocator());
-        databaseLogics.rightsLogic.addUserRights(loggedInUserId, document, document.GetAllocator());
+        databaseLogics.rightsLogic.addUserRights(appId, loggedInUserId, document, document.GetAllocator());
         answerOk(true, document);
         return;
     }
     if (isMethod(methodNames.insertRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_insertRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_changeRightsGroups)))
         {
             return;
         }
         MACRO_GetMandatoryString(name);
+        MACRO_GetMandatoryBool(automatic);
         std::string message("rightgroup inserted");
         rapidjson::Document document;
         document.SetObject();
         rapidjson::Value rightgroup;
-        if (!dlrg.insertRightGroup(sole::uuid4(),
-                                       name,
-                                       loggedInUserId,
-                                       rightgroup,
-                                       document.GetAllocator(),
-                                       message))
+        sole::uuid id(NullUuid);
+        if (!dlrg.insertOrUpdateRightGroup(id,
+                                           appId,
+                                           name,
+                                           loggedInUserId,
+                                           automatic,
+                                           rightgroup,
+                                           document.GetAllocator(),
+                                           message))
         {
             answerOk(message, false);
             return;
@@ -70,24 +97,37 @@ void HandlerAppUserRightGroup::method()
 
     if (isMethod(methodNames.updateRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_updateRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_changeRightsGroups)))
         {
             return;
         }
         MACRO_GetMandatoryUuid(id);
         MACRO_GetMandatoryString(name);
-        std::string message;
-        answerOk(message,
-                 dlrg.updateRightGroup(id,
-                                       name,
-                                       loggedInUserId,
-                                       message));
+        MACRO_GetMandatoryBool(automatic);
+        std::string message("rightgroup updated");
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value rightgroup;
+        if(!dlrg.insertOrUpdateRightGroup(id,
+                                          appId,
+                                          name,
+                                          loggedInUserId,
+                                          automatic,
+                                          rightgroup,
+                                          document.GetAllocator(),
+                                          message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        document.AddMember("rightgroup", rightgroup, document.GetAllocator());
+        answerOk(true, document);
         return;
     }
 
     if (isMethod(methodNames.deleteRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_deleteRightGroup)))
+        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_changeRightsGroups)))
         {
             return;
         }

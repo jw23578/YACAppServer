@@ -1,21 +1,6 @@
 #include "databaselogicrightgroup.h"
 #include "pgexecutor.h"
 
-bool DatabaseLogicRightGroup::checkRightGroupCreator(const sole::uuid &id, const sole::uuid &creater_id, std::string &message)
-{
-    PGExecutor e(pool);
-    if (!e.defaultSelect(tableNames.t0021_right_group, id, message))
-    {
-        return false;
-    }
-    if (e.uuid(tableFields.creater_id) != creater_id)
-    {
-        message = "you are not the creater of this right group";
-        return false;
-    }
-    return true;
-}
-
 bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
                                                  rapidjson::Value &object,
                                                  rapidjson::MemoryPoolAllocator<> &alloc,
@@ -25,12 +10,13 @@ bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
     return e.defaultSelectToJSON(tableNames.t0021_right_group, id, object, alloc, message);
 }
 
-bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const std::string &name, sole::uuid &id)
+bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const sole::uuid &app_id, const std::string &name, sole::uuid &id)
 {
     PGSqlString sql;
     sql.select(tableNames.t0021_right_group);
     sql.addCompare("where", tableFields.name, "=", name);
     sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
     if (!e.size())
     {
@@ -48,52 +34,89 @@ DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatContr
 
 }
 
-bool DatabaseLogicRightGroup::insertRightGroup(const sole::uuid &id, const std::string &name, const sole::uuid &creater_id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
-{
+bool DatabaseLogicRightGroup::insertOrUpdateRightGroup(sole::uuid &id, const sole::uuid &app_id, const std::string &name, const sole::uuid &creater_id, const bool automatic, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
+{    
     PGSqlString sql;
-    sql.insert(tableNames.t0021_right_group);
-    MACRO_addInsert(sql, id);
-    MACRO_addInsert(sql, name);
-    MACRO_addInsert(sql, creater_id);
+    if (id == NullUuid)
+    {
+        id = sole::uuid4();
+        sql.insert(tableNames.t0021_right_group);
+        MACRO_addInsert(sql, id);
+        MACRO_addInsert(sql, app_id);
+        MACRO_addInsert(sql, name);
+        MACRO_addInsert(sql, creater_id);
+        MACRO_addInsert(sql, automatic);
+    }
+    else
+    {
+        PGSqlString sql;
+        sql.update(tableNames.t0021_right_group);
+        MACRO_addSet(sql, app_id);
+        MACRO_addSet(sql, name);
+        MACRO_addSet(sql, automatic);
+        sql.addCompare("where", tableFields.id, "=", id);
+    }
     PGExecutor e(pool, sql);
     return fetchOneRightGroup(id, object, alloc, message);
 }
 
-bool DatabaseLogicRightGroup::updateRightGroup(const sole::uuid &id, const std::string &name, const sole::uuid &creater_id, std::string &message)
+bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
 {
-    if (!checkRightGroupCreator(id, creater_id, message))
-    {
-        return false;
-    }
-    PGSqlString sql;
-    sql.update(tableNames.t0021_right_group);
-    MACRO_addSet(sql, name);
-    sql.addCompare("where", tableFields.id, "=", id);
-    PGExecutor e(pool, sql);
-    return true;
-}
-
-bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole::uuid &creater_id, std::string &message)
-{
-    if (!checkRightGroupCreator(id, creater_id, message))
-    {
-        return false;
-    }
     PGSqlString sql;
     sql.update(tableNames.t0021_right_group);
     sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
+    sql.addSet(tableFields.deleted_appuser_id, appuser_id);
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return true;
 }
 
-bool DatabaseLogicRightGroup::fetchRightGroups(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
+bool DatabaseLogicRightGroup::fetchRightGroups(const sole::uuid &app_id,
+                                               rapidjson::Value &targetArray,
+                                               rapidjson::MemoryPoolAllocator<> &alloc,
+                                               std::string &message)
 {
     PGSqlString sql;
     sql.select(tableNames.t0021_right_group);
     sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
     e.toJsonArray(targetArray, alloc);
+    return true;
+}
+
+bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
+                                              rapidjson::Value &object,
+                                              rapidjson::MemoryPoolAllocator<> &alloc,
+                                              std::string &message)
+{
+    {
+        PGExecutor e(pool);
+        if (!e.defaultSelectToJSON(tableNames.t0021_right_group, right_group_id, object, alloc, message))
+        {
+            return false;
+        }
+    }
+    {
+        PGSqlString sql;
+        sql.select(tableNames.t0023_right2rightgroup);
+        sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+        PGExecutor e(pool, sql);
+        rapidjson::Value rightNumbers;
+        rightNumbers.SetArray();
+        e.fill(rightNumbers, alloc, tableFields.right_number);
+        object.AddMember("rightNumbers", rightNumbers, alloc);
+    }
+    {
+        PGSqlString sql;
+        sql.select(tableNames.t0022_right_group2appuser);
+        sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+        PGExecutor e(pool, sql);
+        rapidjson::Value member;
+        member.SetArray();
+        e.fill(member, alloc, tableFields.appuser_id);
+        object.AddMember("member", member, alloc);
+    }
     return true;
 }
 
@@ -114,7 +137,10 @@ void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const sole::uuid &appuser
     }
 }
 
-bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id, const sole::uuid &right_group_id, const int right_number, std::string &message)
+bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id,
+                                          const sole::uuid &right_group_id,
+                                          const int right_number,
+                                          std::string &message)
 {
     {
         PGSqlString sql;
@@ -190,16 +216,18 @@ void DatabaseLogicRightGroup::fetchGroupRightNumbers(const sole::uuid &right_gro
     e.fill(right_numbers, tableFields.right_number);
 }
 
-void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const std::string &adminGroupName, const std::set<int> &right_numbers)
+void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const sole::uuid &app_id,
+                                                         const std::string &adminGroupName, const std::set<int> &right_numbers)
 {
     sole::uuid id(sole::uuid4());
-    if (!fetchIDOfOneRightGroupByName(adminGroupName, id))
+    if (!fetchIDOfOneRightGroupByName(app_id, adminGroupName, id))
     {
         PGSqlString sql;
         sql.insert(tableNames.t0021_right_group);
         MACRO_addInsert(sql, id);
         sql.addInsert(tableFields.name, adminGroupName);
         sql.addInsert(tableFields.creater_id, NullUuid);
+        sql.addInsert(tableFields.app_id, app_id);
         PGExecutor e(pool, sql);
     }
     std::string message;
@@ -214,7 +242,7 @@ void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const std::string &admi
     }
 }
 
-bool DatabaseLogicRightGroup::adminExists(const std::string &adminGroupName)
+bool DatabaseLogicRightGroup::adminExists(const sole::uuid &app_id, const std::string &adminGroupName)
 {
     PGSqlString sql;
     sql.select(tableNames.t0022_right_group2appuser);
@@ -222,6 +250,7 @@ bool DatabaseLogicRightGroup::adminExists(const std::string &adminGroupName)
     sql += std::string("select id from ") + tableNames.t0021_right_group;
     sql.addCompare("where", tableFields.name, "=", adminGroupName);
     sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    sql.addCompare("and", tableFields.app_id, "=", app_id);
     sql += std::string(" ) limit 1");
     PGExecutor e(pool, sql);
     return e.size() > 0;

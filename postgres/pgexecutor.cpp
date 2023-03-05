@@ -226,6 +226,23 @@ size_t PGExecutor::append(std::set<int> &target, const std::string &fieldname)
     return target.size();
 }
 
+size_t PGExecutor::fill(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname)
+{
+    targetArray.Clear();
+    append(targetArray, alloc, fieldname);
+}
+
+size_t PGExecutor::append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname)
+{
+    const pqxx::row::size_type column(result[currentRow].column_number(fieldname));
+    for (size_t i(0); i < size(); ++i)
+    {
+        rapidjson::Value data(string(column), alloc);
+        targetArray.PushBack(data, alloc);
+        next();
+    }
+}
+
 void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc)
 {
     object.SetObject();

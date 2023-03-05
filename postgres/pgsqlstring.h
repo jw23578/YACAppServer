@@ -22,12 +22,20 @@
 #define MACRO_addSet(sql, fieldValue) \
     sql.addSet(#fieldValue, fieldValue);
 
+#define MACRO_addInsertOrSet(sql, fieldValue) \
+    sql.addInsertOrSet(#fieldValue, fieldValue);
+
+
 class PGSqlString
 {
     std::string sql;
     std::string insert2ndPart;
     std::string conflictAction;
-    bool firstSetField;
+    bool firstSetField{true};
+    bool selectStatement{false};
+    bool insertStatement{false};
+    bool updateStatement{false};
+    bool deleteStatement{false};
     void rawReplace(std::string &sql,
                     std::string const &param,
                     std::string value) const;
@@ -42,6 +50,7 @@ public:
     void update(std::string const &tableName);
     void insert(std::string const &tableName);
     void delet(std::string const &tableName);
+    void insertOrUpdate(sole::uuid &id, std::string const &tableName);
 
     void addOnConflict(const std::string &target, PGSqlString &onConflict);
 
@@ -91,11 +100,11 @@ public:
     }
 
     template <class T>
-    void addSet(const std::string &needle,
+    void addSet(const std::string &field,
                 const T &value)
     {
         addCompare(firstSetField ? "" : ", ",
-                   needle,
+                   field,
                    "=",
                    value);
         firstSetField = false;
@@ -114,6 +123,35 @@ public:
         sql += field;
         insert2ndPart += ":" + field;
         set(field, value);
+    }
+
+    template <class T>
+    void addInsertOrSet(const std::string &field, const T &value)
+    {
+        if (insertStatement)
+        {
+            addInsert(field, value);
+        }
+        if (updateStatement)
+        {
+            addSet(field, value);
+        }
+    }
+
+    template <class T>
+    void addInsertOrWhere(const std::string &connector,
+                          const std::string &needleField,
+                          const std::string &comparator,
+                          const T &value)
+    {
+        if (insertStatement)
+        {
+            addInsert(needleField, value);
+        }
+        if (updateStatement)
+        {
+            addCompare(connector, needleField, comparator, value);
+        }
     }
 
     void limit(const size_t limit, const size_t offset);

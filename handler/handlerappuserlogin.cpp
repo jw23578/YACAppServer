@@ -1,5 +1,4 @@
 #include "handlerappuserlogin.h"
-#include "extmap.h"
 
 HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogics &databaseLogics,
                                          DeviceTokenCache &deviceTokenCache,
@@ -32,7 +31,7 @@ void HandlerAppUserLogin::method()
                                                           w,
                                                           appUserId))
     {
-        answerBad(message);
+        answerOk(message, false);
     }
     else
     {
@@ -44,7 +43,7 @@ void HandlerAppUserLogin::method()
         }
         w.addMember("message", "Login successful");
         RightsLogic &rl(databaseLogics.rightsLogic);
-        rl.addUserRights(appUserId, data, data.GetAllocator());
+        rl.addUserRights(appId, appUserId, data, data.GetAllocator());
         answerOk(true, data);
     }
 

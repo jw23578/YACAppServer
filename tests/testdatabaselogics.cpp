@@ -6,20 +6,24 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
 {
     DatabaseLogicAppointments &dla(databaseLogics.databaseLogicAppointments);
     sole::uuid id(sole::uuid4());
+    sole::uuid app_id(sole::uuid4());
     sole::uuid owner_id(sole::uuid4());
     dla.insertAppointmentTemplate(id,
+                                  app_id,
                                   "termin vorlage",
                                   30,
                                   0,
                                   owner_id);
 
     dla.updateAppointmentTemplate(id,
+                                  app_id,
                                   "neue termin vorlage",
                                   45,
                                   1,
                                   id);
 
     dla.updateAppointmentTemplate(id,
+                                  app_id,
                                   "neue termin vorlage",
                                   45,
                                   1,
@@ -36,6 +40,7 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
     rapidjson::Value appointment;
     bool visible_for_everybody(true);
     dla.insertAppointment(id,
+                          app_id,
                           id,
                           id,
                           "appointment",
@@ -57,11 +62,13 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
 
     DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
     rapidjson::Value rightGroup;
-    dlrg.insertRightGroup(id, "group #1", creater_id, rightGroup, document.GetAllocator(), message);
-    dlrg.updateRightGroup(id, "right group with new name", id, message);
-    dlrg.updateRightGroup(id, "right group with really new name", creater_id, message);
+    bool automatic(false);
+    id = NullUuid;
+    dlrg.insertOrUpdateRightGroup(id, app_id, "group #1", creater_id, automatic, rightGroup, document.GetAllocator(), message);
+    dlrg.insertOrUpdateRightGroup(id, app_id, "right group with new name", id, automatic, rightGroup, document.GetAllocator(), message);
+    dlrg.insertOrUpdateRightGroup(id, app_id, "right group with really new name", creater_id, automatic, rightGroup, document.GetAllocator(), message);
     rapidjson::Value rightGroups;
-    dlrg.fetchRightGroups(rightGroups, document.GetAllocator(), message);
+    dlrg.fetchRightGroups(app_id, rightGroups, document.GetAllocator(), message);
     document.AddMember("rightGroups", rightGroups, document.GetAllocator());
     dlrg.deleteRightGroup(id, id, message);
     dlrg.deleteRightGroup(id, creater_id, message);

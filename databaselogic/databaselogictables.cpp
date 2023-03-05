@@ -32,6 +32,9 @@ bool DatabaseLogicTables::pgCryptoInstalled()
 void DatabaseLogicTables::createDatabaseTables()
 {
     PGColumnAndType idPrimaryKey({tableFields.id, pg_uuid, true});
+    PGColumnAndType appId({tableFields.app_id, pg_uuid, false, true});
+    PGColumnAndType deletedDateTime({tableFields.deleted_datetime, pg_uuid});
+    PGColumnAndType deletedAppUser({tableFields.deleted_appuser_id, pg_uuid});
 
     if (!utils.tableExists(tableNames.t0001_users))
     {
@@ -69,7 +72,7 @@ void DatabaseLogicTables::createDatabaseTables()
     }
 
     utils.createTableIfNeeded(tableNames.t0003_appuser_profiles,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.app_id, pg_uuid, false, true},
                                {tableFields.fstname, pg_text},
                                {tableFields.surname, pg_text},
@@ -87,22 +90,22 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.image_id, pg_uuid}});
 
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.appuser_id, pg_uuid, false, true},
                                {"login_token", pg_text},
                                {tableFields.login_token_valid_until, pg_timestamp}});
 
     utils.createTableIfNeeded(tableNames.t0004_appuser_passwordhashes,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.appuser_id, pg_uuid, false, true},
                                {tableFields.password_hash, pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0005_group_of_appusers,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.name, pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0006_appuser2group,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.appuser_id, pg_uuid, false, true},
                                {"group_id", pg_uuid, false, true}});
 
@@ -114,34 +117,34 @@ void DatabaseLogicTables::createDatabaseTables()
                                {"content_base64", pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0008_message_received,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.message_id, pg_uuid, false, true},
                                {tableFields.receiver_id, pg_uuid, false, true},
                                {tableFields.received_datetime, pg_timestamp}},
                               {{tableFields.message_id, tableFields.receiver_id}});
 
     utils.createTableIfNeeded(tableNames.t0014_message_read,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.message_id, pg_uuid, false, true},
                                {tableFields.reader_id, pg_uuid, false, true},
                                {tableFields.read_datetime, pg_timestamp}},
                               {{tableFields.message_id, tableFields.reader_id}});
 
     utils.createTableIfNeeded(tableNames.t0010_task,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.task, pg_text},
                                {tableFields.creater_id, pg_uuid, false, true},
                                {tableFields.created, pg_timestamp},
                                {tableFields.finished, pg_timestamp}});
 
     utils.createTableIfNeeded(tableNames.t0011_task_time,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.user_id, pg_uuid, false, true},
                                {tableFields.task_start, pg_timestamp},
                                {tableFields.task_end, pg_timestamp}});
 
     utils.createTableIfNeeded(tableNames.t0012_worktime,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.user_id, pg_uuid, false, true},
                                {tableFields.ts, pg_timestamp, false, true},
                                {tableFields.type, pg_int, false, true},
@@ -153,12 +156,13 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.data, pg_blob}});
 
     utils.createTableIfNeeded(tableNames.t0015_appuser_devicetoken,
-                              {{tableFields.id, pg_uuid, true},
+                              {idPrimaryKey,
                                {tableFields.user_id, pg_uuid, false, true},
                                {tableFields.device_token, pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0016_appointment_templates,
                               {idPrimaryKey,
+                               appId,
                                {tableFields.name, pg_text},
                                {tableFields.default_duration_in_minutes, pg_int},
                                {tableFields.color, pg_int},
@@ -171,6 +175,7 @@ void DatabaseLogicTables::createDatabaseTables()
 
     utils.createTableIfNeeded(tableNames.t0018_appointment,
                               {idPrimaryKey,
+                               appId,
                                {tableFields.appointment_group_id, pg_uuid, false, true},
                                {tableFields.appointment_template_id, pg_uuid, false, true},
                                {tableFields.caption, pg_text},
@@ -184,7 +189,8 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.bookable_since_datetime, pg_timestamp},
                                {tableFields.bookable_until_datetime, pg_timestamp},
                                {tableFields.booking_credits, pg_int},
-                               {tableFields.visible_for_everybody, pg_bool}});
+                               {tableFields.visible_for_everybody, pg_bool},
+                               {tableFields.no_space, pg_bool}});
 
     utils.createTableIfNeeded(tableNames.t0019_element_visible4appuser,
                               {idPrimaryKey,
@@ -198,9 +204,12 @@ void DatabaseLogicTables::createDatabaseTables()
 
     utils.createTableIfNeeded(tableNames.t0021_right_group,
                               {idPrimaryKey,
+                               appId,
                                {tableFields.name, pg_text, false, true},
                                {tableFields.creater_id, pg_uuid, false, true},
-                               {tableFields.deleted_datetime, pg_timestamp}});
+                               deletedDateTime,
+                               deletedAppUser,
+                               {tableFields.automatic, pg_bool}});
 
     utils.createTableIfNeeded(tableNames.t0022_right_group2appuser,
                               {idPrimaryKey,
@@ -214,13 +223,24 @@ void DatabaseLogicTables::createDatabaseTables()
 
     utils.createTableIfNeeded(tableNames.t0024_space,
                               {idPrimaryKey,
+                               appId,
                                {tableFields.name, pg_text, false, true},
                                {tableFields.creater_id, pg_uuid, false, true},
-                               {tableFields.deleted_datetime, pg_timestamp}});
+                               deletedDateTime,
+                               deletedAppUser,
+                               {tableFields.automatic, pg_bool},
+                               {tableFields.access_code, pg_text}});
 
     utils.createTableIfNeeded(tableNames.t0025_space2appuser,
                               {idPrimaryKey,
+                               appId,
                                {tableFields.space_id, pg_uuid, false, true},
-                               {tableFields.appuser_id, pg_uuid, false, true}});
+                               {tableFields.appuser_id, pg_uuid, false, true},
+                               {tableFields.requested_datetime, pg_timestamp},
+                               {tableFields.approved_datetime, pg_timestamp},
+                               {tableFields.approved_appuser_id, pg_uuid},
+                               {tableFields.denied_datetime, pg_timestamp},
+                               {tableFields.denied_appuser_id, pg_uuid}});
+
 }
 

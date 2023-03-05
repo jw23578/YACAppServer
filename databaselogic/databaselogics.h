@@ -10,6 +10,7 @@
 #include "databaselogicmessages.h"
 #include "databaselogicappointments.h"
 #include "databaselogicrightgroup.h"
+#include "databaselogic/databaselogicspaces.h"
 #include "rightsLogic/rightslogic.h"
 
 class DatabaseLogics
@@ -24,6 +25,7 @@ public:
     DatabaseLogicMessages databaseLogicMessages;
     DatabaseLogicAppointments databaseLogicAppointments;
     DatabaseLogicRightGroup databaseLogicRightGroup;
+    DatabaseLogicSpaces databaseLogicSpaces;
 
     RightsLogic rightsLogic;
 
