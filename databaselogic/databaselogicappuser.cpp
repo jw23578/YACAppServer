@@ -353,6 +353,36 @@ bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::updatePasswordLoggedIn(const sole::uuid &appuser_id, const std::string &password)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0004_appuser_passwordhashes);
+    sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
+    PGExecutor e(pool, sql);
+    if (e.size())
+    {
+        PGSqlString sql;
+        sql.update(tableNames.t0004_appuser_passwordhashes);
+        sql += " password_hash = crypt(:password, gen_salt('bf')) ";
+        sql.set("password", password);
+        sql.addCompare("where", "appuser_id", "=", appuser_id);
+        PGExecutor e(pool, sql);
+    }
+    else
+    {
+        PGSqlString sql("insert into t0004_appuser_passwordhashes "
+                        " (id, appuser_id, password_hash) "
+                        " values "
+                        " (:id, :appuser_id, crypt(:password, gen_salt('bf'))) ");
+        sql.set(tableFields.id, sole::uuid4());
+        sql.set(tableFields.appuser_id, appuser_id);
+        sql.set("password", password);
+        PGExecutor e(pool, sql);
+
+    }
+    return true;
+}
+
 bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
                                           const std::string &loginEMail,
                                           const std::string &updatePasswordToken,

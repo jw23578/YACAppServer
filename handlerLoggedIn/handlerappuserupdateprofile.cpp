@@ -37,6 +37,7 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetBool(with_image);
     MACRO_GetString(image_data_base64);
     MACRO_GetString(public_key_base64);
+    MACRO_GetString(password);
 
     sole::uuid imageId(NullUuid);
     if (with_image)
@@ -64,6 +65,10 @@ void HandlerAppUserUpdateProfile::method()
     {
         deviceTokenCache.add(loggedInUserId,
                              deviceToken);
+    }
+    if (password.size())
+    {
+        databaseLogics.databaseLogicAppUser.updatePasswordLoggedIn(loggedInUserId, password);
     }
 
     std::string message;

@@ -88,6 +88,8 @@ public:
                                std::string &updatePasswordToken,
                                std::string &message);
 
+    bool updatePasswordLoggedIn(const sole::uuid &appuser_id,
+                                const std::string &password);
     bool updatePassword(const sole::uuid &appId,
                         const std::string &loginEMail,
                         const std::string &updatePasswordToken,
