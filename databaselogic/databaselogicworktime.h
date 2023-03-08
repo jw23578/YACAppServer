@@ -6,6 +6,8 @@
 #include "logstat/logstatcontroller.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
+#include "rapidjson/document.h"
+#include "definitions.h"
 
 class DatabaseLogicWorktime
 {
@@ -61,6 +63,13 @@ public:
                         std::chrono::system_clock::time_point &workStart,
                         std::chrono::system_clock::time_point &pauseStart,
                         std::chrono::system_clock::time_point &offSiteWorkStart,
+                        std::string &message);
+
+    bool fetchWorktimes(const sole::uuid &user_id,
+                        const TimePoint &since,
+                        const TimePoint &until,
+                        rapidjson::Value &targetArray,
+                        rapidjson::MemoryPoolAllocator<> &alloc,
                         std::string &message);
 };
 

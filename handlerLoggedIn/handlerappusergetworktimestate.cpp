@@ -4,16 +4,40 @@ HandlerAppUserGetWorktimeState::HandlerAppUserGetWorktimeState(DatabaseLogics &d
                                                                PistacheServerInterface &serverInterface,
                                                                LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                             "/getWorktimeState",
+                             methodNames.getWorktimeState,
                              TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
-
+    addMethod(serverInterface,
+              methodNames.fetchWorktimes,
+              TypeGet);
 }
 
 void HandlerAppUserGetWorktimeState::method()
 {
+    if (isMethod(methodNames.fetchWorktimes))
+    {
+        MACRO_GetMandatoryTimePointFromISO(since);
+        MACRO_GetMandatoryTimePointFromISO(until);
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value worktimes;
+        std::string message;
+        if (!databaseLogics.databaseLogicWorktime.fetchWorktimes(loggedInUserId,
+                                                                 since,
+                                                                 until,
+                                                                 worktimes,
+                                                                 document.GetAllocator(),
+                                                                 message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        document.AddMember("worktimes", worktimes, document.GetAllocator());
+        answerOk(true, document);
+        return;
+    }
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;

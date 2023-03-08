@@ -165,3 +165,21 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
     PGExecutor e(pool, sql);
     return true;
 }
+
+bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
+                                           const TimePoint &since,
+                                           const TimePoint &until,
+                                           rapidjson::Value &targetArray,
+                                           rapidjson::MemoryPoolAllocator<> &alloc,
+                                           std::string &message)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0012_worktime);
+    sql.addCompare("where", tableFields.user_id, "=", user_id);
+    sql.addCompare("and", tableFields.ts, ">=", since);
+    sql.addCompare("and", tableFields.ts, "<=", until);
+    sql += std::string(" order by ") + tableFields.ts;
+    PGExecutor e(pool, sql);
+    e.toJsonArray(targetArray, alloc);
+    return true;
+}
