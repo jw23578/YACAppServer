@@ -176,8 +176,10 @@ bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
     PGSqlString sql;
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
-    sql.addCompare("and", tableFields.ts, ">=", since);
-    sql.addCompare("and", tableFields.ts, "<=", until);
+    sql += std::string(" and ") + tableFields.ts + " >= :since ";
+    sql += std::string(" and ") + tableFields.ts + " <= :until ";
+    MACRO_set(sql, since);
+    MACRO_set(sql, until);
     sql += std::string(" order by ") + tableFields.ts;
     PGExecutor e(pool, sql);
     e.toJsonArray(targetArray, alloc);

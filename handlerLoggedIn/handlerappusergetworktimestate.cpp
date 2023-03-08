@@ -18,15 +18,15 @@ void HandlerAppUserGetWorktimeState::method()
 {
     if (isMethod(methodNames.fetchWorktimes))
     {
-        MACRO_GetMandatoryTimePointFromISO(since);
-        MACRO_GetMandatoryTimePointFromISO(until);
+        MACRO_GetMandatoryTimePointFromISO(sinceISO);
+        MACRO_GetMandatoryTimePointFromISO(untilISO);
         rapidjson::Document document;
         document.SetObject();
         rapidjson::Value worktimes;
         std::string message;
         if (!databaseLogics.databaseLogicWorktime.fetchWorktimes(loggedInUserId,
-                                                                 since,
-                                                                 until,
+                                                                 sinceISO,
+                                                                 untilISO,
                                                                  worktimes,
                                                                  document.GetAllocator(),
                                                                  message))
