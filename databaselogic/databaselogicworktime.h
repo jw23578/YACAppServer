@@ -8,6 +8,7 @@
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
 #include "definitions.h"
+#include "pgexecutor.h"
 
 class DatabaseLogicWorktime
 {
@@ -16,6 +17,12 @@ class DatabaseLogicWorktime
     TableNames tableNames;
     TableFields tableFields;
 
+    bool selectWorktimeBefore(const sole::uuid &user_id,
+                              const TimePoint &ts,
+                              PGExecutor &e);
+    bool selectWorktimeAfter(const sole::uuid &user_id,
+                              const TimePoint &ts,
+                              PGExecutor &e);
 public:
     DatabaseLogicWorktime(LogStatController &logStatController,
                           PGConnectionPool &pool);
@@ -64,6 +71,12 @@ public:
                         std::chrono::system_clock::time_point &pauseStart,
                         std::chrono::system_clock::time_point &offSiteWorkStart,
                         std::string &message);
+
+    bool insertWorktimeBeginEnd(const sole::uuid &user_id,
+                                const TimePoint &begin,
+                                const TimePoint &end,
+                                const WorktimeType type,
+                                std::string &message);
 
     bool fetchWorktimes(const sole::uuid &user_id,
                         const TimePoint &since,

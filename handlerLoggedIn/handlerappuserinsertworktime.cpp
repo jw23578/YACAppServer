@@ -4,16 +4,32 @@ HandlerAppUserInsertWorktime::HandlerAppUserInsertWorktime(DatabaseLogics &datab
                                                            PistacheServerInterface &serverInterface,
                                                            LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                             "/insertWorktime",
+                             methodNames.insertWorktime,
                              TypePost,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
-
+    addMethod(serverInterface,
+              methodNames.insertWorktimeBeginEnd,
+              TypePost);
 }
 
 void HandlerAppUserInsertWorktime::method()
 {
+    DatabaseLogicWorktime &dlwt(databaseLogics.databaseLogicWorktime);
+    if (isMethod(methodNames.insertWorktimeBeginEnd))
+    {
+        MACRO_GetMandatoryTimePointFromISO(beginISO);
+        MACRO_GetMandatoryTimePointFromISO(endISO);
+        MACRO_GetMandatoryInt(worktimeType, false);
+        std::string message;
+        answerOk(message, dlwt.insertWorktimeBeginEnd(loggedInUserId,
+                                                      beginISO,
+                                                      endISO,
+                                                      static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
+                                                      message));
+        return;
+    }
     MACRO_GetMandatoryTimePointFromISO(ts);
     MACRO_GetMandatoryInt(worktimeType, false);
     MACRO_GetMandatoryInt(userMood, true);
@@ -22,14 +38,14 @@ void HandlerAppUserInsertWorktime::method()
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    bool success(databaseLogics.databaseLogicWorktime.insertWorktime(loggedInUserId, ts,
-                                                                     static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
-                                                                     static_cast<DatabaseLogicWorktime::UserMood>(userMood),
-                                                                     static_cast<DatabaseLogicWorktime::DayRating>(dayRating),
-                                                                     workStart,
-                                                                     pauseStart,
-                                                                     offSiteWorkStart,
-                                                                     message));
+    bool success(dlwt.insertWorktime(loggedInUserId, ts,
+                                     static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
+                                     static_cast<DatabaseLogicWorktime::UserMood>(userMood),
+                                     static_cast<DatabaseLogicWorktime::DayRating>(dayRating),
+                                     workStart,
+                                     pauseStart,
+                                     offSiteWorkStart,
+                                     message));
     std::map<std::string, std::string> data;
     data["workStart"] = ExtString::timepointToISO(workStart);
     data["pauseStart"] = ExtString::timepointToISO(pauseStart);

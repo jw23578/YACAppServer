@@ -1,5 +1,26 @@
 #include "databaselogicworktime.h"
-#include "pgexecutor.h"
+
+bool DatabaseLogicWorktime::selectWorktimeBefore(const sole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0012_worktime);
+    sql.addCompare("where", tableFields.user_id, "=", user_id);
+    sql.addCompare("and", tableFields.ts, "<", ts);
+    sql += std::string(" order by ts desc limit 1");
+    e.exec(sql);
+    return e.size() > 0;
+}
+
+bool DatabaseLogicWorktime::selectWorktimeAfter(const sole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0012_worktime);
+    sql.addCompare("where", tableFields.user_id, "=", user_id);
+    sql.addCompare("and", tableFields.ts, ">", ts);
+    sql += std::string(" order by ts limit 1");
+    e.exec(sql);
+    return e.size() > 0;
+}
 
 DatabaseLogicWorktime::DatabaseLogicWorktime(LogStatController &logStatController,
                                              PGConnectionPool &pool):
@@ -163,6 +184,78 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
     sql.addInsert(tableFields.day_rating, day_rating);
 
     PGExecutor e(pool, sql);
+    return true;
+}
+
+bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
+                                                   const TimePoint &begin,
+                                                   const TimePoint &end,
+                                                   const WorktimeType type,
+                                                   std::string &message)
+{
+    if (type != WorkStartType && type != PauseStartType && type != OffSiteWorkStartType)
+    {
+        message = "Only Workstart, Pausestart and OffsiteWorkStart can be inserted with begin/end";
+        return false;
+    }
+    PGExecutor e(pool);
+    if (selectWorktimeBefore(user_id, begin, e))
+    {
+        if (type == WorkStartType)
+        {
+            if (e.integer("type") != WorkEndType)
+            {
+                message = "Before Begin was not a WorkEnd";
+                return false;
+            }
+        }
+    }
+    if (selectWorktimeAfter(user_id, begin, e))
+    {
+        if (type == WorkStartType)
+        {
+            if (e.timepoint("ts") < end)
+            {
+                message = "There are already entries between Begin and End";
+                return false;
+            }
+        }
+    }
+    if (selectWorktimeAfter(user_id, end, e))
+    {
+        if (type == WorkStartType)
+        {
+            if (e.integer("type") != WorkStartType)
+            {
+                message = "After End was not a WorkStart";
+                return false;
+            }
+        }
+    }
+
+    {
+        PGSqlString sql;
+        sql.insert(tableNames.t0012_worktime);
+        sql.addInsert(tableFields.id, sole::uuid4());
+        sql.addInsert(tableFields.user_id, user_id);
+        sql.addInsert(tableFields.ts, begin);
+        sql.addInsert(tableFields.type, type);
+        sql.addInsert(tableFields.user_mood, UserMoodUnknown);
+        sql.addInsert(tableFields.day_rating, DayRatingUnknown);
+        PGExecutor e(pool, sql);
+    }
+    {
+        PGSqlString sql;
+        sql.insert(tableNames.t0012_worktime);
+        sql.addInsert(tableFields.id, sole::uuid4());
+        sql.addInsert(tableFields.user_id, user_id);
+        sql.addInsert(tableFields.ts, end);
+        sql.addInsert(tableFields.type, type + 1);
+        sql.addInsert(tableFields.user_mood, UserMoodUnknown);
+        sql.addInsert(tableFields.day_rating, DayRatingUnknown);
+        PGExecutor e(pool, sql);
+    }
+
     return true;
 }
 
