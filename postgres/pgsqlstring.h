@@ -74,6 +74,28 @@ public:
              std::chrono::system_clock::time_point const &tp);
     void set(std::string const &param,
              std::vector<uint64_t> const &v);
+
+    template<class T>
+    void set(std::string const &param,
+             std::set<T> const &v)
+    {
+        if (v.size() == 0)
+        {
+            variable2Values[param] = "null";
+            return;
+        }
+        auto it(v.begin());
+        std::stringstream value;
+        value << *it;
+        ++it;
+        while (it != v.end())
+        {
+            value << ", ";
+            value << *it;
+            ++it;
+        }
+        variable2Values[param] = value.str();
+    }
     void set(const std::string &param,
              const std::set<sole::uuid> &uuids);
     PGSqlString &operator=(std::string const &s);

@@ -11,12 +11,20 @@ bool DatabaseLogicWorktime::selectWorktimeBefore(const sole::uuid &user_id, cons
     return e.size() > 0;
 }
 
-bool DatabaseLogicWorktime::selectWorktimeAfter(const sole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
+bool DatabaseLogicWorktime::selectWorktimeAfter(const sole::uuid &user_id,
+                                                const TimePoint &ts,
+                                                const std::set<WorktimeType> &typesAllowed,
+                                                PGExecutor &e)
 {
     PGSqlString sql;
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql.addCompare("and", tableFields.ts, ">", ts);
+    if (typesAllowed.size())
+    {
+        sql += std::string(" and type in (:typesallowed) ");
+        MACRO_set(sql, typesAllowed);
+    }
     sql += std::string(" order by ts limit 1");
     e.exec(sql);
     return e.size() > 0;
@@ -201,18 +209,50 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
     PGExecutor e(pool);
     if (selectWorktimeBefore(user_id, begin, e))
     {
+        WorktimeType beforeType(static_cast<WorktimeType>(e.integer(tableFields.type)));
         if (type == WorkStartType)
         {
-            if (e.integer("type") != WorkEndType)
+            if (beforeType != WorkEndType)
             {
                 message = "Before Begin was not a WorkEnd";
                 return false;
             }
         }
+        if (type == PauseStartType)
+        {
+            if (beforeType == WorkEndType)
+            {
+                message = "Pause can not be inserted after WorkEnd";
+                return false;
+            }
+            if (beforeType == PauseStartType)
+            {
+                message = "Pause can not be inserted in another Pause";
+                return false;
+            }
+        }
+        if (type == OffSiteWorkEndType)
+        {
+            if (beforeType == WorkEndType)
+            {
+                message = "OffsiteWork can not be inserted after WorkEnd";
+                return false;
+            }
+            if (beforeType == PauseStartType)
+            {
+                message = "OffsiteWork can not be inserted in a Pause";
+                return false;
+            }
+            if (beforeType == OffSiteWorkStartType)
+            {
+                message = "OffsiteWork can not be inserted in another OffsiteWork";
+                return false;
+            }
+        }
     }
-    if (selectWorktimeAfter(user_id, begin, e))
+    if (type == WorkStartType || type == PauseStartType)
     {
-        if (type == WorkStartType)
+        if (selectWorktimeAfter(user_id, begin, {}, e))
         {
             if (e.timepoint("ts") < end)
             {
@@ -221,13 +261,51 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
             }
         }
     }
-    if (selectWorktimeAfter(user_id, end, e))
+    if (type == OffSiteWorkStartType)
     {
+        if (selectWorktimeAfter(user_id, begin, {WorkStartType, WorkEndType, OffSiteWorkStartType, OffSiteWorkEndType}, e))
+        {
+            if (e.timepoint("ts") < end)
+            {
+                message = "There are already entries between Begin and End";
+                return false;
+            }
+        }
+    }
+    if (selectWorktimeAfter(user_id, end, {}, e))
+    {
+        WorktimeType afterType(static_cast<WorktimeType>(e.integer(tableFields.type)));
         if (type == WorkStartType)
         {
-            if (e.integer("type") != WorkStartType)
+            if (afterType != WorkStartType)
             {
                 message = "After End was not a WorkStart";
+                return false;
+            }
+        }
+        if (type == PauseStartType)
+        {
+            if (afterType == WorkStartType)
+            {
+                message = "End is after a WorkEnd";
+                return false;
+            }
+        }
+        if (type == OffSiteWorkStartType)
+        {
+            if (afterType == OffSiteWorkEndType)
+            {
+                message = "OffsiteWork can not be inserted in another OffsiteWork";
+                return false;
+            }
+            if (afterType == PauseEndType)
+            {
+                message = "OffsiteWork can not be inserted in a Pause";
+                return false;
+            }
+            if (afterType == WorkStartType)
+            {
+                message = "End is after a WorkEnd";
                 return false;
             }
         }

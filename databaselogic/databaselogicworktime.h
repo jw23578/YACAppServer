@@ -16,17 +16,7 @@ class DatabaseLogicWorktime
     PGConnectionPool &pool;
     TableNames tableNames;
     TableFields tableFields;
-
-    bool selectWorktimeBefore(const sole::uuid &user_id,
-                              const TimePoint &ts,
-                              PGExecutor &e);
-    bool selectWorktimeAfter(const sole::uuid &user_id,
-                              const TimePoint &ts,
-                              PGExecutor &e);
 public:
-    DatabaseLogicWorktime(LogStatController &logStatController,
-                          PGConnectionPool &pool);
-
     enum WorktimeType
     {
         WorkStartType = 1,
@@ -37,6 +27,19 @@ public:
         OffSiteWorkEndType,
         WorktimeTypeCount
     };
+private:
+
+    bool selectWorktimeBefore(const sole::uuid &user_id,
+                              const TimePoint &ts,
+                              PGExecutor &e);
+    bool selectWorktimeAfter(const sole::uuid &user_id,
+                              const TimePoint &ts,
+                             const std::set<WorktimeType> &typesAllowed,
+                              PGExecutor &e);
+public:
+    DatabaseLogicWorktime(LogStatController &logStatController,
+                          PGConnectionPool &pool);
+
     enum UserMood
     {
         UserMoodUnknown = 0,

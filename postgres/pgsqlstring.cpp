@@ -190,12 +190,15 @@ void PGSqlString::set(const std::string &param,
         variable2Values[param] = "null";
         return;
     }
+    auto it(v.begin());
     std::stringstream value;
-    value << v[0];
-    for (size_t i(1); i < v.size(); ++i)
+    value << *it;
+    ++it;
+    while (it != v.end())
     {
         value << ", ";
-        value << v[i];
+        value << *it;
+        ++it;
     }
     variable2Values[param] = value.str();
 }
