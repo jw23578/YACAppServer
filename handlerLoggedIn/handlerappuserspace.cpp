@@ -24,12 +24,28 @@ HandlerAppUserSpace::HandlerAppUserSpace(DatabaseLogics &databaseLogics,
     addMethod(serverInterface,
               methodNames.requestSpaceAccess,
               TypePost);
+    addMethod(serverInterface,
+              methodNames.spaceRequestResultSeen,
+              TypePost);
 }
 
 void HandlerAppUserSpace::method()
 {
     DatabaseLogicSpaces &dls(databaseLogics.databaseLogicSpaces);
     RightsLogic &rl(databaseLogics.rightsLogic);
+    if (isMethod(methodNames.spaceRequestResultSeen))
+    {
+        MACRO_GetMandatoryUuid(id);
+        MACRO_GetMandatoryUuid(appuser_id);
+        std::string errorMessage;
+        if (!dls.spaceRequestResultSeen(id, appuser_id, errorMessage))
+        {
+            answerOk(errorMessage, false);
+            return;
+        }
+        answerOk("request successful", true);
+        return;
+    }
     if (isMethod(methodNames.requestSpaceAccess))
     {
         MACRO_GetMandatoryUuid(space_id);
@@ -87,6 +103,7 @@ void HandlerAppUserSpace::method()
         MACRO_GetMandatoryString(name);
         MACRO_GetMandatoryBool(automatic);
         MACRO_GetString(access_code);
+        MACRO_GetBool(request_allowed);
         std::string message("space inserted");
         rapidjson::Document document;
         document.SetObject();
@@ -98,6 +115,7 @@ void HandlerAppUserSpace::method()
                                      loggedInUserId,
                                      automatic,
                                      access_code,
+                                     request_allowed,
                                      space,
                                      document.GetAllocator(),
                                      message))
@@ -120,6 +138,7 @@ void HandlerAppUserSpace::method()
         MACRO_GetMandatoryString(name);
         MACRO_GetMandatoryBool(automatic);
         MACRO_GetString(access_code);
+        MACRO_GetBool(request_allowed);
         std::string message("space updated");
         rapidjson::Document document;
         document.SetObject();
@@ -130,6 +149,7 @@ void HandlerAppUserSpace::method()
                                     loggedInUserId,
                                     automatic,
                                     access_code,
+                                    request_allowed,
                                     space,
                                     document.GetAllocator(),
                                     message))

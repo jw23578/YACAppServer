@@ -51,6 +51,11 @@ void PGSqlString::insertOrUpdate(sole::uuid &id, const std::string &tableName)
     }
 }
 
+bool PGSqlString::isUpdateStatement()
+{
+    return updateStatement;
+}
+
 void PGSqlString::addOnConflict(const std::string &target,
                                 PGSqlString &onConflict)
 {

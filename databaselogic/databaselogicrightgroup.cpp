@@ -34,28 +34,21 @@ DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatContr
 
 }
 
-bool DatabaseLogicRightGroup::insertOrUpdateRightGroup(sole::uuid &id, const sole::uuid &app_id, const std::string &name, const sole::uuid &creater_id, const bool automatic, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
+bool DatabaseLogicRightGroup::insertOrUpdateRightGroup(sole::uuid &id, const sole::uuid &app_id, const std::string &name, const sole::uuid &creater_id, const bool automatic, const std::string &access_code,
+                                                       const bool request_allowed,
+                                                       const bool visible_for_non_members,
+                                                       rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {    
     PGSqlString sql;
-    if (id == NullUuid)
-    {
-        id = sole::uuid4();
-        sql.insert(tableNames.t0021_right_group);
-        MACRO_addInsert(sql, id);
-        MACRO_addInsert(sql, app_id);
-        MACRO_addInsert(sql, name);
-        MACRO_addInsert(sql, creater_id);
-        MACRO_addInsert(sql, automatic);
-    }
-    else
-    {
-        PGSqlString sql;
-        sql.update(tableNames.t0021_right_group);
-        MACRO_addSet(sql, app_id);
-        MACRO_addSet(sql, name);
-        MACRO_addSet(sql, automatic);
-        sql.addCompare("where", tableFields.id, "=", id);
-    }
+    sql.insertOrUpdate(id, tableNames.t0021_right_group);
+    MACRO_addInsertOrSet(sql, creater_id);
+    MACRO_addInsertOrSet(sql, app_id);
+    MACRO_addInsertOrSet(sql, name);
+    MACRO_addInsertOrSet(sql, automatic);
+    MACRO_addInsertOrSet(sql, access_code);
+    MACRO_addInsertOrSet(sql, request_allowed);
+    MACRO_addInsertOrSet(sql, visible_for_non_members);
+    sql.addInsertOrWhere("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return fetchOneRightGroup(id, object, alloc, message);
 }

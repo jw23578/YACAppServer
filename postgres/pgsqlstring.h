@@ -52,6 +52,8 @@ public:
     void delet(std::string const &tableName);
     void insertOrUpdate(sole::uuid &id, std::string const &tableName);
 
+    bool isUpdateStatement();
+
     void addOnConflict(const std::string &target, PGSqlString &onConflict);
 
     void set(std::string const &param,

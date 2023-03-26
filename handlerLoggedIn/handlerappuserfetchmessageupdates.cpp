@@ -15,40 +15,46 @@ HandlerAppUserFetchMessageUpdates::HandlerAppUserFetchMessageUpdates(PistacheSer
 void HandlerAppUserFetchMessageUpdates::method()
 {
     MACRO_GetMandatoryTimePointFromISO(updatesSinceISO);
-
     rapidjson::Document document;
     document.SetObject();
     std::string serverNowISO(ExtString::timepointToISO(std::chrono::system_clock::now()));
     document.AddMember("serverNowISO", serverNowISO, document.GetAllocator());
     rapidjson::Value messages;
-    if (!databaseLogics.databaseLogicMessages.fetchMessages(loggedInUserId,
-                                                            updatesSinceISO,
-                                                            messages,
-                                                            document.GetAllocator()))
+    DatabaseLogicMessages &dlm(databaseLogics.databaseLogicMessages);
+    if (!dlm.fetchMessages(loggedInUserId,
+                           updatesSinceISO,
+                           messages,
+                           document.GetAllocator()))
     {
         answerOk("error on fetching messages", false);
         return;
     }
     document.AddMember("messages", messages, document.GetAllocator());
+    rapidjson::Value receivedMessages;
     rapidjson::Value readMessages;
-    if (!databaseLogics.databaseLogicMessages.fetchReadMessages(loggedInUserId,
-                                                                updatesSinceISO,
-                                                                readMessages,
-                                                                document.GetAllocator()))
+    if (!dlm.fetchReceivedAndReadMessages(loggedInUserId,
+                                          updatesSinceISO,
+                                          receivedMessages,
+                                          readMessages,
+                                          document.GetAllocator()))
     {
-        answerOk("error on fetching read messages", false);
+        answerOk("error on fetching received and read messages", false);
         return;
     }
     document.AddMember("readMessages", readMessages, document.GetAllocator());
-    rapidjson::Value receivedMessages;
-    if (!databaseLogics.databaseLogicMessages.fetchReceivedMessages(loggedInUserId,
-                                                                    updatesSinceISO,
-                                                                    receivedMessages,
-                                                                    document.GetAllocator()))
+    document.AddMember("receivedMessages", receivedMessages, document.GetAllocator());
+
+    DatabaseLogicSpaces &dls(databaseLogics.databaseLogicSpaces);
+    rapidjson::Value spaceRequests;
+    std::string errorMessage;
+    if (!dls.fetchSpaceRequests(loggedInUserId,
+                                spaceRequests,
+                                document.GetAllocator(),
+                                errorMessage))
     {
-        answerOk("error on fetching received messages", false);
+        answerOk(errorMessage, false);
         return;
     }
-    document.AddMember("receivedMessages", receivedMessages, document.GetAllocator());
+    document.AddMember("spaceRequests", spaceRequests, document.GetAllocator());
     answerOk(true, document);
 }

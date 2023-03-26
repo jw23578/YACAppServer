@@ -19,6 +19,7 @@ int RightsLogic::appUserMissesRight(const sole::uuid &appuser_id,
                                     const RightNumber &rn)
 {
     // if right is missing then the right number is returned
+    fetchRightsForUser(appuser_id);
     auto appUserRights(appUsers2RightNumbers[appuser_id]);
     if (appUserRights.find(rn.number) == appUserRights.end())
     {

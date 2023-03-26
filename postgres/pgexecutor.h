@@ -96,7 +96,10 @@ public:
     size_t append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
 
     size_t toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc);
-    void toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc);
+    size_t toJsonArray(std::map<std::string, rapidjson::Value *> &type2TargetArray, rapidjson::MemoryPoolAllocator<> &alloc);
+    void toJsonObject(rapidjson::Value &object,
+                      rapidjson::MemoryPoolAllocator<> &alloc,
+                      const std::set<std::string> fields2Ignore);
 };
 
 #endif // PGEXECUTOR_H

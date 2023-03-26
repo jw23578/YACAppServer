@@ -105,7 +105,7 @@ bool PGExecutor::defaultSelectToJSON(const std::string &tableName,
     {
         return false;
     }
-    toJsonObject(object, alloc);
+    toJsonObject(object, alloc, {});
     return true;
 }
 
@@ -243,15 +243,20 @@ size_t PGExecutor::append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAl
     }
 }
 
-void PGExecutor::toJsonObject(rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc)
+void PGExecutor::toJsonObject(rapidjson::Value &object,
+                              rapidjson::MemoryPoolAllocator<> &alloc,
+                              const std::set<std::string> fields2Ignore)
 {
     object.SetObject();
     const pqxx::row &row(result[currentRow]);
     for (pqxx::row::size_type i(0); i < row.size(); ++i)
     {
-        rapidjson::Value name(row[i].name(), alloc);
-        std::string data(string(i));
-        object.AddMember(name, data, alloc);
+        if (fields2Ignore.find(row[i].name()) == fields2Ignore.end())
+        {
+            rapidjson::Value name(row[i].name(), alloc);
+            std::string data(string(i));
+            object.AddMember(name, data, alloc);
+        }
     }
 }
 
@@ -261,10 +266,37 @@ size_t PGExecutor::toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryP
     for (size_t r(0); r < size(); ++r)
     {
         rapidjson::Value object(rapidjson::kObjectType);
-        toJsonObject(object, alloc);
+        toJsonObject(object, alloc, {});
         targetArray.PushBack(object, alloc);
         next();
     }
     return size();
 
+}
+
+size_t PGExecutor::toJsonArray(std::map<std::string, rapidjson::Value*> &type2TargetArray,
+                               rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    if (!type2TargetArray.size())
+    {
+        return 0;
+    }
+    for (auto &a: type2TargetArray)
+    {
+        a.second->SetArray();
+    }
+    for (size_t r(0); r < size(); ++r)
+    {
+        std::string type(string("type"));
+        auto target(type2TargetArray.find(type));
+        if (target == type2TargetArray.end())
+        {
+            return 0;
+        }
+        rapidjson::Value object(rapidjson::kObjectType);
+        toJsonObject(object, alloc, {"type"});
+        target->second->PushBack(object, alloc);
+        next();
+    }
+    return size();
 }

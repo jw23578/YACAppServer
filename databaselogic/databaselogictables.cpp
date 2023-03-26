@@ -33,8 +33,20 @@ void DatabaseLogicTables::createDatabaseTables()
 {
     PGColumnAndType idPrimaryKey({tableFields.id, pg_uuid, true});
     PGColumnAndType appId({tableFields.app_id, pg_uuid, false, true});
-    PGColumnAndType deletedDateTime({tableFields.deleted_datetime, pg_uuid});
+    PGColumnAndType deletedDateTime({tableFields.deleted_datetime, pg_timestamp});
     PGColumnAndType deletedAppUser({tableFields.deleted_appuser_id, pg_uuid});
+    PGColumnAndType accessCode({tableFields.access_code, pg_text});
+    PGColumnAndType requestAllowed({tableFields.request_allowed, pg_bool});
+    PGColumnAndType resultSeen({tableFields.result_seen, pg_timestamp});
+    PGColumnAndType appuserId({tableFields.appuser_id, pg_uuid, false, true});
+    PGColumnAndType requestedDatetime({tableFields.requested_datetime, pg_timestamp});
+    PGColumnAndType approvedDatetime({tableFields.approved_datetime, pg_timestamp});
+    PGColumnAndType approvedAppuserId({tableFields.approved_appuser_id, pg_uuid});
+    PGColumnAndType deniedDatetime({tableFields.denied_datetime, pg_timestamp});
+    PGColumnAndType deniedAppuserId({tableFields.denied_appuser_id, pg_uuid});
+    PGColumnAndType visibleForNonMembers({tableFields.visible_for_non_members, pg_bool});
+
+
 
     if (!utils.tableExists(tableNames.t0001_users))
     {
@@ -149,7 +161,9 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.ts, pg_timestamp, false, true},
                                {tableFields.type, pg_int, false, true},
                                {tableFields.user_mood, pg_int},
-                               {tableFields.day_rating, pg_int}});
+                               {tableFields.day_rating, pg_int},
+                               deletedDateTime,
+                               deletedAppUser});
 
     utils.createTableIfNeeded(tableNames.t0013_images,
                               {{tableFields.id, pg_uuid, true},
@@ -209,12 +223,21 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.creater_id, pg_uuid, false, true},
                                deletedDateTime,
                                deletedAppUser,
-                               {tableFields.automatic, pg_bool}});
+                               {tableFields.automatic, pg_bool},
+                               accessCode,
+                               requestAllowed,
+                               visibleForNonMembers});
 
     utils.createTableIfNeeded(tableNames.t0022_right_group2appuser,
                               {idPrimaryKey,
                                {tableFields.right_group_id, pg_uuid, false, true},
-                               {tableFields.appuser_id, pg_uuid, false, true}});
+                               appuserId,
+                               requestedDatetime,
+                               approvedDatetime,
+                               approvedAppuserId,
+                               deniedDatetime,
+                               deniedAppuserId,
+                               resultSeen});
 
     utils.createTableIfNeeded(tableNames.t0023_right2rightgroup,
                               {idPrimaryKey,
@@ -229,18 +252,20 @@ void DatabaseLogicTables::createDatabaseTables()
                                deletedDateTime,
                                deletedAppUser,
                                {tableFields.automatic, pg_bool},
-                               {tableFields.access_code, pg_text}});
+                               accessCode,
+                               requestAllowed});
 
     utils.createTableIfNeeded(tableNames.t0025_space2appuser,
                               {idPrimaryKey,
                                appId,
                                {tableFields.space_id, pg_uuid, false, true},
-                               {tableFields.appuser_id, pg_uuid, false, true},
-                               {tableFields.requested_datetime, pg_timestamp},
-                               {tableFields.approved_datetime, pg_timestamp},
-                               {tableFields.approved_appuser_id, pg_uuid},
-                               {tableFields.denied_datetime, pg_timestamp},
-                               {tableFields.denied_appuser_id, pg_uuid}});
+                               appuserId,
+                               requestedDatetime,
+                               approvedDatetime,
+                               approvedAppuserId,
+                               deniedDatetime,
+                               deniedAppuserId,
+                               resultSeen});
 
 }
 

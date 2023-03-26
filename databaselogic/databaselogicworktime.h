@@ -87,6 +87,10 @@ public:
                         rapidjson::Value &targetArray,
                         rapidjson::MemoryPoolAllocator<> &alloc,
                         std::string &message);
+
+    bool deleteWorktime(const sole::uuid &user_id,
+                        const sole::uuid &id,
+                        std::string &message);
 };
 
 #endif // DATABASELOGICWORKTIME_H

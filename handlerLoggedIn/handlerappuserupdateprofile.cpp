@@ -87,5 +87,7 @@ void HandlerAppUserUpdateProfile::method()
         answerOk(message, false);
         return;
     }
-    answerOk(message, true);
+    std::map<std::string, std::string> data;
+    data["image_id"] = imageId.str();
+    answerOk(message, true, data);
 }

@@ -22,6 +22,7 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace(sole::uuid &id,
                                               const sole::uuid &creater_id,
                                               const bool automatic,
                                               const std::string &access_code,
+                                              const bool request_allowed,
                                               rapidjson::Value &object,
                                               rapidjson::MemoryPoolAllocator<> &alloc,
                                               std::string &message)
@@ -33,9 +34,23 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace(sole::uuid &id,
     MACRO_addInsertOrSet(sql, creater_id);
     MACRO_addInsertOrSet(sql, automatic);
     MACRO_addInsertOrSet(sql, access_code);
+    MACRO_addInsertOrSet(sql, request_allowed);
     sql.addInsertOrWhere("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return fetchOneSpaceOnly(id, object, alloc, message);
+}
+
+bool DatabaseLogicSpaces::spaceRequestResultSeen(const sole::uuid &id,
+                                                 const sole::uuid &appuser_id,
+                                                 std::string &errorMessage)
+{
+    PGSqlString sql;
+    sql.update(tableNames.t0025_space2appuser);
+    sql.addSet(tableFields.result_seen, TimePointPostgreSqlNow);
+    sql.addCompare("where", tableFields.id, "=", id);
+    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    PGExecutor e(pool, sql);
+    return true;
 }
 
 bool DatabaseLogicSpaces::deleteSpace(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
@@ -130,14 +145,21 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace2AppUser(sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &app_id,
+bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
                                              rapidjson::Value &targetArray,
                                              rapidjson::MemoryPoolAllocator<> &alloc,
-                                             std::string &message)
+                                             std::string &errorMessage)
 {
-    PGSqlString sql;
-    sql.select(tableNames.t0025_space2appuser);
-    sql.addCompare("where", tableFields.app_id, "=", app_id);
+    PGSqlString sql("select t0025.id, t0025.space_id, t0025.appuser_id, t0024.name ");
+    sql += " from " + tableNames.t0025_space2appuser + " t0025 ";
+    sql += " left join " + tableNames.t0024_space + " t0024 on t0024.id = t0025.space_id ";
+    sql.addCompare("where", tableFields.requested_datetime, " is not ", TimePointPostgreSqlNull);
+    sql.addCompare("and", tableFields.approved_datetime, " is ", TimePointPostgreSqlNull);
+
+    sql += " and " + tableFields.space_id + " in (select id from " + tableNames.t0024_space;
+    sql.addCompare("where", tableFields.creater_id, "=", spaceAdminId);
+    sql += ")";
+
     PGExecutor e(pool, sql);
     e.toJsonArray(targetArray, alloc);
     return true;

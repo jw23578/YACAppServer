@@ -29,9 +29,14 @@ public:
                              const sole::uuid &creater_id,
                              const bool automatic,
                              const std::string &access_code,
+                             const bool request_allowed,
                              rapidjson::Value &object,
                              rapidjson::MemoryPoolAllocator<> &alloc,
                              std::string &message);
+
+    bool spaceRequestResultSeen(const sole::uuid &id,
+                                const sole::uuid &appuser_id,
+                                std::string &errorMessage);
 
     bool deleteSpace(const sole::uuid &id,
                      const sole::uuid &appuser_id,
@@ -57,10 +62,10 @@ public:
                                      const TimePoint &denied_datetime,
                                      const sole::uuid &denied_appuser_id);
 
-    bool fetchSpaceRequests(const sole::uuid &app_id,
+    bool fetchSpaceRequests(const sole::uuid &spaceAdminId,
                             rapidjson::Value &targetArray,
                             rapidjson::MemoryPoolAllocator<> &alloc,
-                            std::string &message);
+                            std::string &errorMessage);
 
     bool fetchSpaceRequestId(const sole::uuid &space_id,
                              const sole::uuid &appuser_id,

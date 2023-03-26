@@ -12,11 +12,23 @@ HandlerAppUserInsertWorktime::HandlerAppUserInsertWorktime(DatabaseLogics &datab
     addMethod(serverInterface,
               methodNames.insertWorktimeBeginEnd,
               TypePost);
+    addMethod(serverInterface,
+              methodNames.deleteWorktime,
+              TypePost);
 }
 
 void HandlerAppUserInsertWorktime::method()
 {
     DatabaseLogicWorktime &dlwt(databaseLogics.databaseLogicWorktime);
+    if (isMethod(methodNames.deleteWorktime))
+    {
+        MACRO_GetMandatoryUuid(id);
+        std::string message;
+        answerOk(message, dlwt.deleteWorktime(loggedInUserId,
+                                              id,
+                                              message));
+        return;
+    }
     if (isMethod(methodNames.insertWorktimeBeginEnd))
     {
         MACRO_GetMandatoryTimePointFromISO(beginISO);

@@ -50,16 +50,6 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
     MACRO_set(sql, since);
     PGExecutor e(pool, sql);
     e.toJsonArray(target, alloc);
-//    for (size_t i(0); i < e.size(); ++i)
-//    {
-//        Message m;
-//        m.id = e.uuid("id");
-//        m.sender_id = e.uuid("sender_id");
-//        m.sended_datetime = e.timepoint("sended_datetime");
-//        m.content_base64 = e.string("content_base64");
-//        messages.push_back(m);
-//        e.next();
-//    }
     return true;
 }
 
@@ -95,6 +85,36 @@ bool DatabaseLogicMessages::fetchReadMessages(const sole::uuid &reader_id,
     PGExecutor e(pool,
                  sql);
     e.toJsonArray(target, alloc);
+    return true;
+}
+
+bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const sole::uuid &receiver_or_reader_id,
+                                                         const std::chrono::system_clock::time_point &since,
+                                                         rapidjson::Value &targetReceived,
+                                                         rapidjson::Value &targetRead,
+                                                         rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    PGSqlString sql("select '1' as type, ");
+    sql += tableFields.id + ", ";
+    sql += tableFields.received_datetime;
+    sql += " from ";
+    sql += tableNames.t0008_message_received;
+    sql.addCompare(" where ", tableFields.receiver_id, " = ", receiver_or_reader_id);
+    sql.addCompare(" and ", tableFields.received_datetime, " > ", since);
+    sql += " union all ";
+    sql += "select '2' as type, ";
+    sql += tableFields.id + ", ";
+    sql += tableFields.read_datetime;
+    sql += " from ";
+    sql += tableNames.t0014_message_read;
+    sql.addCompare(" where ", tableFields.reader_id, " = ", receiver_or_reader_id);
+    sql.addCompare(" and ", tableFields.read_datetime, " > ", since);
+    PGExecutor e(pool,
+                 sql);
+    std::map<std::string, rapidjson::Value*> targets;
+    targets["1"] = &targetReceived;
+    targets["2"] = &targetRead;
+    e.toJsonArray(targets, alloc);
     return true;
 }
 

@@ -33,6 +33,9 @@ public:
                                   const std::string &name,
                                   const sole::uuid &creater_id,
                                   const bool automatic,
+                                  const std::string &access_code,
+                                  const bool request_allowed,
+                                  const bool visible_for_non_members,
                                   rapidjson::Value &object,
                                   rapidjson::MemoryPoolAllocator<> &alloc,
                                   std::string &message);

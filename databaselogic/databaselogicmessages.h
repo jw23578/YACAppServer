@@ -48,6 +48,11 @@ public:
                            const std::chrono::system_clock::time_point &since,
                            rapidjson::Value &target,
                            rapidjson::MemoryPoolAllocator<> &alloc);
+    bool fetchReceivedAndReadMessages(const sole::uuid &receiver_or_reader_id,
+                                      const std::chrono::system_clock::time_point &since,
+                                      rapidjson::Value &targetReceived,
+                                      rapidjson::Value &targetRead,
+                                      rapidjson::MemoryPoolAllocator<> &alloc);
 
     void setReceived(const sole::uuid &receiver_id,
                      const sole::uuid &message_id,

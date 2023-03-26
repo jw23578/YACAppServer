@@ -73,6 +73,9 @@ void HandlerAppUserRightGroup::method()
         }
         MACRO_GetMandatoryString(name);
         MACRO_GetMandatoryBool(automatic);
+        MACRO_GetMandatoryString(access_code);
+        MACRO_GetMandatoryBool(request_allowed);
+        MACRO_GetMandatoryBool(visible_for_non_members);
         std::string message("rightgroup inserted");
         rapidjson::Document document;
         document.SetObject();
@@ -83,6 +86,9 @@ void HandlerAppUserRightGroup::method()
                                            name,
                                            loggedInUserId,
                                            automatic,
+                                           access_code,
+                                           request_allowed,
+                                           visible_for_non_members,
                                            rightgroup,
                                            document.GetAllocator(),
                                            message))
@@ -104,6 +110,9 @@ void HandlerAppUserRightGroup::method()
         MACRO_GetMandatoryUuid(id);
         MACRO_GetMandatoryString(name);
         MACRO_GetMandatoryBool(automatic);
+        MACRO_GetMandatoryString(access_code);
+        MACRO_GetMandatoryBool(request_allowed);
+        MACRO_GetMandatoryBool(visible_for_non_members);
         std::string message("rightgroup updated");
         rapidjson::Document document;
         document.SetObject();
@@ -113,6 +122,9 @@ void HandlerAppUserRightGroup::method()
                                           name,
                                           loggedInUserId,
                                           automatic,
+                                          access_code,
+                                          request_allowed,
+                                          visible_for_non_members,
                                           rightgroup,
                                           document.GetAllocator(),
                                           message))

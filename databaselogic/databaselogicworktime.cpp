@@ -6,6 +6,7 @@ bool DatabaseLogicWorktime::selectWorktimeBefore(const sole::uuid &user_id, cons
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql.addCompare("and", tableFields.ts, "<", ts);
+    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
     sql += std::string(" order by ts desc limit 1");
     e.exec(sql);
     return e.size() > 0;
@@ -20,6 +21,7 @@ bool DatabaseLogicWorktime::selectWorktimeAfter(const sole::uuid &user_id,
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql.addCompare("and", tableFields.ts, ">", ts);
+    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
     if (typesAllowed.size())
     {
         sql += std::string(" and type in (:typesallowed) ");
@@ -53,6 +55,7 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
         sql += std::string(" select * from (select ts, type from ");
         sql += tableNames.t0012_worktime;
         sql += std::string(" where user_id = :user_id and type = :type") + ExtString::toString(wt);
+        sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
         sql += std::string(" order by ts desc limit 1) a") + ExtString::toString(wt) + " ";
         sql.set(std::string("type") + ExtString::toString(wt), wt);
     }
@@ -190,6 +193,8 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
     sql.addInsert(tableFields.type, type);
     sql.addInsert(tableFields.user_mood, user_mood);
     sql.addInsert(tableFields.day_rating, day_rating);
+    sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull);
+    sql.addInsert(tableFields.deleted_appuser_id, NullUuid);
 
     PGExecutor e(pool, sql);
     return true;
@@ -320,6 +325,8 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
         sql.addInsert(tableFields.type, type);
         sql.addInsert(tableFields.user_mood, UserMoodUnknown);
         sql.addInsert(tableFields.day_rating, DayRatingUnknown);
+        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull);
+        sql.addInsert(tableFields.deleted_appuser_id, NullUuid);
         PGExecutor e(pool, sql);
     }
     {
@@ -331,6 +338,8 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
         sql.addInsert(tableFields.type, type + 1);
         sql.addInsert(tableFields.user_mood, UserMoodUnknown);
         sql.addInsert(tableFields.day_rating, DayRatingUnknown);
+        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull);
+        sql.addInsert(tableFields.deleted_appuser_id, NullUuid);
         PGExecutor e(pool, sql);
     }
 
@@ -349,10 +358,48 @@ bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql += std::string(" and ") + tableFields.ts + " >= :since ";
     sql += std::string(" and ") + tableFields.ts + " <= :until ";
+    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
     MACRO_set(sql, since);
     MACRO_set(sql, until);
     sql += std::string(" order by ") + tableFields.ts;
     PGExecutor e(pool, sql);
     e.toJsonArray(targetArray, alloc);
+    return true;
+}
+
+bool DatabaseLogicWorktime::deleteWorktime(const sole::uuid &user_id,
+                                           const sole::uuid &id,
+                                           std::string &message)
+{
+    sole::uuid endId(NullUuid);
+    {
+        PGSqlString sql;
+        sql.select(tableNames.t0012_worktime);
+        sql.addCompare("where", tableFields.user_id, "=", user_id);
+        sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+        sql += std::string(" and ts >= (select ts from t0012_worktime where id = :id) ");
+        sql += std::string(" and type = (select type + 1 from t0012_worktime where id = :id) ");
+        sql += "order by ts limit 1";
+        MACRO_set(sql, id);
+        PGExecutor e(pool, sql);
+        if (e.size())
+        {
+            endId = e.uuid(tableFields.id);
+        }
+    }
+    PGSqlString sql;
+    sql.update(tableNames.t0012_worktime);
+    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
+    sql.addSet(tableFields.deleted_appuser_id, user_id);
+    sql.addCompare("where", tableFields.user_id, "=", user_id);
+    sql += " and deleted_datetime is null ";
+    sql += std::string(" and ts >= (select ts from t0012_worktime where id = :id) ");
+    if (endId != NullUuid)
+    {
+        sql += std::string(" and ts <= (select ts from t0012_worktime where id = :endid) ");
+        MACRO_set(sql, endId);
+    }
+    MACRO_set(sql, id);
+    PGExecutor e(pool, sql);
     return true;
 }

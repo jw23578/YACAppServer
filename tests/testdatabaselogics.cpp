@@ -64,9 +64,11 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
     rapidjson::Value rightGroup;
     bool automatic(false);
     id = NullUuid;
-    dlrg.insertOrUpdateRightGroup(id, app_id, "group #1", creater_id, automatic, rightGroup, document.GetAllocator(), message);
-    dlrg.insertOrUpdateRightGroup(id, app_id, "right group with new name", id, automatic, rightGroup, document.GetAllocator(), message);
-    dlrg.insertOrUpdateRightGroup(id, app_id, "right group with really new name", creater_id, automatic, rightGroup, document.GetAllocator(), message);
+    bool request_allowed(false);
+    bool visible_for_non_members(false);
+    dlrg.insertOrUpdateRightGroup(id, app_id, "group #1", creater_id, automatic, "1234", request_allowed, visible_for_non_members, rightGroup, document.GetAllocator(), message);
+    dlrg.insertOrUpdateRightGroup(id, app_id, "right group with new name", id, automatic, "1234", request_allowed, visible_for_non_members, rightGroup, document.GetAllocator(), message);
+    dlrg.insertOrUpdateRightGroup(id, app_id, "right group with really new name", creater_id, automatic, "1234", request_allowed, visible_for_non_members, rightGroup, document.GetAllocator(), message);
     rapidjson::Value rightGroups;
     dlrg.fetchRightGroups(app_id, rightGroups, document.GetAllocator(), message);
     document.AddMember("rightGroups", rightGroups, document.GetAllocator());
