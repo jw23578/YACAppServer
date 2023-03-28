@@ -7,6 +7,7 @@ include("yacAppAndServer/yacAppAndServer.pri")
 
 DEFINES += RAPIDJSON_HAS_STDSTRING
 DEFINES += YACAPPServer
+DEFINES += ORMCPPTypes
 
 LIBS += \
     -lpistache \

@@ -56,7 +56,14 @@ void RightsLogic::addUserRights(const sole::uuid &app_id,
             if (dlrg.fetchIDOfOneRightGroupByName(app_id, Rights::Administrator, right_group_id))
             {
                 std::string message;
-                if (dlrg.insertUser(sole::uuid4(), right_group_id, appuser_id, message))
+                sole::uuid id(NullUuid);
+                if (dlrg.insertOrUpdateRightGroup2AppUser(id, right_group_id, appuser_id,
+                                                          TimePointPostgreSqlNow,
+                                                          TimePointPostgreSqlNow,
+                                                          appuser_id,
+                                                          TimePointPostgreSqlNull,
+                                                          NullUuid,
+                                                          message))
                 {
                     appIdsWhereAdminExists.insert(app_id);
                 }

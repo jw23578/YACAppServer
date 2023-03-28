@@ -4,6 +4,7 @@
 #include <regex>
 #include <stdlib.h>
 #include <iomanip>
+#include "definitions.h"
 
 ExtString::ExtString()
 {
@@ -455,6 +456,10 @@ std::string ExtString::timepointToISO(const std::chrono::system_clock::time_poin
 
 std::chrono::system_clock::time_point ExtString::toTimepoint(const std::string &s)
 {
+    if (s.find("1900-01-01T12:00:00") == 0)
+    {
+        return TimePointPostgreSqlNull;
+    }
     std::tm tm;
     memset(&tm, 0, sizeof(tm));
     std::string format("%F %T");

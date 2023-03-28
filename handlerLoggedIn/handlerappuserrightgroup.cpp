@@ -21,12 +21,60 @@ HandlerAppUserRightGroup::HandlerAppUserRightGroup(DatabaseLogics &databaseLogic
     addMethod(serverInterface,
               methodNames.fetchRightGroup,
               TypeGet);
+    addMethod(serverInterface,
+              methodNames.fetchRightGroupMember,
+              TypeGet);
+    addMethod(serverInterface,
+              methodNames.insertOrUpdateRightGroup2AppUser,
+              TypePost);
 }
 
 void HandlerAppUserRightGroup::method()
 {
     DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
     RightsLogic &rl(databaseLogics.rightsLogic);
+    if (isMethod(methodNames.insertOrUpdateRightGroup2AppUser))
+    {
+        MACRO_GetUuid(id);
+        MACRO_GetMandatoryUuid(right_group_id);
+        MACRO_GetMandatoryUuid(appuser_id);
+        MACRO_GetTimePointFromISO(requested_datetime);
+        MACRO_GetTimePointFromISO(approved_datetime);
+        MACRO_GetMandatoryUuid(approved_appuser_id);
+        MACRO_GetTimePointFromISO(denied_datetime);
+        MACRO_GetUuid(denied_appuser_id);
+
+        std::string errorMessage;
+        answerOk(errorMessage, dlrg.insertOrUpdateRightGroup2AppUser(id,
+                                                  right_group_id,
+                                                  appuser_id,
+                                                  requested_datetime,
+                                                  approved_datetime,
+                                                  approved_appuser_id,
+                                                  denied_datetime,
+                                                  denied_appuser_id,
+                                                  errorMessage));
+        return;
+    }
+    if (isMethod(methodNames.fetchRightGroupMember))
+    {
+        MACRO_GetMandatoryUuid(right_group_id);
+        rapidjson::Document document;
+        document.SetObject();
+        rapidjson::Value member;
+        std::string errorMessage;
+        if (!dlrg.fetchRightGroupMember(right_group_id,
+                                        member,
+                                        document.GetAllocator(),
+                                        errorMessage))
+        {
+            answerOk(errorMessage, false);
+            return;
+        }
+        document.AddMember("member", member, document.GetAllocator());
+        answerOk(true, document);
+        return;
+    }
     if (isMethod(methodNames.fetchRightGroup))
     {
         MACRO_GetMandatoryUuid(id);

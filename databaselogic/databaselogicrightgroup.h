@@ -8,6 +8,7 @@
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
 #include <set>
+#include "definitions.h"
 
 class DatabaseLogicRightGroup
 {
@@ -20,6 +21,9 @@ class DatabaseLogicRightGroup
                             rapidjson::Value &object,
                             rapidjson::MemoryPoolAllocator<> &alloc,
                             std::string &message);
+
+    bool appuserInRightGroup(const sole::uuid &right_group_id,
+                             const sole::uuid &appuser_id);
 public:
     DatabaseLogicRightGroup(LogStatController &logStatController,
                             PGConnectionPool &pool);
@@ -54,6 +58,11 @@ public:
                          rapidjson::MemoryPoolAllocator<> &alloc,
                          std::string &message);
 
+    bool fetchRightGroupMember(const sole::uuid &right_group_id,
+                               rapidjson::Value &member,
+                               rapidjson::MemoryPoolAllocator<> &alloc,
+                               std::string &errorMessage);
+
     void fetchGroupRightNumbers(const sole::uuid &right_group_id,
                                 std::set<int> &right_numbers);
 
@@ -69,10 +78,15 @@ public:
                      const int right_number,
                      std::string &message);
 
-    bool insertUser(const sole::uuid &id,
-                    const sole::uuid &right_group_id,
-                    const sole::uuid &appuser_id,
-                    std::string &message);
+    bool insertOrUpdateRightGroup2AppUser(sole::uuid &id,
+                                          const sole::uuid &right_group_id,
+                                          const sole::uuid &appuser_id,
+                                          const TimePoint &requested_datetime,
+                                          const TimePoint &approved_datetime,
+                                          const sole::uuid &approved_appuser_id,
+                                          const TimePoint &denied_datetime,
+                                          const sole::uuid &denied_appuser_id,
+                                          std::string &message);
 
     bool removeUser(const sole::uuid &right_group_id,
                     const sole::uuid &appuser_id,

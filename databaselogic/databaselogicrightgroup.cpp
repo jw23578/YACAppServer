@@ -10,6 +10,17 @@ bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
     return e.defaultSelectToJSON(tableNames.t0021_right_group, id, object, alloc, message);
 }
 
+bool DatabaseLogicRightGroup::appuserInRightGroup(const sole::uuid &right_group_id, const sole::uuid &appuser_id)
+{
+    PGSqlString sql;
+    sql.select(tableNames.t0022_right_group2appuser);
+    sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("and", tableFields.approved_datetime, "is not", TimePointPostgreSqlNull);
+    PGExecutor e(pool, sql);
+    return e.size() > 0;
+}
+
 bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const sole::uuid &app_id, const std::string &name, sole::uuid &id)
 {
     PGSqlString sql;
@@ -113,6 +124,23 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
     return true;
 }
 
+bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_group_id,
+                                                    rapidjson::Value &member,
+                                                    rapidjson::MemoryPoolAllocator<> &alloc,
+                                                    std::string &errorMessage)
+{
+    PGSqlString sql("select id, visible_name, image_id from ");
+    sql += tableNames.t0003_appuser_profiles;
+    sql += " where " + tableFields.id + " in (select " + tableFields.appuser_id;
+    sql += " from " + tableNames.t0022_right_group2appuser;
+    sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
+    sql.addCompare("and", tableFields.approved_datetime, " is not ", TimePointPostgreSqlNull);
+    sql += ")";
+    PGExecutor e(pool, sql);
+    e.toJsonArray(member, alloc);
+    return true;
+}
+
 void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const sole::uuid &appuser_id, std::set<int> &right_numbers)
 {
     PGSqlString sql;
@@ -166,25 +194,30 @@ bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, cons
     return true;
 }
 
-bool DatabaseLogicRightGroup::insertUser(const sole::uuid &id, const sole::uuid &right_group_id, const sole::uuid &appuser_id, std::string &message)
+bool DatabaseLogicRightGroup::insertOrUpdateRightGroup2AppUser(sole::uuid &id,
+                                                               const sole::uuid &right_group_id,
+                                                               const sole::uuid &appuser_id,
+                                                               const TimePoint &requested_datetime,
+                                                               const TimePoint &approved_datetime,
+                                                               const sole::uuid &approved_appuser_id,
+                                                               const TimePoint &denied_datetime,
+                                                               const sole::uuid &denied_appuser_id,
+                                                               std::string &message)
 {
+    if (appuserInRightGroup(right_group_id, appuser_id))
     {
-        PGSqlString sql;
-        sql.select(tableNames.t0022_right_group2appuser);
-        sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-        sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
-        PGExecutor e(pool, sql);
-        if (e.size() > 0)
-        {
-            return true;
-        }
-
+        return true;
     }
     PGSqlString sql;
-    sql.insert(tableNames.t0022_right_group2appuser);
-    MACRO_addInsert(sql, id);
-    MACRO_addInsert(sql, right_group_id);
-    MACRO_addInsert(sql, appuser_id);
+    sql.insertOrUpdate(id, tableNames.t0022_right_group2appuser);
+    MACRO_addInsertOrSet(sql, right_group_id);
+    MACRO_addInsertOrSet(sql, appuser_id);
+    MACRO_addInsertOrSet(sql, requested_datetime);
+    MACRO_addInsertOrSet(sql, approved_datetime);
+    MACRO_addInsertOrSet(sql, approved_appuser_id);
+    MACRO_addInsertOrSet(sql, denied_datetime);
+    MACRO_addInsertOrSet(sql, denied_appuser_id);
+    sql.addInsertOrWhere("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return true;
 }
