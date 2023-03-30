@@ -21,6 +21,7 @@
 #include "tests/testdatabaselogicappuser.h"
 #include "tests/testdatabaselogicworktime.h"
 #include "tests/testdatabaselogicimagetable.h"
+#include "tests/testorm2postgres.h"
 
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
@@ -118,6 +119,8 @@ int main(int argc, char **argv)
 
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
+
+    TestORM2Postgres testORM2Postgres(pool);
 
     if (runTests)
     {

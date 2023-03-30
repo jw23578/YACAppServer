@@ -3,11 +3,11 @@ CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
-include("yacAppAndServer/yacAppAndServer.pri")
-
 DEFINES += RAPIDJSON_HAS_STDSTRING
 DEFINES += YACAPPServer
 DEFINES += ORMCPPTypes
+
+include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
     -lpistache \
@@ -44,6 +44,7 @@ SOURCES += \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
+        databaselogic/orm2postgres.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerappuserloggedin.cpp \
@@ -94,18 +95,17 @@ SOURCES += \
         serverHeader/appidheader.cpp \
         serverHeader/loginemailheader.cpp \
         serverHeader/logintokenheader.cpp \
-        sole/sole.cpp \
         tests/testdatabaselogicappuser.cpp \
         tests/testdatabaselogicimagetable.cpp \
         tests/testdatabaselogicmessages.cpp \
         tests/testdatabaselogics.cpp \
         tests/testdatabaselogicworktime.cpp \
         tests/testextstring.cpp \
+        tests/testorm2postgres.cpp \
         tests/testtimepoint.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
         utils/extrapidjson.cpp \
-        utils/extstring.cpp \
         main.cpp \
         postgres/pgconnectionpool.cpp \
         utils/extvector.cpp \
@@ -131,6 +131,7 @@ HEADERS += \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
+  databaselogic/orm2postgres.h \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerappuserloggedin.h \
@@ -182,19 +183,18 @@ HEADERS += \
   serverHeader/appidheader.h \
   serverHeader/loginemailheader.h \
   serverHeader/logintokenheader.h \
-  sole/sole.hpp \
   tests/testdatabaselogicappuser.h \
   tests/testdatabaselogicimagetable.h \
   tests/testdatabaselogicmessages.h \
   tests/testdatabaselogics.h \
   tests/testdatabaselogicworktime.h \
   tests/testextstring.h \
+  tests/testorm2postgres.h \
   tests/testtimepoint.h \
   utils/base64.h \
   utils/definitions.h \
   utils/extmap.h \
   utils/extrapidjson.h \
-  utils/extstring.h \
   utils/extvector.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \

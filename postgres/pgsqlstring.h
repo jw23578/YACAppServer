@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 #include "sole/sole.hpp"
-#include "extstring.h" // marked as unused but is needed for MACRO_set
+#include "utils/extstring.h" // marked as unused but is needed for MACRO_set
 #include "utils/definitions.h"
 
 #define MACRO_set(sql, fieldValue) \
@@ -159,6 +159,37 @@ public:
         if (updateStatement)
         {
             addSet(field, value);
+        }
+    }
+
+    void addSetNull(const std::string &field)
+    {
+        sql += firstSetField ? "" : ", ";
+        sql += field + " = null ";
+        firstSetField = false;
+    }
+
+    void addInsertNull(const std::string &field)
+    {
+        if (!firstSetField)
+        {
+            sql += ", ";
+            insert2ndPart += ", ";
+        }
+        firstSetField = false;
+        sql += field;
+        insert2ndPart += "null";
+    }
+
+    void addInsertOrSetNull(const std::string &field)
+    {
+        if (insertStatement)
+        {
+            addInsertNull(field);
+        }
+        if (updateStatement)
+        {
+            addSetNull(field);
         }
     }
 

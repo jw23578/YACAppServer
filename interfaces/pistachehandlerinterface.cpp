@@ -2,7 +2,7 @@
 #include "extpistache.h"
 #include "rapidjson/error/en.h"
 #include "definitions.h"
-#include "extstring.h"
+#include "utils/extstring.h"
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
@@ -264,6 +264,11 @@ bool PistacheHandlerInterface::getTimePointFromISO(const std::string &name,
     if (!getString(name, temp, ifMissingThenSendResponse))
     {
         return false;
+    }
+    if (temp.find("1900-01-01T12:00:00") == 0)
+    {
+        tp = TimePointPostgreSqlNull;
+        return true;
     }
     tp = ExtString::toTimepoint(temp);
     return true;
