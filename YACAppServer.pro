@@ -44,7 +44,6 @@ SOURCES += \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
-        databaselogic/orm2postgres.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerappuserloggedin.cpp \
@@ -83,6 +82,8 @@ SOURCES += \
         logstat/loggerstatterinterface.cpp \
         logstat/logstatcontroller.cpp \
         opencvwrapper/opencvwrapper.cpp \
+        orm-mapper/orm2postgres.cpp \
+        orm-mapper/orm2rapidjson.cpp \
         postgres/pgcolumnandtype.cpp \
         postgres/pgcommandtransactor.cpp \
         postgres/pgconnection.cpp \
@@ -131,7 +132,6 @@ HEADERS += \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
-  databaselogic/orm2postgres.h \
   databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerappuserloggedin.h \
@@ -170,6 +170,8 @@ HEADERS += \
   logstat/loggerstatterinterface.h \
   logstat/logstatcontroller.h \
   opencvwrapper/opencvwrapper.h \
+  orm-mapper/orm2postgres.h \
+  orm-mapper/orm2rapidjson.h \
   postgres/pgcolumnandtype.h \
   postgres/pgcommandtransactor.h \
   postgres/pgconnection.h \

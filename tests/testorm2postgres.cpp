@@ -1,7 +1,10 @@
 #include "testorm2postgres.h"
-#include "orm2postgres.h"
+#include "orm-mapper/orm2postgres.h"
+#include "orm-mapper/orm2rapidjson.h"
 #include "orm_implementions/t0009_appuser_logintoken.h"
-
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
+#include "iostream"
 TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
     ORM2Postgres o2p(pool);
@@ -9,5 +12,20 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     std::set<ORMObjectInterface*> allT0009;
     o2p.selectAll(ghost, allT0009);
 
-    int z = 1;
+    ORM2rapidjson o2j;
+    rapidjson::Document document;
+    document.SetObject();
+    ORMObjectInterface &o(**allT0009.begin());
+    o2j.toJson(o,
+               document,
+               document.GetAllocator());
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+
+    std::cout << buffer.GetString() << std::endl;
+
+    o2j.fromJson(document, ghost);
+
 }
