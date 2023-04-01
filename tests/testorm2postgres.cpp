@@ -9,7 +9,7 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
     ORM2Postgres o2p(pool);
     t0009_appuser_logintoken ghost;
-    std::set<ORMObjectInterface*> allT0009;
+    std::set<YACBaseObject*> allT0009;
     o2p.selectAll(ghost, allT0009);
     if (!allT0009.size())
     {
@@ -19,7 +19,7 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     ORM2rapidjson o2j;
     rapidjson::Document document;
     document.SetObject();
-    ORMObjectInterface &o(**allT0009.begin());
+    YACBaseObject &o(**allT0009.begin());
     o2j.toJson(o,
                document,
                document.GetAllocator());

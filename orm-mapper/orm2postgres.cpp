@@ -7,7 +7,7 @@ ORM2Postgres::ORM2Postgres(PGConnectionPool &pool):
 
 }
 
-void ORM2Postgres::insertOrUpdate(ORMObjectInterface &object)
+void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
     PGSqlString sql;
@@ -41,7 +41,7 @@ void ORM2Postgres::insertOrUpdate(ORMObjectInterface &object)
 }
 
 bool ORM2Postgres::select(const sole::uuid &id,
-                          ORMObjectInterface &object)
+                          YACBaseObject &object)
 {
     PGSqlString sql;
     sql.select(object.getORMName());
@@ -67,8 +67,8 @@ bool ORM2Postgres::select(const sole::uuid &id,
     return true;
 }
 
-size_t ORM2Postgres::selectAll(const ORMObjectInterface &ghost,
-                               std::set<ORMObjectInterface *> &target)
+size_t ORM2Postgres::selectAll(const YACBaseObject &ghost,
+                               std::set<YACBaseObject *> &target)
 {
     PGSqlString sql;
     sql.select(ghost.getORMName());
@@ -81,7 +81,7 @@ size_t ORM2Postgres::selectAll(const ORMObjectInterface &ghost,
     ghost.getPropertyNames(propertyNames);
     for (size_t i(0); i < e.size(); ++i)
     {
-        ORMObjectInterface *object(ghost.create());
+        YACBaseObject *object(static_cast<YACBaseObject*>(ghost.create()));
         for (const auto &pn: propertyNames)
         {
             if (e.isNull(pn))

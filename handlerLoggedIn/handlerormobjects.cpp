@@ -40,7 +40,7 @@ void HandlerORMObjects::method()
         {
             if (isMethod(on))
             {
-                std::unique_ptr<ORMObjectInterface> object(o2json.fromJson(getPostedData(), factory));
+                std::unique_ptr<YACBaseObject> object(o2json.fromJson(getPostedData(), factory));
                 if (answerMissingRight(rightsLogic.appUserMissesRight(loggedInUserId, object->changeRight)))
                 {
                     return;
