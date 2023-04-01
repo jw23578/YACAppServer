@@ -11,6 +11,10 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     t0009_appuser_logintoken ghost;
     std::set<ORMObjectInterface*> allT0009;
     o2p.selectAll(ghost, allT0009);
+    if (!allT0009.size())
+    {
+        return;
+    }
 
     ORM2rapidjson o2j;
     rapidjson::Document document;
@@ -19,6 +23,10 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     o2j.toJson(o,
                document,
                document.GetAllocator());
+
+    rapidjson::Value array;
+    o2j.toJson(allT0009, array, document.GetAllocator());
+    document.AddMember("array", array, document.GetAllocator());
 
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);

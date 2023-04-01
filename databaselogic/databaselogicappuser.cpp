@@ -1,6 +1,8 @@
 #include "databaselogicappuser.h"
 #include "postgres/pgexecutor.h"
 #include "definitions.h"
+#include "orm_implementions/t0009_appuser_logintoken.h"
+#include "orm-mapper/orm2postgres.h"
 
 void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
                                            std::string &loginToken)
@@ -10,12 +12,12 @@ void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
         loginToken = sole::uuid4().str();
     }
     int validHours(24 * 7);
-    PGSqlString sql(utils.createInsertString(tableNames.t0009_appuser_logintoken));
-    sql.set("id", sole::uuid4());
-    sql.set("appuser_id", appUserId);
-    sql.set("login_token", loginToken);
-    sql.set("login_token_valid_until", std::chrono::system_clock::now() + std::chrono::hours(1) * validHours);
-    PGExecutor e(pool, sql);
+    t0009_appuser_logintoken t0009;
+    t0009.appuser_id.set(appUserId);
+    t0009.login_token.set(loginToken);
+    t0009.login_token_valid_until.set(std::chrono::system_clock::now() + std::chrono::hours(1) * validHours);
+    ORM2Postgres o2p(pool);
+    o2p.insertOrUpdate(t0009);
 }
 
 bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,

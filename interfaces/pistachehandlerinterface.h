@@ -108,6 +108,7 @@ protected:
                   std::map<std::string, std::string> &data);
     void answerOk(bool success,
                   rapidjson::Document &d);
+    const rapidjson::Document &getPostedData() const;
     bool isMethod(const std::string &method) const;
     bool isGet() const;
     bool isPost() const;

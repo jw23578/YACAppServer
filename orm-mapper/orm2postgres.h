@@ -13,7 +13,7 @@ class ORM2Postgres
 public:
     ORM2Postgres(PGConnectionPool &pool);
 
-    void insertOrUpdate(const ORMObjectInterface &object);
+    void insertOrUpdate(ORMObjectInterface &object);
 
     bool select(const sole::uuid &id,
                 ORMObjectInterface &object);

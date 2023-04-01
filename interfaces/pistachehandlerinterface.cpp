@@ -61,6 +61,11 @@ void PistacheHandlerInterface::answerOk(bool success,
     answer(Pistache::Http::Code::Ok, success, missingRight, d);
 }
 
+const rapidjson::Document &PistacheHandlerInterface::getPostedData() const
+{
+    return postedData;
+}
+
 bool PistacheHandlerInterface::isGet() const
 {
     return request->method() == Pistache::Http::Method::Get;

@@ -70,6 +70,7 @@ SOURCES += \
         handlerLoggedIn/handlerappuserupdatemessagestates.cpp \
         handlerLoggedIn/handlerappuserupdateprofile.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
+        handlerLoggedIn/handlerormobjects.cpp \
         handlerLoggedIn/handlerstoremessage.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
         interfaces/extpistache.cpp \
@@ -158,6 +159,7 @@ HEADERS += \
   handlerLoggedIn/handlerappuserupdatemessagestates.h \
   handlerLoggedIn/handlerappuserupdateprofile.h \
   handlerLoggedIn/handlerloggedininterface.h \
+  handlerLoggedIn/handlerormobjects.h \
   handlerLoggedIn/handlerstoremessage.h \
   handlerLoggedIn/handleruploadapp.h \
   interfaces/extpistache.h \
@@ -208,6 +210,7 @@ DISTFILES += \
   curl-format.txt \
   deployToJW78.sh \
   intern_doc.txt \
+  t0009_appuser_logintoken.json \
   updateProfile.json
 
 contains(DEFINES,WITH_INFLUX){

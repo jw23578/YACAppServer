@@ -16,9 +16,10 @@
 class DatabaseLogics
 {
     LogStatController &logStatController;
-    PGConnectionPool &pool;
 
 public:
+    PGConnectionPool &pool;
+
     DatabaseLogicAppUser databaseLogicAppUser;
     DatabaseLogicWorktime databaseLogicWorktime;
     DatabaseLogicImageTable databaseLogicImageTable;
@@ -30,6 +31,7 @@ public:
     RightsLogic rightsLogic;
 
     LogStatController &getLogStat();
+
 
     DatabaseLogics(LogStatController &logStatController,
                    PGConnectionPool &pool);

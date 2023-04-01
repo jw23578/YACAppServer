@@ -7,13 +7,14 @@ ORM2Postgres::ORM2Postgres(PGConnectionPool &pool):
 
 }
 
-void ORM2Postgres::insertOrUpdate(const ORMObjectInterface &object)
+void ORM2Postgres::insertOrUpdate(ORMObjectInterface &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
     PGSqlString sql;
     if (object.propertyIsNull(tableFields.id))
     {
         sql.insert(object.getORMName());
+        object.id.set(sole::uuid4());
     }
     else
     {

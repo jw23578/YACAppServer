@@ -26,6 +26,7 @@
 #include "handlerLoggedIn/handlerappuserappointments.h"
 #include "handlerLoggedIn/handlerappuserrightgroup.h"
 #include "handlerLoggedIn/handlerappuserspace.h"
+#include "handlerLoggedIn/handlerormobjects.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogictables.h"
 #include "databaselogicmessages.h"
@@ -34,9 +35,11 @@
 #include "loggedincontainer/loggedinuserscontainer.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "caches/devicetokencache.h"
+#include "orm_implementions/ormfactory.h"
 
 class YACAppServer: public PistacheServerInterface
 {
+    ORMFactory factory;
     DeviceTokenCache deviceTokenCache;
 
     LoggedInUsersContainer loggedInUsersContainer;
@@ -66,6 +69,7 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserAppointments handlerAppUserAppointments;
     HandlerAppUserRightGroup handlerAppUserRightGroup;
     HandlerAppUserSpace handlerAppUserSpace;
+    HandlerORMObjects handlerORMObjects;
     HandlerStoreMessage handlerStoreMesage;
 
 
