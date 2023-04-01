@@ -109,6 +109,9 @@ protected:
     void answerOk(bool success,
                   rapidjson::Document &d);
     bool isMethod(const std::string &method) const;
+    bool isGet() const;
+    bool isPost() const;
+    bool isDelete() const;
     const std::string &d_getMethodName() const;
     void addMethod(PistacheServerInterface &serverInterface,
                    std::string const &methodName,

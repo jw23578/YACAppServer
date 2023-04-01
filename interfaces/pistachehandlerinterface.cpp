@@ -61,6 +61,21 @@ void PistacheHandlerInterface::answerOk(bool success,
     answer(Pistache::Http::Code::Ok, success, missingRight, d);
 }
 
+bool PistacheHandlerInterface::isGet() const
+{
+    return request->method() == Pistache::Http::Method::Get;
+}
+
+bool PistacheHandlerInterface::isPost() const
+{
+    return request->method() == Pistache::Http::Method::Post;
+}
+
+bool PistacheHandlerInterface::isDelete() const
+{
+    return request->method() == Pistache::Http::Method::Delete;
+}
+
 bool PistacheHandlerInterface::isMethod(const std::string &method) const
 {
     return request->resource() == method || request->resource() == "/" + method;
