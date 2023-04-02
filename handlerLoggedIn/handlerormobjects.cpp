@@ -1,6 +1,8 @@
 #include "handlerormobjects.h"
+#include "orm_implementions/t0023_right2rightgroup.h"
+#include "orm_implementions/t0022_right_group2appuser.h"
 
-HandlerORMObjects::HandlerORMObjects(ORMFactory &factory,
+HandlerORMObjects::HandlerORMObjects(YACORMFactory &factory,
                                      PGConnectionPool &pool,
                                      RightsLogic &rightsLogic,
                                      PistacheServerInterface &serverInterface,
@@ -10,7 +12,7 @@ HandlerORMObjects::HandlerORMObjects(ORMFactory &factory,
                              TypeGet,
                              loggedInAppUsersContainer),
     factory(factory),    
-    o2postgres(pool),
+    orm2postgres(pool),
     rightsLogic(rightsLogic)
 {
     for (const auto &on: factory.getORMNames())
@@ -32,7 +34,21 @@ void HandlerORMObjects::method()
 {
     if (isGet())
     {
-
+        if (isMethod(t0023_right2rightgroup().getORMName()))
+        {
+            MACRO_GetMandatoryUuid(right_group_id);
+            rapidjson::Document document;
+            document.SetObject();
+            rapidjson::Value array;
+            orm2postgres.selectAll(t0023_right2rightgroup(),
+                                   "right_group_id",
+                                   right_group_id,
+                                   array,
+                                   document.GetAllocator());
+            document.AddMember("t0023_right2rightgroup", array, document.GetAllocator());
+            answerOk(true, document);
+            return;
+        }
     }
     if (isPost())
     {
@@ -40,12 +56,13 @@ void HandlerORMObjects::method()
         {
             if (isMethod(on))
             {
-                std::unique_ptr<YACBaseObject> object(o2json.fromJson(getPostedData(), factory));
-                if (answerMissingRight(rightsLogic.appUserMissesRight(loggedInUserId, object->changeRight)))
+                YACBaseObject *baseObject(static_cast<YACBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
+                std::unique_ptr<ORMObjectInterface> object(baseObject);
+                if (answerMissingRight(rightsLogic.appUserMissesRight(loggedInUserId, baseObject->changeRight)))
                 {
                     return;
                 }
-                o2postgres.insertOrUpdate(*object);
+                orm2postgres.insertOrUpdate(*object);
                 answerOk("object stored", true);
                 return;
             }

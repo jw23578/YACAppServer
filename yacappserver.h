@@ -35,11 +35,10 @@
 #include "loggedincontainer/loggedinuserscontainer.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "caches/devicetokencache.h"
-#include "orm_implementions/ormfactory.h"
+#include "orm_implementions/yacormfactory.h"
 
 class YACAppServer: public PistacheServerInterface
 {
-    ORMFactory factory;
     DeviceTokenCache deviceTokenCache;
 
     LoggedInUsersContainer loggedInUsersContainer;
@@ -75,6 +74,7 @@ class YACAppServer: public PistacheServerInterface
 
 public:
     YACAppServer(const std::string &firebaseApiKey,
+                 YACORMFactory &factory,
                  DatabaseLogics &databaseLogics,
                  DatabaseLogicTables &databaseLogicTables,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,

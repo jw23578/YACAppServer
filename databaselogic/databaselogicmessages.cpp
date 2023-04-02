@@ -49,7 +49,7 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
     MACRO_set(sql, fetcher_id);
     MACRO_set(sql, since);
     PGExecutor e(pool, sql);
-    e.toJsonArray(target, alloc);
+    e.deprecated_toJsonArray(target, alloc);
     return true;
 }
 
@@ -67,7 +67,7 @@ bool DatabaseLogicMessages::fetchReceivedMessages(const sole::uuid &receiver_id,
     sql.addCompare(" and ", tableFields.received_datetime, " > ", since);
     PGExecutor e(pool,
                  sql);
-    e.toJsonArray(target, alloc);
+    e.deprecated_toJsonArray(target, alloc);
     return true;
 }
 
@@ -84,7 +84,7 @@ bool DatabaseLogicMessages::fetchReadMessages(const sole::uuid &reader_id,
     sql.addCompare(" and ", tableFields.read_datetime, " > ", since);
     PGExecutor e(pool,
                  sql);
-    e.toJsonArray(target, alloc);
+    e.deprecated_toJsonArray(target, alloc);
     return true;
 }
 
@@ -114,7 +114,7 @@ bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const sole::uuid &recei
     std::map<std::string, rapidjson::Value*> targets;
     targets["1"] = &targetReceived;
     targets["2"] = &targetRead;
-    e.toJsonArray(targets, alloc);
+    e.deprecated_toJsonArray(targets, alloc);
     return true;
 }
 

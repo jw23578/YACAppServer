@@ -105,7 +105,7 @@ bool PGExecutor::defaultSelectToJSON(const std::string &tableName,
     {
         return false;
     }
-    toJsonObject(object, alloc, {});
+    deprecated_toJsonObject(object, alloc, {});
     return true;
 }
 
@@ -125,7 +125,7 @@ void PGExecutor::defaultDelete(const std::string &table_name,
     delet(table_name, "id", id.str());
 }
 
-size_t PGExecutor::size()
+size_t PGExecutor::size() const
 {
     return result.size();
 }
@@ -145,7 +145,7 @@ std::string PGExecutor::columnName(size_t c)
     return result.column_name(c);
 }
 
-bool PGExecutor::isNull(const std::string &fieldname)
+bool PGExecutor::isNull(const std::string &fieldname) const
 {
     const pqxx::row &row(result[currentRow]);
     return row[fieldname].is_null();
@@ -163,7 +163,7 @@ bool PGExecutor::boolean(const std::string &fieldname)
     return row[fieldname].get<bool>().value();
 }
 
-std::string PGExecutor::string(const pqxx::row::size_type columnNumber)
+std::string PGExecutor::string(const pqxx::row::size_type columnNumber) const
 {
     const pqxx::row &row(result[currentRow]);
     if (row[columnNumber].is_null())
@@ -173,7 +173,7 @@ std::string PGExecutor::string(const pqxx::row::size_type columnNumber)
     return row[columnNumber].get<std::string>().value();
 }
 
-std::string PGExecutor::string(const std::string &fieldname)
+std::string PGExecutor::string(const std::string &fieldname) const
 {
     const pqxx::row &row(result[currentRow]);
     const pqxx::row::size_type columnNumber(row.column_number(fieldname));
@@ -243,9 +243,9 @@ size_t PGExecutor::append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAl
     }
 }
 
-void PGExecutor::toJsonObject(rapidjson::Value &object,
-                              rapidjson::MemoryPoolAllocator<> &alloc,
-                              const std::set<std::string> fields2Ignore)
+void PGExecutor::deprecated_toJsonObject(rapidjson::Value &object,
+                                         rapidjson::MemoryPoolAllocator<> &alloc,
+                                         const std::set<std::string> fields2Ignore)
 {
     object.SetObject();
     const pqxx::row &row(result[currentRow]);
@@ -260,13 +260,14 @@ void PGExecutor::toJsonObject(rapidjson::Value &object,
     }
 }
 
-size_t PGExecutor::toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
+
+size_t PGExecutor::deprecated_toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
 {
     targetArray.SetArray();
     for (size_t r(0); r < size(); ++r)
     {
         rapidjson::Value object(rapidjson::kObjectType);
-        toJsonObject(object, alloc, {});
+        deprecated_toJsonObject(object, alloc, {});
         targetArray.PushBack(object, alloc);
         next();
     }
@@ -274,8 +275,8 @@ size_t PGExecutor::toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryP
 
 }
 
-size_t PGExecutor::toJsonArray(std::map<std::string, rapidjson::Value*> &type2TargetArray,
-                               rapidjson::MemoryPoolAllocator<> &alloc)
+size_t PGExecutor::deprecated_toJsonArray(std::map<std::string, rapidjson::Value*> &type2TargetArray,
+                                          rapidjson::MemoryPoolAllocator<> &alloc)
 {
     if (!type2TargetArray.size())
     {
@@ -294,7 +295,7 @@ size_t PGExecutor::toJsonArray(std::map<std::string, rapidjson::Value*> &type2Ta
             return 0;
         }
         rapidjson::Value object(rapidjson::kObjectType);
-        toJsonObject(object, alloc, {"type"});
+        deprecated_toJsonObject(object, alloc, {"type"});
         target->second->PushBack(object, alloc);
         next();
     }

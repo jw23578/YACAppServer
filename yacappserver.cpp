@@ -4,6 +4,7 @@
 #include "serverHeader/appidheader.h"
 
 YACAppServer::YACAppServer(const std::string &firebaseApiKey,
+                           YACORMFactory &factory,
                            DatabaseLogics &databaseLogics,
                            DatabaseLogicTables &databaseLogicTables,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,

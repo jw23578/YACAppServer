@@ -46,14 +46,14 @@ void HandlerAppUserRightGroup::method()
 
         std::string errorMessage;
         answerOk(errorMessage, dlrg.insertOrUpdateRightGroup2AppUser(id,
-                                                  right_group_id,
-                                                  appuser_id,
-                                                  requested_datetime,
-                                                  approved_datetime,
-                                                  approved_appuser_id,
-                                                  denied_datetime,
-                                                  denied_appuser_id,
-                                                  errorMessage));
+                                                                     right_group_id,
+                                                                     appuser_id,
+                                                                     requested_datetime,
+                                                                     approved_datetime,
+                                                                     approved_appuser_id,
+                                                                     denied_datetime,
+                                                                     denied_appuser_id,
+                                                                     errorMessage));
         return;
     }
     if (isMethod(methodNames.fetchRightGroupMember))

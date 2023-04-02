@@ -130,7 +130,7 @@ bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appu
     sql.set("appuser_id", appuser_id);
     sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
-    e.toJsonArray(target, alloc);
+    e.deprecated_toJsonArray(target, alloc);
     return true;
 }
 
@@ -235,6 +235,6 @@ bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
     sql += std::string(" and ") + tableFields.history_datetime + std::string(" is null ");
     sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
-    e.toJsonArray(target, alloc);
+    e.deprecated_toJsonArray(target, alloc);
     return true;
 }

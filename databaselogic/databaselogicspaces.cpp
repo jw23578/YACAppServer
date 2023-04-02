@@ -93,7 +93,7 @@ bool DatabaseLogicSpaces::fetchSpaces(const sole::uuid &app_id,
 
     sql.set("appuser_id", appuser_id);
     PGExecutor e(pool, sql);
-    e.toJsonArray(targetArray, alloc);
+    e.deprecated_toJsonArray(targetArray, alloc);
     return true;
 }
 
@@ -161,7 +161,7 @@ bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
     sql += ")";
 
     PGExecutor e(pool, sql);
-    e.toJsonArray(targetArray, alloc);
+    e.deprecated_toJsonArray(targetArray, alloc);
     return true;
 }
 

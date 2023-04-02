@@ -1,5 +1,8 @@
 #include "databaselogicrightgroup.h"
 #include "pgexecutor.h"
+#include "orm-mapper/orm2postgres.h"
+#include "orm-mapper/orm2rapidjson.h"
+#include "orm_implementions/t0021_right_group.h"
 
 bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
                                                  rapidjson::Value &object,
@@ -85,7 +88,8 @@ bool DatabaseLogicRightGroup::fetchRightGroups(const sole::uuid &app_id,
     sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
     sql.addCompare("and", tableFields.app_id, "=", app_id);
     PGExecutor e(pool, sql);
-    e.toJsonArray(targetArray, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(e, t0021_right_group(), targetArray, alloc);
     return true;
 }
 
@@ -94,13 +98,19 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
                                               rapidjson::MemoryPoolAllocator<> &alloc,
                                               std::string &message)
 {
+    ORM2Postgres orm2postgres(pool);
+    t0021_right_group t0021;
+    if (!orm2postgres.select(right_group_id, t0021, object, alloc))
     {
-        PGExecutor e(pool);
-        if (!e.defaultSelectToJSON(tableNames.t0021_right_group, right_group_id, object, alloc, message))
-        {
-            return false;
-        }
+        return false;
     }
+//    {
+//        PGExecutor e(pool);
+//        if (!e.defaultSelectToJSON(tableNames.t0021_right_group, right_group_id, object, alloc, message))
+//        {
+//            return false;
+//        }
+//    }
     {
         PGSqlString sql;
         sql.select(tableNames.t0023_right2rightgroup);
@@ -137,7 +147,7 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_grou
     sql.addCompare("and", tableFields.approved_datetime, " is not ", TimePointPostgreSqlNull);
     sql += ")";
     PGExecutor e(pool, sql);
-    e.toJsonArray(member, alloc);
+    e.deprecated_toJsonArray(member, alloc);
     return true;
 }
 

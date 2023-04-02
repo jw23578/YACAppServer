@@ -25,6 +25,7 @@
 
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
+#include "orm_implementions/yacormfactory.h"
 
 using namespace std;
 
@@ -90,8 +91,10 @@ int main(int argc, char **argv)
                           10,
                           logStatController);
 
+    YACORMFactory factory;
     DatabaseLogicTables databaseLogicTables(logStatController,
-                                            pool);
+                                            pool,
+                                            factory);
 
     std::cout << "Checking Databaseconnection\n";
     if (!databaseLogicTables.connectionOk())
@@ -144,6 +147,7 @@ int main(int argc, char **argv)
                           json.getString("smtpPassword"));
 
     YACAppServer server(json.getString("firebaseApiKey"),
+                        factory,
                         databaseLogics,
                         databaseLogicTables,
                         databaseLogicUserAndApp,

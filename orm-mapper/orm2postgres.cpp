@@ -1,5 +1,5 @@
 #include "orm2postgres.h"
-#include "pgsqlstring.h"
+#include "pgexecutor.h"
 
 ORM2Postgres::ORM2Postgres(PGConnectionPool &pool):
     pool(pool)
@@ -7,22 +7,109 @@ ORM2Postgres::ORM2Postgres(PGConnectionPool &pool):
 
 }
 
-void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
+bool ORM2Postgres::select(const sole::uuid &id,
+                          ORMObjectInterface &object)
+{
+    PGSqlString sql;
+    sql.select(object.getORMName());
+    sql.addCompare("where", tableFields.id, "=", id);
+    PGExecutor e(pool, sql);
+    if (e.size() != 1)
+    {
+        return false;
+    }
+    for (const auto &pn: object.propertyNames())
+    {
+        if (e.isNull(pn))
+        {
+            object.setPropertyNull(pn, true);
+        }
+        else
+        {
+            object.setPropertyFromString(pn, e.string(pn));
+        }
+    }
+    return true;
+}
+
+bool ORM2Postgres::select(const sole::uuid &id,
+                          ORMObjectInterface &object,
+                          rapidjson::Value &target,
+                          rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    if (!select(id, object))
+    {
+        return false;
+    }
+    orm2json.toJson(object, target, alloc);
+    return true;
+}
+
+size_t ORM2Postgres::selectAll(const ORMObjectInterface &ghost,
+                               std::set<ORMObjectInterface *> &target)
+{
+    PGSqlString sql;
+    sql.select(ghost.getORMName());
+    PGExecutor e(pool, sql);
+    if (!e.size())
+    {
+        return 0;
+    }
+    return fetchAll(e, ghost, target);
+}
+
+bool ORM2Postgres::postgres2object(const PGExecutor &e,
+                                   ORMObjectInterface &target)
+{
+    for (const auto &pn: target.propertyNames())
+    {
+        if (e.isNull(pn))
+        {
+            target.setPropertyNull(pn, true);
+        }
+        else
+        {
+            target.setPropertyFromString(pn, e.string(pn));
+        }
+    }
+    return true;
+}
+
+size_t ORM2Postgres::fetchAll(PGExecutor &e,
+                              const ORMObjectInterface &ghost,
+                              std::set<ORMObjectInterface *> &target)
+{
+    for (size_t i(0); i < e.size(); ++i)
+    {
+        ORMObjectInterface *object(ghost.create());
+        postgres2object(e, *object);
+        target.insert(object);
+        e.next();
+    }
+    return e.size();
+}
+
+size_t ORM2Postgres::toJsonArray(PGSqlString &sql, const ORMObjectInterface &ghost, rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    PGExecutor e(pool, sql);
+    toJsonArray(e, ghost, targetArray, alloc);
+}
+
+
+void ORM2Postgres::insertOrUpdate(ORMObjectInterface &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
     PGSqlString sql;
     if (object.propertyIsNull(tableFields.id))
     {
         sql.insert(object.getORMName());
-        object.id.set(sole::uuid4());
+        object.setPropertyFromString(tableFields.id, sole::uuid4().str());
     }
     else
     {
         sql.update(object.getORMName());
     }
-    std::set<ORMString> propertyNames;
-    object.getPropertyNames(propertyNames);
-    for (const auto &pn: propertyNames)
+    for (const auto &pn: object.propertyNames())
     {
         if (pn != tableFields.id)
         {
@@ -40,61 +127,20 @@ void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
     PGExecutor e(pool, sql);
 }
 
-bool ORM2Postgres::select(const sole::uuid &id,
-                          YACBaseObject &object)
+size_t ORM2Postgres::toJsonArray(PGExecutor &e,
+                                 const ORMObjectInterface &ghost,
+                                 rapidjson::Value &targetArray,
+                                 rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    PGSqlString sql;
-    sql.select(object.getORMName());
-    sql.addCompare("where", tableFields.id, "=", id);
-    PGExecutor e(pool, sql);
-    if (e.size() != 1)
-    {
-        return false;
-    }
-    std::set<ORMString> propertyNames;
-    object.getPropertyNames(propertyNames);
-    for (const auto &pn: propertyNames)
-    {
-        if (e.isNull(pn))
-        {
-            object.setPropertyNull(pn, true);
-        }
-        else
-        {
-            object.setPropertyFromString(pn, e.string(pn));
-        }
-    }
-    return true;
-}
-
-size_t ORM2Postgres::selectAll(const YACBaseObject &ghost,
-                               std::set<YACBaseObject *> &target)
-{
-    PGSqlString sql;
-    sql.select(ghost.getORMName());
-    PGExecutor e(pool, sql);
-    if (!e.size())
-    {
-        return 0;
-    }
-    std::set<ORMString> propertyNames;
-    ghost.getPropertyNames(propertyNames);
+    ORM2Postgres o2p(pool);
     for (size_t i(0); i < e.size(); ++i)
     {
-        YACBaseObject *object(static_cast<YACBaseObject*>(ghost.create()));
-        for (const auto &pn: propertyNames)
+        std::unique_ptr<ORMObjectInterface> object(ghost.create());
+        if (o2p.postgres2object(e, *object))
         {
-            if (e.isNull(pn))
-            {
-                object->setPropertyNull(pn, true);
-            }
-            else
-            {
-                object->setPropertyFromString(pn, e.string(pn));
-            }
+            orm2json.addToArray(*object, targetArray, alloc);
         }
-        target.insert(object);
         e.next();
     }
-    return e.size();
+    return targetArray.Size();
 }

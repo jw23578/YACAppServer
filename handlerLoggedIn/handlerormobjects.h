@@ -4,19 +4,19 @@
 #include "handlerloggedininterface.h"
 #include "rightsLogic/rightslogic.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
-#include "orm_implementions/ormfactory.h"
+#include "orm_implementions/yacormfactory.h"
 #include "pgconnectionpool.h"
 #include "orm-mapper/orm2rapidjson.h"
 #include "orm-mapper/orm2postgres.h"
 
 class HandlerORMObjects : public HandlerLoggedInInterface
 {
-    ORMFactory &factory;
-    ORM2rapidjson o2json;
-    ORM2Postgres o2postgres;
+    YACORMFactory &factory;
+    ORM2rapidjson orm2json;
+    ORM2Postgres orm2postgres;
     RightsLogic &rightsLogic;
 public:
-    HandlerORMObjects(ORMFactory &factory,
+    HandlerORMObjects(YACORMFactory &factory,
                       PGConnectionPool &pool,
                       RightsLogic &rightsLogic,
                       PistacheServerInterface &serverInterface,

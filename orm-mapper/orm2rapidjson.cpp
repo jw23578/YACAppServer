@@ -5,7 +5,7 @@ ORM2rapidjson::ORM2rapidjson()
 
 }
 
-void ORM2rapidjson::toJson(const YACBaseObject &object,
+void ORM2rapidjson::toJson(const ORMObjectInterface &object,
                            rapidjson::Value &target,
                            rapidjson::MemoryPoolAllocator<> &alloc)
 {
@@ -13,9 +13,7 @@ void ORM2rapidjson::toJson(const YACBaseObject &object,
     rapidjson::Value name("ORMName", alloc);
     rapidjson::Value ORMName(object.getORMName(), alloc);
     target.AddMember(name, ORMName, alloc);
-    std::set<ORMString> propertyNames;
-    object.getPropertyNames(propertyNames);
-    for (const auto &pn : propertyNames)
+    for (const auto &pn : object.propertyNames())
     {
         rapidjson::Value name(pn, alloc);
         if (object.propertyIsNull(pn))
@@ -30,8 +28,8 @@ void ORM2rapidjson::toJson(const YACBaseObject &object,
     }
 }
 
-YACBaseObject *ORM2rapidjson::fromJson(const rapidjson::Value &source,
-                                       const ORMFactory &factory)
+ORMObjectInterface *ORM2rapidjson::fromJson(const rapidjson::Value &source,
+                                            const YACORMFactory &factory)
 {
     if (!source.HasMember("ORMName"))
     {
@@ -47,7 +45,7 @@ YACBaseObject *ORM2rapidjson::fromJson(const rapidjson::Value &source,
 }
 
 bool ORM2rapidjson::fromJson(const rapidjson::Value &source,
-                             YACBaseObject &object)
+                             ORMObjectInterface &object)
 {
     if (!source.HasMember("ORMName"))
     {
@@ -57,9 +55,7 @@ bool ORM2rapidjson::fromJson(const rapidjson::Value &source,
     {
         return false;
     }
-    std::set<ORMString> propertyNames;
-    object.getPropertyNames(propertyNames);
-    for (const auto &pn : propertyNames)
+    for (const auto &pn : object.propertyNames())
     {
         if (!source.HasMember(pn) || source[pn].IsNull())
         {
@@ -73,27 +69,40 @@ bool ORM2rapidjson::fromJson(const rapidjson::Value &source,
     return true;
 }
 
-void ORM2rapidjson::toJson(const std::set<YACBaseObject *> &objects,
+void ORM2rapidjson::toJson(const std::set<ORMObjectInterface *> &objects,
                            rapidjson::Value &array,
                            rapidjson::MemoryPoolAllocator<> &alloc)
 {
     array.SetArray();
     for (const auto &o: objects)
     {
-        rapidjson::Value object;
-        toJson(*o, object, alloc);
-        array.PushBack(object, alloc);
+        rapidjson::Value jsonObject;
+        toJson(*o, jsonObject, alloc);
+        array.PushBack(jsonObject, alloc);
     }
 }
 
+void ORM2rapidjson::addToArray(const ORMObjectInterface &object,
+                               rapidjson::Value &array,
+                               rapidjson::MemoryPoolAllocator<> &alloc)
+{
+    if (!array.IsArray())
+    {
+        array.SetArray();
+    }
+    rapidjson::Value jsonObject;
+    toJson(object, jsonObject, alloc);
+    array.PushBack(jsonObject, alloc);
+}
+
 size_t ORM2rapidjson::fromJson(const rapidjson::Value &array,
-                               const ORMFactory &factory,
-                               std::set<YACBaseObject *> &objects)
+                               const YACORMFactory &factory,
+                               std::set<ORMObjectInterface*> &objects)
 {
     const auto it(array.Begin());
     while (it != array.End())
     {
-        YACBaseObject *object(fromJson(*it, factory));
+        ORMObjectInterface *object(fromJson(*it, factory));
         if (object)
         {
             objects.insert(object);

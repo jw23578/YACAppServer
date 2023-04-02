@@ -1,0 +1,7 @@
+{
+  "ORMName": "t0009_appuser_logintoken",
+  "appuser_id": "78d4d508-5b01-4e3a-b370-7c85958df9e4",
+  "id": "1f6191a4-c35e-46a6-885a-83ab3b630c11",
+  "login_token": "5c996f89-21ce-44d8-a702-42db0169bb7e",
+  "login_token_valid_until": "2025-04-02T12:11:26Z"
+}

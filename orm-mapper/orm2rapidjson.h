@@ -3,30 +3,34 @@
 
 #include "rapidjson/document.h"
 #include "orm_implementions/yacbaseobject.h"
-#include "orm_implementions/ormfactory.h"
+#include "orm_implementions/yacormfactory.h"
 
 class ORM2rapidjson
 {
 public:
     ORM2rapidjson();
 
-    void toJson(const YACBaseObject &object,
+    void toJson(const ORMObjectInterface &object,
                 rapidjson::Value &target,
                 rapidjson::MemoryPoolAllocator<> &alloc);
 
-    YACBaseObject *fromJson(const rapidjson::Value &source,
-                            const ORMFactory &factory);
+    ORMObjectInterface *fromJson(const rapidjson::Value &source,
+                                 const YACORMFactory &factory);
 
     bool fromJson(const rapidjson::Value &source,
-                  YACBaseObject &object);
+                  ORMObjectInterface &object);
 
-    void toJson(const std::set<YACBaseObject *> &objects,
+    void toJson(const std::set<ORMObjectInterface*> &objects,
                 rapidjson::Value &array,
                 rapidjson::MemoryPoolAllocator<> &alloc);
 
+    void addToArray(const ORMObjectInterface &object,
+                    rapidjson::Value &array,
+                    rapidjson::MemoryPoolAllocator<> &alloc);
+
     size_t fromJson(const rapidjson::Value &array,
-                    const ORMFactory &factory,
-                    std::set<YACBaseObject*> &objects);
+                    const YACORMFactory &factory,
+                    std::set<ORMObjectInterface *> &objects);
 };
 
 #endif // ORM2RAPIDJSON_H

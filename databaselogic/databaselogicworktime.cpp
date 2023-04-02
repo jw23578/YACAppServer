@@ -363,7 +363,7 @@ bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
     MACRO_set(sql, until);
     sql += std::string(" order by ") + tableFields.ts;
     PGExecutor e(pool, sql);
-    e.toJsonArray(targetArray, alloc);
+    e.deprecated_toJsonArray(targetArray, alloc);
     return true;
 }
 

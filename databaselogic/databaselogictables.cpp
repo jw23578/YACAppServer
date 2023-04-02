@@ -3,9 +3,11 @@
 #include "postgres/pgexecutor.h"
 
 DatabaseLogicTables::DatabaseLogicTables(LogStatController &logStatController,
-                                         PGConnectionPool &pool):
+                                         PGConnectionPool &pool,
+                                         YACORMFactory &factory):
     logStatController(logStatController),
     pool(pool),
+    factory(factory),
     utils(pool)
 {
 
@@ -45,6 +47,40 @@ void DatabaseLogicTables::createDatabaseTables()
     PGColumnAndType deniedDatetime({tableFields.denied_datetime, pg_timestamp});
     PGColumnAndType deniedAppuserId({tableFields.denied_appuser_id, pg_uuid});
     PGColumnAndType visibleForNonMembers({tableFields.visible_for_non_members, pg_bool});
+
+    for (const auto &on: factory.getORMNames())
+    {
+        std::unique_ptr<YACBaseObject> object(factory.create(on));
+        std::vector<PGColumnAndType> columnsAndTypes;
+        columnsAndTypes.push_back(idPrimaryKey);
+        for (const auto &pn: object->propertyNames())
+        {
+            if (pn != tableFields.id)
+            {
+                if (object->proptertyIsBool(pn))
+                {
+                    columnsAndTypes.push_back({pn, pg_bool, false, object->shouldBeIndexed(pn)});
+                }
+                if (object->proptertyIsUuid(pn))
+                {
+                    columnsAndTypes.push_back({pn, pg_uuid, false, object->shouldBeIndexed(pn)});
+                }
+                if (object->proptertyIsDateTime(pn))
+                {
+                    columnsAndTypes.push_back({pn, pg_timestamp, false, object->shouldBeIndexed(pn)});
+                }
+                if (object->proptertyIsString(pn))
+                {
+                    columnsAndTypes.push_back({pn, pg_text, false, object->shouldBeIndexed(pn)});
+                }
+                if (object->proptertyIsInt(pn))
+                {
+                    columnsAndTypes.push_back({pn, pg_bigint, false, object->shouldBeIndexed(pn)});
+                }
+            }
+        }
+        utils.createTableIfNeeded(on, columnsAndTypes);
+    }
 
 
 
@@ -215,34 +251,6 @@ void DatabaseLogicTables::createDatabaseTables()
                               {idPrimaryKey,
                                {tableFields.appointment_id, pg_uuid, false, true},
                                {tableFields.appuser_id, pg_uuid, false, true}});
-
-    utils.createTableIfNeeded(tableNames.t0021_right_group,
-                              {idPrimaryKey,
-                               appId,
-                               {tableFields.name, pg_text, false, true},
-                               {tableFields.creater_id, pg_uuid, false, true},
-                               deletedDateTime,
-                               deletedAppUser,
-                               {tableFields.automatic, pg_bool},
-                               accessCode,
-                               requestAllowed,
-                               visibleForNonMembers});
-
-    utils.createTableIfNeeded(tableNames.t0022_right_group2appuser,
-                              {idPrimaryKey,
-                               {tableFields.right_group_id, pg_uuid, false, true},
-                               appuserId,
-                               requestedDatetime,
-                               approvedDatetime,
-                               approvedAppuserId,
-                               deniedDatetime,
-                               deniedAppuserId,
-                               resultSeen});
-
-    utils.createTableIfNeeded(tableNames.t0023_right2rightgroup,
-                              {idPrimaryKey,
-                               {tableFields.right_number, pg_int, false, true},
-                               {tableFields.right_group_id, pg_uuid, false, true}});
 
     utils.createTableIfNeeded(tableNames.t0024_space,
                               {idPrimaryKey,

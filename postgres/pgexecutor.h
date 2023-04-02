@@ -5,6 +5,8 @@
 #include "pgconnectionpool.h"
 #include "pgsqlstring.h"
 #include "rapidjson/document.h"
+#include "orm-mapper/orm2rapidjson.h"
+#include "orm-mapper/orm2postgres.h"
 
 #define MACRO_Uuid_NotEqual(executor, id) \
     if (executor.uuid(#id) != id)
@@ -71,18 +73,18 @@ public:
     void defaultDelete(const std::string &table_name,
                        const sole::uuid &id);
 
-    size_t size();
+    size_t size() const;
     size_t columns();
 
     size_t next();
 
     std::string columnName(size_t c);
 
-    bool isNull(const std::string &fieldname);
+    bool isNull(const std::string &fieldname) const;
     bool isNullOrEmpty(const std::string &fieldname);
     bool boolean(const std::string &fieldname);
-    std::string string(const pqxx::row::size_type columnNumber);
-    std::string string(const std::string &fieldname);
+    std::string string(const pqxx::row::size_type columnNumber) const;
+    std::string string(const std::string &fieldname) const;
     int integer(const std::string &fieldname);
     size_t get_size_t(const std::string &fieldname);
     std::chrono::system_clock::time_point timepoint(const std::string &fieldname);
@@ -95,11 +97,12 @@ public:
     size_t fill(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
     size_t append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
 
-    size_t toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc);
-    size_t toJsonArray(std::map<std::string, rapidjson::Value *> &type2TargetArray, rapidjson::MemoryPoolAllocator<> &alloc);
-    void toJsonObject(rapidjson::Value &object,
-                      rapidjson::MemoryPoolAllocator<> &alloc,
-                      const std::set<std::string> fields2Ignore);
+    size_t deprecated_toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc);
+    size_t deprecated_toJsonArray(std::map<std::string, rapidjson::Value *> &type2TargetArray, rapidjson::MemoryPoolAllocator<> &alloc);
+    void deprecated_toJsonObject(rapidjson::Value &object,
+                                 rapidjson::MemoryPoolAllocator<> &alloc,
+                                 const std::set<std::string> fields2Ignore);
+
 };
 
 #endif // PGEXECUTOR_H

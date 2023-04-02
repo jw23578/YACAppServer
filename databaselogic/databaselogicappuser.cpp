@@ -489,7 +489,7 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     sql += " ) ) ";
     sql.limit(limit, offset);
     PGExecutor e(pool, sql);
-    e.toJsonArray(target, alloc);
+    e.deprecated_toJsonArray(target, alloc);
     return true;
 }
 
