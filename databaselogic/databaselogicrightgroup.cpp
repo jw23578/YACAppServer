@@ -48,25 +48,6 @@ DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatContr
 
 }
 
-bool DatabaseLogicRightGroup::insertOrUpdateRightGroup(sole::uuid &id, const sole::uuid &app_id, const std::string &name, const sole::uuid &creater_id, const bool automatic, const std::string &access_code,
-                                                       const bool request_allowed,
-                                                       const bool visible_for_non_members,
-                                                       rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
-{    
-    PGSqlString sql;
-    sql.insertOrUpdate(id, tableNames.t0021_right_group);
-    MACRO_addInsertOrSet(sql, creater_id);
-    MACRO_addInsertOrSet(sql, app_id);
-    MACRO_addInsertOrSet(sql, name);
-    MACRO_addInsertOrSet(sql, automatic);
-    MACRO_addInsertOrSet(sql, access_code);
-    MACRO_addInsertOrSet(sql, request_allowed);
-    MACRO_addInsertOrSet(sql, visible_for_non_members);
-    sql.addInsertOrWhere("where", tableFields.id, "=", id);
-    PGExecutor e(pool, sql);
-    return fetchOneRightGroup(id, object, alloc, message);
-}
-
 bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
 {
     PGSqlString sql;
@@ -75,21 +56,6 @@ bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole:
     sql.addSet(tableFields.deleted_appuser_id, appuser_id);
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
-    return true;
-}
-
-bool DatabaseLogicRightGroup::fetchRightGroups(const sole::uuid &app_id,
-                                               rapidjson::Value &targetArray,
-                                               rapidjson::MemoryPoolAllocator<> &alloc,
-                                               std::string &message)
-{
-    PGSqlString sql;
-    sql.select(tableNames.t0021_right_group);
-    sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
-    sql.addCompare("and", tableFields.app_id, "=", app_id);
-    PGExecutor e(pool, sql);
-    ORM2Postgres o2p(pool);
-    o2p.toJsonArray(e, t0021_right_group(), targetArray, alloc);
     return true;
 }
 
@@ -200,34 +166,6 @@ bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, cons
     sql.delet(tableNames.t0023_right2rightgroup);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.right_number, "=", right_number);
-    PGExecutor e(pool, sql);
-    return true;
-}
-
-bool DatabaseLogicRightGroup::insertOrUpdateRightGroup2AppUser(sole::uuid &id,
-                                                               const sole::uuid &right_group_id,
-                                                               const sole::uuid &appuser_id,
-                                                               const TimePoint &requested_datetime,
-                                                               const TimePoint &approved_datetime,
-                                                               const sole::uuid &approved_appuser_id,
-                                                               const TimePoint &denied_datetime,
-                                                               const sole::uuid &denied_appuser_id,
-                                                               std::string &message)
-{
-    if (appuserInRightGroup(right_group_id, appuser_id))
-    {
-        return true;
-    }
-    PGSqlString sql;
-    sql.insertOrUpdate(id, tableNames.t0022_right_group2appuser);
-    MACRO_addInsertOrSet(sql, right_group_id);
-    MACRO_addInsertOrSet(sql, appuser_id);
-    MACRO_addInsertOrSet(sql, requested_datetime);
-    MACRO_addInsertOrSet(sql, approved_datetime);
-    MACRO_addInsertOrSet(sql, approved_appuser_id);
-    MACRO_addInsertOrSet(sql, denied_datetime);
-    MACRO_addInsertOrSet(sql, denied_appuser_id);
-    sql.addInsertOrWhere("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return true;
 }

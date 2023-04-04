@@ -55,27 +55,31 @@ void DatabaseLogicTables::createDatabaseTables()
         columnsAndTypes.push_back(idPrimaryKey);
         for (const auto &pn: object->propertyNames())
         {
-            if (pn != tableFields.id)
+            if (pn != tableFields.id && !object->isTransferProperty(pn))
             {
-                if (object->proptertyIsBool(pn))
+                if (object->propertyIsBool(pn))
                 {
                     columnsAndTypes.push_back({pn, pg_bool, false, object->shouldBeIndexed(pn)});
                 }
-                if (object->proptertyIsUuid(pn))
+                if (object->propertyIsUuid(pn))
                 {
                     columnsAndTypes.push_back({pn, pg_uuid, false, object->shouldBeIndexed(pn)});
                 }
-                if (object->proptertyIsDateTime(pn))
+                if (object->propertyIsDateTime(pn))
                 {
                     columnsAndTypes.push_back({pn, pg_timestamp, false, object->shouldBeIndexed(pn)});
                 }
-                if (object->proptertyIsString(pn))
+                if (object->propertyIsString(pn))
                 {
                     columnsAndTypes.push_back({pn, pg_text, false, object->shouldBeIndexed(pn)});
                 }
-                if (object->proptertyIsInt(pn))
+                if (object->propertyIsInt(pn))
                 {
                     columnsAndTypes.push_back({pn, pg_bigint, false, object->shouldBeIndexed(pn)});
+                }
+                if (object->propertyIsOid(pn))
+                {
+                    columnsAndTypes.push_back({pn, pg_blob, false, object->shouldBeIndexed(pn)});
                 }
             }
         }
@@ -101,23 +105,6 @@ void DatabaseLogicTables::createDatabaseTables()
     }
     std::string t0001_user_i1("t0001_user_i1");
     utils.createIndex(tableNames.t0001_users, t0001_user_i1, "(loginemail)");
-
-    if (!utils.tableExists(tableNames.t0002_apps))
-    {
-        PGSqlString sql("create table ");
-        sql += tableNames.t0002_apps;
-        sql += std::string("( id uuid, "
-                           "owner_id uuid, "
-                           "app_name text, "
-                           "app_version int, "
-                           "app_logo_url text, "
-                           "app_color_name text, "
-                           "is_template_app bool, "
-                           "json_yacapp text, "
-                           "yacpck_base64 oid, "
-                           "primary key (id))");
-        PGExecutor e(pool, sql);
-    }
 
     utils.createTableIfNeeded(tableNames.t0003_appuser_profiles,
                               {idPrimaryKey,

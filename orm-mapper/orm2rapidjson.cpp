@@ -5,7 +5,7 @@ ORM2rapidjson::ORM2rapidjson()
 
 }
 
-void ORM2rapidjson::toJson(const ORMObjectInterface &object,
+void ORM2rapidjson::toJson(const YACBaseObject &object,
                            rapidjson::Value &target,
                            rapidjson::MemoryPoolAllocator<> &alloc)
 {
@@ -28,7 +28,7 @@ void ORM2rapidjson::toJson(const ORMObjectInterface &object,
     }
 }
 
-ORMObjectInterface *ORM2rapidjson::fromJson(const rapidjson::Value &source,
+YACBaseObject *ORM2rapidjson::fromJson(const rapidjson::Value &source,
                                             const YACORMFactory &factory)
 {
     if (!source.HasMember("ORMName"))
@@ -45,7 +45,7 @@ ORMObjectInterface *ORM2rapidjson::fromJson(const rapidjson::Value &source,
 }
 
 bool ORM2rapidjson::fromJson(const rapidjson::Value &source,
-                             ORMObjectInterface &object)
+                             YACBaseObject &object)
 {
     if (!source.HasMember("ORMName"))
     {
@@ -69,7 +69,7 @@ bool ORM2rapidjson::fromJson(const rapidjson::Value &source,
     return true;
 }
 
-void ORM2rapidjson::toJson(const std::set<ORMObjectInterface *> &objects,
+void ORM2rapidjson::toJson(const std::set<YACBaseObject*> &objects,
                            rapidjson::Value &array,
                            rapidjson::MemoryPoolAllocator<> &alloc)
 {
@@ -82,7 +82,7 @@ void ORM2rapidjson::toJson(const std::set<ORMObjectInterface *> &objects,
     }
 }
 
-void ORM2rapidjson::addToArray(const ORMObjectInterface &object,
+void ORM2rapidjson::addToArray(const YACBaseObject &object,
                                rapidjson::Value &array,
                                rapidjson::MemoryPoolAllocator<> &alloc)
 {
@@ -97,12 +97,12 @@ void ORM2rapidjson::addToArray(const ORMObjectInterface &object,
 
 size_t ORM2rapidjson::fromJson(const rapidjson::Value &array,
                                const YACORMFactory &factory,
-                               std::set<ORMObjectInterface*> &objects)
+                               std::set<YACBaseObject*> &objects)
 {
     const auto it(array.Begin());
     while (it != array.End())
     {
-        ORMObjectInterface *object(fromJson(*it, factory));
+        YACBaseObject *object(fromJson(*it, factory));
         if (object)
         {
             objects.insert(object);

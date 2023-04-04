@@ -14,6 +14,6 @@ HandlerGetAllApps::HandlerGetAllApps(DatabaseLogicUserAndApp &databaseLogicUserA
 void HandlerGetAllApps::method()
 {
     rapidjson::Document allAPPsObject;
-    databaseLogicUserAndApp.fetchAllAPPs(allAPPsObject);
+    databaseLogicUserAndApp.getAllAPPs(allAPPsObject);
     answerOk(true, allAPPsObject);
 }

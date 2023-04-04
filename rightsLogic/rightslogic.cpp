@@ -1,5 +1,7 @@
 #include "rightslogic.h"
 #include "extrapidjson.h"
+#include "orm_implementions/t0022_right_group2appuser.h"
+#include "orm-mapper/orm2postgres.h"
 
 void RightsLogic::fetchRightsForUser(const sole::uuid &appuser_id)
 {
@@ -55,18 +57,17 @@ void RightsLogic::addUserRights(const sole::uuid &app_id,
             sole::uuid right_group_id;
             if (dlrg.fetchIDOfOneRightGroupByName(app_id, Rights::Administrator, right_group_id))
             {
-                std::string message;
-                sole::uuid id(NullUuid);
-                if (dlrg.insertOrUpdateRightGroup2AppUser(id, right_group_id, appuser_id,
-                                                          TimePointPostgreSqlNow,
-                                                          TimePointPostgreSqlNow,
-                                                          appuser_id,
-                                                          TimePointPostgreSqlNull,
-                                                          NullUuid,
-                                                          message))
-                {
-                    appIdsWhereAdminExists.insert(app_id);
-                }
+                t0022_right_group2appuser t0022;
+                t0022.right_group_id = right_group_id;
+                t0022.appuser_id = appuser_id;
+                t0022.requested_datetime = TimePointPostgreSqlNow;
+                t0022.approved_datetime = TimePointPostgreSqlNow;
+                t0022.approved_appuser_id = appuser_id;
+                t0022.denied_datetime = TimePointPostgreSqlNull;
+                t0022.denied_appuser_id = NullUuid;
+                ORM2Postgres orm2postgres(dlrg.pool);
+                orm2postgres.insertOrUpdate(t0022);
+                appIdsWhereAdminExists.insert(app_id);
             }
         }
     }

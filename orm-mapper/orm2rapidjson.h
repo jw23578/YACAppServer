@@ -10,27 +10,27 @@ class ORM2rapidjson
 public:
     ORM2rapidjson();
 
-    void toJson(const ORMObjectInterface &object,
+    void toJson(const YACBaseObject &object,
                 rapidjson::Value &target,
                 rapidjson::MemoryPoolAllocator<> &alloc);
 
-    ORMObjectInterface *fromJson(const rapidjson::Value &source,
-                                 const YACORMFactory &factory);
+    YACBaseObject *fromJson(const rapidjson::Value &source,
+                            const YACORMFactory &factory);
 
     bool fromJson(const rapidjson::Value &source,
-                  ORMObjectInterface &object);
+                  YACBaseObject &object);
 
-    void toJson(const std::set<ORMObjectInterface*> &objects,
+    void toJson(const std::set<YACBaseObject*> &objects,
                 rapidjson::Value &array,
                 rapidjson::MemoryPoolAllocator<> &alloc);
 
-    void addToArray(const ORMObjectInterface &object,
+    void addToArray(const YACBaseObject &object,
                     rapidjson::Value &array,
                     rapidjson::MemoryPoolAllocator<> &alloc);
 
     size_t fromJson(const rapidjson::Value &array,
                     const YACORMFactory &factory,
-                    std::set<ORMObjectInterface *> &objects);
+                    std::set<YACBaseObject*> &objects);
 };
 
 #endif // ORM2RAPIDJSON_H

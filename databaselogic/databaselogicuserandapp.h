@@ -7,6 +7,9 @@
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
+#include "tablefields.h"
+#include "orm_implementions/t0002_apps.h"
+#include "orm_implementions/t0027_app_images.h"
 
 
 class DatabaseLogicUserAndApp
@@ -14,7 +17,8 @@ class DatabaseLogicUserAndApp
     LogStatController &logStatController;
     PGConnectionPool &pool;
     PGUtils utils;
-    TableNames tableNames;
+    const TableNames tableNames;
+    const TableFields tableFields;
     void loginSuccessful(const std::string &loginEMail,
                          std::string &loginToken);
 
@@ -23,6 +27,10 @@ public:
                   PGConnectionPool &pool);
 
     bool userExists(const std::string &loginEMail);
+    bool userIsAppOwner(const sole::uuid &app_id,
+                        const sole::uuid &user_id,
+                        std::string &errorMessage,
+                        bool &appExists);
     std::string createUser(const std::string &loginEMail,
                            const std::string &password);
 
@@ -44,21 +52,16 @@ public:
     void refreshLoginToken(const std::string &loginEMail,
                            std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    bool saveApp(const sole::uuid owner_id,
-                 const std::string &app_id,
-                 const std::string &app_name,
-                 const int app_version,
-                 const std::string &app_logo_url,
-                 const std::string &app_color_name,
-                 const bool is_template_app,
-                 const std::string &json_yacapp,
-                 const std::basic_string<std::byte> &yacpck_base64,
+    bool saveApp(const sole::uuid loggedInUserId,
+                 t0002_apps &app,
                  std::string &message);
 
-    size_t fetchAllAPPs(rapidjson::Document &target);
+    size_t getAllAPPs(rapidjson::Document &target);
     bool fetchOneApp(const std::string &app_id,
                      const int current_installed_version,
                      rapidjson::Document &target);
+
+    bool storeAppImage(t0027_app_images &t0027);
 
 };
 

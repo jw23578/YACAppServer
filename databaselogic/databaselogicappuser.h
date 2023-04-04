@@ -9,6 +9,7 @@
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
 #include "extrapidjson.h"
+#include "orm_implementions/t0002_apps.h"
 
 
 class LoggedInAppUsersContainer;

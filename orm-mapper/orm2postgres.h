@@ -2,7 +2,7 @@
 #define ORM2POSTGRES_H
 
 #include "pgconnectionpool.h"
-#include "orm/ormobjectinterface.h"
+#include "orm_implementions/yacbaseobject.h"
 #include "tablefields.h"
 #include "orm2rapidjson.h"
 #include "pgsqlstring.h"
@@ -17,20 +17,20 @@ class ORM2Postgres
 public:
     ORM2Postgres(PGConnectionPool &pool);
 
-    void insertOrUpdate(ORMObjectInterface &object);
+    void insertOrUpdate(YACBaseObject &object);
 
     bool select(const sole::uuid &id,
-                ORMObjectInterface &object);
+                YACBaseObject &object);
     bool select(const sole::uuid &id,
-                ORMObjectInterface &object,
+                YACBaseObject &object,
                 rapidjson::Value &target,
                 rapidjson::MemoryPoolAllocator<> &alloc);
 
-    size_t selectAll(const ORMObjectInterface &ghost,
-                     std::set<ORMObjectInterface*> &target);
+    size_t selectAll(const YACBaseObject &ghost,
+                     std::set<YACBaseObject*> &target);
 
     template <class NeedleValueType1>
-    size_t selectAll(const ORMObjectInterface &ghost,
+    size_t selectAll(const YACBaseObject &ghost,
                      const std::string &needle1,
                      NeedleValueType1 needleValue1,
                      rapidjson::Value &targetArray,
@@ -43,21 +43,23 @@ public:
     }
 
     bool postgres2object(const PGExecutor &e,
-                         ORMObjectInterface &target);
+                         YACBaseObject &target);
 
     size_t fetchAll(PGExecutor &e,
-                    const ORMObjectInterface &ghost,
-                    std::set<ORMObjectInterface*> &target);
+                    const YACBaseObject &ghost,
+                    std::set<YACBaseObject*> &target);
 
     size_t toJsonArray(PGSqlString &sql,
-                       const ORMObjectInterface &ghost,
+                       const YACBaseObject &ghost,
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc);
 
     size_t toJsonArray(PGExecutor &e,
-                       const ORMObjectInterface &ghost,
+                       const YACBaseObject &ghost,
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc);
+    void insert(YACBaseObject &object);
+    void update(YACBaseObject &object);
 };
 
 #endif // ORM2POSTGRES_H

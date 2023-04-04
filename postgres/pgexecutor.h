@@ -91,6 +91,8 @@ public:
     sole::uuid uuid(const std::string &fieldname);
     pqxx::oid oid(const std::string &fieldname);
 
+    size_t array(const std::string &fieldname, std::set<std::string> &target);
+
     size_t fill(std::set<int> &target, const std::string &fieldname);
     size_t append(std::set<int> &target, const std::string &fieldname);
 

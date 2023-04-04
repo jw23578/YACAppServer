@@ -1,4 +1,6 @@
 #include "handleruploadapp.h"
+#include "orm_implementions/t0002_apps.h"
+#include "orm-mapper/orm2rapidjson.h"
 
 HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                                    PistacheServerInterface &serverInterface,
@@ -7,35 +9,56 @@ HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAnd
                              "/uploadApp",
                              TypePost,
                              loggedInUsersContainer),
-    databaseLogicUserAndApp(databaseLogicUserAndApp)
+    dlua(databaseLogicUserAndApp)
 {
-
+    addMethod(serverInterface, t0027.getORMName(), TypePost);
+    addMethod(serverInterface, t0027.getORMName(), TypeGet);
+    addMethod(serverInterface, t0027.getORMName(), TypeDelete);
 }
 
 void HandlerUploadApp::method()
 {
-    MACRO_GetMandatoryString(app_id);
-    MACRO_GetMandatoryString(json_yacapp);
-    MACRO_GetMandatoryByteString(yacpck_base64);
-    MACRO_GetMandatoryString(app_name);
-    MACRO_GetMandatoryInt(app_version, false);
-    MACRO_GetMandatoryString(app_logo_url);
-    MACRO_GetMandatoryString(app_color_name);
-    MACRO_GetMandatoryBool(is_template_app);
-
-    std::string message;
-    if (!databaseLogicUserAndApp.saveApp(loggedInUserId,
-                               app_id,
-                               app_name,
-                               app_version,
-                               app_logo_url,
-                               app_color_name,
-                               is_template_app,
-                               json_yacapp,
-                               yacpck_base64,
-                               message))
+    std::string errorMessage;
+    ORM2rapidjson orm2json;
+    if (isMethod(t0027.getORMName()))
     {
-        answerBad(message);
+        orm2json.fromJson(getPostedData(), t0027);
+        bool appExists(false);
+        if (!dlua.userIsAppOwner(t0027.app_id, loggedInUserId, errorMessage, appExists))
+        {
+            answerOk(errorMessage, false);
+        }
+        if (!appExists)
+        {
+            answerOk("app does not exist", false);
+        }
+        if (isPost())
+        {
+            dlua.storeAppImage(t0027);
+            answerOk("image stored", true);
+            return;
+        }
+        if (isGet())
+        {
+            // FIXME FIX ME AND IMPLEMENT ME
+        }
+        if (isDelete())
+        {
+            // FIXME FIX ME AND IMPLEMENT ME
+        }
+        return;
+    }
+
+    t0002_apps app;
+    if (!orm2json.fromJson(getPostedData(), app))
+    {
+        answerOk("data is not an app-object", false);
+        return;
+    }
+
+    if (!dlua.saveApp(loggedInUserId, app, errorMessage))
+    {
+        answerOk(errorMessage, false);
         return;
     }
 

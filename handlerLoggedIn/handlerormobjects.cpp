@@ -1,8 +1,16 @@
 #include "handlerormobjects.h"
-#include "orm_implementions/t0023_right2rightgroup.h"
-#include "orm_implementions/t0022_right_group2appuser.h"
+#include "orm_implementions/t0027_app_images.h"
 
-HandlerORMObjects::HandlerORMObjects(YACORMFactory &factory,
+void HandlerORMObjects::storeObject(YACBaseObject &object)
+{
+    orm2postgres.insertOrUpdate(object);
+    std::map<std::string, std::string> data;
+    data[tableFields.id] = object.getPropertyToString(tableFields.id);
+    answerOk("object stored", true, data);
+}
+
+HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
+                                     YACORMFactory &factory,
                                      PGConnectionPool &pool,
                                      RightsLogic &rightsLogic,
                                      PistacheServerInterface &serverInterface,
@@ -11,21 +19,28 @@ HandlerORMObjects::HandlerORMObjects(YACORMFactory &factory,
                              "",
                              TypeGet,
                              loggedInAppUsersContainer),
-    factory(factory),    
+    databaseLogics(databaseLogics),
+    factory(factory),
     orm2postgres(pool),
     rightsLogic(rightsLogic)
 {
+    t0027_app_images t0027; // has its own handler
+    std::set<std::string> withOwnHandler;
+    withOwnHandler.insert(t0027.getORMName());
     for (const auto &on: factory.getORMNames())
     {
-        addMethod(serverInterface,
-                  on,
-                  TypeGet);
-        addMethod(serverInterface,
-                  on,
-                  TypePost);
-        addMethod(serverInterface,
-                  on,
-                  TypeDelete);
+        if (withOwnHandler.find(on) == withOwnHandler.end())
+        {
+            addMethod(serverInterface,
+                      on,
+                      TypeGet);
+            addMethod(serverInterface,
+                      on,
+                      TypePost);
+            addMethod(serverInterface,
+                      on,
+                      TypeDelete);
+        }
     }
 
 }
@@ -34,6 +49,28 @@ void HandlerORMObjects::method()
 {
     if (isGet())
     {
+        if (isMethod(t0021.getORMName()))
+        {
+            MACRO_GetUuid(id);
+            if (id == NullUuid)
+            {
+                rapidjson::Document document;
+                document.SetObject();
+                rapidjson::Value rightgroups;
+
+                PGSqlString sql;
+                sql.select(t0021.getORMName());
+                sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+                sql.addCompare("and", tableFields.app_id, "=", appId);
+                orm2postgres.toJsonArray(sql, t0021, rightgroups, document.GetAllocator());
+                document.AddMember("t0021_right_group", rightgroups, document.GetAllocator());
+
+                databaseLogics.rightsLogic.addUserRights(appId, loggedInUserId, document, document.GetAllocator());
+                answerOk(true, document);
+                return;
+            }
+        }
+
         if (isMethod(t0023_right2rightgroup().getORMName()))
         {
             MACRO_GetMandatoryUuid(right_group_id);
@@ -52,18 +89,35 @@ void HandlerORMObjects::method()
     }
     if (isPost())
     {
+        if (isMethod(t0022.getORMName()))
+        {
+            std::unique_ptr<t0022_right_group2appuser> object(static_cast<t0022_right_group2appuser*>(orm2json.fromJson(getPostedData(), factory)));
+
+            if (databaseLogics.databaseLogicRightGroup.appuserInRightGroup(object->right_group_id.get(), object->appuser_id.get()))
+            {
+                return;
+            }
+            storeObject(*object);
+            return;
+        }
         for (const auto &on: factory.getORMNames())
         {
             if (isMethod(on))
             {
-                YACBaseObject *baseObject(static_cast<YACBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
-                std::unique_ptr<ORMObjectInterface> object(baseObject);
+                std::unique_ptr<YACBaseObject> baseObject(static_cast<YACBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
                 if (answerMissingRight(rightsLogic.appUserMissesRight(loggedInUserId, baseObject->changeRight)))
                 {
                     return;
                 }
-                orm2postgres.insertOrUpdate(*object);
-                answerOk("object stored", true);
+                if (baseObject->propertyExists(tableFields.app_id) && baseObject->propertyIsNull(tableFields.app_id))
+                {
+                    baseObject->setPropertyFromString(tableFields.app_id, appId.str());
+                }
+                if (baseObject->propertyExists(tableFields.creater_id) && baseObject->propertyIsNull(tableFields.creater_id))
+                {
+                    baseObject->setPropertyFromString(tableFields.creater_id, loggedInUserId.str());
+                }
+                storeObject(*baseObject);
                 return;
             }
         }

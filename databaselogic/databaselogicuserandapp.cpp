@@ -2,12 +2,14 @@
 #include "postgres/pgsqlstring.h"
 #include "postgres/pgexecutor.h"
 #include "utils/extstring.h"
+#include "utils/extrapidjson.h"
 #include "postgres/pgutils.h"
 #include "pgoidstorer.h"
 #include "pgoidloader.h"
+#include "orm-mapper/orm2postgres.h"
 
 void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
-                                    std::string &loginToken)
+                                              std::string &loginToken)
 {
     if (loginToken.size() == 0)
     {
@@ -25,7 +27,7 @@ void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
 }
 
 DatabaseLogicUserAndApp::DatabaseLogicUserAndApp(LogStatController &logStatController,
-                             PGConnectionPool &pool):
+                                                 PGConnectionPool &pool):
     logStatController(logStatController),
     pool(pool),
     utils(pool)
@@ -38,8 +40,29 @@ bool DatabaseLogicUserAndApp::userExists(const std::string &loginEMail)
     return utils.entryExists(tableNames.t0001_users, "loginemail", loginEMail);
 }
 
+bool DatabaseLogicUserAndApp::userIsAppOwner(const sole::uuid &app_id,
+                                             const sole::uuid &user_id,
+                                             std::string &errorMessage,
+                                             bool &appExists)
+{
+    PGUtils utils(pool);
+    PGSqlString sql(utils.createEntryExistsString(tableNames.t0002_apps, tableFields.id));
+    sql.set(tableFields.id, app_id);
+    PGExecutor e(pool, sql);
+    appExists = e.size() > 0;
+    if (e.size())
+    {
+        if (e.uuid("owner_id") != user_id)
+        {
+            errorMessage = "user is not app owner";
+            return false;
+        }
+    }
+    return true;
+}
+
 std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
-                                      const std::string &password)
+                                                const std::string &password)
 {
     PGSqlString sql("insert into t0001_users "
                     " (id, loginemail, password_hash, verified, verify_token, verify_token_valid_until, login_token, login_token_valid_until) "
@@ -61,9 +84,9 @@ std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
 }
 
 bool DatabaseLogicUserAndApp::verifyUser(const std::string &loginEMail,
-                               const std::string &verifyToken,
-                               std::string &message,
-                               std::string &loginToken)
+                                         const std::string &verifyToken,
+                                         std::string &message,
+                                         std::string &loginToken)
 {
     PGSqlString sql("select * from t0001_users "
                     "where loginemail = :loginemail ");
@@ -124,9 +147,9 @@ bool DatabaseLogicUserAndApp::verifyUser(const std::string &loginEMail,
 }
 
 bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
-                              const std::string &password,
-                              std::string &message,
-                              std::string &loginToken)
+                                        const std::string &password,
+                                        std::string &message,
+                                        std::string &loginToken)
 {
     PGSqlString sql("select *, password_hash = crypt(:password, password_hash) as login_ok "
                     "from t0001_users "
@@ -155,9 +178,9 @@ bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
 }
 
 bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
-                                 const std::string &loginToken,
-                                 sole::uuid &userId,
-                                 std::chrono::system_clock::time_point &loginTokenValidUntil)
+                                           const std::string &loginToken,
+                                           sole::uuid &userId,
+                                           std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     PGSqlString sql("select * from t0001_users "
                     "where loginemail = :loginemail "
@@ -175,7 +198,7 @@ bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
 }
 
 void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
-                                      std::chrono::system_clock::time_point &loginTokenValidUntil)
+                                                std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     PGSqlString sql("update t0001_users "
                     "set login_token_valid_until = now() + interval '1 hour' *:validhours "
@@ -189,51 +212,33 @@ void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
 
-bool DatabaseLogicUserAndApp::saveApp(const sole::uuid owner_id,
-                            const std::string &app_id,
-                            const std::string &app_name,
-                            const int app_version,
-                            const std::string &app_logo_url,
-                            const std::string &app_color_name,
-                            const bool is_template_app,
-                            const std::string &json_yacapp,
-                            const std::basic_string<std::byte> &yacpck_base64,
-                            std::string &message)
+bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
+                                      t0002_apps &app,
+                                      std::string &message)
 {
-    std::string app_id_field("id");
-    PGUtils utils(pool);
-    PGSqlString sql(utils.createEntryExistsString(tableNames.t0002_apps, app_id_field));
-    sql.set("id", app_id);
-    PGExecutor e(pool, sql);
-    if (e.size())
+    bool appExists(false);
+    if (!userIsAppOwner(app.id, loggedInUserId, message, appExists))
     {
-        if (e.uuid("owner_id") != owner_id)
-        {
-            message = "user is not app owner";
-            return false;
-        }
-        sql = utils.createUpdateString(tableNames.t0002_apps, app_id_field);
+        return false;
+    }
+
+    pqxx::oid oid;
+    PGOidStorer storeOid(pool, app.transfer_yacpck_base64, oid);
+    app.yacpck_base64 = oid;
+    app.owner_id =  loggedInUserId;
+    ORM2Postgres orm2postgres(pool);
+    if (appExists)
+    {
+        orm2postgres.update(app);
     }
     else
     {
-        sql = utils.createInsertString(tableNames.t0002_apps);
+        orm2postgres.insert(app);
     }
-    pqxx::oid oid;
-    PGOidStorer storeOid(pool, yacpck_base64, oid);
-    sql.set("yacpck_base64", oid);
-    sql.set("owner_id", owner_id);
-    sql.set("id", app_id);
-    MACRO_set(sql, app_name);
-    MACRO_set(sql, app_version);
-    MACRO_set(sql, app_logo_url);
-    MACRO_set(sql, app_color_name);
-    MACRO_set(sql, is_template_app);
-    MACRO_set(sql, json_yacapp);
-    PGExecutor insertOrUpdate(pool, sql);
     return true;
 }
 
-size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
+size_t DatabaseLogicUserAndApp::getAllAPPs(rapidjson::Document &target)
 {
     auto &alloc(target.GetAllocator());
     PGSqlString sql("select id "
@@ -241,7 +246,8 @@ size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
                     ", app_version "
                     ", app_logo_url "
                     ", app_color_name "
-                    "from t0002_apps "
+                    ", array(select id from t0027_app_images where app_id = t0002.id) as app_images "
+                    "from t0002_apps t0002 "
                     "order by app_name ");
     PGExecutor e(pool, sql);
     rapidjson::Value allAPPs(rapidjson::kArrayType);
@@ -254,6 +260,16 @@ size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
         appObject.AddMember("app_version", e.integer("app_version"), alloc);
         appObject.AddMember("app_logo_url", e.string("app_logo_url"), alloc);
         appObject.AddMember("app_color_name", e.string("app_color_name"), alloc);
+        std::set<std::string> app_images;
+        e.array("app_images", app_images);
+        rapidjson::Value json_app_images;
+        json_app_images.SetArray();
+        for (const auto &i: app_images)
+        {
+            rapidjson::Value v(i.c_str(), alloc);
+            json_app_images.PushBack(v, alloc);
+        }
+        appObject.AddMember("app_images", json_app_images, alloc);
         allAPPs.PushBack(appObject, alloc);
         e.next();
     }
@@ -263,8 +279,8 @@ size_t DatabaseLogicUserAndApp::fetchAllAPPs(rapidjson::Document &target)
 }
 
 bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
-                                const int current_installed_version,
-                                rapidjson::Document &target)
+                                          const int current_installed_version,
+                                          rapidjson::Document &target)
 {
     target.SetObject();
 
@@ -298,3 +314,16 @@ bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
     target.AddMember("yacpck_base64", yacpck_base64, alloc);
     return true;
 }
+
+bool DatabaseLogicUserAndApp::storeAppImage(t0027_app_images &t0027)
+{
+    pqxx::oid oid;
+    PGOidStorer storeOid(pool, t0027.transfer_image_base64, oid);
+    t0027.image_oid = oid;
+    ORM2Postgres orm2postgres(pool);
+    orm2postgres.insert(t0027);
+    return true;
+}
+
+
+

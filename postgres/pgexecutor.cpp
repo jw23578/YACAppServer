@@ -210,6 +210,22 @@ pqxx::oid PGExecutor::oid(const std::string &fieldname)
     return row[fieldname].get<pqxx::oid>().value();
 }
 
+size_t PGExecutor::array(const std::string &fieldname, std::set<std::string> &target)
+{
+    const pqxx::row &row(result[currentRow]);
+    auto array(row[fieldname].as_array());
+    auto elem(array.get_next());
+    while (elem.first != pqxx::array_parser::juncture::done )
+    {
+        if (elem.first == pqxx::array_parser::juncture::string_value)
+        {
+            target.insert(elem.second.c_str());
+        }
+        elem = array.get_next();
+    }
+    return target.size();
+}
+
 size_t PGExecutor::fill(std::set<int> &target, const std::string &fieldname)
 {
     target.clear();

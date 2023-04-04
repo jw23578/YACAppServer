@@ -4,10 +4,12 @@
 #include "handlerloggedininterface.h"
 #include "databaselogicuserandapp.h"
 #include "loggedincontainer/loggedinuserscontainer.h"
+#include "orm_implementions/t0027_app_images.h"
 
 class HandlerUploadApp : public HandlerLoggedInInterface
 {
-    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
+    t0027_app_images t0027;
+    DatabaseLogicUserAndApp &dlua;
 public:
     HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                      PistacheServerInterface &serverInterface,
