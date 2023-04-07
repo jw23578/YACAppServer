@@ -46,14 +46,13 @@ SOURCES += \
         databaselogic/databaselogicworktime.cpp \
         databaselogic/tablenames.cpp \
         emaillogic.cpp \
+        handler/handlerapp.cpp \
         handler/handlerappuserloggedin.cpp \
         handler/handlerappuserlogin.cpp \
         handler/handlerappuserregister.cpp \
         handler/handlerappuserrequestupdatepassword.cpp \
         handler/handlerappuserupdatepassword.cpp \
         handler/handlerappuserverify.cpp \
-        handler/handlergetallapps.cpp \
-        handler/handlergetapp.cpp \
         handler/handleruserloggedin.cpp \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
@@ -135,14 +134,13 @@ HEADERS += \
   databaselogic/databaselogicworktime.h \
   databaselogic/tablenames.h \
   emaillogic.h \
+  handler/handlerapp.h \
   handler/handlerappuserloggedin.h \
   handler/handlerappuserlogin.h \
   handler/handlerappuserregister.h \
   handler/handlerappuserrequestupdatepassword.h \
   handler/handlerappuserupdatepassword.h \
   handler/handlerappuserverify.h \
-  handler/handlergetallapps.h \
-  handler/handlergetapp.h \
   handler/handleruserloggedin.h \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \

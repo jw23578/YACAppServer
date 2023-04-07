@@ -1,15 +1,15 @@
-#ifndef HANDLERGETAPP_H
-#define HANDLERGETAPP_H
+#ifndef HANDLERAPP_H
+#define HANDLERAPP_H
 
 #include "interfaces/pistachehandlerinterface.h"
 #include "databaselogicuserandapp.h"
 
-class HandlerGetAPP : public PistacheHandlerInterface
+class HandlerAPP : public PistacheHandlerInterface
 {
     DatabaseLogicUserAndApp &databaseLogicUserAndApp;
 
 public:
-    HandlerGetAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+    HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                   PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
@@ -17,4 +17,4 @@ public:
     void method();
 };
 
-#endif // HANDLERGETAPP_H
+#endif // HANDLERAPP_H

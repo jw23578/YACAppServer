@@ -67,7 +67,7 @@
 class PistacheHandlerInterface
 {    
 public:
-    YACAPPServerMethodNames methodNames;
+    const YACAPPServerMethodNames methodNames;
 private:
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
