@@ -22,6 +22,10 @@ class DatabaseLogicUserAndApp
     void loginSuccessful(const std::string &loginEMail,
                          std::string &loginToken);
 
+    std::map<sole::uuid, pqxx::oid> imageId2oid;
+    bool lookUpOid(const sole::uuid &imageId,
+                   pqxx::oid &imageOid);
+
 public:
     DatabaseLogicUserAndApp(LogStatController &logStatController,
                   PGConnectionPool &pool);
@@ -54,14 +58,20 @@ public:
 
     bool saveApp(const sole::uuid loggedInUserId,
                  t0002_apps &app,
+                 const std::string &installation_code,
                  std::string &message);
 
     size_t getAllAPPs(rapidjson::Document &target);
     bool fetchOneApp(const std::string &app_id,
                      const int current_installed_version,
+                     const std::string &installation_code,
                      rapidjson::Document &target);
 
     bool storeAppImage(t0027_app_images &t0027);
+
+    bool getAppImage(const sole::uuid &id,
+                     std::basic_string<std::byte> &data,
+                     std::string &errorMessage);
 
 };
 

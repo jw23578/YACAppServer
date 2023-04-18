@@ -6,7 +6,7 @@
 
 class HandlerAPP : public PistacheHandlerInterface
 {
-    DatabaseLogicUserAndApp &databaseLogicUserAndApp;
+    DatabaseLogicUserAndApp &dlua;
 
 public:
     HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,

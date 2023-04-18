@@ -3,10 +3,12 @@
 #include "postgres/pgexecutor.h"
 #include "utils/extstring.h"
 #include "utils/extrapidjson.h"
+#include "base64.h"
 #include "postgres/pgutils.h"
 #include "pgoidstorer.h"
 #include "pgoidloader.h"
 #include "orm-mapper/orm2postgres.h"
+#include "orm_implementions/t0027_app_images.h"
 
 void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
                                               std::string &loginToken)
@@ -24,6 +26,19 @@ void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
     sql.set("validHours", validHours);
     sql.set("login_token", loginToken);
     PGExecutor e(pool, sql);
+}
+
+bool DatabaseLogicUserAndApp::lookUpOid(const sole::uuid &id,
+                                        pqxx::oid &imageOid)
+{
+    ORM2Postgres orm2postgres(pool);
+    t0027_app_images t0027;
+    if (!orm2postgres.select(id, t0027))
+    {
+        return false;
+    }
+    imageOid = t0027.image_oid;
+    return true;
 }
 
 DatabaseLogicUserAndApp::DatabaseLogicUserAndApp(LogStatController &logStatController,
@@ -214,6 +229,7 @@ void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
 
 bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
                                       t0002_apps &app,
+                                      const std::string &installation_code,
                                       std::string &message)
 {
     bool appExists(false);
@@ -225,7 +241,7 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
     pqxx::oid oid;
     PGOidStorer storeOid(pool, app.transfer_yacpck_base64, oid);
     app.yacpck_base64 = oid;
-    app.owner_id =  loggedInUserId;
+    app.owner_id = loggedInUserId;
     ORM2Postgres orm2postgres(pool);
     if (appExists)
     {
@@ -234,6 +250,21 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
     else
     {
         orm2postgres.insert(app);
+    }
+    if (installation_code == "")
+    {
+        PGSqlString sql("update t0002_apps set "
+                        "installation_code_hash = '' ");
+        sql.addCompare("where", tableFields.id, "=", app.id);
+        PGExecutor e(pool, sql);
+    }
+    else
+    {
+        PGSqlString sql("update t0002_apps set "
+                        "installation_code_hash = crypt(:installation_code, gen_salt('bf')) ");
+        sql.addCompare("where", tableFields.id, "=", app.id);
+        MACRO_set(sql, installation_code);
+        PGExecutor e(pool, sql);
     }
     return true;
 }
@@ -246,7 +277,10 @@ size_t DatabaseLogicUserAndApp::getAllAPPs(rapidjson::Document &target)
                     ", app_version "
                     ", app_logo_url "
                     ", app_color_name "
-                    ", array(select id from t0027_app_images where app_id = t0002.id) as app_images "
+                    ", app_info_url "
+                    ", search_code "
+                    ", installation_code_hash "
+                    ", array(select id from t0027_app_images where app_id = t0002.id order by position) as app_images "
                     "from t0002_apps t0002 "
                     "order by app_name ");
     PGExecutor e(pool, sql);
@@ -255,6 +289,10 @@ size_t DatabaseLogicUserAndApp::getAllAPPs(rapidjson::Document &target)
     {
         rapidjson::Value appObject;
         appObject.SetObject();
+        ExtRapidJSONWriter ao(appObject, alloc);
+        ao.addMember("search_code", e.string("search_code"));
+        ao.addMember("installation_code_needed", e.string("installation_code_hash").size() > 0);
+        appObject.AddMember("app_info_url", e.string("app_info_url"), alloc);
         appObject.AddMember("app_id", e.string("id"), alloc);
         appObject.AddMember("app_name", e.string("app_name"), alloc);
         appObject.AddMember("app_version", e.integer("app_version"), alloc);
@@ -280,22 +318,31 @@ size_t DatabaseLogicUserAndApp::getAllAPPs(rapidjson::Document &target)
 
 bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
                                           const int current_installed_version,
+                                          const std::string &installation_code,
                                           rapidjson::Document &target)
 {
     target.SetObject();
-
     auto &alloc(target.GetAllocator());
+    ExtRapidJSONWriter t(target, alloc);
+
     PGSqlString sql("select app_name "
                     ", app_version "
                     ", json_yacapp "
                     ", yacpck_base64 "
+                    ", coalesce(installation_code_hash, '') = '' or installation_code_hash = crypt(:installation_code, installation_code_hash) as installation_ok "
                     "from t0002_apps "
                     "where id = :app_id ");
     MACRO_set(sql, app_id);
+    MACRO_set(sql, installation_code);
     PGExecutor e(pool, sql);
     if (!e.size())
     {
         target.AddMember("message", "app not found", alloc);
+        return false;
+    }
+    if (!e.boolean("installation_ok"))
+    {
+        t.addMember("message", "wrong installation code");
         return false;
     }
     if (e.integer("app_version") <= current_installed_version)
@@ -318,10 +365,41 @@ bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
 bool DatabaseLogicUserAndApp::storeAppImage(t0027_app_images &t0027)
 {
     pqxx::oid oid;
-    PGOidStorer storeOid(pool, t0027.transfer_image_base64, oid);
+    std::vector<char> data;
+    bin_base64_decode(t0027.transfer_image_base64, data);
+    std::basic_string<std::byte> image_data(reinterpret_cast<std::byte*>(data.data()), data.size());
+    PGOidStorer storeOid(pool, image_data, oid);
     t0027.image_oid = oid;
     ORM2Postgres orm2postgres(pool);
     orm2postgres.insert(t0027);
+    return true;
+}
+
+bool DatabaseLogicUserAndApp::getAppImage(const sole::uuid &id,
+                                          std::basic_string<std::byte> &data,
+                                          std::string &errorMessage)
+{
+    auto it(imageId2oid.find(id));
+    pqxx::oid imageOid(0);
+    if (it == imageId2oid.end())
+    {
+        if (!lookUpOid(id, imageOid))
+        {
+            errorMessage = "could not look up image oid for imageid: " + ExtString::toString(id);
+            return false;
+        }
+    }
+    else
+    {
+        imageOid = it->second;
+    }
+
+    PGOidLoader loader(pool, imageOid, data);
+    if (data.size() == 0)
+    {
+        errorMessage = "could not load image with oid: " + ExtString::toString(imageOid);
+        return false;
+    }
     return true;
 }
 

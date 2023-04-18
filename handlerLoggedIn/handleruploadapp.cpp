@@ -27,10 +27,12 @@ void HandlerUploadApp::method()
         if (!dlua.userIsAppOwner(t0027.app_id, loggedInUserId, errorMessage, appExists))
         {
             answerOk(errorMessage, false);
+            return;
         }
         if (!appExists)
         {
             answerOk("app does not exist", false);
+            return;
         }
         if (isPost())
         {
@@ -48,6 +50,7 @@ void HandlerUploadApp::method()
         }
         return;
     }
+    MACRO_GetString(installation_code);
 
     t0002_apps app;
     if (!orm2json.fromJson(getPostedData(), app))
@@ -56,7 +59,7 @@ void HandlerUploadApp::method()
         return;
     }
 
-    if (!dlua.saveApp(loggedInUserId, app, errorMessage))
+    if (!dlua.saveApp(loggedInUserId, app, installation_code, errorMessage))
     {
         answerOk(errorMessage, false);
         return;
