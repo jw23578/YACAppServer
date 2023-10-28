@@ -155,6 +155,7 @@ bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
     sql.update(tableNames.t0003_appuser_profiles);
     sql.addSet(tableFields.verify_token, verifyToken);
     sql.addSet(tableFields.verify_token_valid_until, std::chrono::system_clock::now() + std::chrono::minutes(60));
+    sql.addCompare("where", tableFields.id, "=", appUserId);
     PGExecutor e(pool, sql);
     return true;
 }

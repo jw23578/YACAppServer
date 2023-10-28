@@ -47,6 +47,7 @@ void DatabaseLogicTables::createDatabaseTables()
     PGColumnAndType deniedDatetime({tableFields.denied_datetime, pg_timestamp});
     PGColumnAndType deniedAppuserId({tableFields.denied_appuser_id, pg_uuid});
     PGColumnAndType visibleForNonMembers({tableFields.visible_for_non_members, pg_bool});
+    PGColumnAndType sender_id({tableFields.sender_id, pg_uuid, false, true});
 
     for (const auto &on: factory.getORMNames())
     {
@@ -146,10 +147,11 @@ void DatabaseLogicTables::createDatabaseTables()
 
     utils.createTableIfNeeded(tableNames.t0007_messages,
                               {{tableFields.id, pg_uuid, true},
-                               {"sender_id", pg_uuid, false, true},
-                               {"to_id", pg_uuid, false, true},
-                               {"sended_datetime", pg_timestamp},
-                               {"content_base64", pg_text}});
+                               sender_id,
+                               {tableFields.to_id, pg_uuid, false, true},
+                               {tableFields.sended_datetime, pg_timestamp},
+                               {tableFields.content_base64, pg_text},
+                               deletedDateTime});
 
     utils.createTableIfNeeded(tableNames.t0008_message_received,
                               {idPrimaryKey,

@@ -1,6 +1,7 @@
 #include "handlerstoremessage.h"
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
+#include "orm-mapper/orm2rapidjson.h"
 
 HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
                                          DeviceTokenCache &deviceTokenCache,
@@ -15,11 +16,46 @@ HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
     deviceTokenCache(deviceTokenCache),
     databaseLogics(databaseLogics)
 {
-
+    addMethod(serverInterface, t0028.getORMName(), TypePost);
+    addMethod(serverInterface, t0028.getORMName(), TypeGet);
+    addMethod(serverInterface, tableNames.t0007_messages, TypeDelete);
 }
 
 void HandlerStoreMessage::method()
 {
+    if (isMethod(tableNames.t0007_messages))
+    {
+        if (isDelete())
+        {
+            MACRO_GetMandatoryUuid(id);
+            std::string resultMessage;
+            answerOk(resultMessage, databaseLogics.databaseLogicMessages.markMessageDeleted(id, loggedInUserId, resultMessage));
+        }
+        return;
+    }
+    if (isMethod(t0028.getORMName()))
+    {
+        ORM2rapidjson orm2json;
+        orm2json.fromJson(getPostedData(), t0028);
+        if (isPost())
+        {
+            databaseLogics.databaseLogicMessages.storeImage(t0028);
+            std::map<std::string, std::string> data;
+            data["id"] = t0028.id.asString();
+            answerOk("image stored", true, data);
+            return;
+        }
+        if (isGet())
+        {
+            // FIXME FIX ME AND IMPLEMENT ME
+        }
+        if (isDelete())
+        {
+            // FIXME FIX ME AND IMPLEMENT ME
+        }
+        return;
+    }
+
     MACRO_GetMandatoryUuid(id);
     MACRO_GetMandatoryUuid(to_id);
     MACRO_GetMandatoryString(content_base64);

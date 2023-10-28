@@ -1,5 +1,6 @@
 #include "handlerormobjects.h"
 #include "orm_implementions/t0027_app_images.h"
+#include "orm_implementions/t0028_message_images.h"
 
 void HandlerORMObjects::storeObject(YACBaseObject &object)
 {
@@ -25,8 +26,10 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
     rightsLogic(rightsLogic)
 {
     t0027_app_images t0027; // has its own handler
+    t0028_message_images t0028;
     std::set<std::string> withOwnHandler;
     withOwnHandler.insert(t0027.getORMName());
+    withOwnHandler.insert(t0028.getORMName());
     for (const auto &on: factory.getORMNames())
     {
         if (withOwnHandler.find(on) == withOwnHandler.end())

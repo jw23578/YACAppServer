@@ -16,6 +16,22 @@ PGExecutor::PGExecutor(PGConnectionPool &pool,
     PGCommandTransactor ct(pool, sql, result);
 }
 
+PGExecutor::PGExecutor(PGConnectionPool &pool,
+                       const PGSqlString &sql,
+                       std::string &resultMessage,
+                       const std::string &onSizeMessage,
+                       const std::string &onZeroSizeMessage):
+    pool(pool)
+{
+    PGCommandTransactor ct(pool, sql, result);
+    if (sql.isUpdateStatement())
+    {
+        resultMessage = affected_rows() > 0 ? onSizeMessage : onZeroSizeMessage;
+        return;
+    }
+    resultMessage = size() > 0 ? onSizeMessage : onZeroSizeMessage;
+}
+
 size_t PGExecutor::exec(const PGSqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
@@ -128,6 +144,11 @@ void PGExecutor::defaultDelete(const std::string &table_name,
 size_t PGExecutor::size() const
 {
     return result.size();
+}
+
+size_t PGExecutor::affected_rows() const
+{
+    return result.affected_rows();
 }
 
 size_t PGExecutor::columns()

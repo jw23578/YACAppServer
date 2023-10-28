@@ -20,6 +20,11 @@ public:
     PGExecutor(PGConnectionPool &pool);
     PGExecutor(PGConnectionPool &pool,
                PGSqlString const &sql);
+    PGExecutor(PGConnectionPool &pool,
+               PGSqlString const &sql,
+               std::string &resultMessage,
+               const std::string &onSizeMessage,
+               const std::string &onZeroSizeMessage);
 
     size_t exec(PGSqlString const &sql);
 
@@ -74,6 +79,7 @@ public:
                        const sole::uuid &id);
 
     size_t size() const;
+    size_t affected_rows() const;
     size_t columns();
 
     size_t next();

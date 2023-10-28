@@ -37,6 +37,7 @@ SOURCES += \
         databaselogic/databaselogicappuser.cpp \
         databaselogic/databaselogicelement.cpp \
         databaselogic/databaselogicimagetable.cpp \
+        databaselogic/databaselogicinterface.cpp \
         databaselogic/databaselogicmessages.cpp \
         databaselogic/databaselogicrightgroup.cpp \
         databaselogic/databaselogics.cpp \
@@ -44,7 +45,6 @@ SOURCES += \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
-        databaselogic/tablenames.cpp \
         emaillogic.cpp \
         handler/handlerapp.cpp \
         handler/handlerappuserloggedin.cpp \
@@ -125,6 +125,7 @@ HEADERS += \
   databaselogic/databaselogicappuser.h \
   databaselogic/databaselogicelement.h \
   databaselogic/databaselogicimagetable.h \
+  databaselogic/databaselogicinterface.h \
   databaselogic/databaselogicmessages.h \
   databaselogic/databaselogicrightgroup.h \
   databaselogic/databaselogics.h \
@@ -132,7 +133,6 @@ HEADERS += \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
-  databaselogic/tablenames.h \
   emaillogic.h \
   handler/handlerapp.h \
   handler/handlerappuserloggedin.h \

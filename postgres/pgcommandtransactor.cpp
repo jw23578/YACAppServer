@@ -14,6 +14,7 @@ void PGCommandTransactor::execAndCommit(pqxx::transaction_base &w,
         }
         pool.getLC().log(__FILE__, __LINE__, LogStatController::verbose, std::string("sql: ") + sql.str());
         result = w.exec(sql.str());
+        pool.getLC().log(__FILE__, __LINE__, LogStatController::verbose, std::string("resultsize: ") + ExtString::toString(result.size()));
         w.commit();
     }
     catch (const pqxx::failure &e)

@@ -182,7 +182,7 @@ bool PistacheHandlerInterface::getBool(const std::string &name,
                                        bool &target,
                                        bool ifMissingThenSendResponse)
 {
-    if (request->method() == Pistache::Http::Method::Get)
+    if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
         return ExtPistache::getBool(*request, *response, name, target, ifMissingThenSendResponse);
     }
@@ -199,7 +199,7 @@ bool PistacheHandlerInterface::getInteger(const std::string &name,
                                           bool zeroAllowed,
                                           bool ifMissingThenSendResponse)
 {
-    if (request->method() == Pistache::Http::Method::Get)
+    if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
         ExtPistache::getInt(*request, *response, name, target, ifMissingThenSendResponse);
     }
@@ -220,7 +220,7 @@ bool PistacheHandlerInterface::getByteString(const std::string &name,
                                              std::basic_string<std::byte> &target,
                                              bool ifMissingThenSendResponse)
 {
-    if (request->method() == Pistache::Http::Method::Get)
+    if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
         std::string temp;
         if (!ExtPistache::getString(*request, *response, name, temp, ifMissingThenSendResponse))
@@ -248,7 +248,7 @@ bool PistacheHandlerInterface::getString(const std::string &name,
                                          std::string &target,
                                          bool ifMissingThenSendResponse)
 {
-    if (request->method() == Pistache::Http::Method::Get)
+    if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
         return ExtPistache::getString(*request, *response, name, target, ifMissingThenSendResponse);
     }

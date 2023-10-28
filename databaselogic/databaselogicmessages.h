@@ -1,22 +1,16 @@
 #ifndef DATABASELOGICMESSAGES_H
 #define DATABASELOGICMESSAGES_H
 
-#include "postgres/pgconnectionpool.h"
+#include "databaselogicinterface.h"
 #include "sole/sole.hpp"
-#include "logstat/logstatcontroller.h"
-#include "pgutils.h"
-#include "tablenames.h"
-#include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
+#include "orm_implementions/t0028_message_images.h"
 
-class DatabaseLogicMessages
+class DatabaseLogicMessages: public DatabaseLogicInterface
 {
-    LogStatController &logStatController;
-    PGConnectionPool &pool;
-    PGUtils utils;
-    TableNames tableNames;
-    TableFields tableFields;
-
+    std::map<sole::uuid, pqxx::oid> imageId2oid;
+    bool lookUpOid(const sole::uuid &imageId,
+                   pqxx::oid &imageOid);
 public:
     //    struct Message
     //    {
@@ -35,6 +29,10 @@ public:
                       const std::string &content_base64);
 
     void deleteMessage(const sole::uuid &id);
+
+    bool markMessageDeleted(const sole::uuid &id,
+                            const sole::uuid &sender_id,
+                            std::string &resultMessage);
 
     bool fetchMessages(const sole::uuid &fetcher_id,
                        const std::chrono::system_clock::time_point &since,
@@ -61,6 +59,11 @@ public:
     void setRead(const sole::uuid &reader_id,
                  const sole::uuid &message_id,
                  const std::chrono::system_clock::time_point &read_datetime);
+
+    bool storeImage(t0028_message_images &t0028);
+    bool fetchImage(const sole::uuid &imageId,
+                                           std::string &message,
+                                           std::basic_string<std::byte> &data);
 };
 
 #endif // DATABASELOGICMESSAGES_H

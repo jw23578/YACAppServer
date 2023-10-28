@@ -51,7 +51,7 @@ void PGSqlString::insertOrUpdate(sole::uuid &id, const std::string &tableName)
     }
 }
 
-bool PGSqlString::isUpdateStatement()
+bool PGSqlString::isUpdateStatement() const
 {
     return updateStatement;
 }

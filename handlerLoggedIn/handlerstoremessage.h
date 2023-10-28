@@ -5,9 +5,11 @@
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "databaselogic/databaselogics.h"
 #include "caches/devicetokencache.h"
+#include "orm_implementions/t0028_message_images.h"
 
 class HandlerStoreMessage : public HandlerLoggedInInterface
 {
+    t0028_message_images t0028;
     const std::string firebaseApiKey;
     DeviceTokenCache &deviceTokenCache;
     DatabaseLogics &databaseLogics;

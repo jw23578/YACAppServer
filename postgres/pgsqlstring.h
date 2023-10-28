@@ -52,7 +52,7 @@ public:
     void delet(std::string const &tableName);
     void insertOrUpdate(sole::uuid &id, std::string const &tableName);
 
-    bool isUpdateStatement();
+    bool isUpdateStatement() const;
 
     void addOnConflict(const std::string &target, PGSqlString &onConflict);
 
