@@ -12,6 +12,7 @@
 #include "databaselogicrightgroup.h"
 #include "databaselogic/databaselogicspaces.h"
 #include "databaselogic/databaselogicuserandapp.h"
+#include "databaselogicthirdparty.h"
 #include "rightsLogic/rightslogic.h"
 
 class DatabaseLogics
@@ -29,6 +30,7 @@ public:
     DatabaseLogicRightGroup databaseLogicRightGroup;
     DatabaseLogicSpaces databaseLogicSpaces;
     DatabaseLogicUserAndApp databaseLogicUserAndApp;
+    DatabaseLogicThirdParty databaseLogicThirdParty;
 
     RightsLogic rightsLogic;
 

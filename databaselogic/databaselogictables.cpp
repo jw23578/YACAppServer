@@ -107,24 +107,6 @@ void DatabaseLogicTables::createDatabaseTables()
     std::string t0001_user_i1("t0001_user_i1");
     utils.createIndex(tableNames.t0001_users, t0001_user_i1, "(loginemail)");
 
-    utils.createTableIfNeeded(tableNames.t0003_appuser_profiles,
-                              {idPrimaryKey,
-                               {tableFields.app_id, pg_uuid, false, true},
-                               {tableFields.fstname, pg_text},
-                               {tableFields.surname, pg_text},
-                               {tableFields.visible_name, pg_text},
-                               {tableFields.loginemail, pg_text, false, true},
-                               {tableFields.verified, pg_timestamp},
-                               {tableFields.verify_token, pg_text},
-                               {tableFields.verify_token_valid_until, pg_timestamp},
-                               {"update_password_token", pg_text},
-                               {"update_password_token_valid_until", pg_timestamp},
-                               {tableFields.deleted, pg_timestamp},
-                               {tableFields.searching_exactly_allowed, pg_bool},
-                               {tableFields.searching_fuzzy_allowed, pg_bool},
-                               {tableFields.public_key_base64, pg_text},
-                               {tableFields.image_id, pg_uuid}});
-
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
                               {idPrimaryKey,
                                {tableFields.appuser_id, pg_uuid, false, true},

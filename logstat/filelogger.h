@@ -3,7 +3,6 @@
 
 #include "loggerstatterinterface.h"
 #include <fstream>
-#include "utils/extstring.h"
 
 class FileLogger : public LoggerStatterInterface
 {

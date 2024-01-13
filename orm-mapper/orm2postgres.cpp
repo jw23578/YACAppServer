@@ -64,6 +64,10 @@ size_t ORM2Postgres::selectAll(const YACBaseObject &ghost,
 bool ORM2Postgres::postgres2object(const PGExecutor &e,
                                    YACBaseObject &target)
 {
+    if (!e.size())
+    {
+        return false;
+    }
     for (const auto &pn: target.propertyNames())
     {
         if (!target.isTransferProperty(pn))
@@ -108,7 +112,7 @@ void ORM2Postgres::insert(YACBaseObject &object)
     sql.insert(object.getORMName());
     if (object.propertyIsNull(tableFields.id))
     {
-        object.setPropertyFromString(tableFields.id, sole::uuid4().str());
+        object.id = sole::uuid4();
     }
     for (const auto &pn: object.propertyNames())
     {
@@ -128,7 +132,7 @@ void ORM2Postgres::insert(YACBaseObject &object)
     PGExecutor e(pool, sql);
 }
 
-void ORM2Postgres::update(YACBaseObject &object)
+void ORM2Postgres::update(const YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
     PGSqlString sql;
@@ -162,7 +166,7 @@ void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
     if (object.propertyIsNull(tableFields.id))
     {
         sql.insert(object.getORMName());
-        object.setPropertyFromString(tableFields.id, sole::uuid4().str());
+        object.id = sole::uuid4();
     }
     else
     {

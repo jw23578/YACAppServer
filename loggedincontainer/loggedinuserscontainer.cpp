@@ -10,8 +10,13 @@ LoggedInUsersContainer::LoggedInUsersContainer(DatabaseLogicUserAndApp &database
 bool LoggedInUsersContainer::isLoggedIn(const sole::uuid &appId,
                                         const std::string &loginEMail,
                                         const std::string &loginToken,
+                                        const std::string &third,
+                                        const std::string &mandant,
                                         sole::uuid &userId)
 {
+    UNUSED(appId);
+    UNUSED(third); // wird hier nicht gebraucht, weil es hier um die user geht die apps anlegen/hochladen können
+    UNUSED(mandant);
     std::string needle(loginEMail + "##" + loginToken);
     LoggedInUsersMap::iterator it(loggedInUsers.find(needle));
     if (it == loggedInUsers.end() || it->second.loginTokenValidUntil < std::chrono::system_clock::now())
@@ -39,14 +44,6 @@ bool LoggedInUsersContainer::isLoggedIn(const sole::uuid &appId,
     }
     userId = it->second.userId;
     return true;
-}
-
-bool LoggedInUsersContainer::isLoggedIn(const sole::uuid &appId,
-                                        const std::string &loginEMail,
-                                        const std::string &loginToken)
-{
-    sole::uuid userId;
-    return isLoggedIn(appId, loginEMail, loginToken, userId);
 }
 
 bool LoggedInUsersContainer::appIdMandatory() const

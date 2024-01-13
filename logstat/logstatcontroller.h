@@ -3,11 +3,13 @@
 
 #include <vector>
 #include <string>
+#include "rapidjson/document.h"
 class LoggerStatterInterface;
 
 
 class LogStatController
 {
+    static LogStatController *instance;
 public:
     enum LogLevel
     {
@@ -27,6 +29,7 @@ public:
     LogStatController(const LogLevel &ld,
                       std::string const &sourceType,
                       std::string const &sourceName);
+    ~LogStatController();
 
     void add(LoggerStatterInterface *ls);
 
@@ -48,7 +51,16 @@ public:
              int line,
              LogLevel level,
              const std::string &message);
+    void log(const std::string &file,
+             int line,
+             LogLevel level,
+             const rapidjson::Document &doc);
     void stat(LogStatController::StatType statType);
+
+    static void slog(const std::string &file,
+                     int line,
+                     LogLevel level,
+                     const std::string &message);
 };
 
 #endif // LOGSTATCONTROLLER_H

@@ -30,6 +30,9 @@ public:
 
     void deleteMessage(const sole::uuid &id);
 
+    bool markAllOfUserMessageDeleted(const sole::uuid &user_id,
+                                     std::string &resultMessage);
+
     bool markMessageDeleted(const sole::uuid &id,
                             const sole::uuid &sender_id,
                             std::string &resultMessage);
@@ -62,8 +65,8 @@ public:
 
     bool storeImage(t0028_message_images &t0028);
     bool fetchImage(const sole::uuid &imageId,
-                                           std::string &message,
-                                           std::basic_string<std::byte> &data);
+                    std::string &message,
+                    std::basic_string<std::byte> &data);
 };
 
 #endif // DATABASELOGICMESSAGES_H

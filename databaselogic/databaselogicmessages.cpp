@@ -37,6 +37,19 @@ void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
     PGExecutor e(pool, sql);
 }
 
+bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const sole::uuid &user_id,
+                                                        std::string &resultMessage)
+{
+    PGSqlString upd;
+    upd.update(tableNames.t0007_messages);
+    upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
+    upd.addCompare("where (", tableFields.sender_id, "=", user_id);
+    upd.addCompare("or", tableFields.to_id, "=", user_id);
+    upd.addCompare(") and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    PGExecutor e(pool, upd, resultMessage, "messsages deleted", "no message found");
+    return e.affected_rows() > 0;
+}
+
 bool DatabaseLogicMessages::markMessageDeleted(const sole::uuid &id,
                                                const sole::uuid &sender_id,
                                                std::string &resultMessage)

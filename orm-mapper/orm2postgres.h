@@ -40,6 +40,7 @@ public:
         sql.select(ghost.getORMName());
         sql.addCompare("where", needle1, "=", needleValue1);
         toJsonArray(sql, ghost, targetArray, alloc);
+        return targetArray.Size();
     }
 
     bool postgres2object(const PGExecutor &e,
@@ -59,7 +60,7 @@ public:
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc);
     void insert(YACBaseObject &object);
-    void update(YACBaseObject &object);
+    void update(const YACBaseObject &object);
 };
 
 #endif // ORM2POSTGRES_H

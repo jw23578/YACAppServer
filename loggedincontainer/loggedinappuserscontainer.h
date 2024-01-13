@@ -2,22 +2,20 @@
 #define LOGGEDINAPPUSERSCONTAINER_H
 
 #include "loggedincontainerinterface.h"
-#include "databaselogicappuser.h"
+#include "databaselogics.h"
 
 class LoggedInAppUsersContainer: public LoggedInContainerInterface
 {
-    DatabaseLogicAppUser &databaseLogicAppUser;
+    DatabaseLogics &databaseLogics;
 public:
-    LoggedInAppUsersContainer(DatabaseLogicAppUser &databaseLogicAppUser);
+    LoggedInAppUsersContainer(DatabaseLogics &databaseLogics);
 
     bool isLoggedIn(const sole::uuid &appId,
                     const std::string &loginEMail,
                     const std::string &loginToken,
+                    const std::string &third,
+                    const std::string &mandant,
                     sole::uuid &userId) override;
-
-    bool isLoggedIn(const sole::uuid &appId,
-                    const std::string &loginEMail,
-                    const std::string &loginToken) override;
 
     bool appIdMandatory() const override;
 };

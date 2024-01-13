@@ -10,16 +10,12 @@ class LoggedInUsersContainer: public LoggedInContainerInterface
 public:
     LoggedInUsersContainer(DatabaseLogicUserAndApp &databaseLogic);
 
-
-
     bool isLoggedIn(const sole::uuid &appId,
                     const std::string &loginEMail,
                     const std::string &loginToken,
+                    const std::string &third,
+                    const std::string &mandant,
                     sole::uuid &userId) override;
-
-    bool isLoggedIn(const sole::uuid &appId,
-                    const std::string &loginEMail,
-                    const std::string &loginToken) override;
 
     bool appIdMandatory() const override;
 };

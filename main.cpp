@@ -149,10 +149,8 @@ int main(int argc, char **argv)
     YACAppServer server(json.getString("firebaseApiKey"),
                         factory,
                         databaseLogics,
-                        databaseLogicTables,
                         databaseLogicUserAndApp,
                         databaseLogics.databaseLogicAppUser,
-                        databaseLogicMessages,
                         emailLogic,
                         json.getInt("serverPort"));
     return 0;

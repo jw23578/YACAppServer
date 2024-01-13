@@ -7,63 +7,66 @@
 #include "pistacheserverinterface.h"
 #include "tablenames.h"
 #include "yacAppAndServer/yacappservermethodnames.h"
+#include "utils/extstring.h"
+
 
 #define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
-    if (!getByteString(#targetName, targetName, true) || !targetName.size()) \
-{ \
-    return; \
+if (!getByteString(#targetName, targetName, true) || !targetName.size()) \
+    { \
+            return; \
     }
 
 #define MACRO_GetMandatoryString(targetName) std::string targetName; \
-    if (!getString(#targetName, targetName, true) || !targetName.size()) \
-{ \
-    return; \
+if (!getString(#targetName, targetName, true) || !targetName.size()) \
+    { \
+            return; \
     }
 
 #define MACRO_GetMandatoryEMail(targetName) MACRO_GetMandatoryString(targetName) \
+ExtString::lowerSelf(targetName); \
     if (!ExtString::emailIsValid(targetName)) \
 { \
-    answerBad("this is not a valid email-adress: " + targetName); \
-    return; \
-    }
+        answerBad("this is not a valid email-adress: " + targetName); \
+        return; \
+}
 
 #define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName(NullUuid); \
-    if (!getUuid(#targetName, targetName, true)) \
-{ \
-    return; \
+if (!getUuid(#targetName, targetName, true)) \
+    { \
+            return; \
     }
 
 #define MACRO_GetMandatoryBool(targetName) bool targetName(false); \
-    if (!getBool(#targetName, targetName, true)) \
-{ \
-    return; \
+if (!getBool(#targetName, targetName, true)) \
+    { \
+            return; \
     }
 #define MACRO_GetUuid(targetName) sole::uuid targetName(NullUuid); \
-    getUuid(#targetName, targetName, false);
+getUuid(#targetName, targetName, false);
 
 #define MACRO_GetString(targetName) std::string targetName; \
-    getString(#targetName, targetName, false);
+getString(#targetName, targetName, false);
 
 #define MACRO_GetBool(targetName) bool targetName(false); \
-    getBool(#targetName, targetName, false);
+getBool(#targetName, targetName, false);
 
 #define MACRO_GetInt(targetName) int targetName(0); \
-    getInteger(#targetName, targetName, true, false);
+getInteger(#targetName, targetName, true, false);
 
 #define MACRO_GetMandatoryInt(targetName, zeroAllowed) int targetName(0); \
-    if (!getInteger(#targetName, targetName, zeroAllowed, true)) \
-{ \
-    return; \
+if (!getInteger(#targetName, targetName, zeroAllowed, true)) \
+    { \
+            return; \
     }
 
 #define MACRO_GetTimePointFromISO(targetName) std::chrono::system_clock::time_point targetName; \
-    getTimePointFromISO(#targetName, targetName, false)
+getTimePointFromISO(#targetName, targetName, false)
 
 #define MACRO_GetMandatoryTimePointFromISO(targetName) std::chrono::system_clock::time_point targetName; \
     if (!getTimePointFromISO(#targetName, targetName, true)) \
 { \
-    return; \
-    }
+        return; \
+}
 
 class PistacheHandlerInterface
 {    
@@ -187,6 +190,34 @@ public:
             }
             return false;
         }
+        return true;
+    }
+
+    template<class T>
+    bool getHeaderStringEMail(std::string &target,
+                              bool ifMissingThenSendResponse)
+    {
+        auto &headers(request->headers());
+        if (!headers.has<T>())
+        {
+            if (ifMissingThenSendResponse)
+            {
+                const int missingRight(0);
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name(), false, missingRight);
+            }
+            return false;
+        }
+        target = headers.get<T>()->value;
+        if (!target.size())
+        {
+            if (ifMissingThenSendResponse)
+            {
+                const int missingRight(0);
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name(), false, missingRight);
+            }
+            return false;
+        }
+        ExtString::lowerSelf(target);
         return true;
     }
 };

@@ -1,5 +1,6 @@
 #include "filelogger.h"
 #include <iostream>
+#include "utils/extstring.h"
 
 bool FileLogger::openStream()
 {
@@ -33,14 +34,16 @@ void FileLogger::theLogFunction(const std::string &file, int line, LogStatContro
     case LogStatController::verbose: levelString = "Verbose ";break;
     }
 
-    std::string m(levelString + " " + file + ":" + ExtString::toString(line) + " " + message);
+    std::string isoNow(ExtString::timepointToISO(std::chrono::system_clock::now()));
+
+    std::string m(isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) + " " + message);
     fileLoggerStream << m << std::endl;
     if (m.size() <= 185)
     {
         std::cout << m << "\n" << std::endl;
         return;
     }
-    std::cout << levelString + " " + file + ":" + ExtString::toString(line) << "\n";
+    std::cout << isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) << "\n";
     m = message;
     while (m.size())
     {

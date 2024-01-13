@@ -2,20 +2,20 @@
 #include "serverHeader/loginemailheader.h"
 #include "serverHeader/logintokenheader.h"
 #include "serverHeader/appidheader.h"
+#include "serverHeader/thirdheader.h"
+#include "serverHeader/mandantheader.h"
 
 YACAppServer::YACAppServer(const std::string &firebaseApiKey,
                            YACORMFactory &factory,
                            DatabaseLogics &databaseLogics,
-                           DatabaseLogicTables &databaseLogicTables,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                            DatabaseLogicAppUser &databaseLogicAppUser,
-                           DatabaseLogicMessages &databaseLogicMessages,
                            EMailLogic &emailLogic,
                            int port):
     PistacheServerInterface(port),
     deviceTokenCache(databaseLogics),
     loggedInUsersContainer(databaseLogicUserAndApp),
-    loggedInAppUsersContainer(databaseLogicAppUser),
+    loggedInAppUsersContainer(databaseLogics),
     handlerUserRegister(databaseLogicUserAndApp,
                     emailLogic,
                     *this),
@@ -92,6 +92,8 @@ YACAppServer::YACAppServer(const std::string &firebaseApiKey,
     Pistache::Http::Header::Registrar<LoginEMailHeader>();
     Pistache::Http::Header::Registrar<LoginTokenHeader>();
     Pistache::Http::Header::Registrar<AppIdHeader>();
+    Pistache::Http::Header::Registrar<ThirdHeader>();
+    Pistache::Http::Header::Registrar<MandantHeader>();
 
     std::cout << "Start Serving on Port: " << port << "\n";
     serve();

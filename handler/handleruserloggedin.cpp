@@ -16,9 +16,13 @@ void HandlerUserLoggedIn::method()
 {
     MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(loginToken);
-    if (loggedInUsersContainer.isLoggedIn(NullUuid,
-                                          loginEMail,
-                                          loginToken))
+    std::string third;
+    std::string mandant;
+    if (loggedInUsersContainer.isLoggedInWithOutUserId(NullUuid,
+                                                       loginEMail,
+                                                       loginToken,
+                                                       third,
+                                                       mandant))
     {
         answerOk("user logged in", true);
         return;

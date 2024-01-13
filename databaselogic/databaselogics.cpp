@@ -25,6 +25,8 @@ DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
                         pool),
     databaseLogicUserAndApp(logStatController,
                             pool),
+    databaseLogicThirdParty(logStatController,
+                            pool),
     rightsLogic(databaseLogicRightGroup)
 {
 

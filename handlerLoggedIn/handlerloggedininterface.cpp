@@ -2,6 +2,8 @@
 #include "serverHeader/loginemailheader.h"
 #include "serverHeader/logintokenheader.h"
 #include "serverHeader/appidheader.h"
+#include "serverHeader/thirdheader.h"
+#include "serverHeader/mandantheader.h"
 
 HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                                                    const std::string &methodName,
@@ -15,7 +17,7 @@ HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serv
 
 bool HandlerLoggedInInterface::checkLogin()
 {
-    if (!getHeaderString<LoginEMailHeader>(loginEMail, true))
+    if (!getHeaderStringEMail<LoginEMailHeader>(loginEMail, true))
     {
         return false;
     }
@@ -29,9 +31,15 @@ bool HandlerLoggedInInterface::checkLogin()
         return false;
     }
     appId = sole::rebuild(temp);
+    getHeaderString<ThirdHeader>(third, false);
+    getHeaderString<MandantHeader>(mandant, false);
+
+
     if (!loggedInContainer.isLoggedIn(appId,
                                       loginEMail,
                                       loginToken,
+                                      third,
+                                      mandant,
                                       loggedInUserId))
     {
         answerBad("not logged in");

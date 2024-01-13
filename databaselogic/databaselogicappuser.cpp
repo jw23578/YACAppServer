@@ -138,6 +138,44 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
     return true;
 }
 
+bool DatabaseLogicAppUser::createVerifiedAppUser(const sole::uuid &appId,
+                                                 const std::string &loginEMail,
+                                                 const std::string &fstname,
+                                                 const std::string &surname,
+                                                 const std::string &visible_name,
+                                                 const bool searching_exactly_allowed,
+                                                 const bool searching_fuzzy_allowed,
+                                                 const std::string &public_key_base64,
+                                                 std::string &message,
+                                                 t0003_appuser_profiles &target)
+{
+    if (getAppUserId(appId,
+                     loginEMail) != NullUuid)
+    {
+        message = "LoginEMail already exists.";
+        return false;
+    }
+    target.app_id = appId;
+    target.fstname = fstname;
+    target.surname = surname;
+    target.visible_name = visible_name;
+    target.verified = std::chrono::system_clock::now();
+    target.loginemail = loginEMail;
+    target.verify_token = "";
+    target.verify_token_valid_until.setNull(true);
+    target.update_password_token = "";
+    target.update_password_token_valid_until.setNull(true);
+    target.deleted.setNull(true);
+    target.searching_exactly_allowed = searching_exactly_allowed;
+    target.searching_fuzzy_allowed = searching_fuzzy_allowed;
+    target.public_key_base64 = public_key_base64;
+    target.image_id.setNull(true);
+
+    ORM2Postgres orm2postgres(pool);
+    orm2postgres.insert(target);
+    return true;
+}
+
 bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
                                              const std::string &loginEMail,
                                              std::string &message,

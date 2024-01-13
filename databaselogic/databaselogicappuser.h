@@ -10,6 +10,7 @@
 #include "rapidjson/document.h"
 #include "extrapidjson.h"
 #include "orm_implementions/t0002_apps.h"
+#include "orm_implementions/t0003_appuser_profiles.h"
 
 
 class LoggedInAppUsersContainer;
@@ -47,6 +48,17 @@ public:
                        const std::string &password,
                        std::string &message,
                        std::string &verifyToken);
+
+    bool createVerifiedAppUser(const sole::uuid &appId,
+                               const std::string &loginEMail,
+                               const std::string &fstname,
+                               const std::string &surname,
+                               const std::string &visible_name,
+                               const bool searching_exactly_allowed,
+                               const bool searching_fuzzy_allowed,
+                               const std::string &public_key_base64,
+                               std::string &message,
+                               t0003_appuser_profiles &target);
 
     bool createVerifyToken(const sole::uuid &appId,
                            const std::string &loginEMail,

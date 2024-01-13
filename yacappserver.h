@@ -27,8 +27,6 @@
 #include "handlerLoggedIn/handlerappuserspace.h"
 #include "handlerLoggedIn/handlerormobjects.h"
 #include "databaselogicuserandapp.h"
-#include "databaselogictables.h"
-#include "databaselogicmessages.h"
 #include "databaselogics.h"
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinuserscontainer.h"
@@ -74,10 +72,8 @@ public:
     YACAppServer(const std::string &firebaseApiKey,
                  YACORMFactory &factory,
                  DatabaseLogics &databaseLogics,
-                 DatabaseLogicTables &databaseLogicTables,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,
-                 DatabaseLogicMessages &databaseLogicMessages,
                  EMailLogic &emailLogic,
                  int port);
 };

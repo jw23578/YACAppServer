@@ -27,9 +27,17 @@ void HandlerStoreMessage::method()
     {
         if (isDelete())
         {
-            MACRO_GetMandatoryUuid(id);
             std::string resultMessage;
-            answerOk(resultMessage, databaseLogics.databaseLogicMessages.markMessageDeleted(id, loggedInUserId, resultMessage));
+            MACRO_GetBool(allOfLoggedInUser);
+            if (allOfLoggedInUser)
+            {
+                answerOk(resultMessage, databaseLogics.databaseLogicMessages.markAllOfUserMessageDeleted(loggedInUserId, resultMessage));
+            }
+            else
+            {
+                MACRO_GetMandatoryUuid(id);
+                answerOk(resultMessage, databaseLogics.databaseLogicMessages.markMessageDeleted(id, loggedInUserId, resultMessage));
+            }
         }
         return;
     }

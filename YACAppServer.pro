@@ -43,6 +43,7 @@ SOURCES += \
         databaselogic/databaselogics.cpp \
         databaselogic/databaselogicspaces.cpp \
         databaselogic/databaselogictables.cpp \
+        databaselogic/databaselogicthirdparty.cpp \
         databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
         emaillogic.cpp \
@@ -96,6 +97,8 @@ SOURCES += \
         serverHeader/appidheader.cpp \
         serverHeader/loginemailheader.cpp \
         serverHeader/logintokenheader.cpp \
+        serverHeader/mandantheader.cpp \
+        serverHeader/thirdheader.cpp \
         tests/testdatabaselogicappuser.cpp \
         tests/testdatabaselogicimagetable.cpp \
         tests/testdatabaselogicmessages.cpp \
@@ -104,6 +107,7 @@ SOURCES += \
         tests/testextstring.cpp \
         tests/testorm2postgres.cpp \
         tests/testtimepoint.cpp \
+        thirdparties/thirdcurlrequests.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
         utils/extrapidjson.cpp \
@@ -131,6 +135,7 @@ HEADERS += \
   databaselogic/databaselogics.h \
   databaselogic/databaselogicspaces.h \
   databaselogic/databaselogictables.h \
+  databaselogic/databaselogicthirdparty.h \
   databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
   emaillogic.h \
@@ -185,6 +190,8 @@ HEADERS += \
   serverHeader/appidheader.h \
   serverHeader/loginemailheader.h \
   serverHeader/logintokenheader.h \
+  serverHeader/mandantheader.h \
+  serverHeader/thirdheader.h \
   tests/testdatabaselogicappuser.h \
   tests/testdatabaselogicimagetable.h \
   tests/testdatabaselogicmessages.h \
@@ -193,6 +200,7 @@ HEADERS += \
   tests/testextstring.h \
   tests/testorm2postgres.h \
   tests/testtimepoint.h \
+  thirdparties/thirdcurlrequests.h \
   utils/base64.h \
   utils/definitions.h \
   utils/extmap.h \
