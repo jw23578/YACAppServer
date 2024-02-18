@@ -324,6 +324,8 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
                                          const std::string &fstname,
                                          const std::string &surname,
                                          const std::string &visible_name,
+                                         const std::string &color,
+                                         const std::string &message_font_color,
                                          const bool searching_exactly_allowed,
                                          const bool searching_fuzzy_allowed,
                                          const std::string &public_key_base64,
@@ -336,6 +338,8 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
     sql.addSet(MACRO_NameValue(fstname));
     sql.addSet(MACRO_NameValue(surname));
     sql.addSet(MACRO_NameValue(visible_name));
+    sql.addSet(MACRO_NameValue(color));
+    sql.addSet(MACRO_NameValue(message_font_color));
     sql.addSet(MACRO_NameValue(searching_exactly_allowed));
     sql.addSet(MACRO_NameValue(searching_fuzzy_allowed));
     sql.addSet(MACRO_NameValue(public_key_base64));
@@ -549,6 +553,8 @@ bool DatabaseLogicAppUser::fetchMyProfile(const sole::uuid &appId,
         return false;
     }
     target.SetObject();
+    target.AddMember(rapidjson::StringRef(tableFields.message_font_color), e.string(tableFields.message_font_color), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.color), e.string(tableFields.color), alloc);
     target.AddMember(rapidjson::StringRef(tableFields.fstname), e.string(tableFields.fstname), alloc);
     target.AddMember(rapidjson::StringRef(tableFields.surname), e.string(tableFields.surname), alloc);
     target.AddMember(rapidjson::StringRef(tableFields.visible_name), e.string(tableFields.visible_name), alloc);
@@ -576,6 +582,8 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     }
     target.SetObject();
     target.AddMember("id", e.string("id"), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.message_font_color), e.string(tableFields.message_font_color), alloc);
+    target.AddMember(rapidjson::StringRef(tableFields.color), e.string(tableFields.color), alloc);
     target.AddMember(rapidjson::StringRef(tableFields.visible_name), e.string(tableFields.visible_name), alloc);
     target.AddMember(rapidjson::StringRef(tableFields.public_key_base64), e.string(tableFields.public_key_base64), alloc);
     target.AddMember(rapidjson::StringRef(tableFields.image_id), e.string(tableFields.image_id), alloc);

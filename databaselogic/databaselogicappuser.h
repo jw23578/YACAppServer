@@ -83,6 +83,8 @@ public:
                        const std::string &fstname,
                        const std::string &surname,
                        const std::string &visible_name,
+                       const std::string &color,
+                       const std::string &message_font_color,
                        const bool searching_exactly_allowed,
                        const bool searching_fuzzy_allowed,
                        const std::string &public_key_base64,

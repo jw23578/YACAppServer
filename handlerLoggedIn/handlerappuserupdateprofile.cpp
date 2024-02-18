@@ -32,6 +32,8 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetMandatoryString(fstname);
     MACRO_GetMandatoryString(surname);
     MACRO_GetMandatoryString(visible_name);
+    MACRO_GetMandatoryString(color);
+    MACRO_GetMandatoryString(message_font_color);
     MACRO_GetMandatoryBool(searching_exactly_allowed);
     MACRO_GetMandatoryBool(searching_fuzzy_allowed);
     MACRO_GetBool(with_image);
@@ -77,6 +79,8 @@ void HandlerAppUserUpdateProfile::method()
                                                            fstname,
                                                            surname,
                                                            visible_name,
+                                                           color,
+                                                           message_font_color,
                                                            searching_exactly_allowed,
                                                            searching_fuzzy_allowed,
                                                            public_key_base64,

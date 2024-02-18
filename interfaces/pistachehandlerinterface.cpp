@@ -3,11 +3,11 @@
 #include "rapidjson/error/en.h"
 #include "definitions.h"
 #include "utils/extstring.h"
-#include "logstat/logstatcontroller.h"
+#include "logstat/beginendtrack.h"
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
-    LogStatController::slog(__FILE__, __LINE__, LogStatController::info, std::string("Start: ") + request.resource());
+    BeginEndTrack bet(__FILE__, __LINE__, request.resource());
     this->request = &request;
     this->response = &response;
     if (loginNeeded == TypeLoginNeeded && !checkLogin())
@@ -26,7 +26,7 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
         }
     }
     method();
-    LogStatController::slog(__FILE__, __LINE__, LogStatController::info, std::string("Finished: ") + request.resource());
+    bet.track(__FILE__, __LINE__);
 }
 
 void PistacheHandlerInterface::answerBad(const std::string &message)

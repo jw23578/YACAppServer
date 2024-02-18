@@ -35,15 +35,13 @@ PGConnectionPool::PGConnectionPool(const std::string &h,
                                    const std::string &db,
                                    const std::string &u,
                                    const std::string &pwd,
-                                   size_t ms,
-                                   LogStatController &logStatController):
+                                   size_t ms):
     host(h),
     port(p),
     dbName(db),
     user(u),
     password(pwd),
-    maxSize(ms),
-    logStatController(logStatController)
+    maxSize(ms)
 {
 }
 
@@ -57,12 +55,6 @@ std::string PGConnectionPool::generateConnstring() const
     connstring << std::string(" password=") << password;
     return connstring.str();
 }
-
-LogStatController &PGConnectionPool::getLC()
-{
-    return logStatController;
-}
-
 
 /*pqxx::result PGConnectionPools::execDirect(const PGSqlString &sql,
                                            bool noTransaction,

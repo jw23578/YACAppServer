@@ -1,6 +1,8 @@
 #include "pgcommandtransactor.h"
 #include <iostream>
 #include <pqxx/except.hxx>
+#include "logstat/logstatcontroller.h"
+#include "logstat/beginendtrack.h"
 
 
 void PGCommandTransactor::execAndCommit(pqxx::transaction_base &w,
@@ -10,16 +12,18 @@ void PGCommandTransactor::execAndCommit(pqxx::transaction_base &w,
     {
         if (noTransaction)
         {
-            pool.getLC().log(__FILE__, __LINE__, LogStatController::verbose, std::string("no transaction"));
+            LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("no transaction"));
         }
-        pool.getLC().log(__FILE__, __LINE__, LogStatController::verbose, std::string("sql: ") + sql.str());
+        LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("sql: ") + sql.str());
+        BeginEndTrack bet(__FILE__, __LINE__, "PGCommandTransactor");
         result = w.exec(sql.str());
-        pool.getLC().log(__FILE__, __LINE__, LogStatController::verbose, std::string("resultsize: ") + ExtString::toString(result.size()));
+        LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("resultsize: ") + ExtString::toString(result.size()));
+        bet.track(__FILE__, __LINE__);
         w.commit();
     }
     catch (const pqxx::failure &e)
     {
-        pool.getLC().log(__FILE__, __LINE__, LogStatController::error, std::string("sql error: ") + e.what());
+        LogStatController::slog(__FILE__, __LINE__, LogStatController::error, std::string("sql error: ") + e.what());
         failed = true;
     }
 }

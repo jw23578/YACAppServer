@@ -88,8 +88,7 @@ int main(int argc, char **argv)
                           json.getString("postgresDBName"),
                           json.getString("postgresUser"),
                           json.getString("postgresPassword"),
-                          10,
-                          logStatController);
+                          10);
 
     YACORMFactory factory;
     DatabaseLogicTables databaseLogicTables(logStatController,

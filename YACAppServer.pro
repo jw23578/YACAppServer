@@ -79,6 +79,7 @@ SOURCES += \
         loggedincontainer/loggedinappuserscontainer.cpp \
         loggedincontainer/loggedincontainerinterface.cpp \
         loggedincontainer/loggedinuserscontainer.cpp \
+        logstat/beginendtrack.cpp \
         logstat/filelogger.cpp \
         logstat/loggerstatterinterface.cpp \
         logstat/logstatcontroller.cpp \
@@ -171,6 +172,7 @@ HEADERS += \
   loggedincontainer/loggedinappuserscontainer.h \
   loggedincontainer/loggedincontainerinterface.h \
   loggedincontainer/loggedinuserscontainer.h \
+  logstat/beginendtrack.h \
   logstat/filelogger.h \
   logstat/loggerstatterinterface.h \
   logstat/logstatcontroller.h \

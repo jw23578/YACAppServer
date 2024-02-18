@@ -4,3 +4,6 @@
 [submodule "yacAppAndServer"]
 	path = yacAppAndServer
 	url = https://github.com/jw23578/yacAppAndServer.git
+[submodule "rapidjson"]
+	path = rapidjson
+	url = https://github.com/Tencent/rapidjson.git

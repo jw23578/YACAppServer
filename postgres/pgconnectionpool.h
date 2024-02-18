@@ -5,7 +5,6 @@
 #include <pqxx/pqxx>
 #include <string>
 #include <vector>
-#include "logstat/logstatcontroller.h"
 
 class PGConnection;
 
@@ -24,7 +23,6 @@ class PGConnectionPool
     int port;
     std::string  dbName, user, password;
     size_t maxSize;
-    LogStatController &logStatController;
     int currentInUse;
     std::vector<PGConnectionContainer> connections;
 
@@ -43,12 +41,9 @@ public:
                      std::string const &db,
                      std::string const &u,
                      std::string const &pwd,
-                     size_t ms,
-                     LogStatController &logStatController);
+                     size_t ms);
 
     std::string generateConnstring() const;
-
-    LogStatController &getLC();
 
     /*    pqxx::result execDirect(PGSqlString const &sql,
                             bool noTransaction,
