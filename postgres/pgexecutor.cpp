@@ -146,6 +146,11 @@ size_t PGExecutor::size() const
     return result.size();
 }
 
+bool PGExecutor::resultAvailable() const
+{
+    return currentRow < size();
+}
+
 size_t PGExecutor::affected_rows() const
 {
     return result.affected_rows();
@@ -301,7 +306,7 @@ void PGExecutor::deprecated_toJsonObject(rapidjson::Value &object,
 size_t PGExecutor::deprecated_toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
 {
     targetArray.SetArray();
-    for (size_t r(0); r < size(); ++r)
+    while (currentRow < size())
     {
         rapidjson::Value object(rapidjson::kObjectType);
         deprecated_toJsonObject(object, alloc, {});
@@ -323,7 +328,7 @@ size_t PGExecutor::deprecated_toJsonArray(std::map<std::string, rapidjson::Value
     {
         a.second->SetArray();
     }
-    for (size_t r(0); r < size(); ++r)
+    while (currentRow < size())
     {
         std::string type(string("type"));
         auto target(type2TargetArray.find(type));

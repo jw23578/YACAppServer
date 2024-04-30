@@ -1,14 +1,32 @@
 #include "filelogger.h"
 #include <iostream>
 #include "utils/extstring.h"
+#include <unistd.h>
+
+std::string FileLogger::generateFileName()
+{
+    std::string fn(fileLoggerPath + "/yac-server-");
+    fn += ExtString::timepointToISODate(std::chrono::system_clock::now());
+    fn += "-";
+    fn += ExtString::toString(getpid());
+    fn += ".txt";
+    return fn;
+}
 
 bool FileLogger::openStream()
 {
+    ++filenameCheckCounter;
     if (fileLoggerStream.good())
     {
-        return true;
+        if (filenameCheckCounter < 1000 || filename == generateFileName())
+        {
+            return true;
+        }
+        filenameCheckCounter = 0;
+        fileLoggerStream.close();
     }
-    fileLoggerStream.open(fileLoggerPath + "/logfile.txt");
+    filename = generateFileName();
+    fileLoggerStream.open(filename);
     return fileLoggerStream.good();
 }
 

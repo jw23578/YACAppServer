@@ -79,6 +79,7 @@ public:
                        const sole::uuid &id);
 
     size_t size() const;
+    bool resultAvailable() const;
     size_t affected_rows() const;
     size_t columns();
 

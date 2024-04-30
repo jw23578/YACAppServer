@@ -7,6 +7,9 @@
 class FileLogger : public LoggerStatterInterface
 {
     std::string const fileLoggerPath;
+    std::string filename;
+    size_t filenameCheckCounter;
+    std::string generateFileName();
     std::ofstream fileLoggerStream;
     bool openStream();
 public:

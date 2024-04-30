@@ -53,7 +53,7 @@ int main(int argc, char **argv)
         }
     }
 
-    std::string configFilename("YACAppServerConfig.json");
+    std::string configFilename(ExtString::extractFilePath(argv[0]) + "/YACAppServerConfig.json");
     if (argc > 1)
     {
         configFilename = argv[1];
