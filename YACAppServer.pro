@@ -58,6 +58,7 @@ SOURCES += \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
+        handlerLoggedIn/handler_t0030_documents.cpp \
         handlerLoggedIn/handlerappuserappointments.cpp \
         handlerLoggedIn/handlerappuserfetchimage.cpp \
         handlerLoggedIn/handlerappuserfetchmessageupdates.cpp \
@@ -151,6 +152,7 @@ HEADERS += \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
+  handlerLoggedIn/handler_t0030_documents.h \
   handlerLoggedIn/handlerappuserappointments.h \
   handlerLoggedIn/handlerappuserfetchimage.h \
   handlerLoggedIn/handlerappuserfetchmessageupdates.h \

@@ -6,6 +6,14 @@
 #include "serverHeader/mandantheader.h"
 
 HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
+                                                   LoggedInContainerInterface &loggedInContainer):
+    PistacheHandlerInterface(serverInterface, TypeLoginNeeded),
+    loggedInContainer(loggedInContainer)
+{
+
+}
+
+HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                                                    const std::string &methodName,
                                                    HandlerType type,
                                                    LoggedInContainerInterface &loggedInContainer):

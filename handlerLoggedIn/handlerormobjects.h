@@ -13,7 +13,6 @@
 
 #include "orm_implementions/t0021_right_group.h"
 #include "orm_implementions/t0022_right_group2appuser.h"
-#include "orm_implementions/t0023_right2rightgroup.h"
 
 class HandlerORMObjects : public HandlerLoggedInInterface
 {

@@ -119,6 +119,8 @@ protected:
     bool isPost() const;
     bool isDelete() const;
     const std::string &d_getMethodName() const;
+    void addAllMethodTypes(PistacheServerInterface &serverInterface,
+                          std::string const &methodName);
     void addMethod(PistacheServerInterface &serverInterface,
                    std::string const &methodName,
                    HandlerType type);
@@ -130,6 +132,9 @@ public:
         TypeLoginNeeded
     };
     LoginNeededType loginNeeded;
+
+    PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                             LoginNeededType loginNeeded);
 
     PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                              const std::string &methodName,

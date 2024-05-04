@@ -16,6 +16,8 @@ protected:
     sole::uuid loggedInUserId;
 public:
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
+                             LoggedInContainerInterface &loggedInContainer);
+    HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                              const std::string &methodName,
                              HandlerType type,
                              LoggedInContainerInterface &loggedInContainer);

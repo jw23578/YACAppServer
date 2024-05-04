@@ -131,6 +131,14 @@ bool PistacheHandlerInterface::answerMissingRight(const int rightNumber)
     return true;
 }
 
+void PistacheHandlerInterface::addAllMethodTypes(PistacheServerInterface &serverInterface,
+                                                 std::string const &methodName)
+{
+    addMethod(serverInterface, methodName, TypeGet);
+    addMethod(serverInterface, methodName, TypePost);
+    addMethod(serverInterface, methodName, TypeDelete);
+}
+
 void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterface,
                                          std::string const &methodName,
                                          HandlerType type)
@@ -158,6 +166,13 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
     {
         Pistache::Rest::Routes::Get(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
     }
+}
+
+PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                                                   LoginNeededType loginNeeded):
+    request(0), response(0),
+    loginNeeded(loginNeeded)
+{
 }
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,

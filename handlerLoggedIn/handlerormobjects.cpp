@@ -1,6 +1,8 @@
 #include "handlerormobjects.h"
 #include "orm_implementions/t0027_app_images.h"
 #include "orm_implementions/t0028_message_images.h"
+#include "orm_implementions/t0030_documents.h"
+#include "orm_implementions/t0023_right2rightgroup.h"
 
 void HandlerORMObjects::storeObject(YACBaseObject &object)
 {
@@ -25,11 +27,10 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
     orm2postgres(pool),
     rightsLogic(rightsLogic)
 {
-    t0027_app_images t0027; // has its own handler
-    t0028_message_images t0028;
     std::set<std::string> withOwnHandler;
-    withOwnHandler.insert(t0027.getORMName());
-    withOwnHandler.insert(t0028.getORMName());
+    withOwnHandler.insert(t0027_app_images().getORMName());
+    withOwnHandler.insert(t0028_message_images().getORMName());
+    withOwnHandler.insert(t0030_documents().getORMName());
     for (const auto &on: factory.getORMNames())
     {
         if (withOwnHandler.find(on) == withOwnHandler.end())
