@@ -111,20 +111,6 @@ bool PGExecutor::defaultSelect(const std::string &tableName,
     return true;
 }
 
-bool PGExecutor::defaultSelectToJSON(const std::string &tableName,
-                                     const sole::uuid &id,
-                                     rapidjson::Value &object,
-                                     rapidjson::MemoryPoolAllocator<> &alloc,
-                                     std::string &message)
-{
-    if (!defaultSelect(tableName, id, message))
-    {
-        return false;
-    }
-    deprecated_toJsonObject(object, alloc, {});
-    return true;
-}
-
 void PGExecutor::delet(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
 {
     PGSqlString sql("delete from ");
@@ -283,63 +269,4 @@ size_t PGExecutor::append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAl
         targetArray.PushBack(data, alloc);
         next();
     }
-}
-
-void PGExecutor::deprecated_toJsonObject(rapidjson::Value &object,
-                                         rapidjson::MemoryPoolAllocator<> &alloc,
-                                         const std::set<std::string> fields2Ignore)
-{
-    object.SetObject();
-    const pqxx::row &row(result[currentRow]);
-    for (pqxx::row::size_type i(0); i < row.size(); ++i)
-    {
-        if (fields2Ignore.find(row[i].name()) == fields2Ignore.end())
-        {
-            rapidjson::Value name(row[i].name(), alloc);
-            std::string data(string(i));
-            object.AddMember(name, data, alloc);
-        }
-    }
-}
-
-
-size_t PGExecutor::deprecated_toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
-{
-    targetArray.SetArray();
-    while (currentRow < size())
-    {
-        rapidjson::Value object(rapidjson::kObjectType);
-        deprecated_toJsonObject(object, alloc, {});
-        targetArray.PushBack(object, alloc);
-        next();
-    }
-    return size();
-
-}
-
-size_t PGExecutor::deprecated_toJsonArray(std::map<std::string, rapidjson::Value*> &type2TargetArray,
-                                          rapidjson::MemoryPoolAllocator<> &alloc)
-{
-    if (!type2TargetArray.size())
-    {
-        return 0;
-    }
-    for (auto &a: type2TargetArray)
-    {
-        a.second->SetArray();
-    }
-    while (currentRow < size())
-    {
-        std::string type(string("type"));
-        auto target(type2TargetArray.find(type));
-        if (target == type2TargetArray.end())
-        {
-            return 0;
-        }
-        rapidjson::Value object(rapidjson::kObjectType);
-        deprecated_toJsonObject(object, alloc, {"type"});
-        target->second->PushBack(object, alloc);
-        next();
-    }
-    return size();
 }

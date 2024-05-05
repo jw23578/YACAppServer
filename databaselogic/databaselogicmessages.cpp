@@ -77,8 +77,8 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
     sql += " and (sended_datetime >= :since or deleted_datetime >= :since) ";
     MACRO_set(sql, fetcher_id);
     MACRO_set(sql, since);
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(target, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, target, alloc);
     return true;
 }
 
@@ -94,9 +94,8 @@ bool DatabaseLogicMessages::fetchReceivedMessages(const sole::uuid &receiver_id,
     sql += tableNames.t0008_message_received;
     sql.addCompare(" where ", tableFields.receiver_id, " = ", receiver_id);
     sql.addCompare(" and ", tableFields.received_datetime, " > ", since);
-    PGExecutor e(pool,
-                 sql);
-    e.deprecated_toJsonArray(target, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, target, alloc);
     return true;
 }
 
@@ -111,9 +110,8 @@ bool DatabaseLogicMessages::fetchReadMessages(const sole::uuid &reader_id,
     sql += tableNames.t0014_message_read;
     sql.addCompare(" where ", tableFields.reader_id, " = ", reader_id);
     sql.addCompare(" and ", tableFields.read_datetime, " > ", since);
-    PGExecutor e(pool,
-                 sql);
-    e.deprecated_toJsonArray(target, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, target, alloc);
     return true;
 }
 
@@ -140,10 +138,22 @@ bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const sole::uuid &recei
     sql.addCompare(" and ", tableFields.read_datetime, " > ", since);
     PGExecutor e(pool,
                  sql);
-    std::map<std::string, rapidjson::Value*> targets;
-    targets["1"] = &targetReceived;
-    targets["2"] = &targetRead;
-    e.deprecated_toJsonArray(targets, alloc);
+    ORM2Postgres o2p(pool);
+    while (e.resultAvailable())
+    {
+        int type(e.integer("type"));
+        rapidjson::Value object(rapidjson::kObjectType);
+        o2p.toJsonObject(e, object, alloc);
+        if (type == 1)
+        {
+            targetReceived.PushBack(object, alloc);
+        }
+        if (type == 2)
+        {
+            targetRead.PushBack(object, alloc);
+        }
+        e.next();
+    }
     return true;
 }
 

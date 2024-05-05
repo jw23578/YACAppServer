@@ -531,8 +531,8 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     sql.set("needle", needle);
     sql += " ) ) ";
     sql.limit(limit, offset);
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(target, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, target, alloc);
     return true;
 }
 

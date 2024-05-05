@@ -9,8 +9,8 @@ bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
                                                  rapidjson::MemoryPoolAllocator<> &alloc,
                                                  std::string &message)
 {
-    PGExecutor e(pool);
-    return e.defaultSelectToJSON(tableNames.t0021_right_group, id, object, alloc, message);
+    ORM2Postgres o2p(pool);
+    return o2p.defaultSelectToJSON(tableNames.t0021_right_group, id, object, alloc, message);
 }
 
 bool DatabaseLogicRightGroup::appuserInRightGroup(const sole::uuid &right_group_id, const sole::uuid &appuser_id)
@@ -71,8 +71,8 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
         return false;
     }
 //    {
-//        PGExecutor e(pool);
-//        if (!e.defaultSelectToJSON(tableNames.t0021_right_group, right_group_id, object, alloc, message))
+//        ORM2Postgres o2p(pool);
+//        if (!o2p.defaultSelectToJSON(tableNames.t0021_right_group, right_group_id, object, alloc, message))
 //        {
 //            return false;
 //        }
@@ -112,8 +112,8 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_grou
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.approved_datetime, " is not ", TimePointPostgreSqlNull);
     sql += ")";
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(member, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, member, alloc);
     return true;
 }
 

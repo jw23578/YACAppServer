@@ -367,7 +367,8 @@ bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
     {
         e.next();
     }
-    e.deprecated_toJsonArray(targetArray, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(e, targetArray, alloc);
     return true;
 }
 

@@ -65,12 +65,6 @@ public:
                        const sole::uuid &id,
                        std::string &message);
 
-    bool defaultSelectToJSON(const std::string &tableName,
-                             const sole::uuid &id,
-                             rapidjson::Value &object,
-                             rapidjson::MemoryPoolAllocator<> &alloc,
-                             std::string &message);
-
     void delet(const std::string &tableName,
                const std::string &needleField,
                const std::string &needleValue);
@@ -105,13 +99,6 @@ public:
 
     size_t fill(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
     size_t append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname);
-
-    size_t deprecated_toJsonArray(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc);
-    size_t deprecated_toJsonArray(std::map<std::string, rapidjson::Value *> &type2TargetArray, rapidjson::MemoryPoolAllocator<> &alloc);
-    void deprecated_toJsonObject(rapidjson::Value &object,
-                                 rapidjson::MemoryPoolAllocator<> &alloc,
-                                 const std::set<std::string> fields2Ignore);
-
 };
 
 #endif // PGEXECUTOR_H

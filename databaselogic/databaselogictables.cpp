@@ -181,37 +181,10 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.user_id, pg_uuid, false, true},
                                {tableFields.device_token, pg_text}});
 
-    utils.createTableIfNeeded(tableNames.t0016_appointment_templates,
-                              {idPrimaryKey,
-                               appId,
-                               {tableFields.name, pg_text},
-                               {tableFields.default_duration_in_minutes, pg_int},
-                               {tableFields.color, pg_int},
-                               {tableFields.owner_id, pg_uuid}});
-
     utils.createTableIfNeeded(tableNames.t0017_element_usable4appuser,
                               {idPrimaryKey,
                                {tableFields.element_id, pg_uuid, false, true},
                                {tableFields.appuser_id, pg_uuid, false, true}});
-
-    utils.createTableIfNeeded(tableNames.t0018_appointment,
-                              {idPrimaryKey,
-                               appId,
-                               {tableFields.appointment_group_id, pg_uuid, false, true},
-                               {tableFields.appointment_template_id, pg_uuid, false, true},
-                               {tableFields.caption, pg_text},
-                               {tableFields.decription, pg_text},
-                               {tableFields.start_datetime, pg_timestamp},
-                               {tableFields.end_datetime, pg_timestamp},
-                               {tableFields.creater_id, pg_uuid, false, true},
-                               {tableFields.deleted_datetime, pg_timestamp},
-                               {tableFields.history_datetime, pg_timestamp},
-                               {tableFields.max_bookable_count, pg_int},
-                               {tableFields.bookable_since_datetime, pg_timestamp},
-                               {tableFields.bookable_until_datetime, pg_timestamp},
-                               {tableFields.booking_credits, pg_int},
-                               {tableFields.visible_for_everybody, pg_bool},
-                               {tableFields.no_space, pg_bool}});
 
     utils.createTableIfNeeded(tableNames.t0019_element_visible4appuser,
                               {idPrimaryKey,

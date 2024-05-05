@@ -196,11 +196,10 @@ size_t ORM2Postgres::toJsonArray(PGExecutor &e,
                                  rapidjson::MemoryPoolAllocator<> &alloc)
 {
     targetArray.SetArray();
-    ORM2Postgres o2p(pool);
     for (size_t i(0); i < e.size(); ++i)
     {
         std::unique_ptr<YACBaseObject> object(static_cast<YACBaseObject*>(ghost.create()));
-        if (o2p.postgres2object(e, *object))
+        if (postgres2object(e, *object))
         {
             orm2json.addToArray(*object, targetArray, alloc);
         }
@@ -208,3 +207,62 @@ size_t ORM2Postgres::toJsonArray(PGExecutor &e,
     }
     return targetArray.Size();
 }
+
+void ORM2Postgres::toJsonObject(PGExecutor &e,
+                                rapidjson::Value &object,
+                                rapidjson::MemoryPoolAllocator<> &alloc,
+                                const std::set<std::string> fields2Ignore)
+{
+    object.SetObject();
+    for (size_t c(0); c < e.columns(); ++c)
+    {
+        if (fields2Ignore.find(e.columnName(c)) == fields2Ignore.end())
+        {
+            rapidjson::Value name(e.columnName(c), alloc);
+            std::string data(e.string(c));
+            object.AddMember(name, data, alloc);
+        }
+    }
+}
+
+size_t ORM2Postgres::toJsonArray(PGExecutor &e,
+                                 rapidjson::Value &targetArray,
+                                 rapidjson::MemoryPoolAllocator<> &alloc,
+                                 const std::set<std::string> fields2Ignore)
+{
+    targetArray.SetArray();
+    while (e.resultAvailable())
+    {
+        rapidjson::Value object(rapidjson::kObjectType);
+        toJsonObject(e, object, alloc, fields2Ignore);
+        targetArray.PushBack(object, alloc);
+        e.next();
+    }
+    return targetArray.Size();
+}
+
+size_t ORM2Postgres::toJsonArray(PGSqlString &sql,
+                                 rapidjson::Value &targetArray,
+                                 rapidjson::MemoryPoolAllocator<> &alloc,
+                                 const std::set<std::string> fields2Ignore)
+{
+    PGExecutor e(pool, sql);
+    return toJsonArray(e, targetArray, alloc, fields2Ignore);
+}
+
+
+bool ORM2Postgres::defaultSelectToJSON(const std::string &tableName,
+                                     const sole::uuid &id,
+                                     rapidjson::Value &object,
+                                     rapidjson::MemoryPoolAllocator<> &alloc,
+                                     std::string &message)
+{
+    PGExecutor e(pool);
+    if (!e.defaultSelect(tableName, id, message))
+    {
+        return false;
+    }
+    toJsonObject(e, object, alloc, {});
+    return true;
+}
+

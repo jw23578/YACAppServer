@@ -1,6 +1,8 @@
 #include "databaselogicappointments.h"
 #include "pgsqlstring.h"
 #include "pgexecutor.h"
+#include "orm_implementions/t0016_appointment_templates.h"
+#include "orm_implementions/t0018_appointment.h"
 
 bool DatabaseLogicAppointments::checkAppointmentTemplateOwner(const sole::uuid &id,
                                                               const sole::uuid &owner_id,
@@ -48,8 +50,8 @@ bool DatabaseLogicAppointments::fetchOneAppointment(const sole::uuid &id,
                                                     rapidjson::MemoryPoolAllocator<> &alloc,
                                                     std::string &message)
 {
-    PGExecutor e(pool);
-    return e.defaultSelectToJSON(tableNames.t0018_appointment, id, object, alloc, message);
+    ORM2Postgres o2p(pool);
+    return o2p.defaultSelectToJSON(tableNames.t0018_appointment, id, object, alloc, message);
 }
 
 DatabaseLogicAppointments::DatabaseLogicAppointments(LogStatController &logStatController,
@@ -129,8 +131,8 @@ bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appu
     sql += " or id in (select element_id from t0019_element_visible4appuser where appuser_id = :appuser_id)) ";
     sql.set("appuser_id", appuser_id);
     sql.addCompare("and", tableFields.app_id, "=", app_id);
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(target, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, t0016_appointment_templates(), target, alloc);
     return true;
 }
 
@@ -234,7 +236,7 @@ bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
     sql += std::string(") and ") + tableFields.deleted_datetime + std::string(" is null ");
     sql += std::string(" and ") + tableFields.history_datetime + std::string(" is null ");
     sql.addCompare("and", tableFields.app_id, "=", app_id);
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(target, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, t0018_appointment(), target, alloc);
     return true;
 }

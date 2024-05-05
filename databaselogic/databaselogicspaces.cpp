@@ -3,8 +3,8 @@
 
 bool DatabaseLogicSpaces::fetchOneSpaceOnly(const sole::uuid &id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {
-    PGExecutor e(pool);
-    return e.defaultSelectToJSON(tableNames.t0024_space, id, object, alloc, message);
+    ORM2Postgres o2p(pool);
+    return o2p.defaultSelectToJSON(tableNames.t0024_space, id, object, alloc, message);
 
 }
 
@@ -92,16 +92,16 @@ bool DatabaseLogicSpaces::fetchSpaces(const sole::uuid &app_id,
     sql.addCompare("and", tableFields.app_id, "=", app_id);
 
     sql.set("appuser_id", appuser_id);
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(targetArray, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, targetArray, alloc);
     return true;
 }
 
 bool DatabaseLogicSpaces::fetchSpace(const sole::uuid &space_id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {
     {
-        PGExecutor e(pool);
-        if (!e.defaultSelectToJSON(tableNames.t0024_space, space_id, object, alloc, message))
+        ORM2Postgres o2p(pool);
+        if (!o2p.defaultSelectToJSON(tableNames.t0024_space, space_id, object, alloc, message))
         {
             return false;
         }
@@ -160,8 +160,8 @@ bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
     sql.addCompare("where", tableFields.creater_id, "=", spaceAdminId);
     sql += ")";
 
-    PGExecutor e(pool, sql);
-    e.deprecated_toJsonArray(targetArray, alloc);
+    ORM2Postgres o2p(pool);
+    o2p.toJsonArray(sql, targetArray, alloc);
     return true;
 }
 

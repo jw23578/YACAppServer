@@ -61,6 +61,26 @@ public:
                        rapidjson::MemoryPoolAllocator<> &alloc);
     void insert(YACBaseObject &object);
     void update(const YACBaseObject &object);
+
+
+    void toJsonObject(PGExecutor &e,
+                      rapidjson::Value &object,
+                      rapidjson::MemoryPoolAllocator<> &alloc,
+                      const std::set<std::string> fields2Ignore = {});
+    size_t toJsonArray(PGExecutor &e,
+                       rapidjson::Value &targetArray,
+                       rapidjson::MemoryPoolAllocator<> &alloc,
+                       const std::set<std::string> fields2Ignore = {});
+    size_t toJsonArray(PGSqlString &sql,
+                       rapidjson::Value &targetArray,
+                       rapidjson::MemoryPoolAllocator<> &alloc,
+                       const std::set<std::string> fields2Ignore = {});
+
+    bool defaultSelectToJSON(const std::string &tableName,
+                             const sole::uuid &id,
+                             rapidjson::Value &object,
+                             rapidjson::MemoryPoolAllocator<> &alloc,
+                             std::string &message);
 };
 
 #endif // ORM2POSTGRES_H
