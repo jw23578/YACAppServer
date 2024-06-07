@@ -3,9 +3,10 @@
 
 #include "pgconnectionpool.h"
 #include "orm_implementions/yacbaseobject.h"
+#include "orm/ormmap.h"
 #include "tablefields.h"
 #include "orm2rapidjson.h"
-#include "pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 
 class PGExecutor;
 
@@ -29,6 +30,13 @@ public:
     size_t selectAll(const YACBaseObject &ghost,
                      std::set<YACBaseObject*> &target);
 
+    size_t fetchAll(PGExecutor &e,
+                    const YACBaseObject &ghost,
+                    ORMMap &target);
+
+    size_t selectAll(const YACBaseObject &ghost,
+                     ORMMap &target);
+
     template <class NeedleValueType1>
     size_t selectAll(const YACBaseObject &ghost,
                      const std::string &needle1,
@@ -36,7 +44,7 @@ public:
                      rapidjson::Value &targetArray,
                      rapidjson::MemoryPoolAllocator<> &alloc)
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(ghost.getORMName());
         sql.addCompare("where", needle1, "=", needleValue1);
         toJsonArray(sql, ghost, targetArray, alloc);
@@ -50,7 +58,7 @@ public:
                     const YACBaseObject &ghost,
                     std::set<YACBaseObject*> &target);
 
-    size_t toJsonArray(PGSqlString &sql,
+    size_t toJsonArray(SqlString &sql,
                        const YACBaseObject &ghost,
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc);
@@ -71,7 +79,7 @@ public:
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc,
                        const std::set<std::string> fields2Ignore = {});
-    size_t toJsonArray(PGSqlString &sql,
+    size_t toJsonArray(SqlString &sql,
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc,
                        const std::set<std::string> fields2Ignore = {});

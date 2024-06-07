@@ -1,5 +1,5 @@
 #include "databaselogicappointments.h"
-#include "pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 #include "pgexecutor.h"
 #include "orm_implementions/t0016_appointment_templates.h"
 #include "orm_implementions/t0018_appointment.h"
@@ -69,7 +69,7 @@ bool DatabaseLogicAppointments::insertAppointmentTemplate(sole::uuid const &id,
                                                           int color,
                                                           sole::uuid const &owner_id)
 {
-    PGSqlString insert;
+    SqlString insert;
     insert.insert(tableNames.t0016_appointment_templates);
     MACRO_addInsert(insert, id);
     MACRO_addInsert(insert, app_id);
@@ -92,7 +92,7 @@ bool DatabaseLogicAppointments::updateAppointmentTemplate(const sole::uuid &id, 
     {
         return false;
     }
-    PGSqlString update;
+    SqlString update;
     update.update(tableNames.t0016_appointment_templates);
     MACRO_addSet(update, name);
     MACRO_addSet(update, app_id);
@@ -112,7 +112,7 @@ bool DatabaseLogicAppointments::deleteAppointmentTemplate(const sole::uuid &id,
     {
         return false;
     }
-    PGSqlString sql;
+    SqlString sql;
     sql.delet(tableNames.t0016_appointment_templates);
     sql.addCompare(" where ", tableFields.id, " = ", id);
     sql.addCompare(" and ", tableFields.owner_id, " = ", owner_id);
@@ -125,7 +125,7 @@ bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appu
                                                           rapidjson::MemoryPoolAllocator<> &alloc,
                                                           std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0016_appointment_templates);
     sql.addCompare(" where (", tableFields.owner_id, " = ", appuser_id);
     sql += " or id in (select element_id from t0019_element_visible4appuser where appuser_id = :appuser_id)) ";
@@ -155,7 +155,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
                                                   std::string &message)
 {
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(tableNames.t0018_appointment);
         sql.addCompare(" where ", tableFields.appointment_group_id, " = ", appointment_group_id);
         sql.addCompare(" and ", tableFields.deleted_datetime, " = ", TimePointPostgreSqlNull);
@@ -175,7 +175,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
             }
             {
                 const std::chrono::system_clock::time_point history_datetime(TimePointPostgreSqlNow);
-                PGSqlString sql;
+                SqlString sql;
                 sql.update(tableNames.t0018_appointment);
                 MACRO_addSet(sql, history_datetime);
                 sql.addCompare(" where ", tableFields.appointment_group_id, " = ", appointment_group_id);
@@ -184,7 +184,7 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
     }
     const std::chrono::system_clock::time_point &deleted_datetime(TimePointPostgreSqlNull);
     const std::chrono::system_clock::time_point &history_datetime(TimePointPostgreSqlNull);
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0018_appointment);
     MACRO_addInsert(sql, id);
     MACRO_addInsert(sql, app_id);
@@ -214,7 +214,7 @@ bool DatabaseLogicAppointments::deleteAppointment(const sole::uuid &id,
     {
         return false;
     }
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0018_appointment);
     const std::chrono::system_clock::time_point deleted_datetime(TimePointPostgreSqlNow);
     MACRO_addSet(sql, deleted_datetime);
@@ -229,7 +229,7 @@ bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
                                                   rapidjson::MemoryPoolAllocator<> &alloc,
                                                   std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0018_appointment);
     sql.addCompare(" where ( ", tableFields.creater_id, " = ", appuser_id);
     sql += std::string(" or ") + tableFields.visible_for_everybody;

@@ -5,9 +5,18 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
 #include <iostream>
+#include "pgsqlimplementation.h"
+#include "orm_implementions/t0033_words.h"
+#include "orm/ormpersistenceinterface.h"
 
 TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
+    PGSqlImplementation sqlImplementation(pool);
+    ORMPersistenceInterface opi(sqlImplementation);
+    t0033_words words;
+    opi.insertObject(words);
+
+
     ORM2Postgres o2p(pool);
     t0009_appuser_logintoken ghost;
     std::set<YACBaseObject*> allT0009;

@@ -29,6 +29,7 @@ bool DatabaseLogicThirdParty::create(const sole::uuid &app_id,
 bool DatabaseLogicThirdParty::update(const t0029_third_party_user_data &user)
 {
     orm2postgres.update(user);
+    return true;
 }
 
 bool DatabaseLogicThirdParty::lookup(const sole::uuid app_id,
@@ -38,7 +39,7 @@ bool DatabaseLogicThirdParty::lookup(const sole::uuid app_id,
                                      t0029_third_party_user_data &result)
 {
     std::string third_party_string(third + mandant);
-    PGSqlString sql;
+    SqlString sql;
     sql.select(result.getORMName());
     sql.addCompare("where", tableFields.app_id, "=", app_id);
     sql.addCompare("and", tableFields.third_party_string, "=", third_party_string);

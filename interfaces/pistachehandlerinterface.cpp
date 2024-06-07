@@ -84,6 +84,11 @@ bool PistacheHandlerInterface::isDelete() const
     return request->method() == Pistache::Http::Method::Delete;
 }
 
+bool PistacheHandlerInterface::isPut() const
+{
+    return request->method() == Pistache::Http::Method::Put;
+}
+
 bool PistacheHandlerInterface::isMethod(const std::string &method) const
 {
     return request->resource() == method || request->resource() == "/" + method;

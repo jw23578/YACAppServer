@@ -62,7 +62,7 @@ void HandlerORMObjects::method()
                 document.SetObject();
                 rapidjson::Value rightgroups;
 
-                PGSqlString sql;
+                SqlString sql;
                 sql.select(t0021.getORMName());
                 sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
                 sql.addCompare("and", tableFields.app_id, "=", appId);

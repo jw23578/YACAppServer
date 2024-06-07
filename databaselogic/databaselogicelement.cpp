@@ -1,5 +1,5 @@
 #include "databaselogicelement.h"
-#include "pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 #include "pgexecutor.h"
 
 DatabaseLogicElement::DatabaseLogicElement(LogStatController &logStatController,
@@ -14,7 +14,7 @@ bool DatabaseLogicElement::insertElementUsable4AppUser(const sole::uuid &id,
                                                        const sole::uuid &element_id,
                                                        const sole::uuid &appuser_id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0017_element_usable4appuser);
     MACRO_addInsert(sql, id);
     MACRO_addInsert(sql, element_id);
@@ -27,7 +27,7 @@ bool DatabaseLogicElement::updateElementUsable4AppUser(const sole::uuid &id,
                                                        const sole::uuid &element_id,
                                                        const sole::uuid &appuser_id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0017_element_usable4appuser);
     MACRO_addSet(sql, element_id);
     MACRO_addSet(sql, appuser_id);
@@ -47,7 +47,7 @@ bool DatabaseLogicElement::insertElementVisible4AppUser(const sole::uuid &id,
                                                         const sole::uuid &element_id,
                                                         const sole::uuid &appuser_id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0019_element_visible4appuser);
     MACRO_addInsert(sql, id);
     MACRO_addInsert(sql, element_id);
@@ -61,7 +61,7 @@ bool DatabaseLogicElement::updateElementVisible4AppUser(const sole::uuid &id,
                                                         const sole::uuid &element_id,
                                                         const sole::uuid &appuser_id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0019_element_visible4appuser);
     MACRO_addSet(sql, element_id);
     MACRO_addSet(sql, appuser_id);

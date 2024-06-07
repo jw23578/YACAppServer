@@ -5,8 +5,8 @@
 #include "definitions.h"
 #include "utils/extvector.h"
 
-std::map<std::string, PGSqlString> PGUtils::tableName2InsertString;
-std::map<std::string, PGSqlString> PGUtils::tableName2UpdateString;
+std::map<std::string, SqlString> PGUtils::tableName2InsertString;
+std::map<std::string, SqlString> PGUtils::tableName2UpdateString;
 
 PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 {
@@ -16,7 +16,7 @@ PGUtils::PGUtils(PGConnectionPool &pool):pool(pool)
 bool PGUtils::tableHasColumn(const std::string &table_name,
                              const std::string &column_name) const
 {
-    PGSqlString sql("select exists ( "
+    SqlString sql("select exists ( "
                     "select 1 "
                     "FROM information_schema.columns "
                     "WHERE table_name= :table_name and column_name= :column_name) ");
@@ -30,7 +30,7 @@ void PGUtils::alterTableAddColumn(const std::string &table_name,
                                   const std::string &column_name,
                                   const std::string &columnType) const
 {
-    PGSqlString sql("alter table ");
+    SqlString sql("alter table ");
     sql += table_name;
     sql += " add column " + column_name + " " + columnType;
     PGExecutor e(pool, sql);
@@ -68,7 +68,7 @@ bool PGUtils::createTable(const std::string &tableName,
                           const std::vector<PGColumnAndType> &columnsAndTypes,
                           const std::vector<std::vector<std::string> > &uniques) const
 {
-    PGSqlString sql("create table ");
+    SqlString sql("create table ");
     sql += tableName;
     sql += " ( ";
     bool first(true);
@@ -120,7 +120,7 @@ void PGUtils::createTableIfNeeded(const std::string &tableName,
 
 bool PGUtils::tableExists(const std::string &tableName) const
 {
-    PGSqlString sql("select table_name from information_schema.tables ");
+    SqlString sql("select table_name from information_schema.tables ");
     sql += "where table_schema = 'public' ";
     sql += "and table_name = :tableName";
     sql.set("tableName", ExtString::lower(tableName));
@@ -134,7 +134,7 @@ bool PGUtils::tableExists(const std::string &tableName) const
 bool PGUtils::indexExists(const std::string &tableName,
                           const std::string &indexName) const
 {
-    PGSqlString sql("select indexname from pg_indexes ");
+    SqlString sql("select indexname from pg_indexes ");
     sql += "where schemaname = 'public' ";
     sql += "and tablename = :tableName "
            "and indexname = :indexName ";
@@ -150,7 +150,7 @@ void PGUtils::createIndex(const std::string &tableName, const std::string &index
     {
         return;
     }
-    PGSqlString sql("create index ");
+    SqlString sql("create index ");
     sql += indexName;
     sql += " on ";
     sql += tableName;
@@ -167,7 +167,7 @@ void PGUtils::createUniqueIndex(const std::string &tableName,
     {
         return;
     }
-    PGSqlString sql("create unique index ");
+    SqlString sql("create unique index ");
     sql += indexName;
     sql += " on ";
     sql += tableName;
@@ -176,10 +176,10 @@ void PGUtils::createUniqueIndex(const std::string &tableName,
     PGExecutor e(pool, sql);
 }
 
-PGSqlString PGUtils::createEntryExistsString(const std::string &tableName,
+SqlString PGUtils::createEntryExistsString(const std::string &tableName,
                                              const std::string &needleField)
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql += " where ";
     sql += ExtString::lower(needleField);
@@ -193,7 +193,7 @@ bool PGUtils::entryExists(const std::string &tableName,
                           const std::string &needleField,
                           const std::string &needleValue)
 {
-    PGSqlString sql(createEntryExistsString(tableName, needleField));
+    SqlString sql(createEntryExistsString(tableName, needleField));
     sql.set(needleField, needleValue);
     PGExecutor e(pool, sql);
     return e.size() > 0;
@@ -205,7 +205,7 @@ bool PGUtils::entryExists(const std::string &tableName,
                           const std::string &needleField2,
                           const std::string &needleValue2)
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
     sql.addCompare("and", needleField2, "=", needleValue2);
@@ -222,7 +222,7 @@ bool PGUtils::entryExists(const std::string &tableName,
                           const std::string &needleField3,
                           const std::chrono::system_clock::time_point &needleValue3)
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
     sql.addCompare("and", needleField2, "=", needleValue2);
@@ -235,7 +235,7 @@ bool PGUtils::entryExists(const std::string &tableName,
 
 size_t PGUtils::countEntries(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
 {
-    PGSqlString sql("select count(*) from ");
+    SqlString sql("select count(*) from ");
     sql += tableName;
     sql += " where ";
     sql += ExtString::lower(needleField);
@@ -245,19 +245,19 @@ size_t PGUtils::countEntries(const std::string &tableName, const std::string &ne
     return e.get_size_t("count");
 }
 
-PGSqlString PGUtils::createInsertString(const std::string &tableName)
+SqlString PGUtils::createInsertString(const std::string &tableName)
 {
-    std::map<std::string, PGSqlString>::iterator it(tableName2InsertString.find(tableName));
+    std::map<std::string, SqlString>::iterator it(tableName2InsertString.find(tableName));
     if (it != tableName2InsertString.end())
     {
         return it->second;
     }
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql += " limit 1";
     PGExecutor e(pool, sql);
 
-    PGSqlString insertSQL("insert into ");
+    SqlString insertSQL("insert into ");
     insertSQL += tableName;
     std::string fields(" (");
     std::string values(") values (:");
@@ -277,20 +277,20 @@ PGSqlString PGUtils::createInsertString(const std::string &tableName)
     return insertSQL;
 }
 
-PGSqlString PGUtils::createUpdateString(const std::string &tableName,
+SqlString PGUtils::createUpdateString(const std::string &tableName,
                                         const std::string &needleField)
 {
-    std::map<std::string, PGSqlString>::iterator it(tableName2UpdateString.find(tableName));
+    std::map<std::string, SqlString>::iterator it(tableName2UpdateString.find(tableName));
     if (it != tableName2UpdateString.end())
     {
         return it->second;
     }
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql += " limit 1";
     PGExecutor e(pool, sql);
 
-    PGSqlString updateSQL("update ");
+    SqlString updateSQL("update ");
     updateSQL += tableName;
     updateSQL += " set ";
     updateSQL += e.columnName(0);
@@ -313,7 +313,7 @@ PGSqlString PGUtils::createUpdateString(const std::string &tableName,
 
 bool PGUtils::tableEmpty(const std::string &tableName) const
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     pqxx::result result;
     PGCommandTransactor ct(pool,
@@ -324,7 +324,7 @@ bool PGUtils::tableEmpty(const std::string &tableName) const
 
 bool PGUtils::databaseExists(const std::string &databaseName) const
 {
-    PGSqlString sql("select * from pg_database where datname = :datname");
+    SqlString sql("select * from pg_database where datname = :datname");
     sql.set("datname", ExtString::lower(databaseName));
     pqxx::result result;
     PGCommandTransactor ct(pool,
@@ -336,7 +336,7 @@ bool PGUtils::databaseExists(const std::string &databaseName) const
 bool PGUtils::createDatabase(const std::string &databaseName,
                              const std::string &owner) const
 {
-    PGSqlString sql("create database ");
+    SqlString sql("create database ");
     sql += databaseName + " owner " + owner;
     pqxx::result result;
     PGCommandTransactor ct(pool,
@@ -348,7 +348,7 @@ bool PGUtils::createDatabase(const std::string &databaseName,
 
 bool PGUtils::pgCryptoInstalled() const
 {
-    PGSqlString sql("select * from pg_extension where extname = :extname");
+    SqlString sql("select * from pg_extension where extname = :extname");
     sql.set("extname", "pgcrypto");
     pqxx::connection c(pool.generateConnstring());
     pqxx::work w(c);
@@ -359,7 +359,7 @@ bool PGUtils::pgCryptoInstalled() const
 
 bool PGUtils::installPGCrypto() const
 {
-    PGSqlString sql("CREATE EXTENSION pgcrypto");
+    SqlString sql("CREATE EXTENSION pgcrypto");
     pqxx::connection c(pool.generateConnstring());
     pqxx::work w(c);
     pqxx::result result(w.exec(sql.str()));
@@ -369,7 +369,7 @@ bool PGUtils::installPGCrypto() const
 
 bool PGUtils::roleExists(const std::string &roleName) const
 {
-    PGSqlString sql("select 1 from pg_roles ");
+    SqlString sql("select 1 from pg_roles ");
     sql += " where rolname = :roleName";
     sql.set("roleName", ExtString::lower(roleName));
     pqxx::result result;
@@ -383,7 +383,7 @@ bool PGUtils::createRole(const std::string &name,
                          const std::string &password,
                          bool superUser) const
 {
-    PGSqlString sql("create role ");
+    SqlString sql("create role ");
     sql += name + " with login encrypted password :password ";
     if (superUser)
     {
@@ -399,7 +399,7 @@ bool PGUtils::createRole(const std::string &name,
 
 bool PGUtils::dropRole(const std::string &name) const
 {
-    PGSqlString sql("drop role ");
+    SqlString sql("drop role ");
     sql += name;
     pqxx::result result;
     PGCommandTransactor ct(pool,

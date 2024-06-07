@@ -93,7 +93,7 @@ SOURCES += \
         postgres/pgexecutor.cpp \
         postgres/pgoidloader.cpp \
         postgres/pgoidstorer.cpp \
-        postgres/pgsqlstring.cpp \
+        postgres/pgsqlimplementation.cpp \
         postgres/pgutils.cpp \
         rightsLogic/rightslogic.cpp \
         serverHeader/appidheader.cpp \
@@ -188,7 +188,7 @@ HEADERS += \
   postgres/pgexecutor.h \
   postgres/pgoidloader.h \
   postgres/pgoidstorer.h \
-  postgres/pgsqlstring.h \
+  postgres/pgsqlimplementation.h \
   postgres/pgutils.h \
   rightsLogic/rightslogic.h \
   serverHeader/appidheader.h \

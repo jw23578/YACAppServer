@@ -118,6 +118,7 @@ protected:
     bool isGet() const;
     bool isPost() const;
     bool isDelete() const;
+    bool isPut() const;
     const std::string &d_getMethodName() const;
     void addAllMethodTypes(PistacheServerInterface &serverInterface,
                           std::string const &methodName);

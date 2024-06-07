@@ -70,7 +70,7 @@ DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
 sole::uuid DatabaseLogicAppUser::getAppUserId(const sole::uuid &appId,
                                            const std::string &loginEMail)
 {
-    PGSqlString sql("select id from ");
+    SqlString sql("select id from ");
     sql += tableNames.t0003_appuser_profiles;
     sql.addCompare("where", tableFields.loginemail, "=", loginEMail);
     sql.addCompare("and", tableFields.app_id, "=", appId);
@@ -103,7 +103,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
     sole::uuid appUserId(sole::uuid4());
     verifyToken = ExtString::randomString(0, 0, 4, 0);
     {
-        PGSqlString sql(utils.createInsertString(tableNames.t0003_appuser_profiles));
+        SqlString sql(utils.createInsertString(tableNames.t0003_appuser_profiles));
         sql.set(tableFields.id, appUserId);
         sql.set(tableFields.app_id, appId);
         sql.set(tableFields.fstname, "");
@@ -125,7 +125,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
 
     if (password.size())
     {
-        PGSqlString sql("insert into t0004_appuser_passwordhashes "
+        SqlString sql("insert into t0004_appuser_passwordhashes "
                         " (id, appuser_id, password_hash) "
                         " values "
                         " (:id, :appuser_id, crypt(:password, gen_salt('bf'))) ");
@@ -189,7 +189,7 @@ bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
         return false;
     }
     verifyToken = ExtString::randomString(0, 0, 4, 0);
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
     sql.addSet(tableFields.verify_token, verifyToken);
     sql.addSet(tableFields.verify_token_valid_until, std::chrono::system_clock::now() + std::chrono::minutes(60));
@@ -254,7 +254,7 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
     }
 
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.update(tableNames.t0003_appuser_profiles);
         sql.addSet(tableFields.verified, TimePointPostgreSqlNow);
         sql.addSet(tableFields.verify_token, "");
@@ -333,7 +333,7 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
                                          const sole::uuid imageId,
                                          std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
     sql.addSet(MACRO_NameValue(fstname));
     sql.addSet(MACRO_NameValue(surname));
@@ -365,7 +365,7 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
     {
         return false;
     }
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableNames.t0009_appuser_logintoken;
     sql.addCompare("where", "appuser_id", "=", userId);
     sql.addCompare("and", "login_token", "=", loginToken);
@@ -389,7 +389,7 @@ bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
         return false;
     }
     updatePasswordToken = ExtString::randomString(0, 0, 4, 0);
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
     sql.addSet("update_password_token", updatePasswordToken);
     sql.addSet("update_password_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
@@ -400,13 +400,13 @@ bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
 
 bool DatabaseLogicAppUser::updatePasswordLoggedIn(const sole::uuid &appuser_id, const std::string &password)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0004_appuser_passwordhashes);
     sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
     PGExecutor e(pool, sql);
     if (e.size())
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.update(tableNames.t0004_appuser_passwordhashes);
         sql += " password_hash = crypt(:password, gen_salt('bf')) ";
         sql.set("password", password);
@@ -415,7 +415,7 @@ bool DatabaseLogicAppUser::updatePasswordLoggedIn(const sole::uuid &appuser_id, 
     }
     else
     {
-        PGSqlString sql("insert into t0004_appuser_passwordhashes "
+        SqlString sql("insert into t0004_appuser_passwordhashes "
                         " (id, appuser_id, password_hash) "
                         " values "
                         " (:id, :appuser_id, crypt(:password, gen_salt('bf'))) ");
@@ -476,7 +476,7 @@ bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
     resetUpdatePasswordToken(userId);
 
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.update(tableNames.t0004_appuser_passwordhashes);
         sql += " password_hash = crypt(:password, gen_salt('bf')) ";
         sql.set("password", password);
@@ -512,7 +512,7 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     }
     std::vector<std::string> needles;
     ExtString::split(needle, " ", needles);
-    PGSqlString sql("select id, visible_name, image_id from ");
+    SqlString sql("select id, visible_name, image_id from ");
     sql += tableNames.t0003_appuser_profiles;
     sql.addCompare("where", "app_id", "=", appId);
     sql.addCompare("and", "verified", "is not", TimePointPostgreSqlNull);
@@ -593,7 +593,7 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
 bool DatabaseLogicAppUser::storeDeviceToken(const sole::uuid &userId,
                                             const std::string &device_token)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0015_appuser_devicetoken);
     sql.addInsert(tableFields.id, sole::uuid4());
     sql.addInsert(tableFields.user_id, userId);
@@ -606,7 +606,7 @@ bool DatabaseLogicAppUser::storeDeviceToken(const sole::uuid &userId,
 bool DatabaseLogicAppUser::removeDeviceToken(const sole::uuid &userId,
                                              const std::string &device_token)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.delet(tableNames.t0015_appuser_devicetoken);
     sql.addCompare(" where ", tableFields.user_id, " = ", userId);
     sql.addCompare(" and ", tableFields.device_token, " = ", device_token);
@@ -618,7 +618,7 @@ bool DatabaseLogicAppUser::removeDeviceToken(const sole::uuid &userId,
 size_t DatabaseLogicAppUser::fetchDeviceToken(const sole::uuid &userId,
                                               std::set<std::string> &device_token)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0015_appuser_devicetoken);
     sql.addCompare(" where ", tableFields.user_id, " = ", userId);
     PGExecutor e(pool,
@@ -642,7 +642,7 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
         return;
     }
 
-    PGSqlString sql("update ");
+    SqlString sql("update ");
     sql += tableNames.t0009_appuser_logintoken;
     sql += " set login_token_valid_until = now() + interval '1 hour' *:validhours "
            "where appuser_id = :appuserid "
@@ -656,7 +656,7 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
 
 void DatabaseLogicAppUser::resetUpdatePasswordToken(const sole::uuid &userId)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
     sql.addSet("update_password_token", "");
     sql.addSet("update_password_token_valid_until", TimePointPostgreSqlNull);

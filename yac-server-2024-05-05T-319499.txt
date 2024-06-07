@@ -1,0 +1,935 @@
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 9
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'app_color_name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 4
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'app_info_url') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'app_logo_url') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'app_name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'app_version') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'installation_code_hash') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'is_template_app') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'json_yacapp') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'owner_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0002_apps' and column_name= 'search_code') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0003_appuser_profiles'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'color') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'deleted') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'fstname') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'image_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'loginemail') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'message_font_color') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'public_key_base64') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'searching_exactly_allowed') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'searching_fuzzy_allowed') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'surname') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'update_password_token') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'update_password_token_valid_until') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'verified') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'verify_token') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'verify_token_valid_until') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0003_appuser_profiles' and column_name= 'visible_name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0009_appuser_logintoken'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'login_token') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'login_token_valid_until') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0016_appointment_templates'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0016_appointment_templates' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0016_appointment_templates' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0016_appointment_templates' and column_name= 'color') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0016_appointment_templates' and column_name= 'default_duration_in_minutes') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0016_appointment_templates' and column_name= 'name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0016_appointment_templates' and column_name= 'owner_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0018_appointment'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'appointment_group_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'appointment_template_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'bookable_since_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'bookable_until_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'booking_credits') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'caption') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'creater_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'decription') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'end_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'no_space') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'start_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0018_appointment' and column_name= 'visible_for_everybody') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0021_right_group'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'access_code') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'automatic') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'creater_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'deleted_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'deleted_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'request_allowed') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0021_right_group' and column_name= 'visible_for_non_members') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0022_right_group2appuser'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'approved_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'approved_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'denied_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'denied_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'requested_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'result_seen') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0022_right_group2appuser' and column_name= 'right_group_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0023_right2rightgroup'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0023_right2rightgroup' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0023_right2rightgroup' and column_name= 'right_group_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0023_right2rightgroup' and column_name= 'right_number') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0026_appuser_tag'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0026_appuser_tag' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0026_appuser_tag' and column_name= 'tag') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0027_app_images'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0027_app_images' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0027_app_images' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0027_app_images' and column_name= 'hash_value') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0027_app_images' and column_name= 'image_oid') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0027_app_images' and column_name= 'position') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0028_message_images'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0028_message_images' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0028_message_images' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0028_message_images' and column_name= 'creater_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0028_message_images' and column_name= 'height') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0028_message_images' and column_name= 'image_oid') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0028_message_images' and column_name= 'width') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0029_third_party_user_data'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0029_third_party_user_data' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0029_third_party_user_data' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0029_third_party_user_data' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0029_third_party_user_data' and column_name= 'image_id_string') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0029_third_party_user_data' and column_name= 'third_party_string') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0029_third_party_user_data' and column_name= 'user_id_string') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0030_documents'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'created_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: alter table t0030_documents add column created_datetime timestamp with time zone
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'creater_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 4
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'delete_after_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 3
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: alter table t0030_documents add column delete_after_datetime timestamp with time zone
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'document_description') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'document_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'document_name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'document_oid') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 2
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'document_type') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0030_documents' and column_name= 'document_version') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0031_catchphrases'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0031_catchphrases' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0031_catchphrases' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0031_catchphrases' and column_name= 'catchphrase') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0032_catchphrase2document'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0032_catchphrase2document' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0032_catchphrase2document' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0032_catchphrase2document' and column_name= 'document_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0032_catchphrase2document' and column_name= 't0031_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0033_words'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0033_words' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0033_words' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0033_words' and column_name= 'word') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0034_word2document'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0034_word2document' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0034_word2document' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0034_word2document' and column_name= 'document_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0034_word2document' and column_name= 't0033_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0001_users'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select indexname from pg_indexes where schemaname = 'public' and tablename = 't0001_users' and indexname = 't0001_user_i1' 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0009_appuser_logintoken'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'login_token') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0009_appuser_logintoken' and column_name= 'login_token_valid_until') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0004_appuser_passwordhashes'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0004_appuser_passwordhashes' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0004_appuser_passwordhashes' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0004_appuser_passwordhashes' and column_name= 'password_hash') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0005_group_of_appusers'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0005_group_of_appusers' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0005_group_of_appusers' and column_name= 'name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0006_appuser2group'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0006_appuser2group' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0006_appuser2group' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0006_appuser2group' and column_name= 'group_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0007_messages'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0007_messages' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0007_messages' and column_name= 'sender_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0007_messages' and column_name= 'to_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0007_messages' and column_name= 'sended_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0007_messages' and column_name= 'content_base64') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0007_messages' and column_name= 'deleted_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0008_message_received'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0008_message_received' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0008_message_received' and column_name= 'message_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0008_message_received' and column_name= 'receiver_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0008_message_received' and column_name= 'received_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0014_message_read'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0014_message_read' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0014_message_read' and column_name= 'message_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0014_message_read' and column_name= 'reader_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0014_message_read' and column_name= 'read_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0010_task'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0010_task' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0010_task' and column_name= 'task') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0010_task' and column_name= 'creater_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0010_task' and column_name= 'created') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0010_task' and column_name= 'finished') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0011_task_time'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0011_task_time' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0011_task_time' and column_name= 'user_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0011_task_time' and column_name= 'task_start') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0011_task_time' and column_name= 'task_end') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0012_worktime'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'user_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'ts') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'type') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'user_mood') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'day_rating') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'deleted_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0012_worktime' and column_name= 'deleted_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0013_images'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0013_images' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0013_images' and column_name= 'data') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0015_appuser_devicetoken'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0015_appuser_devicetoken' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0015_appuser_devicetoken' and column_name= 'user_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0015_appuser_devicetoken' and column_name= 'device_token') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0017_element_usable4appuser'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0017_element_usable4appuser' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0017_element_usable4appuser' and column_name= 'element_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0017_element_usable4appuser' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0019_element_visible4appuser'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0019_element_visible4appuser' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0019_element_visible4appuser' and column_name= 'element_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0019_element_visible4appuser' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0020_appointment_participants'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0020_appointment_participants' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0020_appointment_participants' and column_name= 'appointment_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0020_appointment_participants' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0024_space'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'name') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'creater_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'deleted_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'deleted_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'automatic') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'access_code') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0024_space' and column_name= 'request_allowed') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select table_name from information_schema.tables where table_schema = 'public' and table_name = 't0025_space2appuser'
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'app_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'space_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'requested_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'approved_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'approved_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'denied_datetime') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'denied_appuser_id') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select exists ( select 1 FROM information_schema.columns WHERE table_name= 't0025_space2appuser' and column_name= 'result_seen') 
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 1
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:17 sql: select * from t0009_appuser_logintoken
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:18 Start: PGCommandTransactor
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:20 resultsize: 4
+2024-05-05T09:57:13Z Verbose  ../../postgres/pgcommandtransactor.cpp:21 Step 1 PGCommandTransactor 0

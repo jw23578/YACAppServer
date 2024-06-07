@@ -18,7 +18,7 @@ void DatabaseLogicMessages::storeMessage(const sole::uuid &id,
                                          const sole::uuid &to_id,
                                          const std::string &content_base64)
 {
-    PGSqlString sql(utils.createInsertString(tableNames.t0007_messages));
+    SqlString sql(utils.createInsertString(tableNames.t0007_messages));
     MACRO_set(sql, id);
     MACRO_set(sql, sender_id);
     MACRO_set(sql, to_id);
@@ -30,7 +30,7 @@ void DatabaseLogicMessages::storeMessage(const sole::uuid &id,
 
 void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.delet(tableNames.t0007_messages);
     sql += tableNames.t0007_messages;
     sql.addCompare("where", tableFields.id, "=", id);
@@ -40,7 +40,7 @@ void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
 bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const sole::uuid &user_id,
                                                         std::string &resultMessage)
 {
-    PGSqlString upd;
+    SqlString upd;
     upd.update(tableNames.t0007_messages);
     upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
     upd.addCompare("where (", tableFields.sender_id, "=", user_id);
@@ -54,7 +54,7 @@ bool DatabaseLogicMessages::markMessageDeleted(const sole::uuid &id,
                                                const sole::uuid &sender_id,
                                                std::string &resultMessage)
 {
-    PGSqlString upd;
+    SqlString upd;
     upd.update(tableNames.t0007_messages);
     upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
     upd.addCompare("where", tableFields.id, "=", id);
@@ -68,7 +68,7 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
                                           rapidjson::Value &target,
                                           rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableNames.t0007_messages;
     sql += " where (sender_id = :fetcher_id or to_id = :fetcher_id ";
     sql += " or to_id in (select group_id from  ";
@@ -87,7 +87,7 @@ bool DatabaseLogicMessages::fetchReceivedMessages(const sole::uuid &receiver_id,
                                                   rapidjson::Value &target,
                                                   rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    PGSqlString sql("select ");
+    SqlString sql("select ");
     sql += tableFields.id + ", ";
     sql += tableFields.received_datetime;
     sql += " from ";
@@ -103,7 +103,7 @@ bool DatabaseLogicMessages::fetchReadMessages(const sole::uuid &reader_id,
                                               const std::chrono::system_clock::time_point &since,
                                               rapidjson::Value &target, rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    PGSqlString sql("select ");
+    SqlString sql("select ");
     sql += tableFields.id + ", ";
     sql += tableFields.read_datetime;
     sql += " from ";
@@ -121,7 +121,7 @@ bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const sole::uuid &recei
                                                          rapidjson::Value &targetRead,
                                                          rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    PGSqlString sql("select '1' as type, ");
+    SqlString sql("select '1' as type, ");
     sql += tableFields.id + ", ";
     sql += tableFields.received_datetime;
     sql += " from ";
@@ -161,13 +161,13 @@ void DatabaseLogicMessages::setReceived(const sole::uuid &receiver_id,
                                         const sole::uuid &message_id,
                                         const std::chrono::system_clock::time_point &received_datetime)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0008_message_received);
     sql.addInsert(tableFields.id, sole::uuid4());
     sql.addInsert(tableFields.receiver_id, receiver_id);
     sql.addInsert(tableFields.message_id, message_id);
     sql.addInsert(tableFields.read_datetime, received_datetime);
-    PGSqlString update(" update ");
+    SqlString update(" update ");
     update.addSet(tableFields.read_datetime, received_datetime);
     sql.addOnConflict(tableFields.message_id + ", " + tableFields.reader_id, update);
 
@@ -179,13 +179,13 @@ void DatabaseLogicMessages::setRead(const sole::uuid &reader_id,
                                     const sole::uuid &message_id,
                                     const std::chrono::system_clock::time_point &read_datetime)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0014_message_read);
     sql.addInsert(tableFields.id, sole::uuid4());
     sql.addInsert(tableFields.reader_id, reader_id);
     sql.addInsert(tableFields.message_id, message_id);
     sql.addInsert(tableFields.read_datetime, read_datetime);
-    PGSqlString update(" do update set ");
+    SqlString update(" do update set ");
     update.addSet(tableFields.read_datetime, read_datetime);
     sql.addOnConflict(tableFields.message_id + ", " + tableFields.reader_id, update);
 

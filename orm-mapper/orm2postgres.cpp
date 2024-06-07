@@ -10,7 +10,7 @@ ORM2Postgres::ORM2Postgres(PGConnectionPool &pool):
 bool ORM2Postgres::select(const sole::uuid &id,
                           YACBaseObject &object)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(object.getORMName());
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
@@ -48,10 +48,38 @@ bool ORM2Postgres::select(const sole::uuid &id,
     return true;
 }
 
+size_t ORM2Postgres::fetchAll(PGExecutor &e,
+                const YACBaseObject &ghost,
+                ORMMap &target)
+{
+    for (size_t i(0); i < e.size(); ++i)
+    {
+        YACBaseObject *object(static_cast<YACBaseObject*>(ghost.create()));
+        postgres2object(e, *object);
+        target[object->id] = object;
+        e.next();
+    }
+    return e.size();
+}
+
+size_t ORM2Postgres::selectAll(const YACBaseObject &ghost,
+                               ORMMap &target)
+{
+    SqlString sql;
+    sql.select(ghost.getORMName());
+    PGExecutor e(pool, sql);
+    if (!e.size())
+    {
+        return 0;
+    }
+    return fetchAll(e, ghost, target);
+}
+
+
 size_t ORM2Postgres::selectAll(const YACBaseObject &ghost,
                                std::set<YACBaseObject *> &target)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(ghost.getORMName());
     PGExecutor e(pool, sql);
     if (!e.size())
@@ -99,7 +127,7 @@ size_t ORM2Postgres::fetchAll(PGExecutor &e,
     return e.size();
 }
 
-size_t ORM2Postgres::toJsonArray(PGSqlString &sql, const YACBaseObject &ghost, rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
+size_t ORM2Postgres::toJsonArray(SqlString &sql, const YACBaseObject &ghost, rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc)
 {
     PGExecutor e(pool, sql);
     return toJsonArray(e, ghost, targetArray, alloc);
@@ -108,7 +136,7 @@ size_t ORM2Postgres::toJsonArray(PGSqlString &sql, const YACBaseObject &ghost, r
 void ORM2Postgres::insert(YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(object.getORMName());
     if (object.propertyIsNull(tableFields.id))
     {
@@ -135,7 +163,7 @@ void ORM2Postgres::insert(YACBaseObject &object)
 void ORM2Postgres::update(const YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
-    PGSqlString sql;
+    SqlString sql;
     if (object.propertyIsNull(tableFields.id))
     {
         assert((void("update with id == null is not possible"), object.propertyExists(tableFields.id)));
@@ -162,7 +190,7 @@ void ORM2Postgres::update(const YACBaseObject &object)
 void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
-    PGSqlString sql;
+    SqlString sql;
     if (object.propertyIsNull(tableFields.id))
     {
         sql.insert(object.getORMName());
@@ -241,7 +269,7 @@ size_t ORM2Postgres::toJsonArray(PGExecutor &e,
     return targetArray.Size();
 }
 
-size_t ORM2Postgres::toJsonArray(PGSqlString &sql,
+size_t ORM2Postgres::toJsonArray(SqlString &sql,
                                  rapidjson::Value &targetArray,
                                  rapidjson::MemoryPoolAllocator<> &alloc,
                                  const std::set<std::string> fields2Ignore)

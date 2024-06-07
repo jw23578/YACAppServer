@@ -15,7 +15,7 @@ bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
 
 bool DatabaseLogicRightGroup::appuserInRightGroup(const sole::uuid &right_group_id, const sole::uuid &appuser_id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0022_right_group2appuser);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
@@ -26,7 +26,7 @@ bool DatabaseLogicRightGroup::appuserInRightGroup(const sole::uuid &right_group_
 
 bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const sole::uuid &app_id, const std::string &name, sole::uuid &id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0021_right_group);
     sql.addCompare("where", tableFields.name, "=", name);
     sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
@@ -50,7 +50,7 @@ DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatContr
 
 bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0021_right_group);
     sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
     sql.addSet(tableFields.deleted_appuser_id, appuser_id);
@@ -78,7 +78,7 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
 //        }
 //    }
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(tableNames.t0023_right2rightgroup);
         sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
         PGExecutor e(pool, sql);
@@ -88,7 +88,7 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
         object.AddMember("rightNumbers", rightNumbers, alloc);
     }
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(tableNames.t0022_right_group2appuser);
         sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
         PGExecutor e(pool, sql);
@@ -105,7 +105,7 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_grou
                                                     rapidjson::MemoryPoolAllocator<> &alloc,
                                                     std::string &errorMessage)
 {
-    PGSqlString sql("select id, visible_name, image_id from ");
+    SqlString sql("select id, visible_name, image_id from ");
     sql += tableNames.t0003_appuser_profiles;
     sql += " where " + tableFields.id + " in (select " + tableFields.appuser_id;
     sql += " from " + tableNames.t0022_right_group2appuser;
@@ -119,7 +119,7 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_grou
 
 void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const sole::uuid &appuser_id, std::set<int> &right_numbers)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0023_right2rightgroup);
     sql += std::string(" where ") + tableFields.right_group_id;
     sql += std::string(" in (select ") + tableFields.right_group_id;
@@ -140,7 +140,7 @@ bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id,
                                           std::string &message)
 {
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(tableNames.t0023_right2rightgroup);
         sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
         sql.addCompare("and", tableFields.right_number, "=", right_number);
@@ -151,7 +151,7 @@ bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id,
         }
 
     }
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0023_right2rightgroup);
     MACRO_addInsert(sql, id);
     MACRO_addInsert(sql, right_group_id);
@@ -162,7 +162,7 @@ bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id,
 
 bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, const int right_number, std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.delet(tableNames.t0023_right2rightgroup);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.right_number, "=", right_number);
@@ -172,7 +172,7 @@ bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, cons
 
 bool DatabaseLogicRightGroup::removeUser(const sole::uuid &right_group_id, const sole::uuid &appuser_id, std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.delet(tableNames.t0022_right_group2appuser);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
@@ -183,7 +183,7 @@ bool DatabaseLogicRightGroup::removeUser(const sole::uuid &right_group_id, const
 void DatabaseLogicRightGroup::fetchGroupRightNumbers(const sole::uuid &right_group_id,
                                                      std::set<int> &right_numbers)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0023_right2rightgroup);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     PGExecutor e(pool, sql);
@@ -196,7 +196,7 @@ void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const sole::uuid &app_i
     sole::uuid id(sole::uuid4());
     if (!fetchIDOfOneRightGroupByName(app_id, adminGroupName, id))
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.insert(tableNames.t0021_right_group);
         MACRO_addInsert(sql, id);
         sql.addInsert(tableFields.name, adminGroupName);
@@ -218,7 +218,7 @@ void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const sole::uuid &app_i
 
 bool DatabaseLogicRightGroup::adminExists(const sole::uuid &app_id, const std::string &adminGroupName)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0022_right_group2appuser);
     sql += std::string(" where ") + tableFields.right_group_id + std::string(" = (");
     sql += std::string("select id from ") + tableNames.t0021_right_group;

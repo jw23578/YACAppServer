@@ -4,24 +4,24 @@
 #include "pqxx/pqxx"
 #include "pgconnectionpool.h"
 #include "pgconnection.h"
-#include "pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 
 class PGCommandTransactor
 {
     PGConnectionPool &pool;
     PGConnection conn;
-    PGSqlString const &sql;    
+    SqlString const &sql;
     pqxx::result &result;
     const bool noTransaction;
     bool failed;
     void execAndCommit(pqxx::transaction_base &w,
-                       PGSqlString const &sql);
+                       SqlString const &sql);
 public:
     PGCommandTransactor(PGConnectionPool &pool,
-                        PGSqlString const &sql,
+                        SqlString const &sql,
                         pqxx::result &result);
     PGCommandTransactor(PGConnectionPool &pool,
-                        PGSqlString const &sql,
+                        SqlString const &sql,
                         pqxx::result &result,
                         bool noTransaction);
     void operator()();

@@ -35,7 +35,7 @@ bool DatabaseLogicImageTable::storeImage(const std::basic_string<std::byte> &dat
     PGOidStorer storer(pool,
                        data,
                        imageOid);
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0013_images);
     imageId = sole::uuid4();
     sql.addInsert(tableFields.id, imageId);

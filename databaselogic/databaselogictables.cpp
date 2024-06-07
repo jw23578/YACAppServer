@@ -91,7 +91,7 @@ void DatabaseLogicTables::createDatabaseTables()
 
     if (!utils.tableExists(tableNames.t0001_users))
     {
-        PGSqlString sql("create table ");
+        SqlString sql("create table ");
         sql += tableNames.t0001_users;
         sql += std::string(" ( id uuid, "
                            " loginemail text, "

@@ -27,7 +27,7 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace(sole::uuid &id,
                                               rapidjson::MemoryPoolAllocator<> &alloc,
                                               std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insertOrUpdate(id, tableNames.t0024_space);
     MACRO_addInsertOrSet(sql, app_id);
     MACRO_addInsertOrSet(sql, name);
@@ -44,7 +44,7 @@ bool DatabaseLogicSpaces::spaceRequestResultSeen(const sole::uuid &id,
                                                  const sole::uuid &appuser_id,
                                                  std::string &errorMessage)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0025_space2appuser);
     sql.addSet(tableFields.result_seen, TimePointPostgreSqlNow);
     sql.addCompare("where", tableFields.id, "=", id);
@@ -55,7 +55,7 @@ bool DatabaseLogicSpaces::spaceRequestResultSeen(const sole::uuid &id,
 
 bool DatabaseLogicSpaces::deleteSpace(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0024_space);
     sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
     sql.addSet(tableFields.deleted_appuser_id, appuser_id);
@@ -71,7 +71,7 @@ bool DatabaseLogicSpaces::fetchSpaces(const sole::uuid &app_id,
                                       rapidjson::MemoryPoolAllocator<> &alloc,
                                       std::string &message)
 {
-    PGSqlString sql("select * ");
+    SqlString sql("select * ");
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
     sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
     sql.addCompare("and", tableFields.approved_datetime, "is not", TimePointPostgreSqlNull);
@@ -107,7 +107,7 @@ bool DatabaseLogicSpaces::fetchSpace(const sole::uuid &space_id, rapidjson::Valu
         }
     }
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(tableNames.t0025_space2appuser);
         sql.addCompare("where", tableFields.space_id, "=", space_id);
         PGExecutor e(pool, sql);
@@ -130,7 +130,7 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace2AppUser(sole::uuid &id,
                                                       const TimePoint &denied_datetime,
                                                       const sole::uuid &denied_appuser_id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.insertOrUpdate(id, tableNames.t0025_space2appuser);
     MACRO_addInsertOrSet(sql, app_id);
     MACRO_addInsertOrSet(sql, space_id);
@@ -150,7 +150,7 @@ bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
                                              rapidjson::MemoryPoolAllocator<> &alloc,
                                              std::string &errorMessage)
 {
-    PGSqlString sql("select t0025.id, t0025.space_id, t0025.appuser_id, t0024.name ");
+    SqlString sql("select t0025.id, t0025.space_id, t0025.appuser_id, t0024.name ");
     sql += " from " + tableNames.t0025_space2appuser + " t0025 ";
     sql += " left join " + tableNames.t0024_space + " t0024 on t0024.id = t0025.space_id ";
     sql.addCompare("where", tableFields.requested_datetime, " is not ", TimePointPostgreSqlNull);
@@ -167,7 +167,7 @@ bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
 
 bool DatabaseLogicSpaces::fetchSpaceRequestId(const sole::uuid &space_id, const sole::uuid &appuser_id, sole::uuid &id)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0025_space2appuser);
     sql.addCompare("where", tableFields.space_id, "=", space_id);
     sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);

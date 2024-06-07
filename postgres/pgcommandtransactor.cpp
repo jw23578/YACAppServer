@@ -1,12 +1,11 @@
 #include "pgcommandtransactor.h"
-#include <iostream>
 #include <pqxx/except.hxx>
 #include "logstat/logstatcontroller.h"
 #include "logstat/beginendtrack.h"
 
 
 void PGCommandTransactor::execAndCommit(pqxx::transaction_base &w,
-                                        PGSqlString const &sql)
+                                        SqlString const &sql)
 {
     try
     {
@@ -29,7 +28,7 @@ void PGCommandTransactor::execAndCommit(pqxx::transaction_base &w,
 }
 
 PGCommandTransactor::PGCommandTransactor(PGConnectionPool &pool,
-                                         PGSqlString const &sql,
+                                         SqlString const &sql,
                                          pqxx::result &result):
     pool(pool),
     conn(pool),
@@ -42,7 +41,7 @@ PGCommandTransactor::PGCommandTransactor(PGConnectionPool &pool,
 }
 
 PGCommandTransactor::PGCommandTransactor(PGConnectionPool &pool,
-                                         const PGSqlString &sql,
+                                         const SqlString &sql,
                                          pqxx::result &result,
                                          bool noTransaction):
     pool(pool),

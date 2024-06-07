@@ -11,13 +11,13 @@ PGExecutor::PGExecutor(PGConnectionPool &pool):
 }
 
 PGExecutor::PGExecutor(PGConnectionPool &pool,
-                       const PGSqlString &sql): pool(pool)
+                       const SqlString &sql): pool(pool)
 {
     PGCommandTransactor ct(pool, sql, result);
 }
 
 PGExecutor::PGExecutor(PGConnectionPool &pool,
-                       const PGSqlString &sql,
+                       const SqlString &sql,
                        std::string &resultMessage,
                        const std::string &onSizeMessage,
                        const std::string &onZeroSizeMessage):
@@ -32,7 +32,7 @@ PGExecutor::PGExecutor(PGConnectionPool &pool,
     resultMessage = size() > 0 ? onSizeMessage : onZeroSizeMessage;
 }
 
-size_t PGExecutor::exec(const PGSqlString &sql)
+size_t PGExecutor::exec(const SqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
     return size();
@@ -44,7 +44,7 @@ size_t PGExecutor::login(const std::string &tableName,
                          const std::string &loginField,
                          const std::string &loginValue)
 {
-    PGSqlString sql("select *, ");
+    SqlString sql("select *, ");
     sql += passwordHashfield;
     sql += " = crypt(:password, ";
     sql += passwordHashfield;
@@ -63,7 +63,7 @@ size_t PGExecutor::select(const std::string &tableName,
                           const std::string &needleField2,
                           const std::string &needleValue2)
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql += " where " + needleField;
     sql += " = :" + needleField;
@@ -82,7 +82,7 @@ size_t PGExecutor::select(const std::string &tableName,
                           const std::string &needleField3,
                           const std::chrono::system_clock::time_point &needleValue3)
 {
-    PGSqlString sql("select * from ");
+    SqlString sql("select * from ");
     sql += tableName;
     sql.addCompare("where", needleField, "=", needleValue);
     sql.addCompare("and", needleField2, "=", needleValue2);
@@ -94,7 +94,7 @@ bool PGExecutor::defaultSelect(const std::string &tableName,
                                const sole::uuid &id,
                                std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableName);
     sql.addCompare("where", "id", "=", id);
     exec(sql);
@@ -113,7 +113,7 @@ bool PGExecutor::defaultSelect(const std::string &tableName,
 
 void PGExecutor::delet(const std::string &tableName, const std::string &needleField, const std::string &needleValue)
 {
-    PGSqlString sql("delete from ");
+    SqlString sql("delete from ");
     sql += tableName;
     sql += " where " + needleField;
     sql += " = :" + needleField;

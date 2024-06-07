@@ -2,13 +2,13 @@
 #define PGUTILS_H
 
 #include "pgconnectionpool.h"
-#include "pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 #include "pgcolumnandtype.h"
 
 class PGUtils
 {
-    static std::map<std::string, PGSqlString> tableName2InsertString;
-    static std::map<std::string, PGSqlString> tableName2UpdateString;
+    static std::map<std::string, SqlString> tableName2InsertString;
+    static std::map<std::string, SqlString> tableName2UpdateString;
     PGConnectionPool &pool;
 public:
     PGUtils(PGConnectionPool &pool);
@@ -53,8 +53,8 @@ public:
                            const std::string &indexName,
                            const std::string &definition) const;
 
-    PGSqlString createEntryExistsString(const std::string &tableName,
-                                        const std::string &needleField);
+    SqlString createEntryExistsString(const std::string &tableName,
+                                      const std::string &needleField);
 
     bool entryExists(const std::string &tableName,
                      const std::string &needleField,
@@ -78,9 +78,9 @@ public:
                         const std::string &needleField,
                         const std::string &needleValue);
 
-    PGSqlString createInsertString(const std::string &tableName);
-    PGSqlString createUpdateString(const std::string &tableName,
-                                   const std::string &needleField);
+    SqlString createInsertString(const std::string &tableName);
+    SqlString createUpdateString(const std::string &tableName,
+                                 const std::string &needleField);
 };
 
 #endif // PGUTILS_H

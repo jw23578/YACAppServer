@@ -1,5 +1,5 @@
 #include "databaselogicuserandapp.h"
-#include "postgres/pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 #include "postgres/pgexecutor.h"
 #include "utils/extstring.h"
 #include "utils/extrapidjson.h"
@@ -18,7 +18,7 @@ void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
         loginToken = sole::uuid4().str();
     }
     int validHours(24 * 7);
-    PGSqlString sql("update t0001_users "
+    SqlString sql("update t0001_users "
                     "set login_token = :login_token, "
                     "login_token_valid_until = now() + interval '1 hour' *:validHours "
                     "where loginemail = :loginemail");
@@ -61,7 +61,7 @@ bool DatabaseLogicUserAndApp::userIsAppOwner(const sole::uuid &app_id,
                                              bool &appExists)
 {
     PGUtils utils(pool);
-    PGSqlString sql(utils.createEntryExistsString(tableNames.t0002_apps, tableFields.id));
+    SqlString sql(utils.createEntryExistsString(tableNames.t0002_apps, tableFields.id));
     sql.set(tableFields.id, app_id);
     PGExecutor e(pool, sql);
     appExists = e.size() > 0;
@@ -79,7 +79,7 @@ bool DatabaseLogicUserAndApp::userIsAppOwner(const sole::uuid &app_id,
 std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
                                                 const std::string &password)
 {
-    PGSqlString sql("insert into t0001_users "
+    SqlString sql("insert into t0001_users "
                     " (id, loginemail, password_hash, verified, verify_token, verify_token_valid_until, login_token, login_token_valid_until) "
                     " values "
                     " (:id, :loginEMail, crypt(:password, gen_salt('bf')),"
@@ -103,7 +103,7 @@ bool DatabaseLogicUserAndApp::verifyUser(const std::string &loginEMail,
                                          std::string &message,
                                          std::string &loginToken)
 {
-    PGSqlString sql("select * from t0001_users "
+    SqlString sql("select * from t0001_users "
                     "where loginemail = :loginemail ");
     sql.set("loginemail", loginEMail);
     PGExecutor e(pool, sql);
@@ -138,7 +138,7 @@ bool DatabaseLogicUserAndApp::verifyUser(const std::string &loginEMail,
     if (verify_token_valid_until < now)
     {
         message = std::string("verify token not valid any more, please register again");
-        PGSqlString delSql("delete from t0001_users "
+        SqlString delSql("delete from t0001_users "
                            "where loginemail = :loginemail ");
         delSql.set("loginemail", loginEMail);
         PGExecutor e(pool, delSql);
@@ -166,7 +166,7 @@ bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
                                         std::string &message,
                                         std::string &loginToken)
 {
-    PGSqlString sql("select *, password_hash = crypt(:password, password_hash) as login_ok "
+    SqlString sql("select *, password_hash = crypt(:password, password_hash) as login_ok "
                     "from t0001_users "
                     "where loginemail = :loginemail ");
     sql.set("loginemail", loginEMail);
@@ -197,7 +197,7 @@ bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
                                            sole::uuid &userId,
                                            std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
-    PGSqlString sql("select * from t0001_users "
+    SqlString sql("select * from t0001_users "
                     "where loginemail = :loginemail "
                     "and login_token = :login_token");
     sql.set("login_token", loginToken);
@@ -215,7 +215,7 @@ bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
 void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
                                                 std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
-    PGSqlString sql("update t0001_users "
+    SqlString sql("update t0001_users "
                     "set login_token_valid_until = now() + interval '1 hour' *:validhours "
                     "where loginemail = :loginemail "
                     "returning login_token_valid_until");
@@ -253,14 +253,14 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
     }
     if (installation_code == "")
     {
-        PGSqlString sql("update t0002_apps set "
+        SqlString sql("update t0002_apps set "
                         "installation_code_hash = '' ");
         sql.addCompare("where", tableFields.id, "=", app.id);
         PGExecutor e(pool, sql);
     }
     else
     {
-        PGSqlString sql("update t0002_apps set "
+        SqlString sql("update t0002_apps set "
                         "installation_code_hash = crypt(:installation_code, gen_salt('bf')) ");
         sql.addCompare("where", tableFields.id, "=", app.id);
         MACRO_set(sql, installation_code);
@@ -272,7 +272,7 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
 size_t DatabaseLogicUserAndApp::getAllAPPs(rapidjson::Document &target)
 {
     auto &alloc(target.GetAllocator());
-    PGSqlString sql("select id "
+    SqlString sql("select id "
                     ", app_name "
                     ", app_version "
                     ", app_logo_url "
@@ -325,7 +325,7 @@ bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
     auto &alloc(target.GetAllocator());
     ExtRapidJSONWriter t(target, alloc);
 
-    PGSqlString sql("select app_name "
+    SqlString sql("select app_name "
                     ", app_version "
                     ", json_yacapp "
                     ", yacpck_base64 "

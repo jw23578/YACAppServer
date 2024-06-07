@@ -2,7 +2,7 @@
 
 bool DatabaseLogicWorktime::selectWorktimeBefore(const sole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql.addCompare("and", tableFields.ts, "<", ts);
@@ -17,7 +17,7 @@ bool DatabaseLogicWorktime::selectWorktimeAfter(const sole::uuid &user_id,
                                                 const std::set<WorktimeType> &typesAllowed,
                                                 PGExecutor &e)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql.addCompare("and", tableFields.ts, ">", ts);
@@ -45,7 +45,7 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
                                          std::chrono::system_clock::time_point &pauseStart,
                                          std::chrono::system_clock::time_point &offSiteStart)
 {
-    PGSqlString sql("select * from ( ");
+    SqlString sql("select * from ( ");
     for (int wt(WorkStartType); wt < WorktimeTypeCount; ++wt)
     {
         if (wt > 1)
@@ -185,7 +185,7 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
     case WorktimeTypeCount: break;
     }
 
-    PGSqlString sql;
+    SqlString sql;
     sql.insert(tableNames.t0012_worktime);
     sql.addInsert(tableFields.id, sole::uuid4());
     sql.addInsert(tableFields.user_id, user_id);
@@ -317,7 +317,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
     }
 
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.insert(tableNames.t0012_worktime);
         sql.addInsert(tableFields.id, sole::uuid4());
         sql.addInsert(tableFields.user_id, user_id);
@@ -330,7 +330,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
         PGExecutor e(pool, sql);
     }
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.insert(tableNames.t0012_worktime);
         sql.addInsert(tableFields.id, sole::uuid4());
         sql.addInsert(tableFields.user_id, user_id);
@@ -353,7 +353,7 @@ bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
                                            rapidjson::MemoryPoolAllocator<> &alloc,
                                            std::string &message)
 {
-    PGSqlString sql;
+    SqlString sql;
     sql.select(tableNames.t0012_worktime);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql += std::string(" and ") + tableFields.ts + " >= :since ";
@@ -378,7 +378,7 @@ bool DatabaseLogicWorktime::deleteWorktime(const sole::uuid &user_id,
 {
     sole::uuid endId(NullUuid);
     {
-        PGSqlString sql;
+        SqlString sql;
         sql.select(tableNames.t0012_worktime);
         sql.addCompare("where", tableFields.user_id, "=", user_id);
         sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
@@ -392,7 +392,7 @@ bool DatabaseLogicWorktime::deleteWorktime(const sole::uuid &user_id,
             endId = e.uuid(tableFields.id);
         }
     }
-    PGSqlString sql;
+    SqlString sql;
     sql.update(tableNames.t0012_worktime);
     sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
     sql.addSet(tableFields.deleted_appuser_id, user_id);

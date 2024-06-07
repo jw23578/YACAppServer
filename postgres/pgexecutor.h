@@ -3,7 +3,7 @@
 
 #include "pqxx/pqxx"
 #include "pgconnectionpool.h"
-#include "pgsqlstring.h"
+#include "orm_implementions/sqlstring.h"
 #include "rapidjson/document.h"
 #include "orm-mapper/orm2rapidjson.h"
 #include "orm-mapper/orm2postgres.h"
@@ -19,14 +19,14 @@ class PGExecutor
 public:
     PGExecutor(PGConnectionPool &pool);
     PGExecutor(PGConnectionPool &pool,
-               PGSqlString const &sql);
+               SqlString const &sql);
     PGExecutor(PGConnectionPool &pool,
-               PGSqlString const &sql,
+               SqlString const &sql,
                std::string &resultMessage,
                const std::string &onSizeMessage,
                const std::string &onZeroSizeMessage);
 
-    size_t exec(PGSqlString const &sql);
+    size_t exec(SqlString const &sql);
 
     size_t login(const std::string &tableName,
                  const std::string &passwordHashfield,
@@ -39,7 +39,7 @@ public:
                   const std::string &needleField,
                   const NV1 &needleValue)
     {
-        PGSqlString sql("select * from ");
+        SqlString sql("select * from ");
         sql += tableName;
         sql += " where " + needleField;
         sql += " = :" + needleField;
