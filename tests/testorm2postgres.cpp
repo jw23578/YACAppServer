@@ -14,8 +14,16 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     PGSqlImplementation sqlImplementation(pool);
     ORMPersistenceInterface opi(sqlImplementation);
     t0033_words words;
-    opi.insertObject(words);
+    opi.upsertObject(words);
+    words.word = "Jens";
+    opi.upsertObject(words);
 
+    t0033_words words2;
+    opi.selectObject(words.id, words2);
+
+    std::cout << words2.toString() << std::endl;
+
+    opi.deleteObject(words2);
 
     ORM2Postgres o2p(pool);
     t0009_appuser_logintoken ghost;

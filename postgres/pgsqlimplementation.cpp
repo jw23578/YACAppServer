@@ -10,6 +10,7 @@ PGSqlImplementation::PGSqlImplementation(PGConnectionPool &pool):ORMSqlInterface
 bool PGSqlImplementation::execute(const SqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
+    return result.size() > 0;
 }
 
 bool PGSqlImplementation::open(const SqlString &sql)
@@ -34,16 +35,23 @@ bool PGSqlImplementation::next()
     return true;
 }
 
-size_t PGSqlImplementation::storeBlob(const std::vector<char> &data)
+size_t PGSqlImplementation::storeBlob(const std::basic_string<std::byte> &data)
 {
-    // FIXME
-    return 0;
+    PGConnection conn(pool);
+    pqxx::work w(*conn.getConnection());
+    pqxx::oid blobId(pqxx::blob::from_buf(w, data.data(), data.size()));
+    w.commit();
+    return blobId;
 }
 
-bool PGSqlImplementation::fetchBlob(size_t blobId, std::vector<char> &data)
+bool PGSqlImplementation::fetchBlob(size_t blobId, std::basic_string<std::byte> &data)
 {
-    // FIXME
-    return false;
+    PGConnection conn(pool);
+    pqxx::work w(*conn.getConnection());
+    std::size_t maxRead(1024 * 1024);
+        while (pqxx::blob::append_to_buf(w, blobId, data.size(), data, maxRead)) {}
+    w.commit();
+    return data.size() > 0;
 }
 
 size_t PGSqlImplementation::columns()

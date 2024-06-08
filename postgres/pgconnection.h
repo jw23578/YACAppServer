@@ -7,12 +7,14 @@ class PGConnectionPool;
 class PGCommandTransactor;
 class PGOidStorer;
 class PGOidLoader;
+class PGSqlImplementation;
 
 class PGConnection
 {
     friend PGCommandTransactor;
     friend PGOidStorer;
     friend PGOidLoader;
+    friend PGSqlImplementation;
     PGConnectionPool &pool;
     pqxx::connection *conn;
     pqxx::connection *getConnection();

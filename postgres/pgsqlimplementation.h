@@ -21,8 +21,8 @@ public:
     bool open(SqlString const &sql) override;
     size_t size() override;
     bool next() override;
-    size_t storeBlob(const std::vector<char> &data) override;
-    bool fetchBlob(size_t blobId, std::vector<char> &data) override;
+    size_t storeBlob(const std::basic_string<std::byte> &data) override;
+    bool fetchBlob(size_t blobId, std::basic_string<std::byte> &data) override;
     size_t columns() override;
     std::string columnName(size_t index) override;
     std::optional<std::string> value(size_t index) override;
