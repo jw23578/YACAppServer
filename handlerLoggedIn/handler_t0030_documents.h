@@ -3,12 +3,15 @@
 
 #include "handlerloggedininterface.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
+#include "orm/ormpersistenceinterface.h"
 
 class Handler_t0030_documents : public HandlerLoggedInInterface
 {
+    ORMPersistenceInterface &opi;
 public:
     Handler_t0030_documents(PistacheServerInterface &serverInterface,
-                            LoggedInAppUsersContainer &loggedInAppUsersContainer);
+                            LoggedInAppUsersContainer &loggedInAppUsersContainer,
+                            ORMPersistenceInterface &opi);
 
 
 

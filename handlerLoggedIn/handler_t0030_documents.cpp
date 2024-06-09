@@ -3,8 +3,10 @@
 #include "base64.h"
 
 Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &serverInterface,
-                                                 LoggedInAppUsersContainer &loggedInAppUsersContainer):
-    HandlerLoggedInInterface(serverInterface, loggedInAppUsersContainer)
+                                                 LoggedInAppUsersContainer &loggedInAppUsersContainer,
+                                                 ORMPersistenceInterface &opi):
+    HandlerLoggedInInterface(serverInterface, loggedInAppUsersContainer),
+    opi(opi)
 {
     addAllMethodTypes(serverInterface, t0030_documents().getORMName());
 }
@@ -16,6 +18,7 @@ void Handler_t0030_documents::method()
         t0030_documents t0030;
         ORM2rapidjson orm2json;
         orm2json.fromJson(getPostedData(), t0030);
+        opi.insertObject(t0030);
 
         // pqxx::oid oid;
         // std::vector<char> data;

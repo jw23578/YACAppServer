@@ -26,6 +26,8 @@
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
 #include "orm_implementions/yacormfactory.h"
+#include "pgsqlimplementation.h"
+
 
 using namespace std;
 
@@ -116,8 +118,13 @@ int main(int argc, char **argv)
 
     DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
                                                     pool);
+
+
     DatabaseLogics databaseLogics(logStatController,
                                   pool);
+
+    PGSqlImplementation sqlImplementation(pool);
+    ORMPersistenceInterface opi(sqlImplementation);
 
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
@@ -147,6 +154,7 @@ int main(int argc, char **argv)
 
     YACAppServer server(json.getString("firebaseApiKey"),
                         factory,
+                        opi,
                         databaseLogics,
                         databaseLogicUserAndApp,
                         databaseLogics.databaseLogicAppUser,

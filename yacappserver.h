@@ -26,6 +26,7 @@
 #include "handlerLoggedIn/handlerappuserrightgroup.h"
 #include "handlerLoggedIn/handlerappuserspace.h"
 #include "handlerLoggedIn/handlerormobjects.h"
+#include "handlerLoggedIn/handler_t0030_documents.h"
 #include "databaselogicuserandapp.h"
 #include "databaselogics.h"
 #include "emaillogic.h"
@@ -33,6 +34,7 @@
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "caches/devicetokencache.h"
 #include "orm_implementions/yacormfactory.h"
+#include "orm/ormpersistenceinterface.h"
 
 class YACAppServer: public PistacheServerInterface
 {
@@ -60,6 +62,7 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserFetchProfile handlerAppUserFetchProfile;
     HandlerAppUserFetchMessageUpdates handlerAppUserFetchMessageUpdates;
     HandlerAppUserFetchImage handlerAppUserFetchImage;
+    Handler_t0030_documents handler_t0030_documents;
 
     HandlerAppUserAppointments handlerAppUserAppointments;
     HandlerAppUserRightGroup handlerAppUserRightGroup;
@@ -71,6 +74,7 @@ class YACAppServer: public PistacheServerInterface
 public:
     YACAppServer(const std::string &firebaseApiKey,
                  YACORMFactory &factory,
+                 ORMPersistenceInterface &opi,
                  DatabaseLogics &databaseLogics,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,
