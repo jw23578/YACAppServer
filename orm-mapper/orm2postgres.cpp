@@ -20,7 +20,7 @@ bool ORM2Postgres::select(const sole::uuid &id,
     }
     for (const auto &pn: object.propertyNames())
     {
-        if (!object.isTransferProperty(pn))
+        if (!object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
             if (e.isNull(pn))
             {
@@ -98,7 +98,7 @@ bool ORM2Postgres::postgres2object(const PGExecutor &e,
     }
     for (const auto &pn: target.propertyNames())
     {
-        if (!target.isTransferProperty(pn))
+        if (!target.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
             if (e.isNull(pn))
             {
@@ -144,7 +144,7 @@ void ORM2Postgres::insert(YACBaseObject &object)
     }
     for (const auto &pn: object.propertyNames())
     {
-        if (pn != tableFields.id && !object.isTransferProperty(pn))
+        if (pn != tableFields.id && !object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
             if (object.propertyIsNull(pn))
             {
@@ -171,7 +171,7 @@ void ORM2Postgres::update(const YACBaseObject &object)
     sql.update(object.getORMName());
     for (const auto &pn: object.propertyNames())
     {
-        if (pn != tableFields.id && !object.isTransferProperty(pn))
+        if (pn != tableFields.id && !object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
             if (object.propertyIsNull(pn))
             {
@@ -202,7 +202,7 @@ void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
     }
     for (const auto &pn: object.propertyNames())
     {
-        if (pn != tableFields.id && !object.isTransferProperty(pn))
+        if (pn != tableFields.id && !object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
             if (object.propertyIsNull(pn))
             {

@@ -56,32 +56,36 @@ void DatabaseLogicTables::createDatabaseTables()
         columnsAndTypes.push_back(idPrimaryKey);
         for (const auto &pn: object->propertyNames())
         {
-            if (pn != tableFields.id && !object->isTransferProperty(pn))
+            bool isTransferProperty(object->getProperty(pn)->hasDetail(DetailOnlyTransfer));
+            if (pn != tableFields.id && !isTransferProperty)
             {
+                bool isIndex(object->getProperty(pn)->hasDetail(DetailDBIndex));
+                PGTypes type(pg_bool);
                 if (object->propertyIsBool(pn))
                 {
-                    columnsAndTypes.push_back({pn, pg_bool, false, object->shouldBeIndexed(pn)});
+                    type = pg_bool;
                 }
                 if (object->propertyIsUuid(pn))
                 {
-                    columnsAndTypes.push_back({pn, pg_uuid, false, object->shouldBeIndexed(pn)});
+                    type = pg_uuid;
                 }
                 if (object->propertyIsDateTime(pn))
                 {
-                    columnsAndTypes.push_back({pn, pg_timestamp, false, object->shouldBeIndexed(pn)});
+                    type = pg_timestamp;
                 }
                 if (object->propertyIsString(pn))
                 {
-                    columnsAndTypes.push_back({pn, pg_text, false, object->shouldBeIndexed(pn)});
+                    type = pg_text;
                 }
                 if (object->propertyIsInt(pn))
                 {
-                    columnsAndTypes.push_back({pn, pg_bigint, false, object->shouldBeIndexed(pn)});
+                    type = pg_bigint;
                 }
                 if (object->propertyIsOid(pn))
                 {
-                    columnsAndTypes.push_back({pn, pg_blob, false, object->shouldBeIndexed(pn)});
+                    type = pg_blob;
                 }
+                columnsAndTypes.push_back({pn, type, false, isIndex});
             }
         }
         utils.createTableIfNeeded(on, columnsAndTypes);

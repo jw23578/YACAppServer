@@ -14,11 +14,11 @@ public:
     virtual ~PGSqlImplementation() {}
 
 
-
+protected:
+    bool internalExecute(const SqlString &sql) override;
+    bool internalOpen(SqlString const &sql) override;
     // ORMSqlInterface interface
 public:    
-    bool execute(const SqlString &sql) override;
-    bool open(SqlString const &sql) override;
     size_t size() override;
     bool next() override;
     size_t storeBlob(const std::basic_string<std::byte> &data) override;

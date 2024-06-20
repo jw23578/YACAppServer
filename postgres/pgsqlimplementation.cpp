@@ -7,13 +7,13 @@ PGSqlImplementation::PGSqlImplementation(PGConnectionPool &pool):ORMSqlInterface
 
 }
 
-bool PGSqlImplementation::execute(const SqlString &sql)
+bool PGSqlImplementation::internalExecute(const SqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
     return result.size() > 0;
 }
 
-bool PGSqlImplementation::open(const SqlString &sql)
+bool PGSqlImplementation::internalOpen(const SqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
     currentRow = 0;
@@ -39,7 +39,7 @@ size_t PGSqlImplementation::storeBlob(const std::basic_string<std::byte> &data)
 {
     PGConnection conn(pool);
     pqxx::work w(*conn.getConnection());
-    pqxx::oid blobId(pqxx::blob::from_buf(w, data.data(), data.size()));
+    pqxx::oid blobId(pqxx::blob::from_buf(w, data.data()));
     w.commit();
     return blobId;
 }

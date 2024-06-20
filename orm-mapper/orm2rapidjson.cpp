@@ -5,6 +5,11 @@ ORM2rapidjson::ORM2rapidjson()
 
 }
 
+void ORM2rapidjson::toJson(const YACBaseObject &object, rapidjson::Document &document)
+{
+    toJson(object, document, document.GetAllocator());
+}
+
 void ORM2rapidjson::toJson(const YACBaseObject &object,
                            rapidjson::Value &target,
                            rapidjson::MemoryPoolAllocator<> &alloc)

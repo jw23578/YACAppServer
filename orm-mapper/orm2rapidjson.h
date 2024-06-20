@@ -11,6 +11,8 @@ public:
     ORM2rapidjson();
 
     void toJson(const YACBaseObject &object,
+                rapidjson::Document &document);
+    void toJson(const YACBaseObject &object,
                 rapidjson::Value &target,
                 rapidjson::MemoryPoolAllocator<> &alloc);
 
