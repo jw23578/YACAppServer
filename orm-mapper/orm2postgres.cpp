@@ -146,14 +146,7 @@ void ORM2Postgres::insert(YACBaseObject &object)
     {
         if (pn != tableFields.id && !object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
-            if (object.propertyIsNull(pn))
-            {
-                sql.addInsertOrSetNull(pn);
-            }
-            else
-            {
-                sql.addInsertOrSet(pn, object.getPropertyToString(pn));
-            }
+            sql.addInsertOrSet(pn, object.getPropertyToString(pn), object.propertyIsNull(pn));
         }
     }
     sql.addInsertOrWhere("where", tableFields.id, "=", object.getPropertyToString(tableFields.id));
@@ -173,14 +166,7 @@ void ORM2Postgres::update(const YACBaseObject &object)
     {
         if (pn != tableFields.id && !object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
-            if (object.propertyIsNull(pn))
-            {
-                sql.addInsertOrSetNull(pn);
-            }
-            else
-            {
-                sql.addInsertOrSet(pn, object.getPropertyToString(pn));
-            }
+            sql.addInsertOrSet(pn, object.getPropertyToString(pn), object.propertyIsNull(pn));
         }
     }
     sql.addInsertOrWhere("where", tableFields.id, "=", object.getPropertyToString(tableFields.id));
@@ -204,14 +190,7 @@ void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
     {
         if (pn != tableFields.id && !object.getProperty(pn)->hasDetail(DetailOnlyTransfer))
         {
-            if (object.propertyIsNull(pn))
-            {
-                sql.addInsertOrSetNull(pn);
-            }
-            else
-            {
-                sql.addInsertOrSet(pn, object.getPropertyToString(pn));
-            }
+            sql.addInsertOrSet(pn, object.getPropertyToString(pn), object.propertyIsNull(pn));
         }
     }
     sql.addInsertOrWhere("where", tableFields.id, "=", object.getPropertyToString(tableFields.id));

@@ -27,12 +27,18 @@
 #include "rapidjson/writer.h"
 #include "orm_implementions/yacormfactory.h"
 #include "pgsqlimplementation.h"
+#include "utils/extstringview.h"
+#include "logstat/beginendtrack.h"
+#include "logstat/coutlogger.h"
 
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
+    LogStatController logStatController(LogStatController::verbose,
+                                        "server",
+                                        "yacapp");
     bool runTests(false);
     for (int i(0); i < argc; ++i)
     {
@@ -76,9 +82,6 @@ int main(int argc, char **argv)
     }
     ExtRapidJSON json(configJSON);
 
-    LogStatController logStatController(LogStatController::verbose,
-                                        "server",
-                                        "yacapp");
     std::string fileLoggerPath(json.getString("fileLoggerPath"));
     if (fileLoggerPath.size())
     {

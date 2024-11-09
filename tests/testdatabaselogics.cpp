@@ -63,7 +63,7 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
     DatabaseLogicRightGroup &dlrg(databaseLogics.databaseLogicRightGroup);
     rapidjson::Value rightGroup;
     bool automatic(false);
-    id = NullUuid;
+    id = ExtUuid::NullUuid;
     bool request_allowed(false);
     bool visible_for_non_members(false);
     dlrg.deleteRightGroup(id, id, message);

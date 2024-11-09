@@ -38,8 +38,8 @@ bool DatabaseLogicImageTable::storeImage(const std::basic_string<std::byte> &dat
     SqlString sql;
     sql.insert(tableNames.t0013_images);
     imageId = sole::uuid4();
-    sql.addInsert(tableFields.id, imageId);
-    sql.addInsert(tableFields.data, imageOid);
+    sql.addInsert(tableFields.id, imageId, false);
+    sql.addInsert(tableFields.data, imageOid, false);
     PGExecutor e(pool,
                  sql);
     imageId2oid[imageId] = imageOid;

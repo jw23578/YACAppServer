@@ -55,10 +55,10 @@ void FileLogger::theLogFunction(const std::string &file, int line, LogStatContro
     std::string isoNow(ExtString::timepointToISO(std::chrono::system_clock::now()));
 
     std::string m(isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) + " " + message);
-    fileLoggerStream << m << std::endl;
+    fileLoggerStream << m << "\n";
     if (m.size() <= 185)
     {
-        std::cout << m << "\n" << std::endl;
+        std::cout << m << "\n"; // << std::endl;
         return;
     }
     std::cout << isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) << "\n";
@@ -77,7 +77,7 @@ void FileLogger::theLogFunction(const std::string &file, int line, LogStatContro
         std::cout << "   " << m.substr(0, pos + 1) << "\n";
         m.erase(0, pos + 1);
     }
-    std::cout << std::endl;
+    std::cout << "\n";
 }
 
 void FileLogger::theStatFunction(const std::string &sourceType, const std::string &sourceName, LogStatController::StatType statType)

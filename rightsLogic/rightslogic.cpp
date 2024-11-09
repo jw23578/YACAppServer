@@ -64,7 +64,7 @@ void RightsLogic::addUserRights(const sole::uuid &app_id,
                 t0022.approved_datetime = TimePointPostgreSqlNow;
                 t0022.approved_appuser_id = appuser_id;
                 t0022.denied_datetime = TimePointPostgreSqlNull;
-                t0022.denied_appuser_id = NullUuid;
+                t0022.denied_appuser_id = ExtUuid::NullUuid;
                 ORM2Postgres orm2postgres(dlrg.pool);
                 orm2postgres.insertOrUpdate(t0022);
                 appIdsWhereAdminExists.insert(app_id);

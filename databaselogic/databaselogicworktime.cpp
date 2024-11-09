@@ -187,14 +187,14 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
 
     SqlString sql;
     sql.insert(tableNames.t0012_worktime);
-    sql.addInsert(tableFields.id, sole::uuid4());
-    sql.addInsert(tableFields.user_id, user_id);
-    sql.addInsert(tableFields.ts, ts);
-    sql.addInsert(tableFields.type, type);
-    sql.addInsert(tableFields.user_mood, user_mood);
-    sql.addInsert(tableFields.day_rating, day_rating);
-    sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull);
-    sql.addInsert(tableFields.deleted_appuser_id, NullUuid);
+    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.user_id, user_id, false);
+    sql.addInsert(tableFields.ts, ts, false);
+    sql.addInsert(tableFields.type, type, false);
+    sql.addInsert(tableFields.user_mood, user_mood, false);
+    sql.addInsert(tableFields.day_rating, day_rating, false);
+    sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull, true);
+    sql.addInsert(tableFields.deleted_appuser_id, ExtUuid::NullUuid, true);
 
     PGExecutor e(pool, sql);
     return true;
@@ -319,27 +319,27 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
     {
         SqlString sql;
         sql.insert(tableNames.t0012_worktime);
-        sql.addInsert(tableFields.id, sole::uuid4());
-        sql.addInsert(tableFields.user_id, user_id);
-        sql.addInsert(tableFields.ts, begin);
-        sql.addInsert(tableFields.type, type);
-        sql.addInsert(tableFields.user_mood, UserMoodUnknown);
-        sql.addInsert(tableFields.day_rating, DayRatingUnknown);
-        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull);
-        sql.addInsert(tableFields.deleted_appuser_id, NullUuid);
+        sql.addInsert(tableFields.id, sole::uuid4(), false);
+        sql.addInsert(tableFields.user_id, user_id, false);
+        sql.addInsert(tableFields.ts, begin, false);
+        sql.addInsert(tableFields.type, type, false);
+        sql.addInsert(tableFields.user_mood, UserMoodUnknown, false);
+        sql.addInsert(tableFields.day_rating, DayRatingUnknown, false);
+        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull, true);
+        sql.addInsert(tableFields.deleted_appuser_id, ExtUuid::NullUuid, true);
         PGExecutor e(pool, sql);
     }
     {
         SqlString sql;
         sql.insert(tableNames.t0012_worktime);
-        sql.addInsert(tableFields.id, sole::uuid4());
-        sql.addInsert(tableFields.user_id, user_id);
-        sql.addInsert(tableFields.ts, end);
-        sql.addInsert(tableFields.type, type + 1);
-        sql.addInsert(tableFields.user_mood, UserMoodUnknown);
-        sql.addInsert(tableFields.day_rating, DayRatingUnknown);
-        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull);
-        sql.addInsert(tableFields.deleted_appuser_id, NullUuid);
+        sql.addInsert(tableFields.id, sole::uuid4(), false);
+        sql.addInsert(tableFields.user_id, user_id, false);
+        sql.addInsert(tableFields.ts, end, false);
+        sql.addInsert(tableFields.type, type + 1, false);
+        sql.addInsert(tableFields.user_mood, UserMoodUnknown, false);
+        sql.addInsert(tableFields.day_rating, DayRatingUnknown, false);
+        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull, true);
+        sql.addInsert(tableFields.deleted_appuser_id, ExtUuid::NullUuid, true);
         PGExecutor e(pool, sql);
     }
 
@@ -376,7 +376,7 @@ bool DatabaseLogicWorktime::deleteWorktime(const sole::uuid &user_id,
                                            const sole::uuid &id,
                                            std::string &message)
 {
-    sole::uuid endId(NullUuid);
+    sole::uuid endId(ExtUuid::NullUuid);
     {
         SqlString sql;
         sql.select(tableNames.t0012_worktime);
@@ -394,12 +394,12 @@ bool DatabaseLogicWorktime::deleteWorktime(const sole::uuid &user_id,
     }
     SqlString sql;
     sql.update(tableNames.t0012_worktime);
-    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
-    sql.addSet(tableFields.deleted_appuser_id, user_id);
+    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
+    sql.addSet(tableFields.deleted_appuser_id, user_id, false);
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql += " and deleted_datetime is null ";
     sql += std::string(" and ts >= (select ts from t0012_worktime where id = :id) ");
-    if (endId != NullUuid)
+    if (endId != ExtUuid::NullUuid)
     {
         sql += std::string(" and ts <= (select ts from t0012_worktime where id = :endid) ");
         MACRO_set(sql, endId);

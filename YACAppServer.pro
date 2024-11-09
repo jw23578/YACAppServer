@@ -81,6 +81,7 @@ SOURCES += \
         loggedincontainer/loggedincontainerinterface.cpp \
         loggedincontainer/loggedinuserscontainer.cpp \
         logstat/beginendtrack.cpp \
+        logstat/coutlogger.cpp \
         logstat/filelogger.cpp \
         logstat/loggerstatterinterface.cpp \
         logstat/logstatcontroller.cpp \
@@ -175,6 +176,7 @@ HEADERS += \
   loggedincontainer/loggedincontainerinterface.h \
   loggedincontainer/loggedinuserscontainer.h \
   logstat/beginendtrack.h \
+  logstat/coutlogger.h \
   logstat/filelogger.h \
   logstat/loggerstatterinterface.h \
   logstat/logstatcontroller.h \
@@ -219,6 +221,7 @@ DISTFILES += \
   YACAppServerConfig.json \
   curl-format.txt \
   deployToJW78.sh \
+  go_psql_local.sh \
   intern_doc.txt \
   t0009_appuser_logintoken.json \
   updateProfile.json

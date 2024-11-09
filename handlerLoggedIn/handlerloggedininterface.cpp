@@ -34,7 +34,7 @@ bool HandlerLoggedInInterface::checkLogin()
         return false;
     }
     std::string temp;
-    if (!getHeaderString<AppIdHeader>(temp, loggedInContainer.appIdMandatory()) && loggedInContainer.appIdMandatory())
+    if (!getHeaderString<AppIdHeader>(temp, loggedInContainer.appIdMandatory()))
     {
         return false;
     }

@@ -78,7 +78,7 @@ sole::uuid DatabaseLogicAppUser::getAppUserId(const sole::uuid &appId,
     PGExecutor e(pool, sql);
     if (e.size() == 0)
     {
-        return NullUuid;
+        return ExtUuid::NullUuid;
     }
     return e.uuid("id");
 }
@@ -95,7 +95,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         return false;
     }
     if (getAppUserId(appId,
-                  loginEMail) != NullUuid)
+                  loginEMail) != ExtUuid::NullUuid)
     {
         message = "LoginEMail already exists.";
         return false;
@@ -119,7 +119,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         sql.set(tableFields.searching_exactly_allowed, false); // FIXME
         sql.set(tableFields.searching_fuzzy_allowed, true); // FIXME
         sql.set("public_key_base64" ,""); // FIXME
-        sql.set("image_id", NullUuid); // FIXME
+        sql.set("image_id", ExtUuid::NullUuid); // FIXME
         PGExecutor e(pool, sql);
     }
 
@@ -150,7 +150,7 @@ bool DatabaseLogicAppUser::createVerifiedAppUser(const sole::uuid &appId,
                                                  t0003_appuser_profiles &target)
 {
     if (getAppUserId(appId,
-                     loginEMail) != NullUuid)
+                     loginEMail) != ExtUuid::NullUuid)
     {
         message = "LoginEMail already exists.";
         return false;
@@ -183,7 +183,7 @@ bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
 {
     sole::uuid appUserId(getAppUserId(appId,
                                 loginEMail));
-    if (appUserId == NullUuid)
+    if (appUserId == ExtUuid::NullUuid)
     {
         message = "LoginEMail does not exist.";
         return false;
@@ -191,8 +191,8 @@ bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
     verifyToken = ExtString::randomString(0, 0, 4, 0);
     SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
-    sql.addSet(tableFields.verify_token, verifyToken);
-    sql.addSet(tableFields.verify_token_valid_until, std::chrono::system_clock::now() + std::chrono::minutes(60));
+    sql.addSet(tableFields.verify_token, verifyToken, false);
+    sql.addSet(tableFields.verify_token_valid_until, std::chrono::system_clock::now() + std::chrono::minutes(60), false);
     sql.addCompare("where", tableFields.id, "=", appUserId);
     PGExecutor e(pool, sql);
     return true;
@@ -256,9 +256,9 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
     {
         SqlString sql;
         sql.update(tableNames.t0003_appuser_profiles);
-        sql.addSet(tableFields.verified, TimePointPostgreSqlNow);
-        sql.addSet(tableFields.verify_token, "");
-        sql.addSet(tableFields.verify_token_valid_until, TimePointPostgreSqlNull);
+        sql.addSet(tableFields.verified, TimePointPostgreSqlNow, false);
+        sql.addSet(tableFields.verify_token, "", false);
+        sql.addSet(tableFields.verify_token_valid_until, TimePointPostgreSqlNull, false);
         sql.addCompare("where", tableFields.id, "=", appUserId);
         PGExecutor e(pool, sql);
     }
@@ -335,17 +335,17 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
 {
     SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
-    sql.addSet(MACRO_NameValue(fstname));
-    sql.addSet(MACRO_NameValue(surname));
-    sql.addSet(MACRO_NameValue(visible_name));
-    sql.addSet(MACRO_NameValue(color));
-    sql.addSet(MACRO_NameValue(message_font_color));
-    sql.addSet(MACRO_NameValue(searching_exactly_allowed));
-    sql.addSet(MACRO_NameValue(searching_fuzzy_allowed));
-    sql.addSet(MACRO_NameValue(public_key_base64));
+    sql.addSet(MACRO_NameValue(fstname), false);
+    sql.addSet(MACRO_NameValue(surname), false);
+    sql.addSet(MACRO_NameValue(visible_name), false);
+    sql.addSet(MACRO_NameValue(color), false);
+    sql.addSet(MACRO_NameValue(message_font_color), false);
+    sql.addSet(MACRO_NameValue(searching_exactly_allowed), false);
+    sql.addSet(MACRO_NameValue(searching_fuzzy_allowed), false);
+    sql.addSet(MACRO_NameValue(public_key_base64), false);
     if (with_image)
     {
-        sql.addSet(tableFields.image_id, imageId);
+        sql.addSet(tableFields.image_id, imageId, false);
     }
     sql.addCompare("where", tableFields.app_id, "=", appId);
     sql.addCompare("and", tableFields.id, "=", userId);
@@ -391,8 +391,8 @@ bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
     updatePasswordToken = ExtString::randomString(0, 0, 4, 0);
     SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
-    sql.addSet("update_password_token", updatePasswordToken);
-    sql.addSet("update_password_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
+    sql.addSet("update_password_token", updatePasswordToken, false);
+    sql.addSet("update_password_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60), false);
     sql.addCompare("where", "id", "=", userId);
     PGExecutor e(pool, sql);
     return true;
@@ -595,9 +595,9 @@ bool DatabaseLogicAppUser::storeDeviceToken(const sole::uuid &userId,
 {
     SqlString sql;
     sql.insert(tableNames.t0015_appuser_devicetoken);
-    sql.addInsert(tableFields.id, sole::uuid4());
-    sql.addInsert(tableFields.user_id, userId);
-    sql.addInsert(tableFields.device_token, device_token);
+    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.user_id, userId, false);
+    sql.addInsert(tableFields.device_token, device_token, false);
     PGExecutor e(pool,
                  sql);
     return true;
@@ -658,8 +658,8 @@ void DatabaseLogicAppUser::resetUpdatePasswordToken(const sole::uuid &userId)
 {
     SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);
-    sql.addSet("update_password_token", "");
-    sql.addSet("update_password_token_valid_until", TimePointPostgreSqlNull);
+    sql.addSet("update_password_token", "", false);
+    sql.addSet("update_password_token_valid_until", TimePointPostgreSqlNull, true);
     sql.addCompare("where", "id", "=", userId);
     PGExecutor e(pool, sql);
 

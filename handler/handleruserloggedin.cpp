@@ -18,7 +18,7 @@ void HandlerUserLoggedIn::method()
     MACRO_GetMandatoryString(loginToken);
     std::string third;
     std::string mandant;
-    if (loggedInUsersContainer.isLoggedInWithOutUserId(NullUuid,
+    if (loggedInUsersContainer.isLoggedInWithOutUserId(ExtUuid::NullUuid,
                                                        loginEMail,
                                                        loginToken,
                                                        third,

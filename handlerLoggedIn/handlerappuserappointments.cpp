@@ -82,11 +82,11 @@ void HandlerAppUserAppointments::method()
     {
         MACRO_GetUuid(appointment_group_id);
         MACRO_GetUuid(appointment_template_id);
-        if (appointment_group_id == NullUuid)
+        if (appointment_group_id == ExtUuid::NullUuid)
         {
             appointment_group_id = sole::uuid4();
         }
-        if (appointment_template_id == NullUuid)
+        if (appointment_template_id == ExtUuid::NullUuid)
         {
             appointment_template_id = sole::uuid4();
         }

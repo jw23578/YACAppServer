@@ -56,7 +56,7 @@ void HandlerORMObjects::method()
         if (isMethod(t0021.getORMName()))
         {
             MACRO_GetUuid(id);
-            if (id == NullUuid)
+            if (id == ExtUuid::NullUuid)
             {
                 rapidjson::Document document;
                 document.SetObject();

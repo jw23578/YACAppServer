@@ -42,7 +42,7 @@ bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const sole::uuid &user_i
 {
     SqlString upd;
     upd.update(tableNames.t0007_messages);
-    upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
+    upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
     upd.addCompare("where (", tableFields.sender_id, "=", user_id);
     upd.addCompare("or", tableFields.to_id, "=", user_id);
     upd.addCompare(") and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
@@ -56,7 +56,7 @@ bool DatabaseLogicMessages::markMessageDeleted(const sole::uuid &id,
 {
     SqlString upd;
     upd.update(tableNames.t0007_messages);
-    upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
+    upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
     upd.addCompare("where", tableFields.id, "=", id);
     upd.addCompare("and", tableFields.sender_id, "=", sender_id);
     PGExecutor e(pool, upd, resultMessage, "messsage deleted", "message not found");
@@ -163,12 +163,12 @@ void DatabaseLogicMessages::setReceived(const sole::uuid &receiver_id,
 {
     SqlString sql;
     sql.insert(tableNames.t0008_message_received);
-    sql.addInsert(tableFields.id, sole::uuid4());
-    sql.addInsert(tableFields.receiver_id, receiver_id);
-    sql.addInsert(tableFields.message_id, message_id);
-    sql.addInsert(tableFields.read_datetime, received_datetime);
+    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.receiver_id, receiver_id, false);
+    sql.addInsert(tableFields.message_id, message_id, false);
+    sql.addInsert(tableFields.read_datetime, received_datetime, false);
     SqlString update(" update ");
-    update.addSet(tableFields.read_datetime, received_datetime);
+    update.addSet(tableFields.read_datetime, received_datetime, false);
     sql.addOnConflict(tableFields.message_id + ", " + tableFields.reader_id, update);
 
     PGExecutor e(pool,
@@ -181,12 +181,12 @@ void DatabaseLogicMessages::setRead(const sole::uuid &reader_id,
 {
     SqlString sql;
     sql.insert(tableNames.t0014_message_read);
-    sql.addInsert(tableFields.id, sole::uuid4());
-    sql.addInsert(tableFields.reader_id, reader_id);
-    sql.addInsert(tableFields.message_id, message_id);
-    sql.addInsert(tableFields.read_datetime, read_datetime);
+    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.reader_id, reader_id, false);
+    sql.addInsert(tableFields.message_id, message_id, false);
+    sql.addInsert(tableFields.read_datetime, read_datetime, false);
     SqlString update(" do update set ");
-    update.addSet(tableFields.read_datetime, read_datetime);
+    update.addSet(tableFields.read_datetime, read_datetime, false);
     sql.addOnConflict(tableFields.message_id + ", " + tableFields.reader_id, update);
 
     PGExecutor e(pool,

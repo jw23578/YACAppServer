@@ -6,6 +6,7 @@
 #include <vector>
 #include <thread>
 #include "utils/threadsafequeue.h"
+#include <string>
 
 namespace jw78
 {

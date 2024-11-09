@@ -54,6 +54,10 @@ void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
     buffer.Put('\n');
     const std::string responseString(buffer.GetString());
     LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("responseStringSize: ") + ExtString::toString(responseString.size()));
+    if (responseString.size() < 100)
+    {
+        LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("responseString: ") + responseString);
+    }
     response.send(code, responseString, MIME(Application, Json));
 
 

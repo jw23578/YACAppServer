@@ -52,8 +52,8 @@ bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole:
 {
     SqlString sql;
     sql.update(tableNames.t0021_right_group);
-    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
-    sql.addSet(tableFields.deleted_appuser_id, appuser_id);
+    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
+    sql.addSet(tableFields.deleted_appuser_id, appuser_id, false);
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return true;
@@ -199,9 +199,9 @@ void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const sole::uuid &app_i
         SqlString sql;
         sql.insert(tableNames.t0021_right_group);
         MACRO_addInsert(sql, id);
-        sql.addInsert(tableFields.name, adminGroupName);
-        sql.addInsert(tableFields.creater_id, NullUuid);
-        sql.addInsert(tableFields.app_id, app_id);
+        sql.addInsert(tableFields.name, adminGroupName, false);
+        sql.addInsert(tableFields.creater_id, ExtUuid::NullUuid, false);
+        sql.addInsert(tableFields.app_id, app_id, false);
         PGExecutor e(pool, sql);
     }
     std::string message;

@@ -52,6 +52,14 @@ YACBaseObject *ORM2rapidjson::fromJson(const rapidjson::Value &source,
 bool ORM2rapidjson::fromJson(const rapidjson::Value &source,
                              YACBaseObject &object)
 {
+    if (!source.IsObject())
+    {
+        return false;
+    }
+    if (source.ObjectEmpty())
+    {
+        return false;
+    }
     if (!source.HasMember("ORMName"))
     {
         return false;

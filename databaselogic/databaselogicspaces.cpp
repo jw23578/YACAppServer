@@ -46,7 +46,7 @@ bool DatabaseLogicSpaces::spaceRequestResultSeen(const sole::uuid &id,
 {
     SqlString sql;
     sql.update(tableNames.t0025_space2appuser);
-    sql.addSet(tableFields.result_seen, TimePointPostgreSqlNow);
+    sql.addSet(tableFields.result_seen, TimePointPostgreSqlNow, false);
     sql.addCompare("where", tableFields.id, "=", id);
     sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
     PGExecutor e(pool, sql);
@@ -57,8 +57,8 @@ bool DatabaseLogicSpaces::deleteSpace(const sole::uuid &id, const sole::uuid &ap
 {
     SqlString sql;
     sql.update(tableNames.t0024_space);
-    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow);
-    sql.addSet(tableFields.deleted_appuser_id, appuser_id);
+    sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
+    sql.addSet(tableFields.deleted_appuser_id, appuser_id, false);
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
     return true;

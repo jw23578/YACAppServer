@@ -258,6 +258,7 @@ size_t PGExecutor::fill(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllo
 {
     targetArray.Clear();
     append(targetArray, alloc, fieldname);
+    return targetArray.Size();
 }
 
 size_t PGExecutor::append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAllocator<> &alloc, const std::string &fieldname)
@@ -269,4 +270,5 @@ size_t PGExecutor::append(rapidjson::Value &targetArray, rapidjson::MemoryPoolAl
         targetArray.PushBack(data, alloc);
         next();
     }
+    return targetArray.Size();
 }

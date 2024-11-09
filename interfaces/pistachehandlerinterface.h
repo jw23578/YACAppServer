@@ -30,7 +30,7 @@ ExtString::lowerSelf(targetName); \
         return; \
 }
 
-#define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName(NullUuid); \
+#define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName(ExtUuid::NullUuid); \
 if (!getUuid(#targetName, targetName, true)) \
     { \
             return; \
@@ -41,7 +41,7 @@ if (!getBool(#targetName, targetName, true)) \
     { \
             return; \
     }
-#define MACRO_GetUuid(targetName) sole::uuid targetName(NullUuid); \
+#define MACRO_GetUuid(targetName) sole::uuid targetName(ExtUuid::NullUuid); \
 getUuid(#targetName, targetName, false);
 
 #define MACRO_GetString(targetName) std::string targetName; \
@@ -99,7 +99,8 @@ public:
     {
         TypeGet,
         TypePost,
-        TypeDelete
+        TypeDelete,
+        TypePut
     };
 protected:
     bool answerMissingRight(const int rightNumber);

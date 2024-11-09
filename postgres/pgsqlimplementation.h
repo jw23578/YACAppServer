@@ -25,6 +25,7 @@ public:
     bool fetchBlob(size_t blobId, std::basic_string<std::byte> &data) override;
     size_t columns() override;
     std::string columnName(size_t index) override;
+    std::optional<ORMUuid> uuidValue(size_t index) override;
     std::optional<std::string> value(size_t index) override;
     std::optional<int> intValue(size_t index) override;
     std::optional<std::chrono::system_clock::time_point> timepointValue(size_t index) override;

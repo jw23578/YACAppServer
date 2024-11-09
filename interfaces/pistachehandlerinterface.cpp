@@ -3,6 +3,7 @@
 #include "rapidjson/error/en.h"
 #include "definitions.h"
 #include "utils/extstring.h"
+#include "utils/extuuid.h"
 #include "logstat/beginendtrack.h"
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
@@ -14,7 +15,8 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
     {
         return;
     }
-    if (request.method() == Pistache::Http::Method::Post)
+    if (request.method() == Pistache::Http::Method::Post
+        || request.method() == Pistache::Http::Method::Put)
     {
         postedData.Parse(request.body().c_str());
         if (postedData.HasParseError())
@@ -48,6 +50,7 @@ void PistacheHandlerInterface::answerOk(const std::string &message,
     const int missingRight(0);
     answer(Pistache::Http::Code::Ok, message, success, missingRight);
 }
+
 
 void PistacheHandlerInterface::answerOk(const std::string &message,
                                         bool success,
@@ -142,6 +145,7 @@ void PistacheHandlerInterface::addAllMethodTypes(PistacheServerInterface &server
     addMethod(serverInterface, methodName, TypeGet);
     addMethod(serverInterface, methodName, TypePost);
     addMethod(serverInterface, methodName, TypeDelete);
+    addMethod(serverInterface, methodName, TypePut);
 }
 
 void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterface,
@@ -156,6 +160,11 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
     if (methodName[0] != '/')
     {
         slash = "/";
+    }
+    if (type == TypePut)
+    {
+        Pistache::Rest::Routes::Put(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
+        return;
     }
     if (type == TypeDelete)
     {
@@ -291,7 +300,7 @@ bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &targ
         return false;
     }
     target = sole::rebuild(temp);
-    if (target == NullUuid && ifMissingThenSendResponse)
+    if (target == ExtUuid::NullUuid && ifMissingThenSendResponse)
     {
         answerBad(std::string("Missing ") + name);
         return false;

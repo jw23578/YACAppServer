@@ -10,7 +10,7 @@ PGSqlImplementation::PGSqlImplementation(PGConnectionPool &pool):ORMSqlInterface
 bool PGSqlImplementation::internalExecute(const SqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
-    return result.size() > 0;
+    return ct.ok();
 }
 
 bool PGSqlImplementation::internalOpen(const SqlString &sql)
@@ -62,6 +62,16 @@ size_t PGSqlImplementation::columns()
 std::string PGSqlImplementation::columnName(size_t index)
 {
     return result.column_name(index);
+}
+
+std::optional<ORMUuid> PGSqlImplementation::uuidValue(size_t index)
+{
+    if (isNull(index))
+    {
+        return std::nullopt;
+    }
+    const pqxx::row &row(result[currentRow]);
+    return ExtUuid::stringToUuid(row[index].get<std::string>().value());
 }
 
 std::optional<std::string> PGSqlImplementation::value(size_t index)
