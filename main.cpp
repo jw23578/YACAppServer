@@ -12,6 +12,7 @@
 #include "emaillogic.h"
 #include "logstat/logstatcontroller.h"
 #include "logstat/filelogger.h"
+#include "logstat/coutlogger.h"
 #include "databaselogictables.h"
 #include "databaselogicappuser.h"
 #include "databaselogicmessages.h"
@@ -39,6 +40,9 @@ int main(int argc, char **argv)
     LogStatController logStatController(LogStatController::verbose,
                                         "server",
                                         "yacapp");
+    logStatController.add(new coutLogger);
+    coutLogger::ActivateVisibleLogging a;
+
     bool runTests(false);
     for (int i(0); i < argc; ++i)
     {
@@ -62,6 +66,7 @@ int main(int argc, char **argv)
     }
 
     std::string configFilename(ExtString::extractFilePath(argv[0]) + "/YACAppServerConfig.json");
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, MACRO_NV(configFilename));
     if (argc > 1)
     {
         configFilename = argv[1];
@@ -94,6 +99,8 @@ int main(int argc, char **argv)
                           json.getString("postgresUser"),
                           json.getString("postgresPassword"),
                           10);
+    a.stop();
+
 
     YACORMFactory factory;
     DatabaseLogicTables databaseLogicTables(logStatController,
@@ -145,7 +152,7 @@ int main(int argc, char **argv)
             return 1;
         }
     }
-//    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController, databaseLogics);
+    //    TestDatabaseLogicWorktime testDatabaseLogicWorktime(logStatController, databaseLogics);
 
 
     EMailLogic emailLogic(json.getString("smtpSenderName"),

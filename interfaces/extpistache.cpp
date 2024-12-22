@@ -1,6 +1,7 @@
 #include "extpistache.h"
 #include "utils/extstring.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 #include "logstat/logstatcontroller.h"
 
 ExtPistache::ExtPistache()
@@ -49,9 +50,18 @@ void ExtPistache::answer(Pistache::Http::ResponseWriter &response,
     d.AddMember("missingRight", missingRight, d.GetAllocator());
     d.AddMember("success", success, d.GetAllocator());
     rapidjson::StringBuffer buffer;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    d.Accept(writer);
-    buffer.Put('\n');
+    if (prettyJson)
+    {
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+        d.Accept(writer);
+        buffer.Put('\n');
+    }
+    else
+    {
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        d.Accept(writer);
+        buffer.Put('\n');
+    }
     const std::string responseString(buffer.GetString());
     LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("responseStringSize: ") + ExtString::toString(responseString.size()));
     if (responseString.size() < 100)

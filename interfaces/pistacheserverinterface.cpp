@@ -11,8 +11,8 @@ void PistacheServerInterface::serve()
 {
     int threads(1);
     auto opts = Pistache::Http::Endpoint::options().threads(threads);
-    opts.maxRequestSize(1000000);
-    opts.maxResponseSize(1000000);
+    opts.maxRequestSize(10 * 1024 * 1024);
+    opts.maxResponseSize(10 * 1024 * 1024);
     opts.flags(Pistache::Tcp::Options::ReuseAddr);
     server.init(opts);
     //    server.useSSL()

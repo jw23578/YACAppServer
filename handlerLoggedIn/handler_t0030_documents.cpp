@@ -3,6 +3,7 @@
 #include "base64.h"
 #include "orm_implementions/t0031_catchphrases.h"
 #include "utils/extstringview.h"
+#include "logstat/coutlogger.h"
 
 Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &serverInterface,
                                                  LoggedInAppUsersContainer &loggedInAppUsersContainer,
@@ -39,6 +40,7 @@ void Handler_t0030_documents::method()
         }
         t0030.document_blob_id = opi.storeBlob(data);
         t0030.app_id = appId;
+        t0030.creater_id = loggedInUserId;
 
         if (isPost())
         {
@@ -78,23 +80,35 @@ void Handler_t0030_documents::method()
     }
     if (isGet())
     {
+        coutLogger::ActivateVisibleLogging avl;
         MACRO_GetString(needle);
-        if (needle.size())
+        MACRO_GetInt(limit);
+        MACRO_GetInt(offset);
+        if (needle.size() || limit)
         {
             // dokumentsuche
+            limit = std::min(100, limit);
+            if (limit == 0)
+            {
+                limit = 100;
+            }
+            SqlString sql("select * from ");
+            sql += tableNames.t0030_documents;
+            sql.addCompare("where", "'1'", "=", "1");
+            sql.addCompare("and", tableFields.creater_id, "=", loggedInUserId);
+            sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
             std::set<std::string> needles;
             ExtString::split(needle, " ", needles);
-            SqlString sql("select * from "
-                          "t0030_documents");
-            sql.addCompare("where", "'1'", "=", "1");
             for (auto &n: needles)
             {
                 sql.addCompare("and", "lower(document_name)", "like", std::string("%") + ExtString::lower(n) + "%");
             }
+            sql += std::string(" order by created_datetime ");
+            sql.limit(limit, offset);
             ORMVector<t0030_documents> documents;
             if (!opi.fetchObjects(sql, documents))
             {
-                answerOk("No matching Document found", false);
+                answerOk("No matching Document found", true);
                 return;
             }
             rapidjson::Document d;
@@ -108,9 +122,13 @@ void Handler_t0030_documents::method()
                 const t0030_documents &t0030(documents[i]);
                 rapidjson::Document jsonDoc;
                 jsonDoc.SetObject();
-                jsonDoc.AddMember("document_name", rapidjson::StringRef(t0030.document_name.asString()), d.GetAllocator());
-                jsonDoc.AddMember("document_type", rapidjson::StringRef(t0030.document_type.asString()), d.GetAllocator());
-                jsonDoc.AddMember("document_description", rapidjson::StringRef(t0030.document_description.asString()), d.GetAllocator());
+                ExtRapidJSONWriter writer(jsonDoc, d.GetAllocator());
+                writer.addMember("ORMName", t0030.getORMName());
+                writer.addMember("id", t0030.id.asString());
+                writer.addMember("document_name", t0030.document_name.asString());
+                writer.addMember("document_type", t0030.document_type.asString());
+                writer.addMember("document_description", t0030.document_description.asString());
+                writer.addMember("created_datetime", t0030.created_datetime.asString());
 /*                jsonDoc.AddMember("id", rapidjson::StringRef(t0030.id.asString()), d.GetAllocator());*/
                 jsonDocuments.PushBack(jsonDoc, d.GetAllocator());
             }
@@ -123,6 +141,16 @@ void Handler_t0030_documents::method()
         MACRO_GetMandatoryUuid(id);
         t0030_documents t0030;
         if (!opi.selectObject(id, t0030))
+        {
+            answerOk(std::string("No Document with id ") + id.pretty() + " found", false);
+            return;
+        }
+        if (t0030.creater_id != loggedInUserId)
+        {
+            answerOk(std::string("Not allowed to download this document, wrong Creator"), false);
+            return;
+        }
+        if (t0030.deleted_datetime != TimePointPostgreSqlNull)
         {
             answerOk(std::string("No Document with id ") + id.pretty() + " found", false);
             return;
@@ -142,7 +170,23 @@ void Handler_t0030_documents::method()
     }
     if (isDelete())
     {
-
+        MACRO_GetMandatoryUuid(id);
+        t0030_documents t0030;
+        if (!opi.selectObject(id, t0030))
+        {
+            answerOk(std::string("No Document with id ") + id.pretty() + " found", false);
+            return;
+        }
+        if (t0030.creater_id != loggedInUserId)
+        {
+            answerOk(std::string("Not allowed to delete this document, wrong Creator"), false);
+            return;
+        }
+        t0030.deleted_datetime = TimePointPostgreSqlNow;
+        t0030.deleted_appuser_id = loggedInUserId;
+        opi.updateObject(t0030);
+        answerOk("document deleted", true);
+        return;
     }
     if (isPut())
     {

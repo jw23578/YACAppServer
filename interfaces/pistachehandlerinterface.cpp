@@ -27,6 +27,8 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
             return;
         }
     }
+    MACRO_GetBool(prettyJson);
+    ep.prettyJson = prettyJson;
     method();
     bet.track(__FILE__, __LINE__);
 }
@@ -107,7 +109,7 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       bool success,
                                       int missingRight)
 {
-    ExtPistache::answer(*response, code, message, success, missingRight);
+    ep.answer(*response, code, message, success, missingRight);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
@@ -115,7 +117,7 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       int missingRight,
                                       rapidjson::Document &d)
 {
-    ExtPistache::answer(*response, code, success, missingRight, d);
+    ep.answer(*response, code, success, missingRight, d);
 }
 
 void PistacheHandlerInterface::answer(Pistache::Http::Code code,
@@ -124,7 +126,8 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
                                       int missingRight,
                                       std::map<std::string, std::string> &data)
 {
-    ExtPistache::answer(*response, code, message, success, missingRight, data);
+    MACRO_GetBool(prettyJson);
+    ep.answer(*response, code, message, success, missingRight, data);
 }
 
 bool PistacheHandlerInterface::answerMissingRight(const int rightNumber)
@@ -216,12 +219,12 @@ bool PistacheHandlerInterface::getBool(const std::string &name,
 {
     if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
-        return ExtPistache::getBool(*request, *response, name, target, ifMissingThenSendResponse);
+        return ep.getBool(*request, *response, name, target, ifMissingThenSendResponse);
     }
     if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
-        return ExtPistache::getPostBool(postData, *response, name, target, ifMissingThenSendResponse);
+        return ep.getPostBool(postData, *response, name, target, ifMissingThenSendResponse);
     }
     return false;
 }
@@ -233,12 +236,12 @@ bool PistacheHandlerInterface::getInteger(const std::string &name,
 {
     if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
-        ExtPistache::getInt(*request, *response, name, target, ifMissingThenSendResponse);
+        ep.getInt(*request, *response, name, target, ifMissingThenSendResponse);
     }
     if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
-        ExtPistache::getPostInt(postData, *response, name, target, ifMissingThenSendResponse);
+        ep.getPostInt(postData, *response, name, target, ifMissingThenSendResponse);
     }
     if (target == 0 && !zeroAllowed)
     {
@@ -255,7 +258,7 @@ bool PistacheHandlerInterface::getByteString(const std::string &name,
     if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
         std::string temp;
-        if (!ExtPistache::getString(*request, *response, name, temp, ifMissingThenSendResponse))
+        if (!ep.getString(*request, *response, name, temp, ifMissingThenSendResponse))
         {
             return false;
         }
@@ -266,7 +269,7 @@ bool PistacheHandlerInterface::getByteString(const std::string &name,
     {
         ExtRapidJSON postData(postedData);
         std::string temp;
-        if (!ExtPistache::getPostString(postData, *response, name, temp, ifMissingThenSendResponse))
+        if (!ep.getPostString(postData, *response, name, temp, ifMissingThenSendResponse))
         {
             return false;
         }
@@ -282,12 +285,12 @@ bool PistacheHandlerInterface::getString(const std::string &name,
 {
     if (request->method() == Pistache::Http::Method::Get || request->method() == Pistache::Http::Method::Delete)
     {
-        return ExtPistache::getString(*request, *response, name, target, ifMissingThenSendResponse);
+        return ep.getString(*request, *response, name, target, ifMissingThenSendResponse);
     }
     if (request->method() == Pistache::Http::Method::Post)
     {
         ExtRapidJSON postData(postedData);
-        return ExtPistache::getPostString(postData, *response, name, target, ifMissingThenSendResponse);
+        return ep.getPostString(postData, *response, name, target, ifMissingThenSendResponse);
     }
     return true;
 }

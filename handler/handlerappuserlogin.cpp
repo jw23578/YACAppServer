@@ -1,6 +1,7 @@
 #include "handlerappuserlogin.h"
 #include "extrapidjson.h"
 #include "thirdparties/thirdcurlrequests.h"
+#include "serverHeader/appidheader.h"
 #include "serverHeader/thirdheader.h"
 #include "serverHeader/mandantheader.h"
 
@@ -102,14 +103,18 @@ HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogics &databaseLogics,
 
 void HandlerAppUserLogin::method()
 {
-    MACRO_GetMandatoryEMail(loginEMail);
     MACRO_GetMandatoryString(password);
-    MACRO_GetMandatoryUuid(appId);
+    sole::uuid appId;
+    if (!getHeaderUuid<AppIdHeader>(appId, true))
+    {
+        return;
+    }
 
     std::string third;
     std::string mandant;
     getHeaderString<ThirdHeader>(third, false);
     getHeaderString<MandantHeader>(mandant, false);
+    MACRO_GetMandatoryLogin(loginEMail, third);
 
     databaseLogics.getLogStat().log(__FILE__, __LINE__, LogStatController::verbose, std::string("third: ") + third);
     databaseLogics.getLogStat().log(__FILE__, __LINE__, LogStatController::verbose, std::string("mandant: ") + mandant);

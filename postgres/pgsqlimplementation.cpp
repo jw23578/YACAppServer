@@ -39,7 +39,7 @@ size_t PGSqlImplementation::storeBlob(const std::basic_string<std::byte> &data)
 {
     PGConnection conn(pool);
     pqxx::work w(*conn.getConnection());
-    pqxx::oid blobId(pqxx::blob::from_buf(w, data.data()));
+    pqxx::oid blobId(pqxx::blob::from_buf(w, data));
     w.commit();
     return blobId;
 }

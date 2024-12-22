@@ -6,6 +6,9 @@
 #include "rapidjson/document.h"
 class LoggerStatterInterface;
 
+#define MACRO_NV(name) \
+std::string(#name) + ": " + ExtString::toString(name)
+
 
 class LogStatController
 {

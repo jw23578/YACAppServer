@@ -1,5 +1,6 @@
 #include "pgconnectionpool.h"
 #include "utils/extstring.h"
+#include "logstat/logstatcontroller.h"
 
 bool PGConnectionPool::findAndUse(pqxx::connection **conn)
 {
@@ -43,6 +44,11 @@ PGConnectionPool::PGConnectionPool(const std::string &h,
     password(pwd),
     maxSize(ms)
 {
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, MACRO_NV(host));
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, MACRO_NV(port));
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, MACRO_NV(dbName));
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, MACRO_NV(user));
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, MACRO_NV(maxSize));
 }
 
 std::string PGConnectionPool::generateConnstring() const

@@ -33,12 +33,10 @@ bool HandlerLoggedInInterface::checkLogin()
     {
         return false;
     }
-    std::string temp;
-    if (!getHeaderString<AppIdHeader>(temp, loggedInContainer.appIdMandatory()))
+    if (!getHeaderUuid<AppIdHeader>(appId, loggedInContainer.appIdMandatory()))
     {
         return false;
     }
-    appId = sole::rebuild(temp);
     getHeaderString<ThirdHeader>(third, false);
     getHeaderString<MandantHeader>(mandant, false);
 

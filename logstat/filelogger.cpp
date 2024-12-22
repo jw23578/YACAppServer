@@ -56,28 +56,6 @@ void FileLogger::theLogFunction(const std::string &file, int line, LogStatContro
 
     std::string m(isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) + " " + message);
     fileLoggerStream << m << "\n";
-    if (m.size() <= 185)
-    {
-        std::cout << m << "\n"; // << std::endl;
-        return;
-    }
-    std::cout << isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) << "\n";
-    m = message;
-    while (m.size())
-    {
-        size_t pos(185);
-        while (pos > 0 && m[pos] != ' ')
-        {
-            --pos;
-        }
-        if (pos == 0)
-        {
-            pos = std::min(m.size(), (size_t)185);
-        }
-        std::cout << "   " << m.substr(0, pos + 1) << "\n";
-        m.erase(0, pos + 1);
-    }
-    std::cout << "\n";
 }
 
 void FileLogger::theStatFunction(const std::string &sourceType, const std::string &sourceName, LogStatController::StatType statType)

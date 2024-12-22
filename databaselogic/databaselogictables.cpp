@@ -91,26 +91,6 @@ void DatabaseLogicTables::createDatabaseTables()
         utils.createTableIfNeeded(on, columnsAndTypes);
     }
 
-
-
-    if (!utils.tableExists(tableNames.t0001_users))
-    {
-        SqlString sql("create table ");
-        sql += tableNames.t0001_users;
-        sql += std::string(" ( id uuid, "
-                           " loginemail text, "
-                           " password_hash text, "
-                           " verified timestamp, "
-                           " verify_token text, "
-                           " verify_token_valid_until timestamp with time zone, "
-                           " login_token text, "
-                           " login_token_valid_until timestamp with time zone,"
-                           " primary key (id)) ");
-        PGExecutor e(pool, sql);
-    }
-    std::string t0001_user_i1("t0001_user_i1");
-    utils.createIndex(tableNames.t0001_users, t0001_user_i1, "(loginemail)");
-
     utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
                               {idPrimaryKey,
                                {tableFields.appuser_id, pg_uuid, false, true},

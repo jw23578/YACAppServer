@@ -9,55 +9,56 @@ class ExtPistache
 {
 public:
     ExtPistache();
+    bool prettyJson;
 
-    static void answer(Pistache::Http::ResponseWriter &response,
-                       Pistache::Http::Code code,
-                       std::string const &message,
-                       bool success,
-                       int missingRight);
-    static void answer(Pistache::Http::ResponseWriter &response,
-                       Pistache::Http::Code code,
-                       std::string const &message,
-                       bool success,
-                       int missingRight,
-                       std::map<std::string, std::string> &data);
-    static void answer(Pistache::Http::ResponseWriter &response,
-                       Pistache::Http::Code code,
-                       bool success,
-                       int missingRight,
-                       rapidjson::Document &d);
+    void answer(Pistache::Http::ResponseWriter &response,
+                Pistache::Http::Code code,
+                std::string const &message,
+                bool success,
+                int missingRight);
+    void answer(Pistache::Http::ResponseWriter &response,
+                Pistache::Http::Code code,
+                std::string const &message,
+                bool success,
+                int missingRight,
+                std::map<std::string, std::string> &data);
+    void answer(Pistache::Http::ResponseWriter &response,
+                Pistache::Http::Code code,
+                bool success,
+                int missingRight,
+                rapidjson::Document &d);
 
-    static bool getString(const Pistache::Rest::Request &request,
-                          Pistache::Http::ResponseWriter &response,
-                          std::string const &name,
-                          std::string &target,
-                          bool ifMissingThenSendResponse);
-    static bool getBool(const Pistache::Rest::Request &request,
-                        Pistache::Http::ResponseWriter &response,
-                        std::string const &name,
-                        bool &target,
-                        bool ifMissingThenSendResponse);
-    static bool getInt(const Pistache::Rest::Request &request,
+    bool getString(const Pistache::Rest::Request &request,
+                   Pistache::Http::ResponseWriter &response,
+                   std::string const &name,
+                   std::string &target,
+                   bool ifMissingThenSendResponse);
+    bool getBool(const Pistache::Rest::Request &request,
+                 Pistache::Http::ResponseWriter &response,
+                 std::string const &name,
+                 bool &target,
+                 bool ifMissingThenSendResponse);
+    bool getInt(const Pistache::Rest::Request &request,
+                Pistache::Http::ResponseWriter &response,
+                std::string const &name,
+                int &target,
+                bool ifMissingThenSendResponse);
+
+    bool getPostString(ExtRapidJSON &postData,
                        Pistache::Http::ResponseWriter &response,
                        std::string const &name,
-                       int &target,
+                       std::string &target,
                        bool ifMissingThenSendResponse);
-
-    static bool getPostString(ExtRapidJSON &postData,
-                              Pistache::Http::ResponseWriter &response,
-                              std::string const &name,
-                              std::string &target,
-                              bool ifMissingThenSendResponse);
-    static bool getPostInt(ExtRapidJSON &postData,
-                           Pistache::Http::ResponseWriter &response,
-                           std::string const &name,
-                           int &target,
-                           bool ifMissingThenSendResponse);
-    static bool getPostBool(ExtRapidJSON &postData,
-                           Pistache::Http::ResponseWriter &response,
-                           std::string const &name,
-                           bool &target,
-                           bool ifMissingThenSendResponse);
+    bool getPostInt(ExtRapidJSON &postData,
+                    Pistache::Http::ResponseWriter &response,
+                    std::string const &name,
+                    int &target,
+                    bool ifMissingThenSendResponse);
+    bool getPostBool(ExtRapidJSON &postData,
+                     Pistache::Http::ResponseWriter &response,
+                     std::string const &name,
+                     bool &target,
+                     bool ifMissingThenSendResponse);
 };
 
 #endif // EXTPISTACHE_H

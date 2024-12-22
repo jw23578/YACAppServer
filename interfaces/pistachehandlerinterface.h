@@ -6,8 +6,10 @@
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
 #include "tablenames.h"
+#include "tablefields.h"
 #include "yacAppAndServer/yacappservermethodnames.h"
 #include "utils/extstring.h"
+#include "extpistache.h"
 
 
 #define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
@@ -29,6 +31,17 @@ ExtString::lowerSelf(targetName); \
         answerBad("this is not a valid email-adress: " + targetName); \
         return; \
 }
+
+#define MACRO_GetMandatoryLogin(targetName, third) MACRO_GetMandatoryString(targetName) \
+    ExtString::lowerSelf(targetName); \
+    if (third != "aidoo") \
+    { \
+        if (!ExtString::emailIsValid(targetName)) \
+        { \
+            answerBad("this is not a valid email-adress: " + targetName); \
+            return; \
+        } \
+    }
 
 #define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName(ExtUuid::NullUuid); \
 if (!getUuid(#targetName, targetName, true)) \
@@ -73,6 +86,8 @@ class PistacheHandlerInterface
 public:
     const YACAPPServerMethodNames methodNames;
     const TableNames tableNames;
+    const TableFields tableFields;
+    ExtPistache ep;
 private:
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
@@ -197,6 +212,33 @@ public:
             }
             return false;
         }
+        return true;
+    }
+    template<class T>
+    bool getHeaderUuid(sole::uuid &target,
+                         bool ifMissingThenSendResponse)
+    {
+        auto &headers(request->headers());
+        if (!headers.has<T>())
+        {
+            if (ifMissingThenSendResponse)
+            {
+                const int missingRight(0);
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name(), false, missingRight);
+            }
+            return false;
+        }
+        std::string temp(headers.get<T>()->value);
+        if (!temp.size())
+        {
+            if (ifMissingThenSendResponse)
+            {
+                const int missingRight(0);
+                answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name(), false, missingRight);
+            }
+            return false;
+        }
+        target = sole::rebuild(temp);
         return true;
     }
 

@@ -54,13 +54,14 @@ bool ThirdCurlRequests::login(LogStatController &logStat,
         rapidjson::Document document;
         document.Parse(result);
         ExtRapidJSON ext(document);
-        ExtRapidJSON memberData(document["memberData"]);
-        logStat.log(__FILE__, __LINE__, LogStatController::verbose, result);
-        std::string message(ext.getString("message"));
-        if (message.size())
+        std::string aidooMessage(ext.getString("message"));
+        if (aidooMessage.size())
         {
+            message = aidooMessage;
             return false;
         }
+        ExtRapidJSON memberData(document["memberData"]);
+        logStat.log(__FILE__, __LINE__, LogStatController::verbose, result);
         fstname = memberData.getString("name");
         surname = memberData.getString("surname");
         visible_name = fstname + " " + surname;
