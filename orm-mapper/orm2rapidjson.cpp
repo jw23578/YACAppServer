@@ -15,21 +15,11 @@ void ORM2rapidjson::toJson(const YACBaseObject &object,
                            rapidjson::MemoryPoolAllocator<> &alloc)
 {
     target.SetObject();
-    rapidjson::Value name("ORMName", alloc);
-    rapidjson::Value ORMName(object.getORMName(), alloc);
-    target.AddMember(name, ORMName, alloc);
-    for (const auto &pn : object.propertyNames())
+    ExtRapidJSONWriter writer(target, alloc);
+    writer.addMember("ORMName", object.getORMName());
+    for (const auto &p: object.getProperties())
     {
-        rapidjson::Value name(pn, alloc);
-        if (object.propertyIsNull(pn))
-        {
-            target.AddMember(name, rapidjson::Value(rapidjson::Type::kNullType) , alloc);
-        }
-        else
-        {
-            rapidjson::Value value(object.getPropertyToString(pn), alloc);
-            target.AddMember(name, value, alloc);
-        }
+        add(writer, *p);
     }
 }
 
@@ -122,4 +112,16 @@ size_t ORM2rapidjson::fromJson(const rapidjson::Value &array,
         }
     }
     return objects.size();
+}
+
+void ORM2rapidjson::add(ExtRapidJSONWriter &writer, const ORMPropertyInterface &pi)
+{
+    if (pi.isNull())
+    {
+        writer.addNull(pi.name());
+    }
+    else
+    {
+        writer.addMember(pi.name(), pi.asString());
+    }
 }

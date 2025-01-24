@@ -29,6 +29,7 @@ public:
     ExtRapidJSONWriter(rapidjson::Value &objectValue,
                        rapidjson::Document::AllocatorType &allocator);
 
+    void addNull(std::string const &name);
     void addMember(std::string const &name, const char * const value);
     void addMember(std::string const &name, std::string const &value);
     void addMember(std::string const &name, const int64_t value);

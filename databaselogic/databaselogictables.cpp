@@ -54,12 +54,13 @@ void DatabaseLogicTables::createDatabaseTables()
         std::unique_ptr<YACBaseObject> object(factory.create(on));
         std::vector<PGColumnAndType> columnsAndTypes;
         columnsAndTypes.push_back(idPrimaryKey);
-        for (const auto &pn: object->propertyNames())
+        for (const auto &p: object->getProperties())
         {
-            bool isTransferProperty(object->getProperty(pn)->hasDetail(DetailOnlyTransfer));
+            bool isTransferProperty(p->hasDetail(DetailOnlyTransfer));
+            ORMString pn(p->name());
             if (pn != tableFields.id && !isTransferProperty)
             {
-                bool isIndex(object->getProperty(pn)->hasDetail(DetailDBIndex));
+                bool isIndex(p->hasDetail(DetailDBIndex));
                 PGTypes type(pg_bool);
                 if (object->propertyIsBool(pn))
                 {

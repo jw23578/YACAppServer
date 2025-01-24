@@ -100,6 +100,13 @@ ExtRapidJSONWriter::ExtRapidJSONWriter(rapidjson::Value &objectValue,
 
 }
 
+void ExtRapidJSONWriter::addNull(const std::string &name)
+{
+    objectValue.AddMember(rapidjson::Value(name, allocator).Move(),
+                          rapidjson::Value(rapidjson::Type::kNullType),
+                          allocator);
+}
+
 void ExtRapidJSONWriter::addMember(const std::string &name, const char * const value)
 {
     addMember(name, std::string(value));

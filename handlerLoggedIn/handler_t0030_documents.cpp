@@ -2,6 +2,7 @@
 #include "orm_implementions/t0030_documents.h"
 #include "base64.h"
 #include "orm_implementions/t0031_catchphrases.h"
+#include "orm_implementions/t0032_catchphrase2document.h"
 #include "utils/extstringview.h"
 #include "logstat/coutlogger.h"
 
@@ -16,6 +17,7 @@ Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &server
 
 void Handler_t0030_documents::method()
 {
+    coutLogger::ActivateVisibleLogging avl;
     if (isPost() || isPut())
     {
         t0030_documents t0030;
@@ -29,7 +31,7 @@ void Handler_t0030_documents::method()
         {
             answerOk("No Document-Data sended", false);
             return;
-        }
+        }        
 
         std::basic_string<std::byte> data;
         bin_base64_decode(t0030.transfer_document_base64, data);
@@ -58,7 +60,6 @@ void Handler_t0030_documents::method()
                 return;
             }
         }
-
         std::basic_string<std::byte> comma_separated_catchphrases;
         bin_base64_decode(t0030.transfer_comma_separated_catchphrases_base64, comma_separated_catchphrases);
 
@@ -73,6 +74,13 @@ void Handler_t0030_documents::method()
             t0031.catchphrase = std::string(cp);
             t0031.app_id = appId;
             opi.insertIfNotSameDataExists(t0031);
+
+            t0032_catchphrase2document t0032;
+            t0032.id.generate();
+            t0032.app_id = appId;
+            t0032.document_id = t0030.id;
+            t0032.t0031_id = t0031.id;
+            opi.insertObject(t0032);
         }
 
         answerOk("Document stored", true);
@@ -80,7 +88,6 @@ void Handler_t0030_documents::method()
     }
     if (isGet())
     {
-        coutLogger::ActivateVisibleLogging avl;
         MACRO_GetString(needle);
         MACRO_GetInt(limit);
         MACRO_GetInt(offset);
@@ -124,12 +131,15 @@ void Handler_t0030_documents::method()
                 jsonDoc.SetObject();
                 ExtRapidJSONWriter writer(jsonDoc, d.GetAllocator());
                 writer.addMember("ORMName", t0030.getORMName());
-                writer.addMember("id", t0030.id.asString());
-                writer.addMember("document_name", t0030.document_name.asString());
-                writer.addMember("document_type", t0030.document_type.asString());
-                writer.addMember("document_description", t0030.document_description.asString());
-                writer.addMember("created_datetime", t0030.created_datetime.asString());
-/*                jsonDoc.AddMember("id", rapidjson::StringRef(t0030.id.asString()), d.GetAllocator());*/
+                ORM2rapidjson orm2json;
+                orm2json.add(writer, t0030.id);
+                orm2json.add(writer, t0030.document_id);
+                orm2json.add(writer, t0030.document_version);
+                orm2json.add(writer, t0030.document_name);
+                orm2json.add(writer, t0030.document_type);
+                orm2json.add(writer, t0030.document_description);
+                orm2json.add(writer, t0030.created_datetime);
+                orm2json.add(writer, t0030.document_size);
                 jsonDocuments.PushBack(jsonDoc, d.GetAllocator());
             }
             d.AddMember("documents", jsonDocuments, d.GetAllocator());
@@ -150,7 +160,7 @@ void Handler_t0030_documents::method()
             answerOk(std::string("Not allowed to download this document, wrong Creator"), false);
             return;
         }
-        if (t0030.deleted_datetime != TimePointPostgreSqlNull)
+        if (!t0030.deleted_datetime.isNull())
         {
             answerOk(std::string("No Document with id ") + id.pretty() + " found", false);
             return;

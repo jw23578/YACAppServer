@@ -4,6 +4,7 @@
 #include "rapidjson/document.h"
 #include "orm_implementions/yacbaseobject.h"
 #include "orm_implementions/yacormfactory.h"
+#include "utils/extrapidjson.h"
 
 class ORM2rapidjson
 {
@@ -33,6 +34,8 @@ public:
     size_t fromJson(const rapidjson::Value &array,
                     const YACORMFactory &factory,
                     std::set<YACBaseObject*> &objects);
+
+    void add(ExtRapidJSONWriter &writer, const ORMPropertyInterface &pi);
 };
 
 #endif // ORM2RAPIDJSON_H
