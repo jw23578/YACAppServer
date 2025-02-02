@@ -99,8 +99,10 @@ void Handler_t0030_documents::method()
             {
                 limit = 100;
             }
-            SqlString sql("select * from ");
-            sql += tableNames.t0030_documents;
+            SqlString sql("select * "
+                          ", encode((select string_agg(catchphrase, ', ') from t0031_catchphrases t0031 "
+                          "where t0031.id in (select t0031_id from t0032_catchphrase2document t0032 where t0032.document_id = t0030.id))::bytea, 'base64') as transfer_comma_separated_catchphrases_base64 from ");
+            sql += tableNames.t0030_documents + " t0030 ";
             sql.addCompare("where", "'1'", "=", "1");
             sql.addCompare("and", tableFields.creater_id, "=", loggedInUserId);
             sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
@@ -108,7 +110,7 @@ void Handler_t0030_documents::method()
             ExtString::split(needle, " ", needles);
             for (auto &n: needles)
             {
-                sql.addCompare("and", "lower(document_name)", "like", std::string("%") + ExtString::lower(n) + "%");
+                sql.addCompare("and", "lower(document_name || '#' || document_type)", "like", std::string("%") + ExtString::lower(n) + "%");
             }
             sql += std::string(" order by created_datetime ");
             sql.limit(limit, offset);
@@ -140,6 +142,7 @@ void Handler_t0030_documents::method()
                 orm2json.add(writer, t0030.document_description);
                 orm2json.add(writer, t0030.created_datetime);
                 orm2json.add(writer, t0030.document_size);
+                orm2json.add(writer, t0030.transfer_comma_separated_catchphrases_base64);
                 jsonDocuments.PushBack(jsonDoc, d.GetAllocator());
             }
             d.AddMember("documents", jsonDocuments, d.GetAllocator());
