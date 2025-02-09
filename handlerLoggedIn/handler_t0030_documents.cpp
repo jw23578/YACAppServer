@@ -99,18 +99,19 @@ void Handler_t0030_documents::method()
             {
                 limit = 100;
             }
-            SqlString sql("select * "
-                          ", encode((select string_agg(catchphrase, ', ') from t0031_catchphrases t0031 "
-                          "where t0031.id in (select t0031_id from t0032_catchphrase2document t0032 where t0032.document_id = t0030.id))::bytea, 'base64') as transfer_comma_separated_catchphrases_base64 from ");
+            SqlString sql("set lc_time='de_DE.UTF-8'; select *, encode(comma_separated_catchphrases::bytea, 'base64') as transfer_comma_separated_catchphrases_base64 from "
+                          "(select *, (select coalesce(string_agg(catchphrase, ', '), '') from t0031_catchphrases t0031 "
+                          "where t0031.id in (select t0031_id from t0032_catchphrase2document t0032 where t0032.document_id = t0030.id)) as comma_separated_catchphrases from ");
             sql += tableNames.t0030_documents + " t0030 ";
-            sql.addCompare("where", "'1'", "=", "1");
-            sql.addCompare("and", tableFields.creater_id, "=", loggedInUserId);
+            sql.addCompare("where", tableFields.creater_id, "=", loggedInUserId);
             sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+            sql += ") docs ";
+            sql.addCompare("where", "'1'", "=", "1");
             std::set<std::string> needles;
             ExtString::split(needle, " ", needles);
             for (auto &n: needles)
             {
-                sql.addCompare("and", "lower(document_name || '#' || document_type)", "like", std::string("%") + ExtString::lower(n) + "%");
+                sql.addCompare("and", "lower(document_name || '#' || document_type || '#' || comma_separated_catchphrases || '#' || to_char(created_datetime, 'TMday#TMmonth'))", "like", std::string("%") + ExtString::lower(n) + "%");
             }
             sql += std::string(" order by created_datetime ");
             sql.limit(limit, offset);
