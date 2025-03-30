@@ -133,7 +133,7 @@ size_t ORM2Postgres::toJsonArray(SqlString &sql, const YACBaseObject &ghost, rap
     return toJsonArray(e, ghost, targetArray, alloc);
 }
 
-void ORM2Postgres::insert(YACBaseObject &object)
+bool ORM2Postgres::insert(YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
     SqlString sql;
@@ -151,9 +151,10 @@ void ORM2Postgres::insert(YACBaseObject &object)
     }
     sql.addInsertOrWhere("where", tableFields.id, "=", object.getPropertyToString(tableFields.id));
     PGExecutor e(pool, sql);
+    return e.ok();
 }
 
-void ORM2Postgres::update(const YACBaseObject &object)
+bool ORM2Postgres::update(const YACBaseObject &object)
 {
     assert((void("every object must have an id as primary key"), object.propertyExists(tableFields.id)));
     SqlString sql;
@@ -171,6 +172,7 @@ void ORM2Postgres::update(const YACBaseObject &object)
     }
     sql.addInsertOrWhere("where", tableFields.id, "=", object.getPropertyToString(tableFields.id));
     PGExecutor e(pool, sql);
+    return e.ok();
 }
 
 void ORM2Postgres::insertOrUpdate(YACBaseObject &object)

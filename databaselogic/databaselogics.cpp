@@ -6,11 +6,14 @@ LogStatController &DatabaseLogics::getLogStat()
 }
 
 DatabaseLogics::DatabaseLogics(LogStatController &logStatController,
-                               PGConnectionPool &pool):
+                               PGConnectionPool &pool,
+                               ORMPersistenceInterface &opi):
     logStatController(logStatController),
+    opi(opi),
     pool(pool),
     databaseLogicAppUser(logStatController,
-                         pool),
+                         pool,
+                         opi),
     databaseLogicWorktime(logStatController,
                           pool),
     databaseLogicImageTable(logStatController,

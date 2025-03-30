@@ -7,6 +7,7 @@
 #include "handler/handleruserlogin.h"
 #include "handler/handleruserloggedin.h"
 #include "handler/handlerapp.h"
+#include "handler/handlerpages.h"
 #include "handler/handlerappuserregister.h"
 #include "handler/handlerappuserverify.h"
 #include "handler/handlerappuserlogin.h"
@@ -47,6 +48,7 @@ class YACAppServer: public PistacheServerInterface
     HandlerUserLogin handlerUserLogin;
     HandlerUserLoggedIn handlerUserLoggedIn;
     HandlerAPP handlerAPP;
+    HandlerPages handlerPages;
     HandlerUploadApp handlerUploadApp;    
 
     HandlerAppUserRegister handlerAppUserRegister;
@@ -79,7 +81,9 @@ public:
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,
                  EMailLogic &emailLogic,
-                 int port);
+                 int port,
+                 const std::string &certFilename,
+                 const std::string &keyFilename);
 };
 
 #endif // YACAPPSERVER_H

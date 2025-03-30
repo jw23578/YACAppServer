@@ -111,7 +111,7 @@ void Handler_t0030_documents::method()
             ExtString::split(needle, " ", needles);
             for (auto &n: needles)
             {
-                sql.addCompare("and", "lower(document_name || '#' || document_type || '#' || comma_separated_catchphrases || '#' || to_char(created_datetime, 'TMday#TMmonth'))", "like", std::string("%") + ExtString::lower(n) + "%");
+                sql.addCompare("and", "lower(document_name || '#' || document_type || '#' || comma_separated_catchphrases || '#' || to_char(created_datetime, 'TMday#TMmonth#YYYY'))", "like", std::string("%") + ExtString::lower(n) + "%");
             }
             sql += std::string(" order by created_datetime ");
             sql.limit(limit, offset);

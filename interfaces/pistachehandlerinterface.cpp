@@ -69,6 +69,11 @@ void PistacheHandlerInterface::answerOk(bool success,
     answer(Pistache::Http::Code::Ok, success, missingRight, d);
 }
 
+void PistacheHandlerInterface::answerOkHtml(const std::string &html)
+{
+    answerHtml(Pistache::Http::Code::Ok, html);
+}
+
 const rapidjson::Document &PistacheHandlerInterface::getPostedData() const
 {
     return postedData;
@@ -99,7 +104,7 @@ bool PistacheHandlerInterface::isMethod(const std::string &method) const
     return request->resource() == method || request->resource() == "/" + method;
 }
 
-const std::string &PistacheHandlerInterface::d_getMethodName() const
+const std::string &PistacheHandlerInterface::requestRessource() const
 {
     return request->resource();
 }
@@ -129,6 +134,13 @@ void PistacheHandlerInterface::answer(Pistache::Http::Code code,
     MACRO_GetBool(prettyJson);
     ep.answer(*response, code, message, success, missingRight, data);
 }
+
+void PistacheHandlerInterface::answerHtml(Pistache::Http::Code code,
+                                          const std::string &html)
+{
+    ep.answerRaw(*response, code, html, MIME(Text, Html));
+}
+
 
 bool PistacheHandlerInterface::answerMissingRight(const int rightNumber)
 {

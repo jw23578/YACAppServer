@@ -108,6 +108,8 @@ private:
                 bool success,
                 int missingRight,
                 std::map<std::string, std::string> &data);
+    void answerHtml(Pistache::Http::Code code,
+                const std::string &html);
 
 public:
     enum HandlerType
@@ -129,13 +131,14 @@ protected:
                   std::map<std::string, std::string> &data);
     void answerOk(bool success,
                   rapidjson::Document &d);
+    void answerOkHtml(const std::string &html);
     const rapidjson::Document &getPostedData() const;
     bool isMethod(const std::string &method) const;
     bool isGet() const;
     bool isPost() const;
     bool isDelete() const;
     bool isPut() const;
-    const std::string &d_getMethodName() const;
+    const std::string &requestRessource() const;
     void addAllMethodTypes(PistacheServerInterface &serverInterface,
                           std::string const &methodName);
     void addMethod(PistacheServerInterface &serverInterface,
@@ -226,7 +229,7 @@ public:
                 const int missingRight(0);
                 answer(Pistache::Http::Code::Bad_Request, std::string("Missing Header ") + T().name(), false, missingRight);
             }
-            return false;
+            return !ifMissingThenSendResponse;
         }
         std::string temp(headers.get<T>()->value);
         if (!temp.size())
@@ -236,7 +239,7 @@ public:
                 const int missingRight(0);
                 answer(Pistache::Http::Code::Bad_Request, std::string("Missing ") + T().name(), false, missingRight);
             }
-            return false;
+            return !ifMissingThenSendResponse;
         }
         target = sole::rebuild(temp);
         return true;

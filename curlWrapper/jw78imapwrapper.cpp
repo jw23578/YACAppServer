@@ -142,6 +142,7 @@ bool jw78::IMAPWrapper::fetchEMail(const std::string &uid)
     curl.get(myUrl, result, errorMessage);
     std::cout << result << std::endl;
     std::cout << errorMessage << std::endl;
+    return true;
 }
 
 bool jw78::IMAPWrapper::fetchHeader(const std::string &uid,
@@ -156,6 +157,7 @@ bool jw78::IMAPWrapper::fetchHeader(const std::string &uid,
     std::string errorMessage;
     curl.get(myUrl, header, errorMessage);
     std::cout << errorMessage << std::endl;
+    return true;
 }
 
 bool jw78::IMAPWrapper::fetchText(const std::string &uid,
@@ -170,6 +172,7 @@ bool jw78::IMAPWrapper::fetchText(const std::string &uid,
     std::string errorMessage;
     curl.get(myUrl, text, errorMessage);
     std::cout << errorMessage << std::endl;
+    return true;
 }
 
 jw78::IMAPWrapper::IMAPFolder::IMAPFolder():
@@ -214,7 +217,7 @@ const std::string &jw78::IMAPWrapper::IMAPFolder::getName()
 
 std::string jw78::IMAPWrapper::IMAPFolder::getFullName()
 {
-    return ExtVector::concat(name, "/", "", "");
+    return ExtVector::concat(name, "/", "", "", "");
 }
 
 std::string jw78::IMAPWrapper::IMAPFolder::getInfoString()

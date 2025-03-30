@@ -246,10 +246,16 @@ bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
     if (appExists)
     {
         orm2postgres.update(app);
+        message = "sql error on updating the app";
+        return false;
     }
     else
     {
-        orm2postgres.insert(app);
+        if (!orm2postgres.insert(app))
+        {
+            message = "sql error on inserting the app";
+            return false;
+        }
     }
     if (installation_code == "")
     {

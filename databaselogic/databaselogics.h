@@ -14,10 +14,12 @@
 #include "databaselogic/databaselogicuserandapp.h"
 #include "databaselogicthirdparty.h"
 #include "rightsLogic/rightslogic.h"
+#include "orm/ormpersistenceinterface.h"
 
 class DatabaseLogics
 {
     LogStatController &logStatController;
+    ORMPersistenceInterface &opi;
 
 public:
     PGConnectionPool &pool;
@@ -38,7 +40,8 @@ public:
 
 
     DatabaseLogics(LogStatController &logStatController,
-                   PGConnectionPool &pool);
+                   PGConnectionPool &pool,
+                   ORMPersistenceInterface &opi);
 };
 
 #endif // DATABASELOGICS_H

@@ -67,8 +67,8 @@ public:
                        const YACBaseObject &ghost,
                        rapidjson::Value &targetArray,
                        rapidjson::MemoryPoolAllocator<> &alloc);
-    void insert(YACBaseObject &object);
-    void update(const YACBaseObject &object);
+    bool insert(YACBaseObject &object);
+    bool update(const YACBaseObject &object);
 
 
     void toJsonObject(PGExecutor &e,

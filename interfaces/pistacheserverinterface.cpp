@@ -1,8 +1,13 @@
 #include "pistacheserverinterface.h"
+#include "logstat/logstatcontroller.h"
 
-PistacheServerInterface::PistacheServerInterface(int port):
+PistacheServerInterface::PistacheServerInterface(int port,
+                                                 const std::string &certFilename,
+                                                 const std::string &keyFilename):
     addr(Pistache::Ipv4::any(), Pistache::Port(port)),
-    server(addr)
+    server(addr),
+    certFilename(certFilename),
+    keyFilename(keyFilename)
 {
 
 }
@@ -15,7 +20,15 @@ void PistacheServerInterface::serve()
     opts.maxResponseSize(10 * 1024 * 1024);
     opts.flags(Pistache::Tcp::Options::ReuseAddr);
     server.init(opts);
-    //    server.useSSL()
+    if (certFilename.size() && keyFilename.size())
+    {
+        LogStatController::slog(__FILE__, __LINE__, LogStatController::info, "using ssl");
+        server.useSSL(certFilename, keyFilename);
+    }
+    else
+    {
+        LogStatController::slog(__FILE__, __LINE__, LogStatController::info, "not using ssl");
+    }
 
     server.setHandler(router.handler());
 

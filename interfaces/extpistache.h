@@ -11,6 +11,11 @@ public:
     ExtPistache();
     bool prettyJson;
 
+    void answerRaw(Pistache::Http::ResponseWriter &response,
+                   Pistache::Http::Code code,
+                   std::string const &data,
+                   Pistache::Http::Mime::MediaType mediaType);
+
     void answer(Pistache::Http::ResponseWriter &response,
                 Pistache::Http::Code code,
                 std::string const &message,

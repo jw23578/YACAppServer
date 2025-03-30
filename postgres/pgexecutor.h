@@ -16,6 +16,7 @@ class PGExecutor
     PGConnectionPool &pool;
     pqxx::result result;
     size_t currentRow = {0};
+    bool failed;
 public:
     PGExecutor(PGConnectionPool &pool);
     PGExecutor(PGConnectionPool &pool,
@@ -25,6 +26,8 @@ public:
                std::string &resultMessage,
                const std::string &onSizeMessage,
                const std::string &onZeroSizeMessage);
+
+    bool ok() const;
 
     size_t exec(SqlString const &sql);
 

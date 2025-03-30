@@ -99,7 +99,10 @@ int main(int argc, char **argv)
                           json.getString("postgresUser"),
                           json.getString("postgresPassword"),
                           10);
-    a.stop();
+    if (!json.getBool("visibleLogActive"))
+    {
+        a.stop();
+    }
 
 
     YACORMFactory factory;
@@ -130,19 +133,21 @@ int main(int argc, char **argv)
                                                     pool);
 
 
-    DatabaseLogics databaseLogics(logStatController,
-                                  pool);
-
     PGSqlImplementation sqlImplementation(pool);
     ORMPersistenceInterface opi(sqlImplementation);
+
+    DatabaseLogics databaseLogics(logStatController,
+                                  pool,
+                                  opi);
+
 
     DatabaseLogicMessages databaseLogicMessages(logStatController,
                                                 pool);
 
-    TestORM2Postgres testORM2Postgres(pool);
 
     if (runTests)
     {
+        TestORM2Postgres testORM2Postgres(pool);
         TestDatabaseLogics testDatabaseLogics(databaseLogics);
         TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
         TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogics.databaseLogicAppUser);
@@ -169,7 +174,9 @@ int main(int argc, char **argv)
                         databaseLogicUserAndApp,
                         databaseLogics.databaseLogicAppUser,
                         emailLogic,
-                        json.getInt("serverPort"));
+                        json.getInt("serverPort"),
+                        json.getString("serverCertFilename"),
+                        json.getString("serverKeyFilename"));
     return 0;
 }
 

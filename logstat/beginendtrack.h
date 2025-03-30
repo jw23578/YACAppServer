@@ -3,9 +3,11 @@
 
 #include <chrono>
 #include <string>
+#include "logstatcontroller.h"
 
 class BeginEndTrack
 {
+    Log::Scope scope;
     int trackCount;
     std::string name;
     std::chrono::system_clock::time_point begin;

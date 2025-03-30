@@ -30,7 +30,7 @@ void HandlerAppUserVerify::method()
                                                            w,
                                                            appUserId))
     {
-        answerBad(message);
+        answerOk(message, false);
         return;
     }
     w.addMember("message", message);

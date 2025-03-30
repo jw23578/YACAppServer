@@ -5,15 +5,16 @@
 
 
 PGExecutor::PGExecutor(PGConnectionPool &pool):
-    pool(pool)
+    pool(pool), failed(false)
 {
 
 }
 
 PGExecutor::PGExecutor(PGConnectionPool &pool,
-                       const SqlString &sql): pool(pool)
+                       const SqlString &sql): pool(pool), failed(false)
 {
     PGCommandTransactor ct(pool, sql, result);
+    failed = !ct.ok();
 }
 
 PGExecutor::PGExecutor(PGConnectionPool &pool,
@@ -21,20 +22,28 @@ PGExecutor::PGExecutor(PGConnectionPool &pool,
                        std::string &resultMessage,
                        const std::string &onSizeMessage,
                        const std::string &onZeroSizeMessage):
-    pool(pool)
+    pool(pool), failed(false)
 {
     PGCommandTransactor ct(pool, sql, result);
+    failed = !ct.ok();
     if (sql.isUpdateStatement())
     {
         resultMessage = affected_rows() > 0 ? onSizeMessage : onZeroSizeMessage;
+        failed = true;
         return;
     }
     resultMessage = size() > 0 ? onSizeMessage : onZeroSizeMessage;
 }
 
+bool PGExecutor::ok() const
+{
+    return !failed;
+}
+
 size_t PGExecutor::exec(const SqlString &sql)
 {
     PGCommandTransactor ct(pool, sql, result);
+    failed = !ct.ok();
     return size();
 }
 

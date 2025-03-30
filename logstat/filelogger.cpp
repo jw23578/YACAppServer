@@ -54,8 +54,19 @@ void FileLogger::theLogFunction(const std::string &file, int line, LogStatContro
 
     std::string isoNow(ExtString::timepointToISO(std::chrono::system_clock::now()));
 
-    std::string m(isoNow + " " + levelString + " " + file + ":" + ExtString::toString(line) + " " + message);
+    std::string part1(isoNow + " " + levelString);
+    ExtString::fillUpRightSelf(part1, 29, ' ');
+
+    std::string part2(file + ":" + ExtString::toString(line));
+    ExtString::fillUpLeftSelf(part2, 40, ' ');
+    part2 = ExtString::right(part2, 40);
+
+    std::string m(part1 + " " + part2 + " " + message);
     fileLoggerStream << m << "\n";
+    if (level <= LogStatController::info)
+    {
+        fileLoggerStream.flush();
+    }
 }
 
 void FileLogger::theStatFunction(const std::string &sourceType, const std::string &sourceName, LogStatController::StatType statType)

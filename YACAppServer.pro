@@ -11,7 +11,7 @@ include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
     -lpistache \
-    -L /usr/local/lib \
+    -L/usr/local/lib \
     -lpqxx -lpq \
     -lcurl -lpthread
 LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
@@ -54,6 +54,7 @@ SOURCES += \
         handler/handlerappuserrequestupdatepassword.cpp \
         handler/handlerappuserupdatepassword.cpp \
         handler/handlerappuserverify.cpp \
+        handler/handlerpages.cpp \
         handler/handleruserloggedin.cpp \
         handler/handleruserlogin.cpp \
         handler/handleruserregister.cpp \
@@ -149,6 +150,7 @@ HEADERS += \
   handler/handlerappuserrequestupdatepassword.h \
   handler/handlerappuserupdatepassword.h \
   handler/handlerappuserverify.h \
+  handler/handlerpages.h \
   handler/handleruserloggedin.h \
   handler/handleruserlogin.h \
   handler/handleruserregister.h \

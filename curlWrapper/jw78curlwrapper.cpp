@@ -19,10 +19,10 @@ int jw78::myDebugFunction(CURL *handle,
                    size_t size,
                    void *userptr)
 {
-    jw78::CurlWrapper::sTarget *target(static_cast<jw78::CurlWrapper::sTarget*>(userptr));
+/*    jw78::CurlWrapper::sTarget *target(static_cast<jw78::CurlWrapper::sTarget*>(userptr));
     target->addDebug(data, size);
     std::string help(data, size);
-    std::cout << help << std::endl;
+    std::cout << help << std::endl;*/
     return 0;
 }
 

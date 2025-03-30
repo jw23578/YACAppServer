@@ -11,7 +11,8 @@ public:
     static std::string concat(const std::vector<std::string> &v,
                               const std::string &delim,
                               const std::string &prefix,
-                              const std::string &suffix);
+                              const std::string &suffix,
+                              const std::string &ifEmpty);
 };
 
 #endif // EXTVECTOR_H

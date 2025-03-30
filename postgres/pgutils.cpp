@@ -97,8 +97,8 @@ bool PGUtils::createTable(const std::string &tableName,
     }
     for (const auto &vec: uniques)
     {
-        std::string columns(ExtVector::concat(vec, ", ", "(", ")"));
-        std::string columnsName(ExtVector::concat(vec, "_", "", ""));
+        std::string columns(ExtVector::concat(vec, ", ", "(", ")", ""));
+        std::string columnsName(ExtVector::concat(vec, "_", "", "", ""));
         createUniqueIndex(tableName, tableName + "_" + columnsName, columns);
     }
     return true;
@@ -241,6 +241,7 @@ size_t PGUtils::countEntries(const std::string &tableName, const std::string &ne
     sql += ExtString::lower(needleField);
     sql += " = :";
     sql += ExtString::lower(needleField);
+    sql.set(needleField, needleValue);
     PGExecutor e(pool, sql);
     return e.get_size_t("count");
 }

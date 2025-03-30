@@ -3,6 +3,7 @@
 #include "definitions.h"
 #include "orm_implementions/t0009_appuser_logintoken.h"
 #include "orm-mapper/orm2postgres.h"
+#include "logstat/logstatcontroller.h"
 
 void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
                                            std::string &loginToken)
@@ -59,9 +60,11 @@ bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,
 }
 
 DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
-                                           PGConnectionPool &pool):
+                                           PGConnectionPool &pool,
+                                           ORMPersistenceInterface &opi):
     logStatController(logStatController),
     pool(pool),
+    opi(opi),
     utils(pool)
 {
 
@@ -89,6 +92,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
                                          std::string &message,
                                          std::string &verifyToken)
 {
+    Log::Scope scope("createAppUser");
     if (!utils.entryExists(tableNames.t0002_apps, "id", appId.str()))
     {
         message = "App with id: " + appId.str() + " does not exist";
@@ -103,6 +107,27 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
     sole::uuid appUserId(sole::uuid4());
     verifyToken = ExtString::randomString(0, 0, 4, 0);
     {
+        t0003_appuser_profiles t0003;
+        t0003.id = appUserId;
+        t0003.app_id = appId;
+        t0003.fstname = "";
+        t0003.surname = "";
+        t0003.visible_name = "";
+        t0003.verified.setNull(true);
+        t0003.loginemail = loginEMail;
+        t0003.verify_token = verifyToken;
+        t0003.verify_token_valid_until = std::chrono::system_clock::now() + std::chrono::minutes(60);
+        t0003.update_password_token =  "";
+        t0003.update_password_token_valid_until.setNull(true);
+        t0003.deleted.setNull(true);
+        t0003.searching_exactly_allowed = false; // FIXME
+        t0003.searching_fuzzy_allowed = true; // FIXME
+        t0003.public_key_base64 = ""; // FIXME
+        t0003.image_id.setNull(true); // FIXME
+        opi.insertObject(t0003);
+
+
+/*
         SqlString sql(utils.createInsertString(tableNames.t0003_appuser_profiles));
         sql.set(tableFields.id, appUserId);
         sql.set(tableFields.app_id, appId);
@@ -120,7 +145,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         sql.set(tableFields.searching_fuzzy_allowed, true); // FIXME
         sql.set("public_key_base64" ,""); // FIXME
         sql.set("image_id", ExtUuid::NullUuid); // FIXME
-        PGExecutor e(pool, sql);
+        PGExecutor e(pool, sql);*/
     }
 
     if (password.size())

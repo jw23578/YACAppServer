@@ -10,9 +10,24 @@ class LoggerStatterInterface;
 std::string(#name) + ": " + ExtString::toString(name)
 
 
+namespace Log
+{
+class Scope
+{
+    std::string scope;
+public:
+    Scope(std::string const &scope);
+    ~Scope();
+};
+}
+
 class LogStatController
 {
+    friend Log::Scope;
     static LogStatController *instance;
+    std::vector<std::string> scopes;
+    static void pushScope(std::string const &scope);
+    static void popScope(std::string const &scope);
 public:
     enum LogLevel
     {
@@ -53,7 +68,7 @@ public:
     void log(const std::string &file,
              int line,
              LogLevel level,
-             const std::string &message);
+             std::string message);
     void log(const std::string &file,
              int line,
              LogLevel level,

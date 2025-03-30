@@ -11,9 +11,13 @@ class PistacheServerInterface
     friend PistacheHandlerInterface;
     Pistache::Address addr;
     Pistache::Http::Endpoint server;
+    const std::string certFilename;
+    const std::string keyFilename;
     Pistache::Rest::Router router;
 public:
-    PistacheServerInterface(int port);
+    PistacheServerInterface(int port,
+                            const std::string &certFilename,
+                            const std::string &keyFilename);
     void serve();
 };
 

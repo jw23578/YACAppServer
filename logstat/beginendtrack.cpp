@@ -1,19 +1,20 @@
 #include "beginendtrack.h"
-#include "logstatcontroller.h"
 #include "utils/extstring.h"
 
-BeginEndTrack::BeginEndTrack(std::string const &file, int line, const std::string &n):trackCount(0),
+BeginEndTrack::BeginEndTrack(std::string const &file, int line, const std::string &n):
+    scope(n),
+    trackCount(0),
     name(n),
     begin(std::chrono::system_clock::now())
 {
-    LogStatController::slog(file, line, LogStatController::verbose, std::string("Start: ") + name);
+    LogStatController::slog(file, line, LogStatController::verbose, std::string("Trackstart: ") + name);
 }
 
 void BeginEndTrack::track(std::string const &file, int line)
 {
     ++trackCount;
     auto ms(milliSeconds());
-    LogStatController::slog(file, line, LogStatController::verbose, std::string("Step ") + ExtString::toString(trackCount) + " " + name + " " + ExtString::toString(ms));
+    LogStatController::slog(file, line, LogStatController::verbose, std::string("Trackstep ") + ExtString::toString(trackCount) + " " + name + " " + ExtString::toString(ms));
 }
 
 long long BeginEndTrack::milliSeconds() const

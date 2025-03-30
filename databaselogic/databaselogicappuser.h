@@ -11,6 +11,7 @@
 #include "extrapidjson.h"
 #include "orm_implementions/t0002_apps.h"
 #include "orm_implementions/t0003_appuser_profiles.h"
+#include "orm/ormpersistenceinterface.h"
 
 
 class LoggedInAppUsersContainer;
@@ -21,6 +22,7 @@ class DatabaseLogicAppUser
 
     LogStatController &logStatController;
     PGConnectionPool &pool;
+    ORMPersistenceInterface &opi;
     PGUtils utils;
     TableNames tableNames;
     TableFields tableFields;
@@ -39,7 +41,8 @@ class DatabaseLogicAppUser
 
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
-                         PGConnectionPool &pool);
+                         PGConnectionPool &pool,
+                         ORMPersistenceInterface &opi);
 
     sole::uuid getAppUserId(const sole::uuid &appId,
                             const std::string &loginEMail);
