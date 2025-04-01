@@ -4,8 +4,8 @@
 #include "orm_implementions/t0016_appointment_templates.h"
 #include "orm_implementions/t0018_appointment.h"
 
-bool DatabaseLogicAppointments::checkAppointmentTemplateOwner(const sole::uuid &id,
-                                                              const sole::uuid &owner_id,
+bool DatabaseLogicAppointments::checkAppointmentTemplateOwner(const reducedsole::uuid &id,
+                                                              const reducedsole::uuid &owner_id,
                                                               std::string &message)
 {
     PGExecutor e(pool);
@@ -28,8 +28,8 @@ bool DatabaseLogicAppointments::checkAppointmentTemplateOwner(const sole::uuid &
     return true;
 }
 
-bool DatabaseLogicAppointments::checkAppointmentCreater(const sole::uuid &id,
-                                                        const sole::uuid &creater_id,
+bool DatabaseLogicAppointments::checkAppointmentCreater(const reducedsole::uuid &id,
+                                                        const reducedsole::uuid &creater_id,
                                                         std::string &message)
 {
     PGExecutor e(pool);
@@ -45,7 +45,7 @@ bool DatabaseLogicAppointments::checkAppointmentCreater(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicAppointments::fetchOneAppointment(const sole::uuid &id,
+bool DatabaseLogicAppointments::fetchOneAppointment(const reducedsole::uuid &id,
                                                     rapidjson::Value &object,
                                                     rapidjson::MemoryPoolAllocator<> &alloc,
                                                     std::string &message)
@@ -62,12 +62,12 @@ DatabaseLogicAppointments::DatabaseLogicAppointments(LogStatController &logStatC
 
 }
 
-bool DatabaseLogicAppointments::insertAppointmentTemplate(sole::uuid const &id,
-                                                          const sole::uuid &app_id,
+bool DatabaseLogicAppointments::insertAppointmentTemplate(reducedsole::uuid const &id,
+                                                          const reducedsole::uuid &app_id,
                                                           const std::string &name,
                                                           int default_duration_in_minutes,
                                                           int color,
-                                                          sole::uuid const &owner_id)
+                                                          reducedsole::uuid const &owner_id)
 {
     SqlString insert;
     insert.insert(tableNames.t0016_appointment_templates);
@@ -81,11 +81,11 @@ bool DatabaseLogicAppointments::insertAppointmentTemplate(sole::uuid const &id,
     return true;
 }
 
-bool DatabaseLogicAppointments::updateAppointmentTemplate(const sole::uuid &id, const sole::uuid &app_id,
+bool DatabaseLogicAppointments::updateAppointmentTemplate(const reducedsole::uuid &id, const reducedsole::uuid &app_id,
                                                           const std::string &name,
                                                           int default_duration_in_minutes,
                                                           int color,
-                                                          sole::uuid const &owner_id)
+                                                          reducedsole::uuid const &owner_id)
 {
     std::string message;
     if (!checkAppointmentTemplateOwner(id, owner_id, message))
@@ -104,8 +104,8 @@ bool DatabaseLogicAppointments::updateAppointmentTemplate(const sole::uuid &id, 
     return true;
 }
 
-bool DatabaseLogicAppointments::deleteAppointmentTemplate(const sole::uuid &id,
-                                                          const sole::uuid &owner_id,
+bool DatabaseLogicAppointments::deleteAppointmentTemplate(const reducedsole::uuid &id,
+                                                          const reducedsole::uuid &owner_id,
                                                           std::string &message)
 {
     if (!checkAppointmentTemplateOwner(id, owner_id, message))
@@ -120,7 +120,7 @@ bool DatabaseLogicAppointments::deleteAppointmentTemplate(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appuser_id, const sole::uuid &app_id,
+bool DatabaseLogicAppointments::fetchAppointmentTemplates(const reducedsole::uuid &appuser_id, const reducedsole::uuid &app_id,
                                                           rapidjson::Value &target,
                                                           rapidjson::MemoryPoolAllocator<> &alloc,
                                                           std::string &message)
@@ -136,15 +136,15 @@ bool DatabaseLogicAppointments::fetchAppointmentTemplates(const sole::uuid &appu
     return true;
 }
 
-bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
-                                                  const sole::uuid &app_id,
-                                                  const sole::uuid &appointment_group_id,
-                                                  const sole::uuid &appointment_template_id,
+bool DatabaseLogicAppointments::insertAppointment(const reducedsole::uuid &id,
+                                                  const reducedsole::uuid &app_id,
+                                                  const reducedsole::uuid &appointment_group_id,
+                                                  const reducedsole::uuid &appointment_template_id,
                                                   const std::string &caption,
                                                   const std::string &decription,
                                                   const std::chrono::system_clock::time_point &start_datetime,
                                                   const std::chrono::system_clock::time_point &end_datetime,
-                                                  const sole::uuid &creater_id,
+                                                  const reducedsole::uuid &creater_id,
                                                   const int max_bookable_count,
                                                   const std::chrono::system_clock::time_point &bookable_since_datetime,
                                                   const std::chrono::system_clock::time_point &bookable_until_datetime,
@@ -206,8 +206,8 @@ bool DatabaseLogicAppointments::insertAppointment(const sole::uuid &id,
     return fetchOneAppointment(id, object, alloc, message);
 }
 
-bool DatabaseLogicAppointments::deleteAppointment(const sole::uuid &id,
-                                                  const sole::uuid &creater_id,
+bool DatabaseLogicAppointments::deleteAppointment(const reducedsole::uuid &id,
+                                                  const reducedsole::uuid &creater_id,
                                                   std::string &message)
 {
     if (!checkAppointmentCreater(id, creater_id, message))
@@ -223,8 +223,8 @@ bool DatabaseLogicAppointments::deleteAppointment(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicAppointments::fetchAppointments(const sole::uuid &appuser_id,
-                                                  const sole::uuid &app_id,
+bool DatabaseLogicAppointments::fetchAppointments(const reducedsole::uuid &appuser_id,
+                                                  const reducedsole::uuid &app_id,
                                                   rapidjson::Value &target,
                                                   rapidjson::MemoryPoolAllocator<> &alloc,
                                                   std::string &message)

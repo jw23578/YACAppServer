@@ -13,9 +13,9 @@ DatabaseLogicMessages::DatabaseLogicMessages(LogStatController &logStatControlle
 
 }
 
-void DatabaseLogicMessages::storeMessage(const sole::uuid &id,
-                                         const sole::uuid &sender_id,
-                                         const sole::uuid &to_id,
+void DatabaseLogicMessages::storeMessage(const reducedsole::uuid &id,
+                                         const reducedsole::uuid &sender_id,
+                                         const reducedsole::uuid &to_id,
                                          const std::string &content_base64)
 {
     SqlString sql(utils.createInsertString(tableNames.t0007_messages));
@@ -28,7 +28,7 @@ void DatabaseLogicMessages::storeMessage(const sole::uuid &id,
     PGExecutor e(pool, sql);
 }
 
-void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
+void DatabaseLogicMessages::deleteMessage(const reducedsole::uuid &id)
 {
     SqlString sql;
     sql.delet(tableNames.t0007_messages);
@@ -37,7 +37,7 @@ void DatabaseLogicMessages::deleteMessage(const sole::uuid &id)
     PGExecutor e(pool, sql);
 }
 
-bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const sole::uuid &user_id,
+bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const reducedsole::uuid &user_id,
                                                         std::string &resultMessage)
 {
     SqlString upd;
@@ -50,8 +50,8 @@ bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const sole::uuid &user_i
     return e.affected_rows() > 0;
 }
 
-bool DatabaseLogicMessages::markMessageDeleted(const sole::uuid &id,
-                                               const sole::uuid &sender_id,
+bool DatabaseLogicMessages::markMessageDeleted(const reducedsole::uuid &id,
+                                               const reducedsole::uuid &sender_id,
                                                std::string &resultMessage)
 {
     SqlString upd;
@@ -63,7 +63,7 @@ bool DatabaseLogicMessages::markMessageDeleted(const sole::uuid &id,
     return e.affected_rows() > 0;
 }
 
-bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
+bool DatabaseLogicMessages::fetchMessages(const reducedsole::uuid &fetcher_id,
                                           const std::chrono::system_clock::time_point &since,
                                           rapidjson::Value &target,
                                           rapidjson::MemoryPoolAllocator<> &alloc)
@@ -82,7 +82,7 @@ bool DatabaseLogicMessages::fetchMessages(const sole::uuid &fetcher_id,
     return true;
 }
 
-bool DatabaseLogicMessages::fetchReceivedMessages(const sole::uuid &receiver_id,
+bool DatabaseLogicMessages::fetchReceivedMessages(const reducedsole::uuid &receiver_id,
                                                   const std::chrono::system_clock::time_point &since,
                                                   rapidjson::Value &target,
                                                   rapidjson::MemoryPoolAllocator<> &alloc)
@@ -99,7 +99,7 @@ bool DatabaseLogicMessages::fetchReceivedMessages(const sole::uuid &receiver_id,
     return true;
 }
 
-bool DatabaseLogicMessages::fetchReadMessages(const sole::uuid &reader_id,
+bool DatabaseLogicMessages::fetchReadMessages(const reducedsole::uuid &reader_id,
                                               const std::chrono::system_clock::time_point &since,
                                               rapidjson::Value &target, rapidjson::MemoryPoolAllocator<> &alloc)
 {
@@ -115,7 +115,7 @@ bool DatabaseLogicMessages::fetchReadMessages(const sole::uuid &reader_id,
     return true;
 }
 
-bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const sole::uuid &receiver_or_reader_id,
+bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const reducedsole::uuid &receiver_or_reader_id,
                                                          const std::chrono::system_clock::time_point &since,
                                                          rapidjson::Value &targetReceived,
                                                          rapidjson::Value &targetRead,
@@ -157,13 +157,13 @@ bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const sole::uuid &recei
     return true;
 }
 
-void DatabaseLogicMessages::setReceived(const sole::uuid &receiver_id,
-                                        const sole::uuid &message_id,
+void DatabaseLogicMessages::setReceived(const reducedsole::uuid &receiver_id,
+                                        const reducedsole::uuid &message_id,
                                         const std::chrono::system_clock::time_point &received_datetime)
 {
     SqlString sql;
     sql.insert(tableNames.t0008_message_received);
-    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
     sql.addInsert(tableFields.receiver_id, receiver_id, false);
     sql.addInsert(tableFields.message_id, message_id, false);
     sql.addInsert(tableFields.read_datetime, received_datetime, false);
@@ -175,13 +175,13 @@ void DatabaseLogicMessages::setReceived(const sole::uuid &receiver_id,
                  sql);
 }
 
-void DatabaseLogicMessages::setRead(const sole::uuid &reader_id,
-                                    const sole::uuid &message_id,
+void DatabaseLogicMessages::setRead(const reducedsole::uuid &reader_id,
+                                    const reducedsole::uuid &message_id,
                                     const std::chrono::system_clock::time_point &read_datetime)
 {
     SqlString sql;
     sql.insert(tableNames.t0014_message_read);
-    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
     sql.addInsert(tableFields.reader_id, reader_id, false);
     sql.addInsert(tableFields.message_id, message_id, false);
     sql.addInsert(tableFields.read_datetime, read_datetime, false);
@@ -206,7 +206,7 @@ bool DatabaseLogicMessages::storeImage(t0028_message_images &t0028)
     return true;
 }
 
-bool DatabaseLogicMessages::lookUpOid(const sole::uuid &imageId,
+bool DatabaseLogicMessages::lookUpOid(const reducedsole::uuid &imageId,
                                         pqxx::oid &imageOid)
 {
     PGExecutor e(pool);
@@ -221,7 +221,7 @@ bool DatabaseLogicMessages::lookUpOid(const sole::uuid &imageId,
     return true;
 }
 
-bool DatabaseLogicMessages::fetchImage(const sole::uuid &imageId,
+bool DatabaseLogicMessages::fetchImage(const reducedsole::uuid &imageId,
                                        std::string &message,
                                        std::basic_string<std::byte> &data)
 {

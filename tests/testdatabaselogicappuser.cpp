@@ -4,8 +4,8 @@
 
 TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databaseLogicAppUser)
 {
-    sole::uuid appId(sole::rebuild("6ce520ba-4c44-47be-9386-15f021ea3a41"));
-    sole::uuid u(databaseLogicAppUser.getAppUserId(appId, "jens@wienoebst.com"));
+    reducedsole::uuid appId(reducedsole::rebuild("6ce520ba-4c44-47be-9386-15f021ea3a41"));
+    reducedsole::uuid u(databaseLogicAppUser.getAppUserId(appId, "jens@wienoebst.com"));
     /*
     std::string loginEMail("jens@wienoebst.com");
     std::string updatePasswordToken;
@@ -19,7 +19,7 @@ TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databas
         return;
     }
     std::string loginToken;
-    sole::uuid userId;
+    reducedsole::uuid userId;
     databaseLogicAppUser.updatePassword(appId,
                                         loginEMail,
                                         updatePasswordToken,
@@ -28,7 +28,7 @@ TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databas
                                         loginToken,
                                         userId);*/
     {
-        sole::uuid userId(sole::uuid4());
+        reducedsole::uuid userId(reducedsole::uuid4());
         std::string device_token("irgendein text");
         databaseLogicAppUser.storeDeviceToken(userId, device_token);
 

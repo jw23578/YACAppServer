@@ -1,7 +1,7 @@
 #ifndef PISTACHEHANDLERINTERFACE_H
 #define PISTACHEHANDLERINTERFACE_H
 
-#include "sole/sole.hpp"
+#include "utils/reducedsole.h"
 #include "pistache/router.h"
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
@@ -43,7 +43,7 @@ ExtString::lowerSelf(targetName); \
         } \
     }
 
-#define MACRO_GetMandatoryUuid(targetName) sole::uuid targetName(ExtUuid::NullUuid); \
+#define MACRO_GetMandatoryUuid(targetName) reducedsole::uuid targetName(ExtUuid::NullUuid); \
 if (!getUuid(#targetName, targetName, true)) \
     { \
             return; \
@@ -54,7 +54,7 @@ if (!getBool(#targetName, targetName, true)) \
     { \
             return; \
     }
-#define MACRO_GetUuid(targetName) sole::uuid targetName(ExtUuid::NullUuid); \
+#define MACRO_GetUuid(targetName) reducedsole::uuid targetName(ExtUuid::NullUuid); \
 getUuid(#targetName, targetName, false);
 
 #define MACRO_GetString(targetName) std::string targetName; \
@@ -181,7 +181,7 @@ public:
                    bool ifMissingThenSendResponse);
 
     bool getUuid(std::string const &name,
-                 sole::uuid &target,
+                 reducedsole::uuid &target,
                  bool ifMissingThenSendResponse);
 
     bool getTimePointFromISO(std::string const &name,
@@ -218,7 +218,7 @@ public:
         return true;
     }
     template<class T>
-    bool getHeaderUuid(sole::uuid &target,
+    bool getHeaderUuid(reducedsole::uuid &target,
                          bool ifMissingThenSendResponse)
     {
         auto &headers(request->headers());
@@ -241,7 +241,7 @@ public:
             }
             return !ifMissingThenSendResponse;
         }
-        target = sole::rebuild(temp);
+        target = reducedsole::rebuild(temp);
         return true;
     }
 

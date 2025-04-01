@@ -15,7 +15,7 @@ void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
 {
     if (loginToken.size() == 0)
     {
-        loginToken = sole::uuid4().str();
+        loginToken = reducedsole::uuid4().str();
     }
     int validHours(24 * 7);
     SqlString sql("update t0001_users "
@@ -28,7 +28,7 @@ void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
     PGExecutor e(pool, sql);
 }
 
-bool DatabaseLogicUserAndApp::lookUpOid(const sole::uuid &id,
+bool DatabaseLogicUserAndApp::lookUpOid(const reducedsole::uuid &id,
                                         pqxx::oid &imageOid)
 {
     ORM2Postgres orm2postgres(pool);
@@ -55,8 +55,8 @@ bool DatabaseLogicUserAndApp::userExists(const std::string &loginEMail)
     return utils.entryExists(tableNames.t0001_users, "loginemail", loginEMail);
 }
 
-bool DatabaseLogicUserAndApp::userIsAppOwner(const sole::uuid &app_id,
-                                             const sole::uuid &user_id,
+bool DatabaseLogicUserAndApp::userIsAppOwner(const reducedsole::uuid &app_id,
+                                             const reducedsole::uuid &user_id,
                                              std::string &errorMessage,
                                              bool &appExists)
 {
@@ -88,7 +88,7 @@ std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
                     " :verify_token_valid_until, "
                     " '',"
                     " null) ");
-    sql.set("id", sole::uuid4());
+    sql.set("id", reducedsole::uuid4());
     sql.set("loginEMail", loginEMail);
     sql.set("password", password);
     std::string verify_token(ExtString::randomString(0, 0, 4, 0));
@@ -194,7 +194,7 @@ bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
 
 bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
                                            const std::string &loginToken,
-                                           sole::uuid &userId,
+                                           reducedsole::uuid &userId,
                                            std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     SqlString sql("select * from t0001_users "
@@ -227,7 +227,7 @@ void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
     loginTokenValidUntil = e.timepoint("login_token_valid_until");
 }
 
-bool DatabaseLogicUserAndApp::saveApp(const sole::uuid loggedInUserId,
+bool DatabaseLogicUserAndApp::saveApp(const reducedsole::uuid loggedInUserId,
                                       t0002_apps &app,
                                       const std::string &installation_code,
                                       std::string &message)
@@ -381,7 +381,7 @@ bool DatabaseLogicUserAndApp::storeAppImage(t0027_app_images &t0027)
     return true;
 }
 
-bool DatabaseLogicUserAndApp::getAppImage(const sole::uuid &id,
+bool DatabaseLogicUserAndApp::getAppImage(const reducedsole::uuid &id,
                                           std::basic_string<std::byte> &data,
                                           std::string &errorMessage)
 {

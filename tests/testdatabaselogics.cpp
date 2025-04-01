@@ -5,9 +5,9 @@
 TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
 {
     DatabaseLogicAppointments &dla(databaseLogics.databaseLogicAppointments);
-    sole::uuid id(sole::uuid4());
-    sole::uuid app_id(sole::uuid4());
-    sole::uuid owner_id(sole::uuid4());
+    reducedsole::uuid id(reducedsole::uuid4());
+    reducedsole::uuid app_id(reducedsole::uuid4());
+    reducedsole::uuid owner_id(reducedsole::uuid4());
     dla.insertAppointmentTemplate(id,
                                   app_id,
                                   "termin vorlage",
@@ -34,7 +34,7 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
                                   owner_id,
                                   message);
 
-    sole::uuid creater_id(sole::uuid4());
+    reducedsole::uuid creater_id(reducedsole::uuid4());
     rapidjson::Document document;
     document.SetObject();
     rapidjson::Value appointment;

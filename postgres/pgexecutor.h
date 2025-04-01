@@ -65,7 +65,7 @@ public:
                   const std::chrono::system_clock::time_point &needleValue3);
 
     bool defaultSelect(const std::string &tableName,
-                       const sole::uuid &id,
+                       const reducedsole::uuid &id,
                        std::string &message);
 
     void delet(const std::string &tableName,
@@ -73,7 +73,7 @@ public:
                const std::string &needleValue);
 
     void defaultDelete(const std::string &table_name,
-                       const sole::uuid &id);
+                       const reducedsole::uuid &id);
 
     size_t size() const;
     bool resultAvailable() const;
@@ -92,7 +92,7 @@ public:
     int integer(const std::string &fieldname);
     size_t get_size_t(const std::string &fieldname);
     std::chrono::system_clock::time_point timepoint(const std::string &fieldname);
-    sole::uuid uuid(const std::string &fieldname);
+    reducedsole::uuid uuid(const std::string &fieldname);
     pqxx::oid oid(const std::string &fieldname);
 
     size_t array(const std::string &fieldname, std::set<std::string> &target);

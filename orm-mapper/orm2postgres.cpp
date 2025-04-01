@@ -7,7 +7,7 @@ ORM2Postgres::ORM2Postgres(PGConnectionPool &pool):
 
 }
 
-bool ORM2Postgres::select(const sole::uuid &id,
+bool ORM2Postgres::select(const reducedsole::uuid &id,
                           YACBaseObject &object)
 {
     SqlString sql;
@@ -35,7 +35,7 @@ bool ORM2Postgres::select(const sole::uuid &id,
     return true;
 }
 
-bool ORM2Postgres::select(const sole::uuid &id,
+bool ORM2Postgres::select(const reducedsole::uuid &id,
                           YACBaseObject &object,
                           rapidjson::Value &target,
                           rapidjson::MemoryPoolAllocator<> &alloc)
@@ -140,7 +140,7 @@ bool ORM2Postgres::insert(YACBaseObject &object)
     sql.insert(object.getORMName());
     if (object.propertyIsNull(tableFields.id))
     {
-        object.id = sole::uuid4();
+        object.id = reducedsole::uuid4();
     }
     for (const auto &pn: object.propertyNames())
     {
@@ -182,7 +182,7 @@ void ORM2Postgres::insertOrUpdate(YACBaseObject &object)
     if (object.propertyIsNull(tableFields.id))
     {
         sql.insert(object.getORMName());
-        object.id = sole::uuid4();
+        object.id = reducedsole::uuid4();
     }
     else
     {
@@ -261,7 +261,7 @@ size_t ORM2Postgres::toJsonArray(SqlString &sql,
 
 
 bool ORM2Postgres::defaultSelectToJSON(const std::string &tableName,
-                                     const sole::uuid &id,
+                                     const reducedsole::uuid &id,
                                      rapidjson::Value &object,
                                      rapidjson::MemoryPoolAllocator<> &alloc,
                                      std::string &message)

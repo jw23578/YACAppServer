@@ -1,7 +1,7 @@
 #ifndef LOGGEDINCONTAINERINTERFACE_H
 #define LOGGEDINCONTAINERINTERFACE_H
 
-#include "sole/sole.hpp"
+#include "utils/reducedsole.h"
 #include <string>
 #include <map>
 #include <chrono>
@@ -11,7 +11,7 @@ class LoggedInContainerInterface
 protected:
     struct SData
     {
-        sole::uuid userId;
+        reducedsole::uuid userId;
         std::chrono::system_clock::time_point loginTokenValidUntil;
     };
 
@@ -23,20 +23,20 @@ public:
 
     virtual bool appIdMandatory() const = 0;
 
-    virtual bool isLoggedIn(const sole::uuid &appId,
+    virtual bool isLoggedIn(const reducedsole::uuid &appId,
                             const std::string &loginEMail,
                             const std::string &loginToken,
                             const std::string &third,
                             const std::string &mandant,
-                            sole::uuid &userId) = 0;
+                            reducedsole::uuid &userId) = 0;
 
-    bool isLoggedInWithOutUserId(const sole::uuid &appId,
+    bool isLoggedInWithOutUserId(const reducedsole::uuid &appId,
                                  const std::string &loginEMail,
                                  const std::string &loginToken,
                                  const std::string &third,
                                  const std::string &mandant);
 
-    void clear(const sole::uuid &userId);
+    void clear(const reducedsole::uuid &userId);
 
 };
 

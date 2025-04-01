@@ -12,8 +12,8 @@ class HandlerLoggedInInterface : public PistacheHandlerInterface
     std::string third;
     std::string mandant;
 protected:
-    sole::uuid appId;
-    sole::uuid loggedInUserId;
+    reducedsole::uuid appId;
+    reducedsole::uuid loggedInUserId;
 public:
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                              LoggedInContainerInterface &loggedInContainer);

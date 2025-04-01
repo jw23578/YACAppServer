@@ -10,9 +10,9 @@ DatabaseLogicElement::DatabaseLogicElement(LogStatController &logStatController,
 
 }
 
-bool DatabaseLogicElement::insertElementUsable4AppUser(const sole::uuid &id,
-                                                       const sole::uuid &element_id,
-                                                       const sole::uuid &appuser_id)
+bool DatabaseLogicElement::insertElementUsable4AppUser(const reducedsole::uuid &id,
+                                                       const reducedsole::uuid &element_id,
+                                                       const reducedsole::uuid &appuser_id)
 {
     SqlString sql;
     sql.insert(tableNames.t0017_element_usable4appuser);
@@ -23,9 +23,9 @@ bool DatabaseLogicElement::insertElementUsable4AppUser(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicElement::updateElementUsable4AppUser(const sole::uuid &id,
-                                                       const sole::uuid &element_id,
-                                                       const sole::uuid &appuser_id)
+bool DatabaseLogicElement::updateElementUsable4AppUser(const reducedsole::uuid &id,
+                                                       const reducedsole::uuid &element_id,
+                                                       const reducedsole::uuid &appuser_id)
 {
     SqlString sql;
     sql.update(tableNames.t0017_element_usable4appuser);
@@ -36,16 +36,16 @@ bool DatabaseLogicElement::updateElementUsable4AppUser(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicElement::deleteElementUsable4AppUser(const sole::uuid &id)
+bool DatabaseLogicElement::deleteElementUsable4AppUser(const reducedsole::uuid &id)
 {
     PGExecutor e(pool);
     e.defaultDelete(tableNames.t0017_element_usable4appuser, id);
     return true;
 }
 
-bool DatabaseLogicElement::insertElementVisible4AppUser(const sole::uuid &id,
-                                                        const sole::uuid &element_id,
-                                                        const sole::uuid &appuser_id)
+bool DatabaseLogicElement::insertElementVisible4AppUser(const reducedsole::uuid &id,
+                                                        const reducedsole::uuid &element_id,
+                                                        const reducedsole::uuid &appuser_id)
 {
     SqlString sql;
     sql.insert(tableNames.t0019_element_visible4appuser);
@@ -57,9 +57,9 @@ bool DatabaseLogicElement::insertElementVisible4AppUser(const sole::uuid &id,
 
 }
 
-bool DatabaseLogicElement::updateElementVisible4AppUser(const sole::uuid &id,
-                                                        const sole::uuid &element_id,
-                                                        const sole::uuid &appuser_id)
+bool DatabaseLogicElement::updateElementVisible4AppUser(const reducedsole::uuid &id,
+                                                        const reducedsole::uuid &element_id,
+                                                        const reducedsole::uuid &appuser_id)
 {
     SqlString sql;
     sql.update(tableNames.t0019_element_visible4appuser);
@@ -70,7 +70,7 @@ bool DatabaseLogicElement::updateElementVisible4AppUser(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicElement::deleteElementVisible4AppUser(const sole::uuid &id)
+bool DatabaseLogicElement::deleteElementVisible4AppUser(const reducedsole::uuid &id)
 {
     PGExecutor e(pool);
     e.defaultDelete(tableNames.t0019_element_visible4appuser, id);

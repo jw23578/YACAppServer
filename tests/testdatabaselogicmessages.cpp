@@ -3,9 +3,9 @@
 
 TestDatabaseLogicMessages::TestDatabaseLogicMessages(DatabaseLogicMessages &databaseLogicMessage)
 {
-    sole::uuid message_id(sole::uuid4());
-    sole::uuid sender_id(sole::uuid4());
-    sole::uuid to_id(sole::uuid4());
+    reducedsole::uuid message_id(reducedsole::uuid4());
+    reducedsole::uuid sender_id(reducedsole::uuid4());
+    reducedsole::uuid to_id(reducedsole::uuid4());
     std::string content_base64("nur ein test text");;
     databaseLogicMessage.storeMessage(message_id,
                                       sender_id,

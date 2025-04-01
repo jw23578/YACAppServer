@@ -2,7 +2,7 @@
 #define DATABASELOGICWORKTIME_H
 
 #include "postgres/pgconnectionpool.h"
-#include "sole/sole.hpp"
+#include "utils/reducedsole.h"
 #include "logstat/logstatcontroller.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
@@ -29,10 +29,10 @@ public:
     };
 private:
 
-    bool selectWorktimeBefore(const sole::uuid &user_id,
+    bool selectWorktimeBefore(const reducedsole::uuid &user_id,
                               const TimePoint &ts,
                               PGExecutor &e);
-    bool selectWorktimeAfter(const sole::uuid &user_id,
+    bool selectWorktimeAfter(const reducedsole::uuid &user_id,
                               const TimePoint &ts,
                              const std::set<WorktimeType> &typesAllowed,
                               PGExecutor &e);
@@ -60,12 +60,12 @@ public:
         DayRating5
     };
 
-    bool currentState(const sole::uuid &user_id,
+    bool currentState(const reducedsole::uuid &user_id,
                       std::chrono::system_clock::time_point &workStart,
                       std::chrono::system_clock::time_point &pauseStart,
                       std::chrono::system_clock::time_point &offSiteStart);
 
-    bool insertWorktime(const sole::uuid &user_id,
+    bool insertWorktime(const reducedsole::uuid &user_id,
                         const std::chrono::system_clock::time_point ts,
                         const WorktimeType type,
                         const UserMood user_mood,
@@ -75,21 +75,21 @@ public:
                         std::chrono::system_clock::time_point &offSiteWorkStart,
                         std::string &message);
 
-    bool insertWorktimeBeginEnd(const sole::uuid &user_id,
+    bool insertWorktimeBeginEnd(const reducedsole::uuid &user_id,
                                 const TimePoint &begin,
                                 const TimePoint &end,
                                 const WorktimeType type,
                                 std::string &message);
 
-    bool fetchWorktimes(const sole::uuid &user_id,
+    bool fetchWorktimes(const reducedsole::uuid &user_id,
                         const TimePoint &since,
                         const TimePoint &until,
                         rapidjson::Value &targetArray,
                         rapidjson::MemoryPoolAllocator<> &alloc,
                         std::string &message);
 
-    bool deleteWorktime(const sole::uuid &user_id,
-                        const sole::uuid &id,
+    bool deleteWorktime(const reducedsole::uuid &user_id,
+                        const reducedsole::uuid &id,
                         std::string &message);
 };
 

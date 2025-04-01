@@ -2,7 +2,7 @@
 #define DATABASELOGICAPPUSER_H
 
 #include "postgres/pgconnectionpool.h"
-#include "sole/sole.hpp"
+#include "utils/reducedsole.h"
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
@@ -26,33 +26,33 @@ class DatabaseLogicAppUser
     PGUtils utils;
     TableNames tableNames;
     TableFields tableFields;
-    void loginSuccessful(const sole::uuid &appUserId,
+    void loginSuccessful(const reducedsole::uuid &appUserId,
                          std::string &loginToken);
 
-    std::map<std::string, sole::uuid> loginEMailAndAppId2AppUserId;
-    bool lookupAppUser(const sole::uuid &appId,
+    std::map<std::string, reducedsole::uuid> loginEMailAndAppId2AppUserId;
+    bool lookupAppUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
-                       sole::uuid &appUserId,
+                       reducedsole::uuid &appUserId,
                        std::string &message);
-    void refreshAppUserLoginToken(const sole::uuid &appId,
+    void refreshAppUserLoginToken(const reducedsole::uuid &appId,
                                   const std::string &loginEMail,
                                   std::chrono::system_clock::time_point &loginTokenValidUntil);
-    void resetUpdatePasswordToken(const sole::uuid &userId);
+    void resetUpdatePasswordToken(const reducedsole::uuid &userId);
 
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool,
                          ORMPersistenceInterface &opi);
 
-    sole::uuid getAppUserId(const sole::uuid &appId,
+    reducedsole::uuid getAppUserId(const reducedsole::uuid &appId,
                             const std::string &loginEMail);
-    bool createAppUser(const sole::uuid &appId,
+    bool createAppUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &password,
                        std::string &message,
                        std::string &verifyToken);
 
-    bool createVerifiedAppUser(const sole::uuid &appId,
+    bool createVerifiedAppUser(const reducedsole::uuid &appId,
                                const std::string &loginEMail,
                                const std::string &fstname,
                                const std::string &surname,
@@ -63,26 +63,26 @@ public:
                                std::string &message,
                                t0003_appuser_profiles &target);
 
-    bool createVerifyToken(const sole::uuid &appId,
+    bool createVerifyToken(const reducedsole::uuid &appId,
                            const std::string &loginEMail,
                            std::string &message,
                            std::string &verifyToken);
 
-    bool verifyAppUser(const sole::uuid &appId,
+    bool verifyAppUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &verifyToken,
                        std::string &message,
                        ExtRapidJSONWriter &w,
-                       sole::uuid &appUserId);
-    bool loginAppUser(const sole::uuid &appId,
+                       reducedsole::uuid &appUserId);
+    bool loginAppUser(const reducedsole::uuid &appId,
                       const std::string &loginEMail,
                       const std::string &password,
                       std::string &message,
                       ExtRapidJSONWriter &w,
-                      sole::uuid &appUserId);
+                      reducedsole::uuid &appUserId);
 
-    bool updateAppUser(const sole::uuid &appId,
-                       const sole::uuid &userId,
+    bool updateAppUser(const reducedsole::uuid &appId,
+                       const reducedsole::uuid &userId,
                        const std::string &fstname,
                        const std::string &surname,
                        const std::string &visible_name,
@@ -92,36 +92,36 @@ public:
                        const bool searching_fuzzy_allowed,
                        const std::string &public_key_base64,
                        const bool with_image,
-                       const sole::uuid imageId,
+                       const reducedsole::uuid imageId,
                        std::string &message);
 
-    bool appUserLoggedIn(const sole::uuid &appId,
+    bool appUserLoggedIn(const reducedsole::uuid &appId,
                          const std::string &loginEMail,
                          const std::string &loginToken,
-                         sole::uuid &userId,
+                         reducedsole::uuid &userId,
                          std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    bool requestUpdatePassword(const sole::uuid &appId,
+    bool requestUpdatePassword(const reducedsole::uuid &appId,
                                const std::string &loginEMail,
                                std::string &updatePasswordToken,
                                std::string &message);
 
-    bool updatePasswordLoggedIn(const sole::uuid &appuser_id,
+    bool updatePasswordLoggedIn(const reducedsole::uuid &appuser_id,
                                 const std::string &password);
-    bool updatePassword(const sole::uuid &appId,
+    bool updatePassword(const reducedsole::uuid &appId,
                         const std::string &loginEMail,
                         const std::string &updatePasswordToken,
                         const std::string &password,
                         std::string &message,
                         std::string &loginToken,
-                        sole::uuid &userId);
+                        reducedsole::uuid &userId);
 
-    bool deleteAppUser(const sole::uuid &appId,
+    bool deleteAppUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &loginToken,
                        std::string &message);
 
-    bool searchProfiles(const sole::uuid &appId,
+    bool searchProfiles(const reducedsole::uuid &appId,
                         const std::string &needle,
                         size_t limit,
                         const size_t offset,
@@ -129,25 +129,25 @@ public:
                         rapidjson::Value &target,
                         rapidjson::MemoryPoolAllocator<> &alloc);
 
-    bool fetchMyProfile(const sole::uuid &appId,
-                        const sole::uuid &userId,
+    bool fetchMyProfile(const reducedsole::uuid &appId,
+                        const reducedsole::uuid &userId,
                         std::string &message,
                         rapidjson::Value &target,
                         rapidjson::MemoryPoolAllocator<> &alloc);
 
-    bool fetchProfile(const sole::uuid &appId,
-                      const sole::uuid &userId,
+    bool fetchProfile(const reducedsole::uuid &appId,
+                      const reducedsole::uuid &userId,
                       std::string &message,
                       rapidjson::Value &target,
                       rapidjson::MemoryPoolAllocator<> &alloc);
 
-    bool storeDeviceToken(const sole::uuid &userId,
+    bool storeDeviceToken(const reducedsole::uuid &userId,
                           const std::string &device_token);
 
-    bool removeDeviceToken(const sole::uuid &userId,
+    bool removeDeviceToken(const reducedsole::uuid &userId,
                            const std::string &device_token);
 
-    size_t fetchDeviceToken(const sole::uuid &userId,
+    size_t fetchDeviceToken(const reducedsole::uuid &userId,
                             std::set<std::string> &device_token);
 };
 

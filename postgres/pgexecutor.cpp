@@ -100,7 +100,7 @@ size_t PGExecutor::select(const std::string &tableName,
 }
 
 bool PGExecutor::defaultSelect(const std::string &tableName,
-                               const sole::uuid &id,
+                               const reducedsole::uuid &id,
                                std::string &message)
 {
     SqlString sql;
@@ -131,7 +131,7 @@ void PGExecutor::delet(const std::string &tableName, const std::string &needleFi
 }
 
 void PGExecutor::defaultDelete(const std::string &table_name,
-                               const sole::uuid &id)
+                               const reducedsole::uuid &id)
 {
     delet(table_name, "id", id.str());
 }
@@ -219,10 +219,10 @@ std::chrono::system_clock::time_point PGExecutor::timepoint(const std::string &f
     return ExtString::toTimepoint(row[fieldname].c_str());
 }
 
-sole::uuid PGExecutor::uuid(const std::string &fieldname)
+reducedsole::uuid PGExecutor::uuid(const std::string &fieldname)
 {
     const pqxx::row &row(result[currentRow]);
-    return sole::rebuild(row[fieldname].c_str());
+    return reducedsole::rebuild(row[fieldname].c_str());
 }
 
 pqxx::oid PGExecutor::oid(const std::string &fieldname)

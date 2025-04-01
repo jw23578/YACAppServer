@@ -307,14 +307,14 @@ bool PistacheHandlerInterface::getString(const std::string &name,
     return true;
 }
 
-bool PistacheHandlerInterface::getUuid(const std::string &name, sole::uuid &target, bool ifMissingThenSendResponse)
+bool PistacheHandlerInterface::getUuid(const std::string &name, reducedsole::uuid &target, bool ifMissingThenSendResponse)
 {
     std::string temp;
     if (!getString(name, temp, ifMissingThenSendResponse))
     {
         return false;
     }
-    target = sole::rebuild(temp);
+    target = reducedsole::rebuild(temp);
     if (target == ExtUuid::NullUuid && ifMissingThenSendResponse)
     {
         answerBad(std::string("Missing ") + name);

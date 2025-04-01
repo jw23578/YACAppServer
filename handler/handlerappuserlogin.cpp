@@ -5,14 +5,14 @@
 #include "serverHeader/thirdheader.h"
 #include "serverHeader/mandantheader.h"
 
-bool HandlerAppUserLogin::thirdLogin(const sole::uuid &appId,
+bool HandlerAppUserLogin::thirdLogin(const reducedsole::uuid &appId,
                                      const std::string &third,
                                      const std::string &mandant,
                                      const std::string &loginEMail,
                                      const std::string &password,
                                      std::string &message,
                                      ExtRapidJSONWriter &w,
-                                     sole::uuid &appUserId)
+                                     reducedsole::uuid &appUserId)
 {
 
     std::string fstname;
@@ -104,7 +104,7 @@ HandlerAppUserLogin::HandlerAppUserLogin(DatabaseLogics &databaseLogics,
 void HandlerAppUserLogin::method()
 {
     MACRO_GetMandatoryString(password);
-    sole::uuid appId;
+    reducedsole::uuid appId;
     if (!getHeaderUuid<AppIdHeader>(appId, true))
     {
         return;
@@ -120,7 +120,7 @@ void HandlerAppUserLogin::method()
     databaseLogics.getLogStat().log(__FILE__, __LINE__, LogStatController::verbose, std::string("mandant: ") + mandant);
 
     std::string message;
-    sole::uuid appUserId;
+    reducedsole::uuid appUserId;
     rapidjson::Document data;
     data.SetObject();
     ExtRapidJSONWriter w(data, data.GetAllocator());

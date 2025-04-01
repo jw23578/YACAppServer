@@ -84,11 +84,11 @@ void HandlerAppUserAppointments::method()
         MACRO_GetUuid(appointment_template_id);
         if (appointment_group_id == ExtUuid::NullUuid)
         {
-            appointment_group_id = sole::uuid4();
+            appointment_group_id = reducedsole::uuid4();
         }
         if (appointment_template_id == ExtUuid::NullUuid)
         {
-            appointment_template_id = sole::uuid4();
+            appointment_template_id = reducedsole::uuid4();
         }
         MACRO_GetMandatoryString(caption);
         MACRO_GetString(decription);
@@ -104,7 +104,7 @@ void HandlerAppUserAppointments::method()
         rapidjson::Document document;
         document.SetObject();
         rapidjson::Value appointment;
-        if (!dla.insertAppointment(sole::uuid4(),
+        if (!dla.insertAppointment(reducedsole::uuid4(),
                                    appId,
                                    appointment_group_id,
                                    appointment_template_id,
@@ -141,7 +141,7 @@ void HandlerAppUserAppointments::method()
     MACRO_GetMandatoryInt(color, true);
     if (isMethod(methodNames.insertAppointmentTemplate))
     {
-        if (!dla.insertAppointmentTemplate(sole::uuid4(),
+        if (!dla.insertAppointmentTemplate(reducedsole::uuid4(),
                                            appId,
                                            name,
                                            default_duration_in_minutes,

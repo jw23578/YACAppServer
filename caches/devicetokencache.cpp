@@ -6,7 +6,7 @@ DeviceTokenCache::DeviceTokenCache(DatabaseLogics &databaseLogics):
 
 }
 
-void DeviceTokenCache::add(const sole::uuid &userId, const std::string &deviceToken)
+void DeviceTokenCache::add(const reducedsole::uuid &userId, const std::string &deviceToken)
 {
     auto itUserId(userId2DeviceToken.find(userId));
     if (itUserId == userId2DeviceToken.end())
@@ -28,7 +28,7 @@ void DeviceTokenCache::add(const sole::uuid &userId, const std::string &deviceTo
                                                          deviceToken);
 }
 
-void DeviceTokenCache::remove(const sole::uuid &userId,
+void DeviceTokenCache::remove(const reducedsole::uuid &userId,
                               const std::string &deviceToken)
 {
     auto itUserId(userId2DeviceToken.find(userId));
@@ -42,7 +42,7 @@ void DeviceTokenCache::remove(const sole::uuid &userId,
                                                           deviceToken);
 }
 
-size_t DeviceTokenCache::get(const sole::uuid &userId,
+size_t DeviceTokenCache::get(const reducedsole::uuid &userId,
                              std::set<std::string> &deviceToken)
 {
     auto itUserId(userId2DeviceToken.find(userId));

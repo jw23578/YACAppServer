@@ -10,14 +10,14 @@ class HandlerAppUserLogin : public PistacheHandlerInterface
     DatabaseLogics &databaseLogics;
     DeviceTokenCache &deviceTokenCache;
 
-    bool thirdLogin(const sole::uuid &appId,
+    bool thirdLogin(const reducedsole::uuid &appId,
                     const std::string &third,
                     const std::string &mandant,
                     const std::string &loginEMail,
                     const std::string &password,
                     std::string &message,
                     ExtRapidJSONWriter &w,
-                    sole::uuid &appUserId);
+                    reducedsole::uuid &appUserId);
 
 public:
     HandlerAppUserLogin(DatabaseLogics &databaseLogics,

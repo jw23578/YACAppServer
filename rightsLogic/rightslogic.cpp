@@ -3,7 +3,7 @@
 #include "orm_implementions/t0022_right_group2appuser.h"
 #include "orm-mapper/orm2postgres.h"
 
-void RightsLogic::fetchRightsForUser(const sole::uuid &appuser_id)
+void RightsLogic::fetchRightsForUser(const reducedsole::uuid &appuser_id)
 {
     auto it(appUsers2RightNumbers.find(appuser_id));
     if (it == appUsers2RightNumbers.end())
@@ -17,7 +17,7 @@ RightsLogic::RightsLogic(DatabaseLogicRightGroup &dlrg):
 {
 }
 
-int RightsLogic::appUserMissesRight(const sole::uuid &appuser_id,
+int RightsLogic::appUserMissesRight(const reducedsole::uuid &appuser_id,
                                     const RightNumber &rn)
 {
     // if right is missing then the right number is returned
@@ -36,8 +36,8 @@ void RightsLogic::clear()
     appUsers2RightNumbers.clear();
 }
 
-void RightsLogic::addUserRights(const sole::uuid &app_id,
-                                const sole::uuid &appuser_id,
+void RightsLogic::addUserRights(const reducedsole::uuid &app_id,
+                                const reducedsole::uuid &appuser_id,
                                 rapidjson::Value &target,
                                 rapidjson::MemoryPoolAllocator<> &alloc)
 {
@@ -54,7 +54,7 @@ void RightsLogic::addUserRights(const sole::uuid &app_id,
         }
         else
         {
-            sole::uuid right_group_id;
+            reducedsole::uuid right_group_id;
             if (dlrg.fetchIDOfOneRightGroupByName(app_id, Rights::Administrator, right_group_id))
             {
                 t0022_right_group2appuser t0022;

@@ -4,7 +4,7 @@
 #include "orm-mapper/orm2rapidjson.h"
 #include "orm_implementions/t0021_right_group.h"
 
-bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
+bool DatabaseLogicRightGroup::fetchOneRightGroup(const reducedsole::uuid &id,
                                                  rapidjson::Value &object,
                                                  rapidjson::MemoryPoolAllocator<> &alloc,
                                                  std::string &message)
@@ -13,7 +13,7 @@ bool DatabaseLogicRightGroup::fetchOneRightGroup(const sole::uuid &id,
     return o2p.defaultSelectToJSON(tableNames.t0021_right_group, id, object, alloc, message);
 }
 
-bool DatabaseLogicRightGroup::appuserInRightGroup(const sole::uuid &right_group_id, const sole::uuid &appuser_id)
+bool DatabaseLogicRightGroup::appuserInRightGroup(const reducedsole::uuid &right_group_id, const reducedsole::uuid &appuser_id)
 {
     SqlString sql;
     sql.select(tableNames.t0022_right_group2appuser);
@@ -24,7 +24,7 @@ bool DatabaseLogicRightGroup::appuserInRightGroup(const sole::uuid &right_group_
     return e.size() > 0;
 }
 
-bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const sole::uuid &app_id, const std::string &name, sole::uuid &id)
+bool DatabaseLogicRightGroup::fetchIDOfOneRightGroupByName(const reducedsole::uuid &app_id, const std::string &name, reducedsole::uuid &id)
 {
     SqlString sql;
     sql.select(tableNames.t0021_right_group);
@@ -48,7 +48,7 @@ DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatContr
 
 }
 
-bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
+bool DatabaseLogicRightGroup::deleteRightGroup(const reducedsole::uuid &id, const reducedsole::uuid &appuser_id, std::string &message)
 {
     SqlString sql;
     sql.update(tableNames.t0021_right_group);
@@ -59,7 +59,7 @@ bool DatabaseLogicRightGroup::deleteRightGroup(const sole::uuid &id, const sole:
     return true;
 }
 
-bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
+bool DatabaseLogicRightGroup::fetchRightGroup(const reducedsole::uuid &right_group_id,
                                               rapidjson::Value &object,
                                               rapidjson::MemoryPoolAllocator<> &alloc,
                                               std::string &message)
@@ -100,7 +100,7 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const sole::uuid &right_group_id,
     return true;
 }
 
-bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_group_id,
+bool DatabaseLogicRightGroup::fetchRightGroupMember(const reducedsole::uuid &right_group_id,
                                                     rapidjson::Value &member,
                                                     rapidjson::MemoryPoolAllocator<> &alloc,
                                                     std::string &errorMessage)
@@ -117,7 +117,7 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const sole::uuid &right_grou
     return true;
 }
 
-void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const sole::uuid &appuser_id, std::set<int> &right_numbers)
+void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const reducedsole::uuid &appuser_id, std::set<int> &right_numbers)
 {
     SqlString sql;
     sql.select(tableNames.t0023_right2rightgroup);
@@ -134,8 +134,8 @@ void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const sole::uuid &appuser
     }
 }
 
-bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id,
-                                          const sole::uuid &right_group_id,
+bool DatabaseLogicRightGroup::insertRight(const reducedsole::uuid &id,
+                                          const reducedsole::uuid &right_group_id,
                                           const int right_number,
                                           std::string &message)
 {
@@ -160,7 +160,7 @@ bool DatabaseLogicRightGroup::insertRight(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, const int right_number, std::string &message)
+bool DatabaseLogicRightGroup::removeRight(const reducedsole::uuid &right_group_id, const int right_number, std::string &message)
 {
     SqlString sql;
     sql.delet(tableNames.t0023_right2rightgroup);
@@ -170,7 +170,7 @@ bool DatabaseLogicRightGroup::removeRight(const sole::uuid &right_group_id, cons
     return true;
 }
 
-bool DatabaseLogicRightGroup::removeUser(const sole::uuid &right_group_id, const sole::uuid &appuser_id, std::string &message)
+bool DatabaseLogicRightGroup::removeUser(const reducedsole::uuid &right_group_id, const reducedsole::uuid &appuser_id, std::string &message)
 {
     SqlString sql;
     sql.delet(tableNames.t0022_right_group2appuser);
@@ -180,7 +180,7 @@ bool DatabaseLogicRightGroup::removeUser(const sole::uuid &right_group_id, const
     return true;
 }
 
-void DatabaseLogicRightGroup::fetchGroupRightNumbers(const sole::uuid &right_group_id,
+void DatabaseLogicRightGroup::fetchGroupRightNumbers(const reducedsole::uuid &right_group_id,
                                                      std::set<int> &right_numbers)
 {
     SqlString sql;
@@ -190,10 +190,10 @@ void DatabaseLogicRightGroup::fetchGroupRightNumbers(const sole::uuid &right_gro
     e.fill(right_numbers, tableFields.right_number);
 }
 
-void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const sole::uuid &app_id,
+void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const reducedsole::uuid &app_id,
                                                          const std::string &adminGroupName, const std::set<int> &right_numbers)
 {
-    sole::uuid id(sole::uuid4());
+    reducedsole::uuid id(reducedsole::uuid4());
     if (!fetchIDOfOneRightGroupByName(app_id, adminGroupName, id))
     {
         SqlString sql;
@@ -211,12 +211,12 @@ void DatabaseLogicRightGroup::checkAndGenerateAdminGroup(const sole::uuid &app_i
     {
         if (current_right_numbers.find(rn) == current_right_numbers.end())
         {
-            insertRight(sole::uuid4(), id, rn, message);
+            insertRight(reducedsole::uuid4(), id, rn, message);
         }
     }
 }
 
-bool DatabaseLogicRightGroup::adminExists(const sole::uuid &app_id, const std::string &adminGroupName)
+bool DatabaseLogicRightGroup::adminExists(const reducedsole::uuid &app_id, const std::string &adminGroupName)
 {
     SqlString sql;
     sql.select(tableNames.t0022_right_group2appuser);

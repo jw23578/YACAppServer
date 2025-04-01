@@ -3,7 +3,7 @@
 #include "pgoidloader.h"
 #include "pgexecutor.h"
 
-bool DatabaseLogicImageTable::lookUpOid(const sole::uuid &imageId,
+bool DatabaseLogicImageTable::lookUpOid(const reducedsole::uuid &imageId,
                                         pqxx::oid &imageOid)
 {
     PGExecutor e(pool);
@@ -29,7 +29,7 @@ DatabaseLogicImageTable::DatabaseLogicImageTable(LogStatController &logStatContr
 
 bool DatabaseLogicImageTable::storeImage(const std::basic_string<std::byte> &data,
                                          std::string &message,
-                                         sole::uuid &imageId)
+                                         reducedsole::uuid &imageId)
 {
     pqxx::oid imageOid;
     PGOidStorer storer(pool,
@@ -37,7 +37,7 @@ bool DatabaseLogicImageTable::storeImage(const std::basic_string<std::byte> &dat
                        imageOid);
     SqlString sql;
     sql.insert(tableNames.t0013_images);
-    imageId = sole::uuid4();
+    imageId = reducedsole::uuid4();
     sql.addInsert(tableFields.id, imageId, false);
     sql.addInsert(tableFields.data, imageOid, false);
     PGExecutor e(pool,
@@ -46,7 +46,7 @@ bool DatabaseLogicImageTable::storeImage(const std::basic_string<std::byte> &dat
     return true;
 }
 
-bool DatabaseLogicImageTable::fetchImage(const sole::uuid &imageId,
+bool DatabaseLogicImageTable::fetchImage(const reducedsole::uuid &imageId,
                                          std::string &message,
                                          std::basic_string<std::byte> &data)
 {

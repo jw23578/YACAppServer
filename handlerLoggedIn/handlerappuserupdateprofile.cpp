@@ -41,7 +41,7 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetString(public_key_base64);
     MACRO_GetString(password);
 
-    sole::uuid imageId(ExtUuid::NullUuid);
+    reducedsole::uuid imageId(ExtUuid::NullUuid);
     if (with_image)
     {
         if (image_data_base64.size() == 0)

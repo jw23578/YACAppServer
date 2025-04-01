@@ -5,12 +5,12 @@
 #include "orm-mapper/orm2postgres.h"
 #include "logstat/logstatcontroller.h"
 
-void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
+void DatabaseLogicAppUser::loginSuccessful(const reducedsole::uuid &appUserId,
                                            std::string &loginToken)
 {
     if (loginToken.size() == 0)
     {
-        loginToken = sole::uuid4().str();
+        loginToken = reducedsole::uuid4().str();
     }
     int validHours(24 * 7);
     t0009_appuser_logintoken t0009;
@@ -21,9 +21,9 @@ void DatabaseLogicAppUser::loginSuccessful(const sole::uuid &appUserId,
     o2p.insertOrUpdate(t0009);
 }
 
-bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,
+bool DatabaseLogicAppUser::lookupAppUser(const reducedsole::uuid &appId,
                                          const std::string &loginEMail,
-                                         sole::uuid &appUserId,
+                                         reducedsole::uuid &appUserId,
                                          std::string &message)
 {
     auto it(loginEMailAndAppId2AppUserId.find(loginEMail + appId.str()));
@@ -32,7 +32,7 @@ bool DatabaseLogicAppUser::lookupAppUser(const sole::uuid &appId,
         appUserId = it->second;
         return true;
     }
-    std::map<std::string, sole::uuid> loginEMail2AppUserId;
+    std::map<std::string, reducedsole::uuid> loginEMail2AppUserId;
     PGExecutor appUser(pool);
     if (!appUser.select(tableNames.t0003_appuser_profiles,
                         "loginemail",
@@ -70,7 +70,7 @@ DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
 
 }
 
-sole::uuid DatabaseLogicAppUser::getAppUserId(const sole::uuid &appId,
+reducedsole::uuid DatabaseLogicAppUser::getAppUserId(const reducedsole::uuid &appId,
                                            const std::string &loginEMail)
 {
     SqlString sql("select id from ");
@@ -86,7 +86,7 @@ sole::uuid DatabaseLogicAppUser::getAppUserId(const sole::uuid &appId,
     return e.uuid("id");
 }
 
-bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
+bool DatabaseLogicAppUser::createAppUser(reducedsole::uuid const &appId,
                                          const std::string &loginEMail,
                                          const std::string &password,
                                          std::string &message,
@@ -104,7 +104,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
         message = "LoginEMail already exists.";
         return false;
     }
-    sole::uuid appUserId(sole::uuid4());
+    reducedsole::uuid appUserId(reducedsole::uuid4());
     verifyToken = ExtString::randomString(0, 0, 4, 0);
     {
         t0003_appuser_profiles t0003;
@@ -154,7 +154,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
                         " (id, appuser_id, password_hash) "
                         " values "
                         " (:id, :appuser_id, crypt(:password, gen_salt('bf'))) ");
-        sql.set(tableFields.id, sole::uuid4());
+        sql.set(tableFields.id, reducedsole::uuid4());
         sql.set(tableFields.appuser_id, appUserId);
         sql.set("password", password);
         PGExecutor e(pool, sql);
@@ -163,7 +163,7 @@ bool DatabaseLogicAppUser::createAppUser(sole::uuid const &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::createVerifiedAppUser(const sole::uuid &appId,
+bool DatabaseLogicAppUser::createVerifiedAppUser(const reducedsole::uuid &appId,
                                                  const std::string &loginEMail,
                                                  const std::string &fstname,
                                                  const std::string &surname,
@@ -201,12 +201,12 @@ bool DatabaseLogicAppUser::createVerifiedAppUser(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
+bool DatabaseLogicAppUser::createVerifyToken(const reducedsole::uuid &appId,
                                              const std::string &loginEMail,
                                              std::string &message,
                                              std::string &verifyToken)
 {
-    sole::uuid appUserId(getAppUserId(appId,
+    reducedsole::uuid appUserId(getAppUserId(appId,
                                 loginEMail));
     if (appUserId == ExtUuid::NullUuid)
     {
@@ -223,12 +223,12 @@ bool DatabaseLogicAppUser::createVerifyToken(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
+bool DatabaseLogicAppUser::verifyAppUser(const reducedsole::uuid &appId,
                                          const std::string &loginEMail,
                                          const std::string &verifyToken,
                                          std::string &message,
                                          ExtRapidJSONWriter &w,
-                                         sole::uuid &appUserId)
+                                         reducedsole::uuid &appUserId)
 {
     PGExecutor select(pool);
     select.select(tableNames.t0003_appuser_profiles,
@@ -297,12 +297,12 @@ bool DatabaseLogicAppUser::verifyAppUser(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
+bool DatabaseLogicAppUser::loginAppUser(const reducedsole::uuid &appId,
                                         const std::string &loginEMail,
                                         const std::string &password,
                                         std::string &message,
                                         ExtRapidJSONWriter &w,
-                                        sole::uuid &appUserId)
+                                        reducedsole::uuid &appUserId)
 {
     if (!lookupAppUser(appId, loginEMail, appUserId, message))
     {
@@ -344,8 +344,8 @@ bool DatabaseLogicAppUser::loginAppUser(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
-                                         const sole::uuid &userId,
+bool DatabaseLogicAppUser::updateAppUser(const reducedsole::uuid &appId,
+                                         const reducedsole::uuid &userId,
                                          const std::string &fstname,
                                          const std::string &surname,
                                          const std::string &visible_name,
@@ -355,7 +355,7 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
                                          const bool searching_fuzzy_allowed,
                                          const std::string &public_key_base64,
                                          const bool with_image,
-                                         const sole::uuid imageId,
+                                         const reducedsole::uuid imageId,
                                          std::string &message)
 {
     SqlString sql;
@@ -379,10 +379,10 @@ bool DatabaseLogicAppUser::updateAppUser(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
+bool DatabaseLogicAppUser::appUserLoggedIn(const reducedsole::uuid &appId,
                                            const std::string &loginEMail,
                                            const std::string &loginToken,
-                                           sole::uuid &userId,
+                                           reducedsole::uuid &userId,
                                            std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     std::string ignored;
@@ -403,12 +403,12 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
+bool DatabaseLogicAppUser::requestUpdatePassword(const reducedsole::uuid &appId,
                                               const std::string &loginEMail,
                                               std::string &updatePasswordToken,
                                               std::string &message)
 {
-    sole::uuid userId;
+    reducedsole::uuid userId;
     if (!lookupAppUser(appId, loginEMail, userId, message))
     {
         return false;
@@ -423,7 +423,7 @@ bool DatabaseLogicAppUser::requestUpdatePassword(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::updatePasswordLoggedIn(const sole::uuid &appuser_id, const std::string &password)
+bool DatabaseLogicAppUser::updatePasswordLoggedIn(const reducedsole::uuid &appuser_id, const std::string &password)
 {
     SqlString sql;
     sql.select(tableNames.t0004_appuser_passwordhashes);
@@ -444,7 +444,7 @@ bool DatabaseLogicAppUser::updatePasswordLoggedIn(const sole::uuid &appuser_id, 
                         " (id, appuser_id, password_hash) "
                         " values "
                         " (:id, :appuser_id, crypt(:password, gen_salt('bf'))) ");
-        sql.set(tableFields.id, sole::uuid4());
+        sql.set(tableFields.id, reducedsole::uuid4());
         sql.set(tableFields.appuser_id, appuser_id);
         sql.set("password", password);
         PGExecutor e(pool, sql);
@@ -453,13 +453,13 @@ bool DatabaseLogicAppUser::updatePasswordLoggedIn(const sole::uuid &appuser_id, 
     return true;
 }
 
-bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
+bool DatabaseLogicAppUser::updatePassword(const reducedsole::uuid &appId,
                                           const std::string &loginEMail,
                                           const std::string &updatePasswordToken,
                                           const std::string &password,
                                           std::string &message,
                                           std::string &loginToken,
-                                          sole::uuid &userId)
+                                          reducedsole::uuid &userId)
 {
     PGExecutor e(pool);
     e.select(tableNames.t0003_appuser_profiles,
@@ -518,7 +518,7 @@ bool DatabaseLogicAppUser::updatePassword(const sole::uuid &appId,
 
 }
 
-bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
+bool DatabaseLogicAppUser::searchProfiles(const reducedsole::uuid &appId,
                                           const std::string &needle,
                                           size_t limit,
                                           const size_t offset,
@@ -561,8 +561,8 @@ bool DatabaseLogicAppUser::searchProfiles(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::fetchMyProfile(const sole::uuid &appId,
-                                          const sole::uuid &userId,
+bool DatabaseLogicAppUser::fetchMyProfile(const reducedsole::uuid &appId,
+                                          const reducedsole::uuid &userId,
                                           std::string &message,
                                           rapidjson::Value &target,
                                           rapidjson::MemoryPoolAllocator<> &alloc)
@@ -589,8 +589,8 @@ bool DatabaseLogicAppUser::fetchMyProfile(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
-                                        const sole::uuid &userId,
+bool DatabaseLogicAppUser::fetchProfile(const reducedsole::uuid &appId,
+                                        const reducedsole::uuid &userId,
                                         std::string &message,
                                         rapidjson::Value &target,
                                         rapidjson::MemoryPoolAllocator<> &alloc)
@@ -615,12 +615,12 @@ bool DatabaseLogicAppUser::fetchProfile(const sole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::storeDeviceToken(const sole::uuid &userId,
+bool DatabaseLogicAppUser::storeDeviceToken(const reducedsole::uuid &userId,
                                             const std::string &device_token)
 {
     SqlString sql;
     sql.insert(tableNames.t0015_appuser_devicetoken);
-    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
     sql.addInsert(tableFields.user_id, userId, false);
     sql.addInsert(tableFields.device_token, device_token, false);
     PGExecutor e(pool,
@@ -628,7 +628,7 @@ bool DatabaseLogicAppUser::storeDeviceToken(const sole::uuid &userId,
     return true;
 }
 
-bool DatabaseLogicAppUser::removeDeviceToken(const sole::uuid &userId,
+bool DatabaseLogicAppUser::removeDeviceToken(const reducedsole::uuid &userId,
                                              const std::string &device_token)
 {
     SqlString sql;
@@ -640,7 +640,7 @@ bool DatabaseLogicAppUser::removeDeviceToken(const sole::uuid &userId,
     return true;
 }
 
-size_t DatabaseLogicAppUser::fetchDeviceToken(const sole::uuid &userId,
+size_t DatabaseLogicAppUser::fetchDeviceToken(const reducedsole::uuid &userId,
                                               std::set<std::string> &device_token)
 {
     SqlString sql;
@@ -656,12 +656,12 @@ size_t DatabaseLogicAppUser::fetchDeviceToken(const sole::uuid &userId,
     return e.size();
 }
 
-void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
+void DatabaseLogicAppUser::refreshAppUserLoginToken(const reducedsole::uuid &appId,
                                                     const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     std::string ignored;
-    sole::uuid appUserId;
+    reducedsole::uuid appUserId;
     if (!lookupAppUser(appId, loginEMail, appUserId, ignored))
     {
         return;
@@ -679,7 +679,7 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const sole::uuid &appId,
     loginTokenValidUntil = e.timepoint(tableFields.login_token_valid_until);
 }
 
-void DatabaseLogicAppUser::resetUpdatePasswordToken(const sole::uuid &userId)
+void DatabaseLogicAppUser::resetUpdatePasswordToken(const reducedsole::uuid &userId)
 {
     SqlString sql;
     sql.update(tableNames.t0003_appuser_profiles);

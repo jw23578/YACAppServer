@@ -20,9 +20,9 @@ public:
 
     void insertOrUpdate(YACBaseObject &object);
 
-    bool select(const sole::uuid &id,
+    bool select(const reducedsole::uuid &id,
                 YACBaseObject &object);
-    bool select(const sole::uuid &id,
+    bool select(const reducedsole::uuid &id,
                 YACBaseObject &object,
                 rapidjson::Value &target,
                 rapidjson::MemoryPoolAllocator<> &alloc);
@@ -85,7 +85,7 @@ public:
                        const std::set<std::string> fields2Ignore = {});
 
     bool defaultSelectToJSON(const std::string &tableName,
-                             const sole::uuid &id,
+                             const reducedsole::uuid &id,
                              rapidjson::Value &object,
                              rapidjson::MemoryPoolAllocator<> &alloc,
                              std::string &message);

@@ -1,6 +1,6 @@
 #include "databaselogicworktime.h"
 
-bool DatabaseLogicWorktime::selectWorktimeBefore(const sole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
+bool DatabaseLogicWorktime::selectWorktimeBefore(const reducedsole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
 {
     SqlString sql;
     sql.select(tableNames.t0012_worktime);
@@ -12,7 +12,7 @@ bool DatabaseLogicWorktime::selectWorktimeBefore(const sole::uuid &user_id, cons
     return e.size() > 0;
 }
 
-bool DatabaseLogicWorktime::selectWorktimeAfter(const sole::uuid &user_id,
+bool DatabaseLogicWorktime::selectWorktimeAfter(const reducedsole::uuid &user_id,
                                                 const TimePoint &ts,
                                                 const std::set<WorktimeType> &typesAllowed,
                                                 PGExecutor &e)
@@ -40,7 +40,7 @@ DatabaseLogicWorktime::DatabaseLogicWorktime(LogStatController &logStatControlle
 
 }
 
-bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
+bool DatabaseLogicWorktime::currentState(const reducedsole::uuid &user_id,
                                          std::chrono::system_clock::time_point &workStart,
                                          std::chrono::system_clock::time_point &pauseStart,
                                          std::chrono::system_clock::time_point &offSiteStart)
@@ -80,7 +80,7 @@ bool DatabaseLogicWorktime::currentState(const sole::uuid &user_id,
     return true;
 }
 
-bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
+bool DatabaseLogicWorktime::insertWorktime(const reducedsole::uuid &user_id,
                                            const std::chrono::system_clock::time_point ts,
                                            const WorktimeType type,
                                            const UserMood user_mood,
@@ -187,7 +187,7 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
 
     SqlString sql;
     sql.insert(tableNames.t0012_worktime);
-    sql.addInsert(tableFields.id, sole::uuid4(), false);
+    sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
     sql.addInsert(tableFields.user_id, user_id, false);
     sql.addInsert(tableFields.ts, ts, false);
     sql.addInsert(tableFields.type, type, false);
@@ -200,7 +200,7 @@ bool DatabaseLogicWorktime::insertWorktime(const sole::uuid &user_id,
     return true;
 }
 
-bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
+bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user_id,
                                                    const TimePoint &begin,
                                                    const TimePoint &end,
                                                    const WorktimeType type,
@@ -319,7 +319,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
     {
         SqlString sql;
         sql.insert(tableNames.t0012_worktime);
-        sql.addInsert(tableFields.id, sole::uuid4(), false);
+        sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
         sql.addInsert(tableFields.user_id, user_id, false);
         sql.addInsert(tableFields.ts, begin, false);
         sql.addInsert(tableFields.type, type, false);
@@ -332,7 +332,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
     {
         SqlString sql;
         sql.insert(tableNames.t0012_worktime);
-        sql.addInsert(tableFields.id, sole::uuid4(), false);
+        sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
         sql.addInsert(tableFields.user_id, user_id, false);
         sql.addInsert(tableFields.ts, end, false);
         sql.addInsert(tableFields.type, type + 1, false);
@@ -346,7 +346,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const sole::uuid &user_id,
     return true;
 }
 
-bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
+bool DatabaseLogicWorktime::fetchWorktimes(const reducedsole::uuid &user_id,
                                            const TimePoint &since,
                                            const TimePoint &until,
                                            rapidjson::Value &targetArray,
@@ -372,11 +372,11 @@ bool DatabaseLogicWorktime::fetchWorktimes(const sole::uuid &user_id,
     return true;
 }
 
-bool DatabaseLogicWorktime::deleteWorktime(const sole::uuid &user_id,
-                                           const sole::uuid &id,
+bool DatabaseLogicWorktime::deleteWorktime(const reducedsole::uuid &user_id,
+                                           const reducedsole::uuid &id,
                                            std::string &message)
 {
-    sole::uuid endId(ExtUuid::NullUuid);
+    reducedsole::uuid endId(ExtUuid::NullUuid);
     {
         SqlString sql;
         sql.select(tableNames.t0012_worktime);

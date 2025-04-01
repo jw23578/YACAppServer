@@ -22,7 +22,7 @@ void HandlerAppUserUpdatePassword::method()
 
     std::string message;
     std::string loginToken;
-    sole::uuid userId;
+    reducedsole::uuid userId;
     if (!databaseLogicAppUser.updatePassword(appId,
                                              loginEMail,
                                              updatePasswordToken,

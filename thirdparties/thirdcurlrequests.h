@@ -6,7 +6,7 @@
 #include <optional>
 #include <chrono>
 #include "logstat/logstatcontroller.h"
-#include <sole/sole.hpp>
+#include <utils/reducedsole.h>
 
 class ThirdCurlRequests
 {

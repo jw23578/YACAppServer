@@ -49,7 +49,7 @@ void HandlerAppUserSpace::method()
     if (isMethod(methodNames.requestSpaceAccess))
     {
         MACRO_GetMandatoryUuid(space_id);
-        sole::uuid id(ExtUuid::NullUuid);
+        reducedsole::uuid id(ExtUuid::NullUuid);
         dls.fetchSpaceRequestId(space_id, loggedInUserId, id);
         dls.insertOrUpdateSpace2AppUser(id, appId, space_id, loggedInUserId, TimePointPostgreSqlNow, TimePointPostgreSqlNull, ExtUuid::NullUuid, TimePointPostgreSqlNull, ExtUuid::NullUuid);
         answerOk("request successful", true);
@@ -108,7 +108,7 @@ void HandlerAppUserSpace::method()
         rapidjson::Document document;
         document.SetObject();
         rapidjson::Value space;
-        sole::uuid id(ExtUuid::NullUuid);
+        reducedsole::uuid id(ExtUuid::NullUuid);
         if (!dls.insertOrUpdateSpace(id,
                                      appId,
                                      name,

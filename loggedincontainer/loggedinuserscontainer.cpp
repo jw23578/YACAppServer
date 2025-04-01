@@ -7,12 +7,12 @@ LoggedInUsersContainer::LoggedInUsersContainer(DatabaseLogicUserAndApp &database
 
 }
 
-bool LoggedInUsersContainer::isLoggedIn(const sole::uuid &appId,
+bool LoggedInUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
                                         const std::string &loginEMail,
                                         const std::string &loginToken,
                                         const std::string &third,
                                         const std::string &mandant,
-                                        sole::uuid &userId)
+                                        reducedsole::uuid &userId)
 {
     UNUSED(appId);
     UNUSED(third); // wird hier nicht gebraucht, weil es hier um die user geht die apps anlegen/hochladen können

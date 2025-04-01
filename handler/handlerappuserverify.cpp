@@ -22,7 +22,7 @@ void HandlerAppUserVerify::method()
     rapidjson::Document data;
     data.SetObject();
     ExtRapidJSONWriter w(data, data.GetAllocator());
-    sole::uuid appUserId;
+    reducedsole::uuid appUserId;
     if (!databaseLogics.databaseLogicAppUser.verifyAppUser(appId,
                                                            loginEMail,
                                                            verifyToken,

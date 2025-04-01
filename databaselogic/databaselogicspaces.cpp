@@ -1,7 +1,7 @@
 #include "databaselogicspaces.h"
 #include "pgexecutor.h"
 
-bool DatabaseLogicSpaces::fetchOneSpaceOnly(const sole::uuid &id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
+bool DatabaseLogicSpaces::fetchOneSpaceOnly(const reducedsole::uuid &id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {
     ORM2Postgres o2p(pool);
     return o2p.defaultSelectToJSON(tableNames.t0024_space, id, object, alloc, message);
@@ -16,10 +16,10 @@ DatabaseLogicSpaces::DatabaseLogicSpaces(LogStatController &logStatController,
 
 }
 
-bool DatabaseLogicSpaces::insertOrUpdateSpace(sole::uuid &id,
-                                              const sole::uuid &app_id,
+bool DatabaseLogicSpaces::insertOrUpdateSpace(reducedsole::uuid &id,
+                                              const reducedsole::uuid &app_id,
                                               const std::string &name,
-                                              const sole::uuid &creater_id,
+                                              const reducedsole::uuid &creater_id,
                                               const bool automatic,
                                               const std::string &access_code,
                                               const bool request_allowed,
@@ -40,8 +40,8 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace(sole::uuid &id,
     return fetchOneSpaceOnly(id, object, alloc, message);
 }
 
-bool DatabaseLogicSpaces::spaceRequestResultSeen(const sole::uuid &id,
-                                                 const sole::uuid &appuser_id,
+bool DatabaseLogicSpaces::spaceRequestResultSeen(const reducedsole::uuid &id,
+                                                 const reducedsole::uuid &appuser_id,
                                                  std::string &errorMessage)
 {
     SqlString sql;
@@ -53,7 +53,7 @@ bool DatabaseLogicSpaces::spaceRequestResultSeen(const sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicSpaces::deleteSpace(const sole::uuid &id, const sole::uuid &appuser_id, std::string &message)
+bool DatabaseLogicSpaces::deleteSpace(const reducedsole::uuid &id, const reducedsole::uuid &appuser_id, std::string &message)
 {
     SqlString sql;
     sql.update(tableNames.t0024_space);
@@ -65,8 +65,8 @@ bool DatabaseLogicSpaces::deleteSpace(const sole::uuid &id, const sole::uuid &ap
 
 }
 
-bool DatabaseLogicSpaces::fetchSpaces(const sole::uuid &app_id,
-                                      const sole::uuid &appuser_id,
+bool DatabaseLogicSpaces::fetchSpaces(const reducedsole::uuid &app_id,
+                                      const reducedsole::uuid &appuser_id,
                                       rapidjson::Value &targetArray,
                                       rapidjson::MemoryPoolAllocator<> &alloc,
                                       std::string &message)
@@ -97,7 +97,7 @@ bool DatabaseLogicSpaces::fetchSpaces(const sole::uuid &app_id,
     return true;
 }
 
-bool DatabaseLogicSpaces::fetchSpace(const sole::uuid &space_id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
+bool DatabaseLogicSpaces::fetchSpace(const reducedsole::uuid &space_id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {
     {
         ORM2Postgres o2p(pool);
@@ -120,15 +120,15 @@ bool DatabaseLogicSpaces::fetchSpace(const sole::uuid &space_id, rapidjson::Valu
 
 }
 
-bool DatabaseLogicSpaces::insertOrUpdateSpace2AppUser(sole::uuid &id,
-                                                      const sole::uuid &app_id,
-                                                      const sole::uuid &space_id,
-                                                      const sole::uuid &appuser_id,
+bool DatabaseLogicSpaces::insertOrUpdateSpace2AppUser(reducedsole::uuid &id,
+                                                      const reducedsole::uuid &app_id,
+                                                      const reducedsole::uuid &space_id,
+                                                      const reducedsole::uuid &appuser_id,
                                                       const TimePoint &requested_datetime,
                                                       const TimePoint &approved_datetime,
-                                                      const sole::uuid &approved_appuser_id,
+                                                      const reducedsole::uuid &approved_appuser_id,
                                                       const TimePoint &denied_datetime,
-                                                      const sole::uuid &denied_appuser_id)
+                                                      const reducedsole::uuid &denied_appuser_id)
 {
     SqlString sql;
     sql.insertOrUpdate(id, tableNames.t0025_space2appuser);
@@ -145,7 +145,7 @@ bool DatabaseLogicSpaces::insertOrUpdateSpace2AppUser(sole::uuid &id,
     return true;
 }
 
-bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
+bool DatabaseLogicSpaces::fetchSpaceRequests(const reducedsole::uuid &spaceAdminId,
                                              rapidjson::Value &targetArray,
                                              rapidjson::MemoryPoolAllocator<> &alloc,
                                              std::string &errorMessage)
@@ -165,7 +165,7 @@ bool DatabaseLogicSpaces::fetchSpaceRequests(const sole::uuid &spaceAdminId,
     return true;
 }
 
-bool DatabaseLogicSpaces::fetchSpaceRequestId(const sole::uuid &space_id, const sole::uuid &appuser_id, sole::uuid &id)
+bool DatabaseLogicSpaces::fetchSpaceRequestId(const reducedsole::uuid &space_id, const reducedsole::uuid &appuser_id, reducedsole::uuid &id)
 {
     SqlString sql;
     sql.select(tableNames.t0025_space2appuser);

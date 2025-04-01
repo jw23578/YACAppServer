@@ -15,8 +15,8 @@ class DatabaseLogicImageTable
     PGUtils utils;
     TableNames tableNames;
     TableFields tableFields;
-    std::map<sole::uuid, pqxx::oid> imageId2oid;
-    bool lookUpOid(const sole::uuid &imageId,
+    std::map<reducedsole::uuid, pqxx::oid> imageId2oid;
+    bool lookUpOid(const reducedsole::uuid &imageId,
                    pqxx::oid &imageOid);
 public:
     DatabaseLogicImageTable(LogStatController &logStatController,
@@ -24,8 +24,8 @@ public:
 
     bool storeImage(const std::basic_string<std::byte> &data,
                     std::string &message,
-                    sole::uuid &imageId);
-    bool fetchImage(const sole::uuid &imageId,
+                    reducedsole::uuid &imageId);
+    bool fetchImage(const reducedsole::uuid &imageId,
                     std::string &message,
                     std::basic_string<std::byte> &data);
 };

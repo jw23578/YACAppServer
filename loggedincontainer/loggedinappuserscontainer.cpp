@@ -8,12 +8,12 @@ LoggedInAppUsersContainer::LoggedInAppUsersContainer(DatabaseLogics &databaseLog
 
 }
 
-bool LoggedInAppUsersContainer::isLoggedIn(const sole::uuid &appId,
+bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
                                            const std::string &loginEMail,
                                            const std::string &loginToken,
                                            const std::string &third,
                                            const std::string &mandant,
-                                           sole::uuid &userId)
+                                           reducedsole::uuid &userId)
 {
     std::string needle(loginEMail + "##" + third + "##" + mandant + "##" + loginToken);
     LoggedInUsersMap::iterator it(loggedInUsers.find(needle));

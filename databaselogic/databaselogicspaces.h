@@ -2,7 +2,7 @@
 #define DATABASELOGICSPACES_H
 
 #include "postgres/pgconnectionpool.h"
-#include "sole/sole.hpp"
+#include "utils/reducedsole.h"
 #include "logstat/logstatcontroller.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
@@ -15,7 +15,7 @@ class DatabaseLogicSpaces
     PGConnectionPool &pool;
     TableNames tableNames;
     TableFields tableFields;
-    bool fetchOneSpaceOnly(const sole::uuid &id,
+    bool fetchOneSpaceOnly(const reducedsole::uuid &id,
                            rapidjson::Value &object,
                            rapidjson::MemoryPoolAllocator<> &alloc,
                            std::string &message);
@@ -23,10 +23,10 @@ public:
     DatabaseLogicSpaces(LogStatController &logStatController,
                         PGConnectionPool &pool);
 
-    bool insertOrUpdateSpace(sole::uuid &id,
-                             const sole::uuid &app_id,
+    bool insertOrUpdateSpace(reducedsole::uuid &id,
+                             const reducedsole::uuid &app_id,
                              const std::string &name,
-                             const sole::uuid &creater_id,
+                             const reducedsole::uuid &creater_id,
                              const bool automatic,
                              const std::string &access_code,
                              const bool request_allowed,
@@ -34,42 +34,42 @@ public:
                              rapidjson::MemoryPoolAllocator<> &alloc,
                              std::string &message);
 
-    bool spaceRequestResultSeen(const sole::uuid &id,
-                                const sole::uuid &appuser_id,
+    bool spaceRequestResultSeen(const reducedsole::uuid &id,
+                                const reducedsole::uuid &appuser_id,
                                 std::string &errorMessage);
 
-    bool deleteSpace(const sole::uuid &id,
-                     const sole::uuid &appuser_id,
+    bool deleteSpace(const reducedsole::uuid &id,
+                     const reducedsole::uuid &appuser_id,
                      std::string &message);
 
-    bool fetchSpaces(const sole::uuid &app_id, const sole::uuid &appuser_id,
+    bool fetchSpaces(const reducedsole::uuid &app_id, const reducedsole::uuid &appuser_id,
                      rapidjson::Value &targetArray,
                      rapidjson::MemoryPoolAllocator<> &alloc,
                      std::string &message);
 
-    bool fetchSpace(const sole::uuid &space_id,
+    bool fetchSpace(const reducedsole::uuid &space_id,
                     rapidjson::Value &object,
                     rapidjson::MemoryPoolAllocator<> &alloc,
                     std::string &message);
 
-    bool insertOrUpdateSpace2AppUser(sole::uuid &id,
-                                     const sole::uuid &app_id,
-                                     const sole::uuid &space_id,
-                                     const sole::uuid &appuser_id,
+    bool insertOrUpdateSpace2AppUser(reducedsole::uuid &id,
+                                     const reducedsole::uuid &app_id,
+                                     const reducedsole::uuid &space_id,
+                                     const reducedsole::uuid &appuser_id,
                                      const TimePoint &requested_datetime,
                                      const TimePoint &approved_datetime,
-                                     const sole::uuid &approved_appuser_id,
+                                     const reducedsole::uuid &approved_appuser_id,
                                      const TimePoint &denied_datetime,
-                                     const sole::uuid &denied_appuser_id);
+                                     const reducedsole::uuid &denied_appuser_id);
 
-    bool fetchSpaceRequests(const sole::uuid &spaceAdminId,
+    bool fetchSpaceRequests(const reducedsole::uuid &spaceAdminId,
                             rapidjson::Value &targetArray,
                             rapidjson::MemoryPoolAllocator<> &alloc,
                             std::string &errorMessage);
 
-    bool fetchSpaceRequestId(const sole::uuid &space_id,
-                             const sole::uuid &appuser_id,
-                             sole::uuid &id);
+    bool fetchSpaceRequestId(const reducedsole::uuid &space_id,
+                             const reducedsole::uuid &appuser_id,
+                             reducedsole::uuid &id);
 
 };
 

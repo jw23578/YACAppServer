@@ -22,7 +22,7 @@ void HandlerAppUserUpdateMessageStates::method()
     }
     for (const auto &m: messages.GetArray())
     {
-        sole::uuid messageId(sole::rebuild(m["id"].GetString()));
+        reducedsole::uuid messageId(reducedsole::rebuild(m["id"].GetString()));
         if (m.HasMember("readAtISO"))
         {
             std::chrono::system_clock::time_point readAt(ExtString::toTimepoint(m["readAtIDO"].GetString()));

@@ -3,7 +3,7 @@
 TestDatabaseLogicImageTable::TestDatabaseLogicImageTable(DatabaseLogicImageTable &databaseLogicImageTable)
 {
     std::string message;
-    sole::uuid imageId;
+    reducedsole::uuid imageId;
     std::basic_string<std::byte> data;
     databaseLogicImageTable.storeImage(data, message, imageId);
 }

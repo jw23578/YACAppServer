@@ -2,7 +2,7 @@
 #define DATABASELOGICUSERANDAPP_H
 
 #include "postgres/pgconnectionpool.h"
-#include "sole/sole.hpp"
+#include "utils/reducedsole.h"
 #include "rapidjson/document.h"
 #include "logstat/logstatcontroller.h"
 #include "pgutils.h"
@@ -22,8 +22,8 @@ class DatabaseLogicUserAndApp
     void loginSuccessful(const std::string &loginEMail,
                          std::string &loginToken);
 
-    std::map<sole::uuid, pqxx::oid> imageId2oid;
-    bool lookUpOid(const sole::uuid &imageId,
+    std::map<reducedsole::uuid, pqxx::oid> imageId2oid;
+    bool lookUpOid(const reducedsole::uuid &imageId,
                    pqxx::oid &imageOid);
 
 public:
@@ -31,8 +31,8 @@ public:
                   PGConnectionPool &pool);
 
     bool userExists(const std::string &loginEMail);
-    bool userIsAppOwner(const sole::uuid &app_id,
-                        const sole::uuid &user_id,
+    bool userIsAppOwner(const reducedsole::uuid &app_id,
+                        const reducedsole::uuid &user_id,
                         std::string &errorMessage,
                         bool &appExists);
     std::string createUser(const std::string &loginEMail,
@@ -50,13 +50,13 @@ public:
 
     bool userLoggedIn(const std::string &loginEMail,
                       const std::string &loginToken,
-                      sole::uuid &userId,
+                      reducedsole::uuid &userId,
                       std::chrono::system_clock::time_point &loginTokenValidUntil);
 
     void refreshLoginToken(const std::string &loginEMail,
                            std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    bool saveApp(const sole::uuid loggedInUserId,
+    bool saveApp(const reducedsole::uuid loggedInUserId,
                  t0002_apps &app,
                  const std::string &installation_code,
                  std::string &message);
@@ -69,7 +69,7 @@ public:
 
     bool storeAppImage(t0027_app_images &t0027);
 
-    bool getAppImage(const sole::uuid &id,
+    bool getAppImage(const reducedsole::uuid &id,
                      std::basic_string<std::byte> &data,
                      std::string &errorMessage);
 
