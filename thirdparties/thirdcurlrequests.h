@@ -5,7 +5,7 @@
 #include <map>
 #include <optional>
 #include <chrono>
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 #include "JWUtils/reducedsole.h"
 
 class ThirdCurlRequests

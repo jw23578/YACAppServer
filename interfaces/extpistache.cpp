@@ -2,7 +2,7 @@
 #include "JWUtils/extstring.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/prettywriter.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 
 ExtPistache::ExtPistache()
 {

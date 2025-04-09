@@ -2,7 +2,7 @@
 #define DATABASELOGICTABLES_H
 
 #include "postgres/pgconnectionpool.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"

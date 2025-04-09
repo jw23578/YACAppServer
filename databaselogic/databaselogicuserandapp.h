@@ -4,7 +4,7 @@
 #include "postgres/pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
 #include "rapidjson/document.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"
 #include "tablefields.h"

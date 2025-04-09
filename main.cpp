@@ -10,9 +10,9 @@
 #include "postgres/pgconnectionpool.h"
 #include "databaselogicuserandapp.h"
 #include "emaillogic.h"
-#include "logstat/logstatcontroller.h"
-#include "logstat/filelogger.h"
-#include "logstat/coutlogger.h"
+#include "logstatcontroller.h"
+#include "filelogger.h"
+#include "coutlogger.h"
 #include "databaselogictables.h"
 #include "databaselogicappuser.h"
 #include "databaselogicmessages.h"
@@ -29,8 +29,8 @@
 #include "orm_implementions/yacormfactory.h"
 #include "pgsqlimplementation.h"
 #include "JWUtils/extstringview.h"
-#include "logstat/beginendtrack.h"
-#include "logstat/coutlogger.h"
+#include "beginendtrack.h"
+#include "coutlogger.h"
 
 
 using namespace std;

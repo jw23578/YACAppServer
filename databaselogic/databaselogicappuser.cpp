@@ -3,7 +3,7 @@
 #include "JWUtils/definitions.h"
 #include "orm_implementions/t0009_appuser_logintoken.h"
 #include "orm-mapper/orm2postgres.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 #include "JWUtils/extuuid.h"
 #include "orm_implementions/t0004_appuser_passwordhashes.h"
 

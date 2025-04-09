@@ -2,7 +2,7 @@
 #define DATABASELOGICS_H
 
 #include "postgres/pgconnectionpool.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 
 #include "databaselogicappuser.h"
 #include "databaselogicworktime.h"

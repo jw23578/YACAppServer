@@ -1,7 +1,7 @@
 #include "pgcommandtransactor.h"
 #include <pqxx/except.hxx>
-#include "logstat/logstatcontroller.h"
-#include "logstat/beginendtrack.h"
+#include "logstatcontroller.h"
+#include "beginendtrack.h"
 
 
 void PGCommandTransactor::execAndCommit(pqxx::transaction_base &w,

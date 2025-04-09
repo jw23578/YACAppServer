@@ -1,5 +1,5 @@
 #include "pistacheserverinterface.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 
 PistacheServerInterface::PistacheServerInterface(int port,
                                                  const std::string &certFilename,

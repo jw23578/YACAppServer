@@ -4,7 +4,7 @@
 #include "orm_implementions/t0031_catchphrases.h"
 #include "orm_implementions/t0032_catchphrase2document.h"
 #include "JWUtils/extstringview.h"
-#include "logstat/coutlogger.h"
+#include "coutlogger.h"
 
 Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &serverInterface,
                                                  LoggedInAppUsersContainer &loggedInAppUsersContainer,

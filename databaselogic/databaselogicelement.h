@@ -3,7 +3,7 @@
 
 #include "postgres/pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
-#include "logstat/logstatcontroller.h"
+#include "logstatcontroller.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
 

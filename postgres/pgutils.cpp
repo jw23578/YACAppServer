@@ -3,7 +3,7 @@
 #include "JWUtils/extstring.h"
 #include "pgexecutor.h"
 #include "JWUtils/definitions.h"
-#include "utils/extvector.h"
+#include "extvector.h"
 
 std::map<std::string, SqlString> PGUtils::tableName2InsertString;
 std::map<std::string, SqlString> PGUtils::tableName2UpdateString;

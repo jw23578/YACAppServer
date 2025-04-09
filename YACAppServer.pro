@@ -8,6 +8,7 @@ DEFINES += YACAPPServer
 DEFINES += ORMCPPTypes
 
 include("JWUtils/JWUtils.pri")
+include("JWLogStat/JWLogStat.pri")
 include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
@@ -80,11 +81,6 @@ SOURCES += \
         loggedincontainer/loggedinappuserscontainer.cpp \
         loggedincontainer/loggedincontainerinterface.cpp \
         loggedincontainer/loggedinuserscontainer.cpp \
-        logstat/beginendtrack.cpp \
-        logstat/coutlogger.cpp \
-        logstat/filelogger.cpp \
-        logstat/loggerstatterinterface.cpp \
-        logstat/logstatcontroller.cpp \
         opencvwrapper/opencvwrapper.cpp \
         orm-mapper/orm2postgres.cpp \
         orm-mapper/orm2rapidjson.cpp \
@@ -116,7 +112,6 @@ SOURCES += \
         utils/extrapidjson.cpp \
         main.cpp \
         postgres/pgconnectionpool.cpp \
-        utils/extvector.cpp \
         yacappserver.cpp
 
 HEADERS += \
@@ -174,11 +169,6 @@ HEADERS += \
   loggedincontainer/loggedinappuserscontainer.h \
   loggedincontainer/loggedincontainerinterface.h \
   loggedincontainer/loggedinuserscontainer.h \
-  logstat/beginendtrack.h \
-  logstat/coutlogger.h \
-  logstat/filelogger.h \
-  logstat/loggerstatterinterface.h \
-  logstat/logstatcontroller.h \
   opencvwrapper/opencvwrapper.h \
   orm-mapper/orm2postgres.h \
   orm-mapper/orm2rapidjson.h \
@@ -209,7 +199,6 @@ HEADERS += \
   utils/base64.h \
   utils/extmap.h \
   utils/extrapidjson.h \
-  utils/extvector.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \
   yacappserver.h
@@ -223,8 +212,3 @@ DISTFILES += \
   intern_doc.txt \
   t0009_appuser_logintoken.json \
   updateProfile.json
-
-contains(DEFINES,WITH_INFLUX){
-SOURCES += logstat/influxlogger.cpp
-HEADERS += logstat/influxlogger.h
-}
