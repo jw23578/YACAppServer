@@ -1,14 +1,14 @@
 #ifndef PISTACHEHANDLERINTERFACE_H
 #define PISTACHEHANDLERINTERFACE_H
 
-#include "utils/reducedsole.h"
+#include "JWUtils/reducedsole.h"
 #include "pistache/router.h"
 #include "rapidjson/document.h"
 #include "pistacheserverinterface.h"
 #include "tablenames.h"
 #include "tablefields.h"
 #include "yacAppAndServer/yacappservermethodnames.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 #include "extpistache.h"
 
 

@@ -5,14 +5,14 @@ ORM2rapidjson::ORM2rapidjson()
 
 }
 
-void ORM2rapidjson::toJson(const YACBaseObject &object, rapidjson::Document &document)
+void ORM2rapidjson::toJson(const YACBaseObject &object, rapidjson::Document &document) const
 {
     toJson(object, document, document.GetAllocator());
 }
 
 void ORM2rapidjson::toJson(const YACBaseObject &object,
                            rapidjson::Value &target,
-                           rapidjson::MemoryPoolAllocator<> &alloc)
+                           rapidjson::MemoryPoolAllocator<> &alloc) const
 {
     target.SetObject();
     ExtRapidJSONWriter writer(target, alloc);
@@ -114,7 +114,7 @@ size_t ORM2rapidjson::fromJson(const rapidjson::Value &array,
     return objects.size();
 }
 
-void ORM2rapidjson::add(ExtRapidJSONWriter &writer, const ORMPropertyInterface &pi)
+void ORM2rapidjson::add(ExtRapidJSONWriter &writer, const ORMPropertyInterface &pi) const
 {
     if (pi.isNull())
     {

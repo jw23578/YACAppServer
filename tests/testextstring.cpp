@@ -1,6 +1,6 @@
 #include "testextstring.h"
 #include "thirds/doctest/doctest/doctest.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 
 TEST_CASE("ExtString")
 {

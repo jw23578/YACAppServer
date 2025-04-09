@@ -1,5 +1,5 @@
 #include "handleruserloggedin.h"
-#include "definitions.h"
+#include "JWUtils/definitions.h"
 
 HandlerUserLoggedIn::HandlerUserLoggedIn(PistacheServerInterface &serverInterface,
                                          LoggedInUsersContainer &loggedInUsersContainer):

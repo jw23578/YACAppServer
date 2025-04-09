@@ -1,5 +1,5 @@
 #include "jw78pop3wrapper.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 
 jw78::Pop3Wrapper::Pop3Wrapper(const std::string &h,
                                  const std::string &u,

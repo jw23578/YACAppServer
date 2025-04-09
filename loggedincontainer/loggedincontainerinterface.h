@@ -1,7 +1,7 @@
 #ifndef LOGGEDINCONTAINERINTERFACE_H
 #define LOGGEDINCONTAINERINTERFACE_H
 
-#include "utils/reducedsole.h"
+#include "JWUtils/reducedsole.h"
 #include <string>
 #include <map>
 #include <chrono>

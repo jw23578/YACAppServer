@@ -1,9 +1,9 @@
 #include "pistachehandlerinterface.h"
 #include "extpistache.h"
 #include "rapidjson/error/en.h"
-#include "definitions.h"
-#include "utils/extstring.h"
-#include "utils/extuuid.h"
+#include "JWUtils/definitions.h"
+#include "JWUtils/extstring.h"
+#include "JWUtils/extuuid.h"
 #include "logstat/beginendtrack.h"
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)

@@ -2,12 +2,12 @@
 #define DATABASELOGICSPACES_H
 
 #include "postgres/pgconnectionpool.h"
-#include "utils/reducedsole.h"
+#include "JWUtils/reducedsole.h"
 #include "logstat/logstatcontroller.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
-#include "definitions.h"
+#include "JWUtils/definitions.h"
 
 class DatabaseLogicSpaces
 {

@@ -28,7 +28,7 @@
 #include "rapidjson/writer.h"
 #include "orm_implementions/yacormfactory.h"
 #include "pgsqlimplementation.h"
-#include "utils/extstringview.h"
+#include "JWUtils/extstringview.h"
 #include "logstat/beginendtrack.h"
 #include "logstat/coutlogger.h"
 
@@ -153,7 +153,9 @@ int main(int argc, char **argv)
 
     if (runTests)
     {
+        coutLogger::ActivateVisibleLogging a;
         TestORM2Postgres testORM2Postgres(pool);
+        a.stop();
         TestDatabaseLogics testDatabaseLogics(databaseLogics);
         TestDatabaseLogicMessages testDatabaseLogicMessage(databaseLogicMessages);
         TestDatabaseLogicAppUser testDatabaseLogicAppUser(databaseLogics.databaseLogicAppUser);

@@ -1,7 +1,7 @@
 #include "thirdcurlrequests.h"
 #include "curlWrapper/jw78curlwrapper.h"
 #include "extrapidjson.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 
 std::optional<ThirdCurlRequests::ThirdData> ThirdCurlRequests::lookupThirdData(const std::string &third, const std::string &mandant) const
 {

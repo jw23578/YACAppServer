@@ -1,6 +1,6 @@
 #include "jw78imapwrapper.h"
 #include "jw78curlwrapper.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 #include "utils/extvector.h"
 
 jw78::IMAPWrapper::IMAPWrapper(const std::string &host,

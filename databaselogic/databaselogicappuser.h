@@ -2,9 +2,8 @@
 #define DATABASELOGICAPPUSER_H
 
 #include "postgres/pgconnectionpool.h"
-#include "utils/reducedsole.h"
+#include "JWUtils/reducedsole.h"
 #include "logstat/logstatcontroller.h"
-#include "pgutils.h"
 #include "tablenames.h"
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
@@ -23,7 +22,6 @@ class DatabaseLogicAppUser
     LogStatController &logStatController;
     PGConnectionPool &pool;
     ORMPersistenceInterface &opi;
-    PGUtils utils;
     TableNames tableNames;
     TableFields tableFields;
     void loginSuccessful(const reducedsole::uuid &appUserId,

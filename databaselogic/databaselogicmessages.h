@@ -2,7 +2,7 @@
 #define DATABASELOGICMESSAGES_H
 
 #include "databaselogicinterface.h"
-#include "utils/reducedsole.h"
+#include "JWUtils/reducedsole.h"
 #include "rapidjson/document.h"
 #include "orm_implementions/t0028_message_images.h"
 

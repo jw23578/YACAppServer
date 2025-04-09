@@ -1,6 +1,6 @@
 #include "coutlogger.h"
 #include <iostream>
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 
 int coutLogger::visibleLoggingActive(0);
 bool coutLogger::definitelyNoVisibleLogging(false);

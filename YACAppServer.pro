@@ -7,6 +7,7 @@ DEFINES += RAPIDJSON_HAS_STDSTRING
 DEFINES += YACAPPServer
 DEFINES += ORMCPPTypes
 
+include("JWUtils/JWUtils.pri")
 include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
@@ -206,7 +207,6 @@ HEADERS += \
   tests/testtimepoint.h \
   thirdparties/thirdcurlrequests.h \
   utils/base64.h \
-  utils/definitions.h \
   utils/extmap.h \
   utils/extrapidjson.h \
   utils/extvector.h \

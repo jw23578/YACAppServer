@@ -8,27 +8,39 @@
 #include "pgsqlimplementation.h"
 #include "orm_implementions/t0033_words.h"
 #include "orm/ormpersistenceinterface.h"
+#include "JWUtils/definitions.h"
+#include "orm_implementions/t0001_users.h"
 
 TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
     PGSqlImplementation sqlImplementation(pool);
     ORMPersistenceInterface opi(sqlImplementation);
+    {
+        t0001_users t0001;
+        t0001.prepareFirstInsert();
+        t0001.setloginemail("test@test.de");
+        t0001.setuser_id(ExtUuid::generateUuid());
+        opi.insertObject(t0001, ExtUuid::NullUuid);
+        opi.deleteObject(t0001, ExtUuid::NullUuid);
+    }
+
+
     t0033_words words;
-    opi.upsertObject(words);
+    words.prepareFirstInsert();
+    opi.insertObject(words, ExtUuid::NullUuid);
     words.word = "Jens";
-    opi.upsertObject(words);
+    opi.insertObject(words, ExtUuid::NullUuid);
 
     t0033_words words2;
     opi.selectObject(words.id, words2);
 
     std::cout << words2.toString() << std::endl;
 
-    opi.deleteObject(words2);
+    opi.deleteObject(words2, NullUuid);
 
-    ORM2Postgres o2p(pool);
     t0009_appuser_logintoken ghost;
-    std::set<YACBaseObject*> allT0009;
-    o2p.selectAll(ghost, allT0009);
+    ORMVector<t0009_appuser_logintoken> allT0009;
+    opi.fetchAllObjects(allT0009);
     if (!allT0009.size())
     {
         return;
@@ -37,11 +49,14 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     ORM2rapidjson o2j;
     rapidjson::Document document;
     document.SetObject();
-    YACBaseObject &o(**allT0009.begin());
-    o2j.toJson(o,
-               document,
-               document.GetAllocator());
+    for (size_t i(0); i < allT0009.size(); ++i)
+    {
+        YACBaseObject &o(allT0009[i]);
+        o2j.toJson(o,
+                   document,
+                   document.GetAllocator());
 
+    }
     rapidjson::Value array;
     o2j.toJson(allT0009, array, document.GetAllocator());
     document.AddMember("array", array, document.GetAllocator());

@@ -1,7 +1,7 @@
 #include "pgexecutor.h"
 #include "pgcommandtransactor.h"
-#include "utils/extstring.h"
-#include "definitions.h"
+#include "JWUtils/extstring.h"
+#include "JWUtils/definitions.h"
 
 
 PGExecutor::PGExecutor(PGConnectionPool &pool):
@@ -61,6 +61,8 @@ size_t PGExecutor::login(const std::string &tableName,
     sql += tableName;
     sql += " where ";
     sql += loginField + " = :" + loginField;
+    sql.addCompare("and", "deleted", "is", NullUuid);
+    sql.addCompare("and", "historied", "is", NullUuid);
     sql.set(loginField, loginValue);
     sql.set("password", password);
     return exec(sql);

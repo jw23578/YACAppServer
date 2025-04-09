@@ -1,6 +1,6 @@
 #include "databaselogicmessages.h"
 #include "pgexecutor.h"
-#include "definitions.h"
+#include "JWUtils/definitions.h"
 #include "pgoidstorer.h"
 #include "pgoidloader.h"
 #include "base64.h"
@@ -32,7 +32,6 @@ void DatabaseLogicMessages::deleteMessage(const reducedsole::uuid &id)
 {
     SqlString sql;
     sql.delet(tableNames.t0007_messages);
-    sql += tableNames.t0007_messages;
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
 }

@@ -1,8 +1,8 @@
 #include "pgutils.h"
 #include "pgcommandtransactor.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 #include "pgexecutor.h"
-#include "definitions.h"
+#include "JWUtils/definitions.h"
 #include "utils/extvector.h"
 
 std::map<std::string, SqlString> PGUtils::tableName2InsertString;

@@ -3,7 +3,7 @@
 #include "base64.h"
 #include "orm_implementions/t0031_catchphrases.h"
 #include "orm_implementions/t0032_catchphrase2document.h"
-#include "utils/extstringview.h"
+#include "JWUtils/extstringview.h"
 #include "logstat/coutlogger.h"
 
 Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &serverInterface,
@@ -40,13 +40,13 @@ void Handler_t0030_documents::method()
             answerOk("No decoded Document-Data", false);
             return;
         }
-        t0030.document_blob_id = opi.storeBlob(data);
+        t0030.document_blob_id = opi.storeBlob(data, loggedInUserId);
         t0030.app_id = appId;
         t0030.creater_id = loggedInUserId;
 
         if (isPost())
         {
-            if (!opi.insertObject(t0030))
+            if (!opi.insertObject(t0030, loggedInUserId))
             {
                 answerOk("Insert of Document failed", false);
                 return;
@@ -54,7 +54,7 @@ void Handler_t0030_documents::method()
         }
         if (isPut())
         {
-            if (!opi.updateObject(t0030))
+            if (!opi.insertObject(t0030, loggedInUserId))
             {
                 answerOk("Update of Document failed", false);
                 return;
@@ -73,14 +73,14 @@ void Handler_t0030_documents::method()
             t0031.id.generate();
             t0031.catchphrase = std::string(cp);
             t0031.app_id = appId;
-            opi.insertIfNotSameDataExists(t0031);
+            opi.insertIfNotSameDataExists(t0031, loggedInUserId);
 
             t0032_catchphrase2document t0032;
             t0032.id.generate();
             t0032.app_id = appId;
             t0032.document_id = t0030.id;
             t0032.t0031_id = t0031.id;
-            opi.insertObject(t0032);
+            opi.insertObject(t0032, loggedInUserId);
         }
 
         answerOk("Document stored", true);
@@ -196,9 +196,7 @@ void Handler_t0030_documents::method()
             answerOk(std::string("Not allowed to delete this document, wrong Creator"), false);
             return;
         }
-        t0030.deleted_datetime = TimePointPostgreSqlNow;
-        t0030.deleted_appuser_id = loggedInUserId;
-        opi.updateObject(t0030);
+        opi.deleteObject(t0030, loggedInUserId);
         answerOk("document deleted", true);
         return;
     }

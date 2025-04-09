@@ -1,5 +1,5 @@
 #include "pgconnectionpool.h"
-#include "utils/extstring.h"
+#include "JWUtils/extstring.h"
 #include "logstat/logstatcontroller.h"
 
 bool PGConnectionPool::findAndUse(pqxx::connection **conn)

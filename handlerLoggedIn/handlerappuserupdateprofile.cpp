@@ -1,6 +1,6 @@
 #include "handlerappuserupdateprofile.h"
 #include "base64.h"
-#include "definitions.h"
+#include "JWUtils/definitions.h"
 
 HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface &serverInterface,
                                                          DatabaseLogics &databaseLogics,
