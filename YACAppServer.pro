@@ -33,7 +33,6 @@ SOURCES += \
         curlWrapper/jw78imapwrapper.cpp \
         curlWrapper/jw78pop3wrapper.cpp \
         curlWrapper/jw78smtpwrapper.cpp \
-        databaselogic/databaselogicappointments.cpp \
         databaselogic/databaselogicappuser.cpp \
         databaselogic/databaselogicelement.cpp \
         databaselogic/databaselogicimagetable.cpp \
@@ -60,7 +59,6 @@ SOURCES += \
         handler/handleruserregister.cpp \
         handler/handlerverifyuser.cpp \
         handlerLoggedIn/handler_t0030_documents.cpp \
-        handlerLoggedIn/handlerappuserappointments.cpp \
         handlerLoggedIn/handlerappuserfetchimage.cpp \
         handlerLoggedIn/handlerappuserfetchmessageupdates.cpp \
         handlerLoggedIn/handlerappuserfetchprofile.cpp \
@@ -129,7 +127,6 @@ HEADERS += \
   curlWrapper/jw78imapwrapper.h \
   curlWrapper/jw78pop3wrapper.h \
   curlWrapper/jw78smtpwrapper.h \
-  databaselogic/databaselogicappointments.h \
   databaselogic/databaselogicappuser.h \
   databaselogic/databaselogicelement.h \
   databaselogic/databaselogicimagetable.h \
@@ -156,7 +153,6 @@ HEADERS += \
   handler/handleruserregister.h \
   handler/handlerverifyuser.h \
   handlerLoggedIn/handler_t0030_documents.h \
-  handlerLoggedIn/handlerappuserappointments.h \
   handlerLoggedIn/handlerappuserfetchimage.h \
   handlerLoggedIn/handlerappuserfetchmessageupdates.h \
   handlerLoggedIn/handlerappuserfetchprofile.h \

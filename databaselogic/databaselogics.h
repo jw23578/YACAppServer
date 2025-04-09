@@ -8,7 +8,6 @@
 #include "databaselogicworktime.h"
 #include "databaselogicimagetable.h"
 #include "databaselogicmessages.h"
-#include "databaselogicappointments.h"
 #include "databaselogicrightgroup.h"
 #include "databaselogic/databaselogicspaces.h"
 #include "databaselogic/databaselogicuserandapp.h"
@@ -28,7 +27,6 @@ public:
     DatabaseLogicWorktime databaseLogicWorktime;
     DatabaseLogicImageTable databaseLogicImageTable;
     DatabaseLogicMessages databaseLogicMessages;
-    DatabaseLogicAppointments databaseLogicAppointments;
     DatabaseLogicRightGroup databaseLogicRightGroup;
     DatabaseLogicSpaces databaseLogicSpaces;
     DatabaseLogicUserAndApp databaseLogicUserAndApp;

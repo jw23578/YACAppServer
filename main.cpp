@@ -106,10 +106,11 @@ int main(int argc, char **argv)
 
 
     YACORMFactory factory;
+    PGSqlImplementation sqlImplementation(pool);
+    ORMPersistenceInterface opi(sqlImplementation);
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool,
                                             factory);
-
     std::cout << "Checking Databaseconnection\n";
     if (!databaseLogicTables.connectionOk())
     {
@@ -128,13 +129,18 @@ int main(int argc, char **argv)
     std::cout << "PGCrypto is installed\n";
     databaseLogicTables.createDatabaseTables();
 
+    ORMVector<t0002_apps> allApps;
+    opi.fetchAllObjects(allApps);
+    for (size_t i(0); i < allApps.size(); ++i)
+    {
+        allApps[i].createDefaults(opi);
+    }
+
 
     DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
                                                     pool);
 
 
-    PGSqlImplementation sqlImplementation(pool);
-    ORMPersistenceInterface opi(sqlImplementation);
 
     DatabaseLogics databaseLogics(logStatController,
                                   pool,

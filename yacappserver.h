@@ -23,7 +23,6 @@
 #include "handlerLoggedIn/handlerappuserfetchprofile.h"
 #include "handlerLoggedIn/handlerappuserfetchmessageupdates.h"
 #include "handlerLoggedIn/handlerappuserfetchimage.h"
-#include "handlerLoggedIn/handlerappuserappointments.h"
 #include "handlerLoggedIn/handlerappuserrightgroup.h"
 #include "handlerLoggedIn/handlerappuserspace.h"
 #include "handlerLoggedIn/handlerormobjects.h"
@@ -66,7 +65,6 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserFetchImage handlerAppUserFetchImage;
     Handler_t0030_documents handler_t0030_documents;
 
-    HandlerAppUserAppointments handlerAppUserAppointments;
     HandlerAppUserRightGroup handlerAppUserRightGroup;
     HandlerAppUserSpace handlerAppUserSpace;
     HandlerORMObjects handlerORMObjects;
