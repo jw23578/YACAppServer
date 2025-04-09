@@ -8,7 +8,7 @@
 
 Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &serverInterface,
                                                  LoggedInAppUsersContainer &loggedInAppUsersContainer,
-                                                 ORMPersistenceInterface &opi):
+                                                 PGORMPersistence &opi):
     HandlerLoggedInInterface(serverInterface, loggedInAppUsersContainer),
     opi(opi)
 {

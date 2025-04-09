@@ -3,15 +3,15 @@
 
 #include "handlerloggedininterface.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
-#include "orm/ormpersistenceinterface.h"
+#include "postgres/pgormpersistence.h"
 
 class Handler_t0030_documents : public HandlerLoggedInInterface
 {
-    ORMPersistenceInterface &opi;
+    PGORMPersistence &opi;
 public:
     Handler_t0030_documents(PistacheServerInterface &serverInterface,
                             LoggedInAppUsersContainer &loggedInAppUsersContainer,
-                            ORMPersistenceInterface &opi);
+                            PGORMPersistence &opi);
 
 
 

@@ -7,14 +7,14 @@
 #include <iostream>
 #include "pgsqlimplementation.h"
 #include "orm_implementions/t0033_words.h"
-#include "orm/ormpersistenceinterface.h"
+#include "postgres/pgormpersistence.h"
 #include "JWUtils/definitions.h"
 #include "orm_implementions/t0001_users.h"
 
 TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
     PGSqlImplementation sqlImplementation(pool);
-    ORMPersistenceInterface opi(sqlImplementation);
+    PGORMPersistence opi(sqlImplementation);
     {
         t0001_users t0001;
         t0001.prepareFirstInsert();

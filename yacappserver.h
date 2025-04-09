@@ -34,7 +34,7 @@
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "caches/devicetokencache.h"
 #include "orm_implementions/yacormfactory.h"
-#include "orm/ormpersistenceinterface.h"
+#include "postgres/pgormpersistence.h"
 
 class YACAppServer: public PistacheServerInterface
 {
@@ -74,7 +74,7 @@ class YACAppServer: public PistacheServerInterface
 public:
     YACAppServer(const std::string &firebaseApiKey,
                  YACORMFactory &factory,
-                 ORMPersistenceInterface &opi,
+                 PGORMPersistence &opi,
                  DatabaseLogics &databaseLogics,
                  DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,

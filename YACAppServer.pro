@@ -10,6 +10,7 @@ DEFINES += ORMCPPTypes
 include("JWUtils/JWUtils.pri")
 include("JWLogStat/JWLogStat.pri")
 include("JWPostgresLib/JWPostgresLib.pri")
+include("JWORM/JWORM.pri")
 include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
@@ -85,6 +86,7 @@ SOURCES += \
         opencvwrapper/opencvwrapper.cpp \
         orm-mapper/orm2postgres.cpp \
         orm-mapper/orm2rapidjson.cpp \
+        postgres/pgormpersistence.cpp \
         postgres/pgsqlimplementation.cpp \
         rightsLogic/rightslogic.cpp \
         serverHeader/appidheader.cpp \
@@ -165,6 +167,7 @@ HEADERS += \
   opencvwrapper/opencvwrapper.h \
   orm-mapper/orm2postgres.h \
   orm-mapper/orm2rapidjson.h \
+  postgres/pgormpersistence.h \
   postgres/pgsqlimplementation.h \
   rightsLogic/rightslogic.h \
   serverHeader/appidheader.h \

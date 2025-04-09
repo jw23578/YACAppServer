@@ -7,7 +7,7 @@
 
 YACAppServer::YACAppServer(const std::string &firebaseApiKey,
                            YACORMFactory &factory,
-                           ORMPersistenceInterface &opi,
+                           PGORMPersistence &opi,
                            DatabaseLogics &databaseLogics,
                            DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                            DatabaseLogicAppUser &databaseLogicAppUser,

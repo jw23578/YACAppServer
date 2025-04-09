@@ -31,6 +31,7 @@
 #include "JWUtils/extstringview.h"
 #include "beginendtrack.h"
 #include "coutlogger.h"
+#include "postgres/pgormpersistence.h"
 
 
 using namespace std;
@@ -107,7 +108,7 @@ int main(int argc, char **argv)
 
     YACORMFactory factory;
     PGSqlImplementation sqlImplementation(pool);
-    ORMPersistenceInterface opi(sqlImplementation);
+    PGORMPersistence opi(sqlImplementation);
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool,
                                             factory);

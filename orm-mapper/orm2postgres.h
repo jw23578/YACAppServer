@@ -3,7 +3,7 @@
 
 #include "pgconnectionpool.h"
 #include "orm_implementions/yacbaseobject.h"
-#include "orm/ormmap.h"
+#include "ormmap.h"
 #include "tablefields.h"
 #include "orm2rapidjson.h"
 #include "sqlstring.h"

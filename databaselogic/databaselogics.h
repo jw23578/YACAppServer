@@ -13,7 +13,7 @@
 #include "databaselogic/databaselogicuserandapp.h"
 #include "databaselogicthirdparty.h"
 #include "rightsLogic/rightslogic.h"
-#include "orm/ormpersistenceinterface.h"
+#include "ormpersistenceinterface.h"
 
 class DatabaseLogics
 {
