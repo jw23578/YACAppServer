@@ -1,5 +1,5 @@
 #include "databaselogicelement.h"
-#include "orm_implementions/sqlstring.h"
+#include "sqlstring.h"
 #include "pgexecutor.h"
 
 DatabaseLogicElement::DatabaseLogicElement(LogStatController &logStatController,

@@ -2,7 +2,7 @@
 #define PGUTILS_H
 
 #include "pgconnectionpool.h"
-#include "orm_implementions/sqlstring.h"
+#include "sqlstring.h"
 #include "pgcolumnandtype.h"
 
 class PGUtils

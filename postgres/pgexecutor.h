@@ -3,7 +3,7 @@
 
 #include "pqxx/pqxx"
 #include "pgconnectionpool.h"
-#include "orm_implementions/sqlstring.h"
+#include "sqlstring.h"
 #include "rapidjson/document.h"
 #include "orm-mapper/orm2rapidjson.h"
 #include "orm-mapper/orm2postgres.h"

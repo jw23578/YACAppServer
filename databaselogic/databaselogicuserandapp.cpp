@@ -1,5 +1,5 @@
 #include "databaselogicuserandapp.h"
-#include "orm_implementions/sqlstring.h"
+#include "sqlstring.h"
 #include "postgres/pgexecutor.h"
 #include "JWUtils/extstring.h"
 #include "utils/extrapidjson.h"

@@ -6,7 +6,7 @@
 #include "orm/ormmap.h"
 #include "tablefields.h"
 #include "orm2rapidjson.h"
-#include "orm_implementions/sqlstring.h"
+#include "sqlstring.h"
 
 class PGExecutor;
 

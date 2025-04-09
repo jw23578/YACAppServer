@@ -4,7 +4,7 @@
 #include "pqxx/pqxx"
 #include "pgconnectionpool.h"
 #include "pgconnection.h"
-#include "orm_implementions/sqlstring.h"
+#include "sqlstring.h"
 
 class PGCommandTransactor
 {
