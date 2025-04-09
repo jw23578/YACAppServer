@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICRIGHTGROUP_H
 #define DATABASELOGICRIGHTGROUP_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
 #include "logstatcontroller.h"
 #include "tablenames.h"

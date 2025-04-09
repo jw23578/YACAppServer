@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICSPACES_H
 #define DATABASELOGICSPACES_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
 #include "logstatcontroller.h"
 #include "tablenames.h"

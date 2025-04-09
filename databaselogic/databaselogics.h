@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICS_H
 #define DATABASELOGICS_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "logstatcontroller.h"
 
 #include "databaselogicappuser.h"

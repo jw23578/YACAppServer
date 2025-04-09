@@ -1,6 +1,6 @@
 #include "databaselogictables.h"
-#include "postgres/pgconnection.h"
-#include "postgres/pgexecutor.h"
+#include "pgconnection.h"
+#include "pgexecutor.h"
 
 DatabaseLogicTables::DatabaseLogicTables(LogStatController &logStatController,
                                          PGConnectionPool &pool,

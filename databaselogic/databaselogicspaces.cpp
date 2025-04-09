@@ -1,5 +1,6 @@
 #include "databaselogicspaces.h"
 #include "pgexecutor.h"
+#include "orm-mapper/orm2postgres.h"
 
 bool DatabaseLogicSpaces::fetchOneSpaceOnly(const reducedsole::uuid &id, rapidjson::Value &object, rapidjson::MemoryPoolAllocator<> &alloc, std::string &message)
 {

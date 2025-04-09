@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICAPPUSER_H
 #define DATABASELOGICAPPUSER_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
 #include "logstatcontroller.h"
 #include "tablenames.h"

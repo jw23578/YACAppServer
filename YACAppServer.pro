@@ -9,6 +9,7 @@ DEFINES += ORMCPPTypes
 
 include("JWUtils/JWUtils.pri")
 include("JWLogStat/JWLogStat.pri")
+include("JWPostgresLib/JWPostgresLib.pri")
 include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
@@ -84,14 +85,7 @@ SOURCES += \
         opencvwrapper/opencvwrapper.cpp \
         orm-mapper/orm2postgres.cpp \
         orm-mapper/orm2rapidjson.cpp \
-        postgres/pgcolumnandtype.cpp \
-        postgres/pgcommandtransactor.cpp \
-        postgres/pgconnection.cpp \
-        postgres/pgexecutor.cpp \
-        postgres/pgoidloader.cpp \
-        postgres/pgoidstorer.cpp \
         postgres/pgsqlimplementation.cpp \
-        postgres/pgutils.cpp \
         rightsLogic/rightslogic.cpp \
         serverHeader/appidheader.cpp \
         serverHeader/loginemailheader.cpp \
@@ -111,7 +105,6 @@ SOURCES += \
         utils/extmap.cpp \
         utils/extrapidjson.cpp \
         main.cpp \
-        postgres/pgconnectionpool.cpp \
         yacappserver.cpp
 
 HEADERS += \
@@ -172,15 +165,7 @@ HEADERS += \
   opencvwrapper/opencvwrapper.h \
   orm-mapper/orm2postgres.h \
   orm-mapper/orm2rapidjson.h \
-  postgres/pgcolumnandtype.h \
-  postgres/pgcommandtransactor.h \
-  postgres/pgconnection.h \
-  postgres/pgconnectionpool.h \
-  postgres/pgexecutor.h \
-  postgres/pgoidloader.h \
-  postgres/pgoidstorer.h \
   postgres/pgsqlimplementation.h \
-  postgres/pgutils.h \
   rightsLogic/rightslogic.h \
   serverHeader/appidheader.h \
   serverHeader/loginemailheader.h \

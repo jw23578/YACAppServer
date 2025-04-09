@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICELEMENT_H
 #define DATABASELOGICELEMENT_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
 #include "logstatcontroller.h"
 #include "tablenames.h"

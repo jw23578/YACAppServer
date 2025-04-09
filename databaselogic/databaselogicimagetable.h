@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICIMAGETABLE_H
 #define DATABASELOGICIMAGETABLE_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"

@@ -1,4 +1,5 @@
 #include "databaselogicworktime.h"
+#include "orm-mapper/orm2postgres.h"
 
 bool DatabaseLogicWorktime::selectWorktimeBefore(const reducedsole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
 {

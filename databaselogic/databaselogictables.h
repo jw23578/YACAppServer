@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICTABLES_H
 #define DATABASELOGICTABLES_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "logstatcontroller.h"
 #include "pgutils.h"
 #include "tablenames.h"

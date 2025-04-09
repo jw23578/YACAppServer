@@ -7,7 +7,7 @@
 #include <rapidjson/istreamwrapper.h>
 #include <fstream>
 #include "utils/extrapidjson.h"
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "databaselogicuserandapp.h"
 #include "emaillogic.h"
 #include "logstatcontroller.h"

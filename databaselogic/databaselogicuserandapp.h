@@ -1,7 +1,7 @@
 #ifndef DATABASELOGICUSERANDAPP_H
 #define DATABASELOGICUSERANDAPP_H
 
-#include "postgres/pgconnectionpool.h"
+#include "pgconnectionpool.h"
 #include "JWUtils/reducedsole.h"
 #include "rapidjson/document.h"
 #include "logstatcontroller.h"
