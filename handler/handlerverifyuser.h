@@ -1,7 +1,7 @@
 #ifndef HANDLERVERIFYUSER_H
 #define HANDLERVERIFYUSER_H
 
-#include <pistachehandlerinterface.h>
+#include "interfaces/pistachehandlerinterface.h"
 #include "databaselogicuserandapp.h"
 
 class HandlerVerifyUser : public PistacheHandlerInterface

@@ -1,7 +1,7 @@
 #ifndef HANDLERLOGGEDININTERFACE_H
 #define HANDLERLOGGEDININTERFACE_H
 
-#include <pistachehandlerinterface.h>
+#include "interfaces/pistachehandlerinterface.h"
 #include "loggedincontainer/loggedincontainerinterface.h"
 
 class HandlerLoggedInInterface : public PistacheHandlerInterface
