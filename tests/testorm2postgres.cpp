@@ -5,7 +5,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
 #include <iostream>
-#include "pgsqlimplementation.h"
+#include "pgormsqlimplementation.h"
 #include "orm_implementions/t0033_words.h"
 #include "postgres/pgormpersistence.h"
 #include "JWUtils/definitions.h"
@@ -13,7 +13,7 @@
 
 TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
-    PGSqlImplementation sqlImplementation(pool);
+    PGORMSqlImplementation sqlImplementation(pool);
     PGORMPersistence opi(sqlImplementation);
     {
         t0001_users t0001;

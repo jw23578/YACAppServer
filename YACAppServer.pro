@@ -3,14 +3,19 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-DEFINES += RAPIDJSON_HAS_STDSTRING
 DEFINES += YACAPPServer
 DEFINES += ORMCPPTypes
+DEFINES += WITH_RAPIDJSON
 
 include("JWUtils/JWUtils.pri")
 include("JWLogStat/JWLogStat.pri")
-include("JWPostgresLib/JWPostgresLib.pri")
+
+DEFINES += ONLY_INSERT_DB_CREATED_BY_COLUMN=created_by_t0003_id
+DEFINES += ONLY_INSERT_DB_DELETE_BY_COLUMN=deleted_by_t0003_id
 include("JWORM/JWORM.pri")
+DEFINES += WITH_JWORM
+include("JWPostgresLib/JWPostgresLib.pri")
+
 include("yacAppAndServer/yacAppAndServer.pri")
 
 LIBS += \
@@ -25,7 +30,6 @@ INCLUDEPATH += postgres
 INCLUDEPATH += curlWrapper
 INCLUDEPATH += interfacesJWSpecula
 INCLUDEPATH += databaselogic
-INCLUDEPATH += rapidjson/include
 INCLUDEPATH += /usr/include/opencv4
 
 SOURCES += \
@@ -87,7 +91,6 @@ SOURCES += \
         orm-mapper/orm2postgres.cpp \
         orm-mapper/orm2rapidjson.cpp \
         postgres/pgormpersistence.cpp \
-        postgres/pgsqlimplementation.cpp \
         rightsLogic/rightslogic.cpp \
         serverHeader/appidheader.cpp \
         serverHeader/loginemailheader.cpp \
@@ -105,7 +108,6 @@ SOURCES += \
         thirdparties/thirdcurlrequests.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
-        utils/extrapidjson.cpp \
         main.cpp \
         yacappserver.cpp
 
@@ -168,7 +170,6 @@ HEADERS += \
   orm-mapper/orm2postgres.h \
   orm-mapper/orm2rapidjson.h \
   postgres/pgormpersistence.h \
-  postgres/pgsqlimplementation.h \
   rightsLogic/rightslogic.h \
   serverHeader/appidheader.h \
   serverHeader/loginemailheader.h \
@@ -186,7 +187,6 @@ HEADERS += \
   thirdparties/thirdcurlrequests.h \
   utils/base64.h \
   utils/extmap.h \
-  utils/extrapidjson.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \
   yacappserver.h

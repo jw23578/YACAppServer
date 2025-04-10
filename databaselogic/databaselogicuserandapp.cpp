@@ -2,7 +2,7 @@
 #include "sqlstring.h"
 #include "pgexecutor.h"
 #include "JWUtils/extstring.h"
-#include "utils/extrapidjson.h"
+#include "extrapidjson.h"
 #include "base64.h"
 #include "pgutils.h"
 #include "pgoidstorer.h"

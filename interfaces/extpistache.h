@@ -3,7 +3,7 @@
 
 #include "pistache/router.h"
 #include "rapidjson/document.h"
-#include "utils/extrapidjson.h"
+#include "extrapidjson.h"
 
 class ExtPistache
 {

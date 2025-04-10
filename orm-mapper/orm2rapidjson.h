@@ -4,7 +4,7 @@
 #include "rapidjson/document.h"
 #include "orm_implementions/yacbaseobject.h"
 #include "orm_implementions/yacormfactory.h"
-#include "utils/extrapidjson.h"
+#include "extrapidjson.h"
 #include "ormvector.h"
 
 class ORM2rapidjson

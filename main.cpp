@@ -6,7 +6,7 @@
 #include "rapidjson/document.h"
 #include <rapidjson/istreamwrapper.h>
 #include <fstream>
-#include "utils/extrapidjson.h"
+#include "extrapidjson.h"
 #include "pgconnectionpool.h"
 #include "databaselogicuserandapp.h"
 #include "emaillogic.h"
@@ -27,7 +27,7 @@
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
 #include "orm_implementions/yacormfactory.h"
-#include "pgsqlimplementation.h"
+#include "pgormsqlimplementation.h"
 #include "JWUtils/extstringview.h"
 #include "beginendtrack.h"
 #include "coutlogger.h"
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 
 
     YACORMFactory factory;
-    PGSqlImplementation sqlImplementation(pool);
+    PGORMSqlImplementation sqlImplementation(pool);
     PGORMPersistence opi(sqlImplementation);
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool,
