@@ -10,8 +10,8 @@ DEFINES += WITH_RAPIDJSON
 include("JWUtils/JWUtils.pri")
 include("JWLogStat/JWLogStat.pri")
 
-DEFINES += ONLY_INSERT_DB_CREATED_BY_COLUMN=created_by_t0003_id
-DEFINES += ONLY_INSERT_DB_DELETE_BY_COLUMN=deleted_by_t0003_id
+DEFINES += ONLY_INSERT_DB_CREATED_BY_COLUMN=created_by_t0002_id
+DEFINES += ONLY_INSERT_DB_DELETE_BY_COLUMN=deleted_by_t0002_id
 include("JWORM/JWORM.pri")
 DEFINES += WITH_JWORM
 include("JWPostgresLib/JWPostgresLib.pri")
@@ -55,17 +55,10 @@ SOURCES += \
         databaselogic/databaselogicworktime.cpp \
         emaillogic.cpp \
         handler/handlerapp.cpp \
-        handler/handlerappuserloggedin.cpp \
-        handler/handlerappuserlogin.cpp \
-        handler/handlerappuserregister.cpp \
         handler/handlerappuserrequestupdatepassword.cpp \
         handler/handlerappuserupdatepassword.cpp \
-        handler/handlerappuserverify.cpp \
         handler/handlerpages.cpp \
-        handler/handleruserloggedin.cpp \
-        handler/handleruserlogin.cpp \
-        handler/handleruserregister.cpp \
-        handler/handlerverifyuser.cpp \
+        handler/handleruser.cpp \
         handlerLoggedIn/handler_t0030_documents.cpp \
         handlerLoggedIn/handlerappuserfetchimage.cpp \
         handlerLoggedIn/handlerappuserfetchmessageupdates.cpp \
@@ -86,7 +79,6 @@ SOURCES += \
         interfaces/pistacheserverinterface.cpp \
         loggedincontainer/loggedinappuserscontainer.cpp \
         loggedincontainer/loggedincontainerinterface.cpp \
-        loggedincontainer/loggedinuserscontainer.cpp \
         opencvwrapper/opencvwrapper.cpp \
         orm-mapper/orm2postgres.cpp \
         orm-mapper/orm2rapidjson.cpp \
@@ -134,17 +126,10 @@ HEADERS += \
   databaselogic/databaselogicworktime.h \
   emaillogic.h \
   handler/handlerapp.h \
-  handler/handlerappuserloggedin.h \
-  handler/handlerappuserlogin.h \
-  handler/handlerappuserregister.h \
   handler/handlerappuserrequestupdatepassword.h \
   handler/handlerappuserupdatepassword.h \
-  handler/handlerappuserverify.h \
   handler/handlerpages.h \
-  handler/handleruserloggedin.h \
-  handler/handleruserlogin.h \
-  handler/handleruserregister.h \
-  handler/handlerverifyuser.h \
+  handler/handleruser.h \
   handlerLoggedIn/handler_t0030_documents.h \
   handlerLoggedIn/handlerappuserfetchimage.h \
   handlerLoggedIn/handlerappuserfetchmessageupdates.h \
@@ -165,7 +150,6 @@ HEADERS += \
   interfaces/pistacheserverinterface.h \
   loggedincontainer/loggedinappuserscontainer.h \
   loggedincontainer/loggedincontainerinterface.h \
-  loggedincontainer/loggedinuserscontainer.h \
   opencvwrapper/opencvwrapper.h \
   orm-mapper/orm2postgres.h \
   orm-mapper/orm2rapidjson.h \
@@ -198,5 +182,5 @@ DISTFILES += \
   deployToJW78.sh \
   go_psql_local.sh \
   intern_doc.txt \
-  t0009_appuser_logintoken.json \
+  t0004_user_logintoken.json \
   updateProfile.json

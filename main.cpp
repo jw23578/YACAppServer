@@ -32,6 +32,7 @@
 #include "beginendtrack.h"
 #include "coutlogger.h"
 #include "postgres/pgormpersistence.h"
+#include "orm_implementions/t0003_user_passwordhashes.h"
 
 
 using namespace std;
@@ -45,11 +46,16 @@ int main(int argc, char **argv)
     coutLogger::ActivateVisibleLogging a;
 
     bool runTests(false);
+    bool cleanup(false);
     for (int i(0); i < argc; ++i)
     {
         if (std::string(argv[i]) == "runTests")
         {
             runTests = true;
+        }
+        if (std::string(argv[i]) == "cleanup")
+        {
+            cleanup = true;
         }
     }
     std::srand(std::time(nullptr));
@@ -87,11 +93,69 @@ int main(int argc, char **argv)
         return 1;
     }
     ExtRapidJSON json(configJSON);
+    if (!json.hasObject("superUser"))
+    {
+        std::cerr << "missing superUser-Object in " << configFilename << std::endl;
+        return 1;
+    }
+    ExtRapidJSON superUser(json.getObject("superUser"));
+    if (superUser.getString("password").size() == 0)
+    {
+        std::cerr << "missing superUser-Password in " << configFilename << std::endl;
+        return 1;
+    }
+
+    if (!ExtString::emailIsValid(superUser.getString("loginEMail")))
+    {
+        std::cerr << superUser.getString("loginEMail") << " is not a valid email-adress" << std::endl;
+        return 1;
+    }
+
+    if (!json.hasObject("createrApp"))
+    {
+        std::cerr << "missing createrApp-Object in " << configFilename << std::endl;
+        return 1;
+    }
+    ExtRapidJSON createrApp(json.getObject("createrApp"));
+    if (createrApp.getString("app_id").size() == 0)
+    {
+        std::cerr << "missing app_id in " << configFilename << std::endl;
+        return 1;
+    }
+    if (createrApp.getString("app_name").size() == 0)
+    {
+        std::cerr << "missing app_name in " << configFilename << std::endl;
+        return 1;
+    }
 
     std::string fileLoggerPath(json.getString("fileLoggerPath"));
     if (fileLoggerPath.size())
     {
         logStatController.add(new FileLogger(fileLoggerPath));
+    }
+    PGConnectionPool *superPool(0);
+    if (json.hasObject("postgresSuperUser"))
+    {
+        ExtRapidJSON postgresSuperUser(json.getObject("postgresSuperUser"));
+        superPool = new PGConnectionPool(postgresSuperUser.getString("host"),
+                                         postgresSuperUser.getInt("port"),
+                                         "postgres",
+                                         postgresSuperUser.getString("user"),
+                                         postgresSuperUser.getString("password"),
+                                         1);
+
+        PGORMSqlImplementation superSqlImplementation(*superPool);
+        PGORMPersistence superOpi(superSqlImplementation);
+        superOpi.createRole("test", "test");
+        superOpi.createDatabase("test", "test");
+        superOpi.dropDatabase("test");
+        superOpi.dropRole("test");
+
+        if (cleanup)
+        {
+            superOpi.dropDatabase("yacapp_database");
+            superOpi.createDatabase("yacapp_database", "yacapp_user");
+        }
     }
 
     PGConnectionPool pool(json.getString("postgresHost"),
@@ -109,6 +173,7 @@ int main(int argc, char **argv)
     YACORMFactory factory;
     PGORMSqlImplementation sqlImplementation(pool);
     PGORMPersistence opi(sqlImplementation);
+    opi.initDatabase();
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool,
                                             factory);
@@ -130,7 +195,36 @@ int main(int argc, char **argv)
     std::cout << "PGCrypto is installed\n";
     databaseLogicTables.createDatabaseTables();
 
-    ORMVector<t0002_apps> allApps;
+    // check for superuser
+    t0002_user superUserProfile;
+    if (!opi.selectObject({{superUserProfile.super_user.name(), "true"}}, superUserProfile))
+    {
+        superUserProfile.fstname = "superUser";
+        superUserProfile.surname = "superUser";
+        superUserProfile.loginemail = superUser.getString("loginEMail");
+        superUserProfile.super_user = true;
+        superUserProfile.verified = TimePointPostgreSqlNow;
+        superUserProfile.app_id = NullUuid;
+        superUserProfile.prepareFirstInsert();
+        opi.insertObject(superUserProfile, superUserProfile.user_id);
+
+        t0003_user_passwordhashes passwordHash;
+        passwordHash.user_id = superUserProfile.user_id;
+        passwordHash.password_hash = superUser.getString("password");
+        passwordHash.app_id = NullUuid;
+        passwordHash.prepareFirstInsert();
+        opi.insertObject(passwordHash, superUserProfile.user_id);
+    }
+    t0001_apps theCreaterApp;
+    std::string appId(createrApp.getString("app_id"));
+    if (!opi.selectObject({{theCreaterApp.app_id.name(), appId}}, theCreaterApp))
+    {
+        theCreaterApp.app_id = appId;
+        theCreaterApp.app_name = createrApp.getString("app_name");
+        opi.insertObject(theCreaterApp, superUserProfile.user_id);
+    }
+
+    ORMVector<t0001_apps> allApps;
     opi.fetchAllObjects(allApps);
     for (size_t i(0); i < allApps.size(); ++i)
     {
@@ -139,7 +233,8 @@ int main(int argc, char **argv)
 
 
     DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
-                                                    pool);
+                                                    pool,
+                                                    opi);
 
 
 
@@ -176,6 +271,7 @@ int main(int argc, char **argv)
                           json.getString("smtpUser"),
                           json.getString("smtpPassword"));
 
+    coutLogger::ActivateVisibleLogging a2;
     YACAppServer server(json.getString("firebaseApiKey"),
                         factory,
                         opi,

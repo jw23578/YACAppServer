@@ -1,7 +1,7 @@
 #include "testorm2postgres.h"
 #include "orm-mapper/orm2postgres.h"
 #include "orm-mapper/orm2rapidjson.h"
-#include "orm_implementions/t0009_appuser_logintoken.h"
+#include "orm_implementions/t0004_user_logintoken.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
 #include <iostream>
@@ -9,19 +9,19 @@
 #include "orm_implementions/t0033_words.h"
 #include "postgres/pgormpersistence.h"
 #include "JWUtils/definitions.h"
-#include "orm_implementions/t0001_users.h"
+#include "orm_implementions/t0002_user.h".h"
 
 TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 {
     PGORMSqlImplementation sqlImplementation(pool);
     PGORMPersistence opi(sqlImplementation);
     {
-        t0001_users t0001;
-        t0001.prepareFirstInsert();
-        t0001.setloginemail("test@test.de");
-        t0001.setuser_id(ExtUuid::generateUuid());
-        opi.insertObject(t0001, ExtUuid::NullUuid);
-        opi.deleteObject(t0001, ExtUuid::NullUuid);
+        t0002_user userProfile;
+        userProfile.prepareFirstInsert();
+        userProfile.setloginemail("test@test.de");
+        userProfile.setuser_id(ExtUuid::generateUuid());
+        opi.insertObject(userProfile, ExtUuid::NullUuid);
+        opi.deleteObject(userProfile, ExtUuid::NullUuid);
     }
 
 
@@ -38,8 +38,8 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
 
     opi.deleteObject(words2, NullUuid);
 
-    t0009_appuser_logintoken ghost;
-    ORMVector<t0009_appuser_logintoken> allT0009;
+    t0004_user_logintoken ghost;
+    ORMVector<t0004_user_logintoken> allT0009;
     opi.fetchAllObjects(allT0009);
     if (!allT0009.size())
     {

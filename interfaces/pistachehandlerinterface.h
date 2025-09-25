@@ -89,6 +89,7 @@ public:
     const TableFields tableFields;
     ExtPistache ep;
 private:
+    reducedsole::uuid appId;
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;
@@ -145,6 +146,7 @@ protected:
                    std::string const &methodName,
                    HandlerType type);
 public:
+    const reducedsole::uuid &getAppId() const;
 
     enum LoginNeededType
     {

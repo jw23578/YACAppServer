@@ -5,7 +5,7 @@
 TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databaseLogicAppUser)
 {
     reducedsole::uuid appId(reducedsole::rebuild("6ce520ba-4c44-47be-9386-15f021ea3a41"));
-    reducedsole::uuid u(databaseLogicAppUser.getAppUserId(appId, "jens@wienoebst.com"));
+    reducedsole::uuid u(databaseLogicAppUser.getUserId(appId, "jens@wienoebst.com"));
     /*
     std::string loginEMail("jens@wienoebst.com");
     std::string updatePasswordToken;

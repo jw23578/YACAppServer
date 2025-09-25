@@ -34,7 +34,7 @@ bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
                                       loginTokenValidUntil);
             if (loggedIn)
             {
-                userId = databaseLogics.databaseLogicAppUser.getAppUserId(appId, loginEMail);
+                userId = databaseLogics.databaseLogicAppUser.getUserId(appId, loginEMail);
             }
         }
         else
@@ -79,6 +79,14 @@ bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
     userId = it->second.userId;
     return true;
 }
+
+bool LoggedInAppUsersContainer::logout(const std::string &loginToken)
+{
+    clearByLoginToken(loginToken);
+    databaseLogics.databaseLogicAppUser.logoutAppUserByLoginToken(loginToken);
+    return true;
+}
+
 
 bool LoggedInAppUsersContainer::appIdMandatory() const
 {

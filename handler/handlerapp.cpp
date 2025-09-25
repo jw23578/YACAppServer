@@ -5,11 +5,12 @@
 HandlerAPP::HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                        PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
-                             "/getAPP",
-                             TypeGet,
                              TypeNoLoginNeeded),
     dlua(databaseLogicUserAndApp)
 {
+    addMethod(serverInterface,
+              methodNames.getAPP,
+              TypeGet);
     addMethod(serverInterface,
               methodNames.getAllAPPs,
               TypeGet);

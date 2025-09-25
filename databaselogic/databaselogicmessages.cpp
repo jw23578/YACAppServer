@@ -5,6 +5,9 @@
 #include "pgoidloader.h"
 #include "base64.h"
 #include "orm-mapper/orm2postgres.h"
+#include "orm_implementions/t0006_appuser2group.h"
+#include "orm_implementions/t0007_messages.h"
+#include "orm_implementions/t0008_message_received.h"
 
 DatabaseLogicMessages::DatabaseLogicMessages(LogStatController &logStatController,
                                              PGConnectionPool &pool):
@@ -18,7 +21,7 @@ void DatabaseLogicMessages::storeMessage(const reducedsole::uuid &id,
                                          const reducedsole::uuid &to_id,
                                          const std::string &content_base64)
 {
-    SqlString sql(utils.createInsertString(tableNames.t0007_messages));
+    SqlString sql(utils.createInsertString(t0007_messages().getORMName()));
     MACRO_set(sql, id);
     MACRO_set(sql, sender_id);
     MACRO_set(sql, to_id);
@@ -31,7 +34,7 @@ void DatabaseLogicMessages::storeMessage(const reducedsole::uuid &id,
 void DatabaseLogicMessages::deleteMessage(const reducedsole::uuid &id)
 {
     SqlString sql;
-    sql.delet(tableNames.t0007_messages);
+    sql.delet(t0007_messages().getORMName());
     sql.addCompare("where", tableFields.id, "=", id);
     PGExecutor e(pool, sql);
 }
@@ -40,7 +43,7 @@ bool DatabaseLogicMessages::markAllOfUserMessageDeleted(const reducedsole::uuid 
                                                         std::string &resultMessage)
 {
     SqlString upd;
-    upd.update(tableNames.t0007_messages);
+    upd.update(t0007_messages().getORMName());
     upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
     upd.addCompare("where (", tableFields.sender_id, "=", user_id);
     upd.addCompare("or", tableFields.to_id, "=", user_id);
@@ -54,7 +57,7 @@ bool DatabaseLogicMessages::markMessageDeleted(const reducedsole::uuid &id,
                                                std::string &resultMessage)
 {
     SqlString upd;
-    upd.update(tableNames.t0007_messages);
+    upd.update(t0007_messages().getORMName());
     upd.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
     upd.addCompare("where", tableFields.id, "=", id);
     upd.addCompare("and", tableFields.sender_id, "=", sender_id);
@@ -68,11 +71,11 @@ bool DatabaseLogicMessages::fetchMessages(const reducedsole::uuid &fetcher_id,
                                           rapidjson::MemoryPoolAllocator<> &alloc)
 {
     SqlString sql("select * from ");
-    sql += tableNames.t0007_messages;
+    sql += t0007_messages().getORMName();
     sql += " where (sender_id = :fetcher_id or to_id = :fetcher_id ";
     sql += " or to_id in (select group_id from  ";
-    sql += tableNames.t0006_appuser2group;
-    sql += " where appuser_id = :fetcher_id)) ";
+    sql += t0006_appuser2group().getORMName();
+    sql += " where user_id = :fetcher_id)) ";
     sql += " and (sended_datetime >= :since or deleted_datetime >= :since) ";
     MACRO_set(sql, fetcher_id);
     MACRO_set(sql, since);
@@ -90,7 +93,7 @@ bool DatabaseLogicMessages::fetchReceivedMessages(const reducedsole::uuid &recei
     sql += tableFields.id + ", ";
     sql += tableFields.received_datetime;
     sql += " from ";
-    sql += tableNames.t0008_message_received;
+    sql += t0008_message_received().getORMName();
     sql.addCompare(" where ", tableFields.receiver_id, " = ", receiver_id);
     sql.addCompare(" and ", tableFields.received_datetime, " > ", since);
     ORM2Postgres o2p(pool);
@@ -124,7 +127,7 @@ bool DatabaseLogicMessages::fetchReceivedAndReadMessages(const reducedsole::uuid
     sql += tableFields.id + ", ";
     sql += tableFields.received_datetime;
     sql += " from ";
-    sql += tableNames.t0008_message_received;
+    sql += t0008_message_received().getORMName();
     sql.addCompare(" where ", tableFields.receiver_id, " = ", receiver_or_reader_id);
     sql.addCompare(" and ", tableFields.received_datetime, " > ", since);
     sql += " union all ";
@@ -161,7 +164,7 @@ void DatabaseLogicMessages::setReceived(const reducedsole::uuid &receiver_id,
                                         const std::chrono::system_clock::time_point &received_datetime)
 {
     SqlString sql;
-    sql.insert(tableNames.t0008_message_received);
+    sql.insert(t0008_message_received().getORMName());
     sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
     sql.addInsert(tableFields.receiver_id, receiver_id, false);
     sql.addInsert(tableFields.message_id, message_id, false);

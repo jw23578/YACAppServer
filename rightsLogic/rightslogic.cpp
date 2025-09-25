@@ -59,7 +59,7 @@ void RightsLogic::addUserRights(const reducedsole::uuid &app_id,
             {
                 t0022_right_group2appuser t0022;
                 t0022.right_group_id = right_group_id;
-                t0022.appuser_id = appuser_id;
+                t0022.user_id = appuser_id;
                 t0022.requested_datetime = TimePointPostgreSqlNow;
                 t0022.approved_datetime = TimePointPostgreSqlNow;
                 t0022.approved_appuser_id = appuser_id;

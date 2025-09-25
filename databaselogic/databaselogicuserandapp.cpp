@@ -10,24 +10,6 @@
 #include "orm-mapper/orm2postgres.h"
 #include "orm_implementions/t0027_app_images.h"
 
-void DatabaseLogicUserAndApp::loginSuccessful(const std::string &loginEMail,
-                                              std::string &loginToken)
-{
-    if (loginToken.size() == 0)
-    {
-        loginToken = reducedsole::uuid4().str();
-    }
-    int validHours(24 * 7);
-    SqlString sql("update t0001_users "
-                    "set login_token = :login_token, "
-                    "login_token_valid_until = now() + interval '1 hour' *:validHours "
-                    "where loginemail = :loginemail");
-    sql.set("loginemail", loginEMail);
-    sql.set("validHours", validHours);
-    sql.set("login_token", loginToken);
-    PGExecutor e(pool, sql);
-}
-
 bool DatabaseLogicUserAndApp::lookUpOid(const reducedsole::uuid &id,
                                         pqxx::oid &imageOid)
 {
@@ -42,17 +24,14 @@ bool DatabaseLogicUserAndApp::lookUpOid(const reducedsole::uuid &id,
 }
 
 DatabaseLogicUserAndApp::DatabaseLogicUserAndApp(LogStatController &logStatController,
-                                                 PGConnectionPool &pool):
+                                                 PGConnectionPool &pool,
+                                                 ORMPersistenceInterface &opi):
     logStatController(logStatController),
     pool(pool),
-    utils(pool)
+    utils(pool),
+    opi(opi)
 {
 
-}
-
-bool DatabaseLogicUserAndApp::userExists(const std::string &loginEMail)
-{
-    return utils.entryExists(tableNames.t0001_users, "loginemail", loginEMail);
 }
 
 bool DatabaseLogicUserAndApp::userIsAppOwner(const reducedsole::uuid &app_id,
@@ -60,8 +39,11 @@ bool DatabaseLogicUserAndApp::userIsAppOwner(const reducedsole::uuid &app_id,
                                              std::string &errorMessage,
                                              bool &appExists)
 {
-    PGUtils utils(pool);
-    SqlString sql(utils.createEntryExistsString(tableNames.t0002_apps, tableFields.id));
+    // FIXME
+    return true;
+/*    PGUtils utils(pool);
+    t0002_apps t0002;
+    SqlString sql(utils.createEntryExistsString(t0002.getORMName(), tableFields.id));
     sql.set(tableFields.id, app_id);
     PGExecutor e(pool, sql);
     appExists = e.size() > 0;
@@ -73,162 +55,12 @@ bool DatabaseLogicUserAndApp::userIsAppOwner(const reducedsole::uuid &app_id,
             return false;
         }
     }
-    return true;
+    return true; */
 }
 
-std::string DatabaseLogicUserAndApp::createUser(const std::string &loginEMail,
-                                                const std::string &password)
-{
-    SqlString sql("insert into t0001_users "
-                    " (id, loginemail, password_hash, verified, verify_token, verify_token_valid_until, login_token, login_token_valid_until) "
-                    " values "
-                    " (:id, :loginEMail, crypt(:password, gen_salt('bf')),"
-                    " null,"
-                    " :verify_token,"
-                    " :verify_token_valid_until, "
-                    " '',"
-                    " null) ");
-    sql.set("id", reducedsole::uuid4());
-    sql.set("loginEMail", loginEMail);
-    sql.set("password", password);
-    std::string verify_token(ExtString::randomString(0, 0, 4, 0));
-    sql.set("verify_token", verify_token);
-    sql.set("verify_token_valid_until", std::chrono::system_clock::now() + std::chrono::minutes(60));
-    PGExecutor e(pool, sql);
-    return verify_token;
-}
-
-bool DatabaseLogicUserAndApp::verifyUser(const std::string &loginEMail,
-                                         const std::string &verifyToken,
-                                         std::string &message,
-                                         std::string &loginToken)
-{
-    SqlString sql("select * from t0001_users "
-                    "where loginemail = :loginemail ");
-    sql.set("loginemail", loginEMail);
-    PGExecutor e(pool, sql);
-    if (e.size() == 0)
-    {
-        message = std::string("no user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
-        return false;
-    }
-    if (e.size() > 1)
-    {
-        message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
-        return false;
-    }
-    logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                          std::string("verify_token_valid_until as string: ") + e.string("verify_token_valid_until"));
-    std::chrono::system_clock::time_point verify_token_valid_until(e.timepoint("verify_token_valid_until"));
-    {
-        std::time_t t = std::chrono::system_clock::to_time_t(verify_token_valid_until);
-        std::stringstream ss;
-        ss << std::put_time( std::localtime( &t ), "%FT%T%z" );
-        logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                              std::string("verify_token_valid_until: ") + ss.str());
-    }
-    std::chrono::system_clock::time_point now(std::chrono::system_clock::now());
-    {
-        std::time_t t = std::chrono::system_clock::to_time_t(now);
-        std::stringstream ss;
-        ss << std::put_time( std::localtime( &t ), "%FT%T%z" );
-        logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                              std::string("now: ") + ss.str());
-    }
-    if (verify_token_valid_until < now)
-    {
-        message = std::string("verify token not valid any more, please register again");
-        SqlString delSql("delete from t0001_users "
-                           "where loginemail = :loginemail ");
-        delSql.set("loginemail", loginEMail);
-        PGExecutor e(pool, delSql);
-        return false;
-    }
-    if (e.string("verify_token") != verifyToken)
-    {
-        message = std::string("wrong verifyToken");
-        return false;
-    }
-
-    sql = "update t0001_users "
-          "set verified = now(), "
-          "verify_token = '', "
-          "verify_token_valid_until = null "
-          "where loginemail = :loginemail ";
-    sql.set("loginemail", loginEMail);
-    e.exec(sql);
-    loginSuccessful(loginEMail, loginToken);
-    return true;
-}
-
-bool DatabaseLogicUserAndApp::loginUser(const std::string &loginEMail,
-                                        const std::string &password,
-                                        std::string &message,
-                                        std::string &loginToken)
-{
-    SqlString sql("select *, password_hash = crypt(:password, password_hash) as login_ok "
-                    "from t0001_users "
-                    "where loginemail = :loginemail ");
-    sql.set("loginemail", loginEMail);
-    sql.set("password", password);
-    PGExecutor e(pool, sql);
-    if (!e.size())
-    {
-        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
-        return false;
-    }
-    if (e.isNull("verified"))
-    {
-        message = "LoginEMail/User not yet verified";
-        return false;
-    }
-    if (!e.boolean("login_ok"))
-    {
-        message = "Password is wrong";
-        return false;
-    }
-    loginToken = e.string("login_token");
-    loginSuccessful(loginEMail, loginToken);
-    return true;
-}
-
-bool DatabaseLogicUserAndApp::userLoggedIn(const std::string &loginEMail,
-                                           const std::string &loginToken,
-                                           reducedsole::uuid &userId,
-                                           std::chrono::system_clock::time_point &loginTokenValidUntil)
-{
-    SqlString sql("select * from t0001_users "
-                    "where loginemail = :loginemail "
-                    "and login_token = :login_token");
-    sql.set("login_token", loginToken);
-    sql.set("loginemail", loginEMail);
-    PGExecutor e(pool, sql);
-    if (e.size() == 0)
-    {
-        return false;
-    }
-    userId = e.uuid("id");
-    loginTokenValidUntil = e.timepoint("login_token_valid_until");
-    return true;
-}
-
-void DatabaseLogicUserAndApp::refreshLoginToken(const std::string &loginEMail,
-                                                std::chrono::system_clock::time_point &loginTokenValidUntil)
-{
-    SqlString sql("update t0001_users "
-                    "set login_token_valid_until = now() + interval '1 hour' *:validhours "
-                    "where loginemail = :loginemail "
-                    "returning login_token_valid_until");
-    MACRO_set(sql, loginEMail);
-    sql.set("loginEMail", loginEMail);
-    int validHours(24 * 7);
-    MACRO_set(sql, validHours);
-    PGExecutor e(pool, sql);
-    loginTokenValidUntil = e.timepoint("login_token_valid_until");
-}
 
 bool DatabaseLogicUserAndApp::saveApp(const reducedsole::uuid loggedInUserId,
-                                      t0002_apps &app,
+                                      t0001_apps &app,
                                       const std::string &installation_code,
                                       std::string &message)
 {
@@ -259,15 +91,15 @@ bool DatabaseLogicUserAndApp::saveApp(const reducedsole::uuid loggedInUserId,
     }
     if (installation_code == "")
     {
-        SqlString sql("update t0002_apps set "
-                        "installation_code_hash = '' ");
+        SqlString sql("update t0001_apps set "
+                      "installation_code_hash = '' ");
         sql.addCompare("where", tableFields.id, "=", app.id);
         PGExecutor e(pool, sql);
     }
     else
     {
-        SqlString sql("update t0002_apps set "
-                        "installation_code_hash = crypt(:installation_code, gen_salt('bf')) ");
+        SqlString sql("update t0001_apps set "
+                      "installation_code_hash = crypt(:installation_code, gen_salt('bf')) ");
         sql.addCompare("where", tableFields.id, "=", app.id);
         MACRO_set(sql, installation_code);
         PGExecutor e(pool, sql);
@@ -279,16 +111,16 @@ size_t DatabaseLogicUserAndApp::getAllAPPs(rapidjson::Document &target)
 {
     auto &alloc(target.GetAllocator());
     SqlString sql("select id "
-                    ", app_name "
-                    ", app_version "
-                    ", app_logo_url "
-                    ", app_color_name "
-                    ", app_info_url "
-                    ", search_code "
-                    ", installation_code_hash "
-                    ", array(select id from t0027_app_images where app_id = t0002.id order by position) as app_images "
-                    "from t0002_apps t0002 "
-                    "order by app_name ");
+                  ", app_name "
+                  ", app_version "
+                  ", app_logo_url "
+                  ", app_color_name "
+                  ", app_info_url "
+                  ", search_code "
+                  ", installation_code_hash "
+                  ", array(select id from t0027_app_images where app_id = t0001.id order by position) as app_images "
+                  "from t0001_apps t0001 "
+                  "order by app_name ");
     PGExecutor e(pool, sql);
     rapidjson::Value allAPPs(rapidjson::kArrayType);
     for (size_t r(0); r < e.size(); ++r)
@@ -332,12 +164,12 @@ bool DatabaseLogicUserAndApp::fetchOneApp(const std::string &app_id,
     ExtRapidJSONWriter t(target, alloc);
 
     SqlString sql("select app_name "
-                    ", app_version "
-                    ", json_yacapp "
-                    ", yacpck_base64 "
-                    ", coalesce(installation_code_hash, '') = '' or installation_code_hash = crypt(:installation_code, installation_code_hash) as installation_ok "
-                    "from t0002_apps "
-                    "where id = :app_id ");
+                  ", app_version "
+                  ", json_yacapp "
+                  ", yacpck_base64 "
+                  ", coalesce(installation_code_hash, '') = '' or installation_code_hash = crypt(:installation_code, installation_code_hash) as installation_ok "
+                  "from t0001_apps "
+                  "where id = :app_id ");
     MACRO_set(sql, app_id);
     MACRO_set(sql, installation_code);
     PGExecutor e(pool, sql);

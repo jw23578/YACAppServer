@@ -2,6 +2,7 @@
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
 #include "orm-mapper/orm2rapidjson.h"
+#include "orm_implementions/t0007_messages.h"
 
 HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
                                          DeviceTokenCache &deviceTokenCache,
@@ -18,12 +19,13 @@ HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
 {
     addMethod(serverInterface, t0028.getORMName(), TypePost);
     addMethod(serverInterface, t0028.getORMName(), TypeGet);
-    addMethod(serverInterface, tableNames.t0007_messages, TypeDelete);
 }
 
 void HandlerStoreMessage::method()
 {
-    if (isMethod(tableNames.t0007_messages))
+    /*
+    addMethod(serverInterface, t0007_messages().getORMName(), TypeDelete);
+    if (isMethod(t0007_messages().getORMName()))
     {
         if (isDelete())
         {
@@ -40,7 +42,7 @@ void HandlerStoreMessage::method()
             }
         }
         return;
-    }
+    }*/
     if (isMethod(t0028.getORMName()))
     {
         ORM2rapidjson orm2json;

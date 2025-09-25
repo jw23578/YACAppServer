@@ -29,6 +29,7 @@ public:
                             const std::string &third,
                             const std::string &mandant,
                             reducedsole::uuid &userId) = 0;
+    virtual bool logout(const std::string &loginToken) = 0;
 
     bool isLoggedInWithOutUserId(const reducedsole::uuid &appId,
                                  const std::string &loginEMail,
@@ -37,6 +38,7 @@ public:
                                  const std::string &mandant);
 
     void clear(const reducedsole::uuid &userId);
+    void clearByLoginToken(const std::string &loginToken);
 
 };
 

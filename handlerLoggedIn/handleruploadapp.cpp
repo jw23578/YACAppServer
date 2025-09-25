@@ -1,14 +1,14 @@
 #include "handleruploadapp.h"
-#include "orm_implementions/t0002_apps.h"
+#include "orm_implementions/t0001_apps.h"
 #include "orm-mapper/orm2rapidjson.h"
 
 HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                                    PistacheServerInterface &serverInterface,
-                                   LoggedInUsersContainer &loggedInUsersContainer):
+                                   LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                             "/uploadApp",
+                             methodNames.uploadApp,
                              TypePost,
-                             loggedInUsersContainer),
+                             loggedInAppUsersContainer),
     dlua(databaseLogicUserAndApp)
 {
     addMethod(serverInterface, t0027.getORMName(), TypePost);
@@ -52,7 +52,7 @@ void HandlerUploadApp::method()
     }
     MACRO_GetString(installation_code);
 
-    t0002_apps app;
+    t0001_apps app;
     if (!orm2json.fromJson(getPostedData(), app))
     {
         answerOk("data is not an app-object", false);

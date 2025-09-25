@@ -8,8 +8,9 @@
 #include "pgutils.h"
 #include "tablenames.h"
 #include "tablefields.h"
-#include "orm_implementions/t0002_apps.h"
+#include "orm_implementions/t0001_apps.h"
 #include "orm_implementions/t0027_app_images.h"
+#include "ormpersistenceinterface.h"
 
 
 class DatabaseLogicUserAndApp
@@ -17,10 +18,9 @@ class DatabaseLogicUserAndApp
     LogStatController &logStatController;
     PGConnectionPool &pool;
     PGUtils utils;
+    ORMPersistenceInterface &opi;
     const TableNames tableNames;
     const TableFields tableFields;
-    void loginSuccessful(const std::string &loginEMail,
-                         std::string &loginToken);
 
     std::map<reducedsole::uuid, pqxx::oid> imageId2oid;
     bool lookUpOid(const reducedsole::uuid &imageId,
@@ -28,36 +28,17 @@ class DatabaseLogicUserAndApp
 
 public:
     DatabaseLogicUserAndApp(LogStatController &logStatController,
-                  PGConnectionPool &pool);
+                            PGConnectionPool &pool,
+                            ORMPersistenceInterface &opi);
 
-    bool userExists(const std::string &loginEMail);
     bool userIsAppOwner(const reducedsole::uuid &app_id,
                         const reducedsole::uuid &user_id,
                         std::string &errorMessage,
                         bool &appExists);
-    std::string createUser(const std::string &loginEMail,
-                           const std::string &password);
-
-    bool verifyUser(const std::string &loginEMail,
-                    const std::string &verifyToken,
-                    std::string &message,
-                    std::string &loginToken);
-
-    bool loginUser(const std::string &loginEMail,
-                   const std::string &password,
-                   std::string &message,
-                   std::string &loginToken);
-
-    bool userLoggedIn(const std::string &loginEMail,
-                      const std::string &loginToken,
-                      reducedsole::uuid &userId,
-                      std::chrono::system_clock::time_point &loginTokenValidUntil);
-
-    void refreshLoginToken(const std::string &loginEMail,
-                           std::chrono::system_clock::time_point &loginTokenValidUntil);
+    bool logoutByLoginToken(const std::string &loginToken);
 
     bool saveApp(const reducedsole::uuid loggedInUserId,
-                 t0002_apps &app,
+                 t0001_apps &app,
                  const std::string &installation_code,
                  std::string &message);
 

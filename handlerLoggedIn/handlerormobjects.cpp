@@ -97,7 +97,7 @@ void HandlerORMObjects::method()
         {
             std::unique_ptr<t0022_right_group2appuser> object(static_cast<t0022_right_group2appuser*>(orm2json.fromJson(getPostedData(), factory)));
 
-            if (databaseLogics.databaseLogicRightGroup.appuserInRightGroup(object->right_group_id.get(), object->appuser_id.get()))
+            if (databaseLogics.databaseLogicRightGroup.appuserInRightGroup(object->right_group_id.get(), object->user_id.get()))
             {
                 return;
             }

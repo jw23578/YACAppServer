@@ -33,10 +33,6 @@ bool HandlerLoggedInInterface::checkLogin()
     {
         return false;
     }
-    if (!getHeaderUuid<AppIdHeader>(appId, loggedInContainer.appIdMandatory()))
-    {
-        return false;
-    }
     getHeaderString<ThirdHeader>(third, false);
     getHeaderString<MandantHeader>(mandant, false);
 
@@ -52,4 +48,9 @@ bool HandlerLoggedInInterface::checkLogin()
         return false;
     }
     return true;
+}
+
+bool HandlerLoggedInInterface::logout()
+{
+    return loggedInContainer.logout(loginToken);
 }

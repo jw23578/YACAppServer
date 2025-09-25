@@ -40,7 +40,7 @@ void DatabaseLogicTables::createDatabaseTables()
     PGColumnAndType accessCode({tableFields.access_code, pg_text});
     PGColumnAndType requestAllowed({tableFields.request_allowed, pg_bool});
     PGColumnAndType resultSeen({tableFields.result_seen, pg_timestamp});
-    PGColumnAndType appuserId({tableFields.appuser_id, pg_uuid, false, true});
+    PGColumnAndType appuserId({tableFields.user_id, pg_uuid, false, true});
     PGColumnAndType requestedDatetime({tableFields.requested_datetime, pg_timestamp});
     PGColumnAndType approvedDatetime({tableFields.approved_datetime, pg_timestamp});
     PGColumnAndType approvedAppuserId({tableFields.approved_appuser_id, pg_uuid});
@@ -92,41 +92,6 @@ void DatabaseLogicTables::createDatabaseTables()
         utils.createTableIfNeeded(on, columnsAndTypes);
     }
 
-    utils.createTableIfNeeded(tableNames.t0009_appuser_logintoken,
-                              {idPrimaryKey,
-                               {tableFields.appuser_id, pg_uuid, false, true},
-                               {"login_token", pg_text},
-                               {tableFields.login_token_valid_until, pg_timestamp}});
-
-    utils.createTableIfNeeded(tableNames.t0004_appuser_passwordhashes,
-                              {idPrimaryKey,
-                               {tableFields.appuser_id, pg_uuid, false, true},
-                               {tableFields.password_hash, pg_text}});
-
-    utils.createTableIfNeeded(tableNames.t0005_group_of_appusers,
-                              {idPrimaryKey,
-                               {tableFields.name, pg_text}});
-
-    utils.createTableIfNeeded(tableNames.t0006_appuser2group,
-                              {idPrimaryKey,
-                               {tableFields.appuser_id, pg_uuid, false, true},
-                               {"group_id", pg_uuid, false, true}});
-
-    utils.createTableIfNeeded(tableNames.t0007_messages,
-                              {{tableFields.id, pg_uuid, true},
-                               sender_id,
-                               {tableFields.to_id, pg_uuid, false, true},
-                               {tableFields.sended_datetime, pg_timestamp},
-                               {tableFields.content_base64, pg_text},
-                               deletedDateTime});
-
-    utils.createTableIfNeeded(tableNames.t0008_message_received,
-                              {idPrimaryKey,
-                               {tableFields.message_id, pg_uuid, false, true},
-                               {tableFields.receiver_id, pg_uuid, false, true},
-                               {tableFields.received_datetime, pg_timestamp}},
-                              {{tableFields.message_id, tableFields.receiver_id}});
-
     utils.createTableIfNeeded(tableNames.t0014_message_read,
                               {idPrimaryKey,
                                {tableFields.message_id, pg_uuid, false, true},
@@ -169,17 +134,17 @@ void DatabaseLogicTables::createDatabaseTables()
     utils.createTableIfNeeded(tableNames.t0017_element_usable4appuser,
                               {idPrimaryKey,
                                {tableFields.element_id, pg_uuid, false, true},
-                               {tableFields.appuser_id, pg_uuid, false, true}});
+                               {tableFields.user_id, pg_uuid, false, true}});
 
     utils.createTableIfNeeded(tableNames.t0019_element_visible4appuser,
                               {idPrimaryKey,
                                {tableFields.element_id, pg_uuid, false, true},
-                               {tableFields.appuser_id, pg_uuid, false, true}});
+                               {tableFields.user_id, pg_uuid, false, true}});
 
     utils.createTableIfNeeded(tableNames.t0020_appointment_participants,
                               {idPrimaryKey,
                                {tableFields.appointment_id, pg_uuid, false, true},
-                               {tableFields.appuser_id, pg_uuid, false, true}});
+                               {tableFields.user_id, pg_uuid, false, true}});
 
     utils.createTableIfNeeded(tableNames.t0024_space,
                               {idPrimaryKey,

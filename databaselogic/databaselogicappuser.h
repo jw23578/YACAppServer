@@ -8,8 +8,8 @@
 #include "yacAppAndServer/tablefields.h"
 #include "rapidjson/document.h"
 #include "extrapidjson.h"
-#include "orm_implementions/t0002_apps.h"
-#include "orm_implementions/t0003_appuser_profiles.h"
+#include "orm_implementions/t0001_apps.h"
+#include "orm_implementions/t0002_user.h"
 #include "ormpersistenceinterface.h"
 
 
@@ -24,11 +24,12 @@ class DatabaseLogicAppUser
     ORMPersistenceInterface &opi;
     TableNames tableNames;
     TableFields tableFields;
-    void loginSuccessful(const reducedsole::uuid &appUserId,
+    void loginSuccessful(const reducedsole::uuid &appId,
+                         const reducedsole::uuid &userId,
                          std::string &loginToken);
 
     std::map<std::string, reducedsole::uuid> loginEMailAndAppId2AppUserId;
-    bool lookupAppUser(const reducedsole::uuid &appId,
+    bool lookupUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
                        reducedsole::uuid &appUserId,
                        std::string &message);
@@ -42,7 +43,7 @@ public:
                          PGConnectionPool &pool,
                          ORMPersistenceInterface &opi);
 
-    reducedsole::uuid getAppUserId(const reducedsole::uuid &appId,
+    reducedsole::uuid getUserId(const reducedsole::uuid &appId,
                             const std::string &loginEMail);
     bool createAppUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
@@ -59,7 +60,7 @@ public:
                                const bool searching_fuzzy_allowed,
                                const std::string &public_key_base64,
                                std::string &message,
-                               t0003_appuser_profiles &target);
+                               t0002_user &target);
 
     bool createVerifyToken(const reducedsole::uuid &appId,
                            const std::string &loginEMail,
@@ -78,6 +79,7 @@ public:
                       std::string &message,
                       ExtRapidJSONWriter &w,
                       reducedsole::uuid &appUserId);
+    bool logoutAppUserByLoginToken(const std::string lt);
 
     bool updateAppUser(const reducedsole::uuid &appId,
                        const reducedsole::uuid &userId,
@@ -104,7 +106,7 @@ public:
                                std::string &updatePasswordToken,
                                std::string &message);
 
-    bool updatePasswordLoggedIn(const reducedsole::uuid &appuser_id,
+    bool updatePasswordLoggedIn(const reducedsole::uuid &user_id,
                                 const std::string &password);
     bool updatePassword(const reducedsole::uuid &appId,
                         const std::string &loginEMail,

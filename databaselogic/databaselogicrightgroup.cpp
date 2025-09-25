@@ -2,6 +2,7 @@
 #include "pgexecutor.h"
 #include "orm-mapper/orm2postgres.h"
 #include "orm-mapper/orm2rapidjson.h"
+#include "orm_implementions/t0002_user.h"
 #include "orm_implementions/t0021_right_group.h"
 
 bool DatabaseLogicRightGroup::fetchOneRightGroup(const reducedsole::uuid &id,
@@ -18,7 +19,7 @@ bool DatabaseLogicRightGroup::appuserInRightGroup(const reducedsole::uuid &right
     SqlString sql;
     sql.select(tableNames.t0022_right_group2appuser);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("and", tableFields.user_id, "=", appuser_id);
     sql.addCompare("and", tableFields.approved_datetime, "is not", TimePointPostgreSqlNull);
     PGExecutor e(pool, sql);
     return e.size() > 0;
@@ -94,7 +95,7 @@ bool DatabaseLogicRightGroup::fetchRightGroup(const reducedsole::uuid &right_gro
         PGExecutor e(pool, sql);
         rapidjson::Value member;
         member.SetArray();
-        e.fill(member, alloc, tableFields.appuser_id);
+        e.fill(member, alloc, tableFields.user_id);
         object.AddMember("member", member, alloc);
     }
     return true;
@@ -105,9 +106,10 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const reducedsole::uuid &rig
                                                     rapidjson::MemoryPoolAllocator<> &alloc,
                                                     std::string &errorMessage)
 {
+    t0002_user userProfile;
     SqlString sql("select id, visible_name, image_id from ");
-    sql += tableNames.t0003_appuser_profiles;
-    sql += " where " + tableFields.id + " in (select " + tableFields.appuser_id;
+    sql += userProfile.getORMName();
+    sql += " where " + tableFields.id + " in (select " + tableFields.user_id;
     sql += " from " + tableNames.t0022_right_group2appuser;
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.approved_datetime, " is not ", TimePointPostgreSqlNull);
@@ -124,7 +126,7 @@ void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const reducedsole::uuid &
     sql += std::string(" where ") + tableFields.right_group_id;
     sql += std::string(" in (select ") + tableFields.right_group_id;
     sql += std::string(" from ") + tableNames.t0022_right_group2appuser;
-    sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("where", tableFields.user_id, "=", appuser_id);
     sql += std::string(")");
     PGExecutor e(pool, sql);
     for (size_t i(0); i < e.size(); ++i)
@@ -175,7 +177,7 @@ bool DatabaseLogicRightGroup::removeUser(const reducedsole::uuid &right_group_id
     SqlString sql;
     sql.delet(tableNames.t0022_right_group2appuser);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("and", tableFields.user_id, "=", appuser_id);
     PGExecutor e(pool, sql);
     return true;
 }

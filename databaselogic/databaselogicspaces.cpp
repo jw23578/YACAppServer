@@ -49,7 +49,7 @@ bool DatabaseLogicSpaces::spaceRequestResultSeen(const reducedsole::uuid &id,
     sql.update(tableNames.t0025_space2appuser);
     sql.addSet(tableFields.result_seen, TimePointPostgreSqlNow, false);
     sql.addCompare("where", tableFields.id, "=", id);
-    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("and", tableFields.user_id, "=", appuser_id);
     PGExecutor e(pool, sql);
     return true;
 }
@@ -74,17 +74,17 @@ bool DatabaseLogicSpaces::fetchSpaces(const reducedsole::uuid &app_id,
 {
     SqlString sql("select * ");
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
-    sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("where", tableFields.user_id, "=", appuser_id);
     sql.addCompare("and", tableFields.approved_datetime, "is not", TimePointPostgreSqlNull);
     sql += std::string(" and ") + tableFields.space_id + " = t0024.id ";
-    sql += ") or creater_id =:appuser_id) as member ";
+    sql += ") or creater_id =:user_id) as member ";
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
-    sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("where", tableFields.user_id, "=", appuser_id);
     sql.addCompare("and", tableFields.denied_datetime, "is not", TimePointPostgreSqlNull);
     sql += std::string(" and ") + tableFields.space_id + " = t0024.id ";
     sql += ")) as denied ";
     sql += std::string(", (exists(select 1 from ") + tableNames.t0025_space2appuser;
-    sql.addCompare("where", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("where", tableFields.user_id, "=", appuser_id);
     sql.addCompare("and", tableFields.requested_datetime, "is not", TimePointPostgreSqlNull);
     sql += std::string(" and ") + tableFields.space_id + " = t0024.id ";
     sql += ")) as requested ";
@@ -114,7 +114,7 @@ bool DatabaseLogicSpaces::fetchSpace(const reducedsole::uuid &space_id, rapidjso
         PGExecutor e(pool, sql);
         rapidjson::Value member;
         member.SetArray();
-        e.fill(member, alloc, tableFields.appuser_id);
+        e.fill(member, alloc, tableFields.user_id);
         object.AddMember("member", member, alloc);
     }
     return true;
@@ -171,7 +171,7 @@ bool DatabaseLogicSpaces::fetchSpaceRequestId(const reducedsole::uuid &space_id,
     SqlString sql;
     sql.select(tableNames.t0025_space2appuser);
     sql.addCompare("where", tableFields.space_id, "=", space_id);
-    sql.addCompare("and", tableFields.appuser_id, "=", appuser_id);
+    sql.addCompare("and", tableFields.user_id, "=", appuser_id);
     PGExecutor e(pool, sql);
     if (!e.size())
     {

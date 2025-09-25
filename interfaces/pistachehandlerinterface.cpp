@@ -5,12 +5,21 @@
 #include "JWUtils/extstring.h"
 #include "JWUtils/extuuid.h"
 #include "beginendtrack.h"
+#include "serverHeader/appidheader.h"
 
+const reducedsole::uuid &PistacheHandlerInterface::getAppId() const
+{
+    return appId;
+}
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
     BeginEndTrack bet(__FILE__, __LINE__, request.resource());
     this->request = &request;
     this->response = &response;
+    if (!getHeaderUuid<AppIdHeader>(appId, true))
+    {
+        return;
+    }
     if (loginNeeded == TypeLoginNeeded && !checkLogin())
     {
         return;

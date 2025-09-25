@@ -1,12 +1,16 @@
-#ifndef HANDLERAPPUSERLOGIN_H
-#define HANDLERAPPUSERLOGIN_H
+#ifndef HANDLERUSER_H
+#define HANDLERUSER_H
 
 #include "interfaces/pistachehandlerinterface.h"
 #include "databaselogics.h"
 #include "caches/devicetokencache.h"
+#include "loggedincontainer/loggedinappuserscontainer.h"
+#include "emaillogic.h"
 
-class HandlerAppUserLogin : public PistacheHandlerInterface
+class HandlerUser : public PistacheHandlerInterface
 {
+    LoggedInAppUsersContainer &loggedInUsersContainer;
+    EMailLogic &emailLogic;
     DatabaseLogics &databaseLogics;
     DeviceTokenCache &deviceTokenCache;
 
@@ -20,9 +24,11 @@ class HandlerAppUserLogin : public PistacheHandlerInterface
                     reducedsole::uuid &appUserId);
 
 public:
-    HandlerAppUserLogin(DatabaseLogics &databaseLogics,
-                        DeviceTokenCache &deviceTokenCache,
-                        PistacheServerInterface &serverInterface);
+    HandlerUser(LoggedInAppUsersContainer &loggedInUsersContainer,
+                EMailLogic &emailLogic,
+                DatabaseLogics &databaseLogics,
+                 DeviceTokenCache &deviceTokenCache,
+                 PistacheServerInterface &serverInterface);
 
 
     // PistacheHandlerInterface interface
@@ -30,4 +36,4 @@ public:
     void method() override;
 };
 
-#endif // HANDLERAPPUSERLOGIN_H
+#endif // HANDLERUSER_H

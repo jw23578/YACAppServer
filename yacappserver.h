@@ -2,16 +2,9 @@
 #define YACAPPSERVER_H
 
 #include "interfaces/pistacheserverinterface.h"
-#include "handler/handleruserregister.h"
-#include "handler/handlerverifyuser.h"
-#include "handler/handleruserlogin.h"
-#include "handler/handleruserloggedin.h"
 #include "handler/handlerapp.h"
 #include "handler/handlerpages.h"
-#include "handler/handlerappuserregister.h"
-#include "handler/handlerappuserverify.h"
-#include "handler/handlerappuserlogin.h"
-#include "handler/handlerappuserloggedin.h"
+#include "handler/handleruser.h"
 #include "handler/handlerappuserrequestupdatepassword.h"
 #include "handler/handlerappuserupdatepassword.h"
 #include "handlerLoggedIn/handleruploadapp.h"
@@ -30,7 +23,6 @@
 #include "databaselogicuserandapp.h"
 #include "databaselogics.h"
 #include "emaillogic.h"
-#include "loggedincontainer/loggedinuserscontainer.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
 #include "caches/devicetokencache.h"
 #include "orm_implementions/yacormfactory.h"
@@ -40,20 +32,12 @@ class YACAppServer: public PistacheServerInterface
 {
     DeviceTokenCache deviceTokenCache;
 
-    LoggedInUsersContainer loggedInUsersContainer;
     LoggedInAppUsersContainer loggedInAppUsersContainer;
-    HandlerUserRegister handlerUserRegister;
-    HandlerVerifyUser handlerVerifyUser;
-    HandlerUserLogin handlerUserLogin;
-    HandlerUserLoggedIn handlerUserLoggedIn;
     HandlerAPP handlerAPP;
     HandlerPages handlerPages;
     HandlerUploadApp handlerUploadApp;    
 
-    HandlerAppUserRegister handlerAppUserRegister;
-    HandlerAppUserVerify handlerAppUserVerify;
-    HandlerAppUserLogin handlerAppUserLogin;
-    HandlerAppUserLoggedIn handlerAppUserLoggedIn;
+    HandlerUser handlerUser;
     HandlerAppUserRequestUpdatePassword handlerAppUserRequestUpdatePassword;
     HandlerAppUserUpdatePassword handlerAppUserUpdatePassword;
     HandlerAppUserUpdateProfile handlerAppUserUpdateProfile;

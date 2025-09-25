@@ -31,3 +31,13 @@ void LoggedInContainerInterface::clear(const reducedsole::uuid &userId)
         }
     }
 }
+
+void LoggedInContainerInterface::clearByLoginToken(const std::string &loginToken)
+{
+    auto it(loggedInUsers.find(loginToken));
+    if (it == loggedInUsers.end())
+    {
+        return;
+    }
+    loggedInUsers.erase(it);
+}
