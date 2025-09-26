@@ -90,6 +90,9 @@ public:
     ExtPistache ep;
 private:
     reducedsole::uuid appId;
+protected:
+    bool appIdNeeded{true};
+private:
     Pistache::Rest::Request const *request;
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;

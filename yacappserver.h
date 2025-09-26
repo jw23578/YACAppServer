@@ -5,8 +5,6 @@
 #include "handler/handlerapp.h"
 #include "handler/handlerpages.h"
 #include "handler/handleruser.h"
-#include "handler/handlerappuserrequestupdatepassword.h"
-#include "handler/handlerappuserupdatepassword.h"
 #include "handlerLoggedIn/handleruploadapp.h"
 #include "handlerLoggedIn/handlerstoremessage.h"
 #include "handlerLoggedIn/handlerappuserupdateprofile.h"
@@ -38,8 +36,6 @@ class YACAppServer: public PistacheServerInterface
     HandlerUploadApp handlerUploadApp;    
 
     HandlerUser handlerUser;
-    HandlerAppUserRequestUpdatePassword handlerAppUserRequestUpdatePassword;
-    HandlerAppUserUpdatePassword handlerAppUserUpdatePassword;
     HandlerAppUserUpdateProfile handlerAppUserUpdateProfile;
     HandlerAppUserSearchProfiles handlerAppUserSearchProfiles;
     HandlerAppUserGetWorktimeState handlerAppUserGetWorktimeState;

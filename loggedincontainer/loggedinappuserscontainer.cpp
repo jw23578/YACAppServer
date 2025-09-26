@@ -1,8 +1,10 @@
 #include "loggedinappuserscontainer.h"
 #include "thirdparties/thirdcurlrequests.h"
 
-LoggedInAppUsersContainer::LoggedInAppUsersContainer(DatabaseLogics &databaseLogics):
+LoggedInAppUsersContainer::LoggedInAppUsersContainer(ORMPersistenceInterface &opi,
+                                                     DatabaseLogics &databaseLogics):
     LoggedInContainerInterface(),
+    opi(opi),
     databaseLogics(databaseLogics)
 {
 
@@ -34,7 +36,9 @@ bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
                                       loginTokenValidUntil);
             if (loggedIn)
             {
-                userId = databaseLogics.databaseLogicAppUser.getUserId(appId, loginEMail);
+                t0002_user userProfile;
+                userProfile.loadByLoginEMail(opi, appId, loginEMail);
+                userId = userProfile.user_id;
             }
         }
         else

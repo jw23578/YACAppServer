@@ -6,11 +6,16 @@ HandlerPages::HandlerPages(PistacheServerInterface &serverInterface):
                              TypeGet,
                              TypeNoLoginNeeded)
 {
-
+    appIdNeeded = false;
 }
 
 void HandlerPages::method()
 {
+    if (requestRessource() == "/info.html")
+    {
+        answerOk("info.html", true);
+        return;
+    }
     if (requestRessource() != "/index.html")
     {
         answerBad("here only index.html is served");

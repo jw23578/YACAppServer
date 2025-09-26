@@ -33,7 +33,16 @@
 #include "coutlogger.h"
 #include "postgres/pgormpersistence.h"
 #include "orm_implementions/t0003_user_passwordhashes.h"
+#include "tests/testviacurl.h"
 
+ORMPersistenceInterface *testOPI = 0;
+void testViaCurlMethod()
+{
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    TestViaCurl tvc(23578, "http://127.0.0.1", *testOPI);
+    std::string rm;
+    tvc.run(rm);
+}
 
 using namespace std;
 
@@ -45,15 +54,21 @@ int main(int argc, char **argv)
     logStatController.add(new coutLogger);
     coutLogger::ActivateVisibleLogging a;
 
+    bool runTestsViaCurl(false);
     bool runTests(false);
     bool cleanup(false);
     for (int i(0); i < argc; ++i)
     {
-        if (std::string(argv[i]) == "runTests")
+        std::string arg(argv[i]);
+        if (arg == "runTestsViaCurl")
+        {
+            runTestsViaCurl = true;
+        }
+        if (arg == "runTests")
         {
             runTests = true;
         }
-        if (std::string(argv[i]) == "cleanup")
+        if (arg == "cleanup")
         {
             cleanup = true;
         }
@@ -173,6 +188,7 @@ int main(int argc, char **argv)
     YACORMFactory factory;
     PGORMSqlImplementation sqlImplementation(pool);
     PGORMPersistence opi(sqlImplementation);
+    testOPI = &opi;
     opi.initDatabase();
     DatabaseLogicTables databaseLogicTables(logStatController,
                                             pool,
@@ -272,6 +288,13 @@ int main(int argc, char **argv)
                           json.getString("smtpPassword"));
 
     coutLogger::ActivateVisibleLogging a2;
+
+
+    if (runTestsViaCurl)
+    {
+        std::thread *testThread(new std::thread(testViaCurlMethod));
+    }
+
     YACAppServer server(json.getString("firebaseApiKey"),
                         factory,
                         opi,

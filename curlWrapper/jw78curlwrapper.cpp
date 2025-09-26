@@ -83,6 +83,11 @@ jw78::CurlWrapper::~CurlWrapper()
     }
 }
 
+void jw78::CurlWrapper::addHeader(const std::string &name, const std::string &value)
+{
+    headers.push_back(name + ": " + value);
+}
+
 void jw78::CurlWrapper::setUserAndPassword(const std::string &user, const std::string &password)
 {
     setOpt(CURLOPT_USERNAME, user);
@@ -199,6 +204,18 @@ bool jw78::CurlWrapper::get(const std::string &url,
 {
     result = message = "";
     setOpt(CURLOPT_URL, url);
+    CURLcode res(curlPerformToString(result));
+    return res == CURLE_OK;
+}
+
+bool jw78::CurlWrapper::post(const std::string &url,
+                             const std::string &postData,
+                             std::string &result,
+                             std::string &message)
+{
+    setOpt(CURLOPT_POSTFIELDS, postData);
+    setOpt(CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
     CURLcode res(curlPerformToString(result));
     return res == CURLE_OK;
 }

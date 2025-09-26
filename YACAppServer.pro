@@ -55,8 +55,6 @@ SOURCES += \
         databaselogic/databaselogicworktime.cpp \
         emaillogic.cpp \
         handler/handlerapp.cpp \
-        handler/handlerappuserrequestupdatepassword.cpp \
-        handler/handlerappuserupdatepassword.cpp \
         handler/handlerpages.cpp \
         handler/handleruser.cpp \
         handlerLoggedIn/handler_t0030_documents.cpp \
@@ -97,6 +95,7 @@ SOURCES += \
         tests/testextstring.cpp \
         tests/testorm2postgres.cpp \
         tests/testtimepoint.cpp \
+        tests/testviacurl.cpp \
         thirdparties/thirdcurlrequests.cpp \
         utils/base64.cpp \
         utils/extmap.cpp \
@@ -126,8 +125,6 @@ HEADERS += \
   databaselogic/databaselogicworktime.h \
   emaillogic.h \
   handler/handlerapp.h \
-  handler/handlerappuserrequestupdatepassword.h \
-  handler/handlerappuserupdatepassword.h \
   handler/handlerpages.h \
   handler/handleruser.h \
   handlerLoggedIn/handler_t0030_documents.h \
@@ -168,6 +165,7 @@ HEADERS += \
   tests/testextstring.h \
   tests/testorm2postgres.h \
   tests/testtimepoint.h \
+  tests/testviacurl.h \
   thirdparties/thirdcurlrequests.h \
   utils/base64.h \
   utils/extmap.h \

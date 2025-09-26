@@ -3,12 +3,15 @@
 
 #include "loggedincontainerinterface.h"
 #include "databaselogics.h"
+#include "ormpersistenceinterface.h"
 
 class LoggedInAppUsersContainer: public LoggedInContainerInterface
 {
+    ORMPersistenceInterface &opi;
     DatabaseLogics &databaseLogics;
 public:
-    LoggedInAppUsersContainer(DatabaseLogics &databaseLogics);
+    LoggedInAppUsersContainer(ORMPersistenceInterface &opi,
+                              DatabaseLogics &databaseLogics);
 
     bool isLoggedIn(const reducedsole::uuid &appId,
                     const std::string &loginEMail,

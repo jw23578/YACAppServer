@@ -57,6 +57,8 @@ public:
     CurlWrapper();
     ~CurlWrapper();
     std::vector<std::string> headers;
+    void addHeader(const std::string &name,
+                   const std::string &value);
 
     void setUserAndPassword(std::string const &user,
                             std::string const &password);
@@ -91,6 +93,11 @@ public:
     bool get(std::string const &url,
              std::string &result,
              std::string &message);
+
+    bool post(const std::string &url,
+              const std::string &postData,
+              std::string &result,
+              std::string &message);
 
     bool httpsPost(std::string const &url,
                    const std::string &postData,

@@ -1,9 +1,9 @@
 #include "handleruser.h"
 #include "extrapidjson.h"
 #include "thirdparties/thirdcurlrequests.h"
-#include "serverHeader/appidheader.h"
 #include "serverHeader/thirdheader.h"
 #include "serverHeader/mandantheader.h"
+#include "extmap.h"
 
 bool HandlerUser::thirdLogin(const reducedsole::uuid &appId,
                              const std::string &third,
@@ -105,10 +105,56 @@ HandlerUser::HandlerUser(LoggedInAppUsersContainer &loggedInUsersContainer,
     addMethod(serverInterface, methodNames.registerUser, TypePost);
     addMethod(serverInterface, methodNames.requestVerifyToken, TypePost);
     addMethod(serverInterface, methodNames.verifyUser, TypePost);
+    addMethod(serverInterface, methodNames.updatePasswordUser, TypePost);
+    addMethod(serverInterface, methodNames.requestUpdatePasswordUser, TypePost);
 }
 
 void HandlerUser::method()
 {
+    if (isMethod(methodNames.requestUpdatePasswordUser))
+    {
+        MACRO_GetMandatoryEMail(loginEMail);
+
+        std::string message;
+        std::string updatePasswordToken;
+        if (!databaseLogics.databaseLogicAppUser.requestUpdatePassword(getAppId(),
+                                                                       loginEMail,
+                                                                       updatePasswordToken,
+                                                                       message))
+        {
+            answerBad(message);
+            return;
+        }
+        emailLogic.sendPleaseUpdatePasswordMail(loginEMail, updatePasswordToken);
+        message = "e-mail with updatePasswordToken sended";
+        answerOk(message, true);
+        return;
+    }
+    if (isMethod(methodNames.updatePasswordUser))
+    {
+        MACRO_GetMandatoryEMail(loginEMail);
+        MACRO_GetMandatoryString(password);
+        MACRO_GetMandatoryString(updatePasswordToken);
+
+        std::string message;
+        std::string loginToken;
+        reducedsole::uuid userId;
+        if (!databaseLogics.databaseLogicAppUser.updatePassword(getAppId(),
+                                                                loginEMail,
+                                                                updatePasswordToken,
+                                                                password,
+                                                                message,
+                                                                loginToken,
+                                                                userId))
+        {
+            answerBad(message);
+            return;
+        }
+        loggedInUsersContainer.clear(userId);
+        MACRO_CreateDataMAP(loginToken);
+        answerOk(message, true, data);
+        return;
+    }
     if (isMethod(methodNames.verifyUser))
     {
         MACRO_GetMandatoryEMail(loginEMail);
@@ -119,7 +165,7 @@ void HandlerUser::method()
         data.SetObject();
         ExtRapidJSONWriter w(data, data.GetAllocator());
         reducedsole::uuid appUserId;
-        if (!databaseLogics.databaseLogicAppUser.verifyAppUser(getAppId(),
+        if (!databaseLogics.databaseLogicAppUser.verifyUser(getAppId(),
                                                                loginEMail,
                                                                verifyToken,
                                                                message,
@@ -185,10 +231,10 @@ void HandlerUser::method()
 
 
         if (loggedInUsersContainer.isLoggedInWithOutUserId(getAppId(),
-                                                              loginEMail,
-                                                              loginToken,
-                                                              third,
-                                                              mandant))
+                                                           loginEMail,
+                                                           loginToken,
+                                                           third,
+                                                           mandant))
         {
             answerOk("user logged in", true);
             return;
@@ -228,7 +274,7 @@ void HandlerUser::method()
     }
     else
     {
-        loggedIn = databaseLogics.databaseLogicAppUser.loginAppUser(getAppId(),
+        loggedIn = databaseLogics.databaseLogicAppUser.loginUser(getAppId(),
                                                                     loginEMail,
                                                                     password,
                                                                     message,

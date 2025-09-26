@@ -18,7 +18,7 @@ public:
     void clear();
 
     void addUserRights(const reducedsole::uuid &app_id,
-                       const reducedsole::uuid &appuser_id, rapidjson::Value &target,
+                       const reducedsole::uuid &user_id, rapidjson::Value &target,
                        rapidjson::MemoryPoolAllocator<> &alloc);
 };
 

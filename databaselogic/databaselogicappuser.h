@@ -30,21 +30,18 @@ class DatabaseLogicAppUser
 
     std::map<std::string, reducedsole::uuid> loginEMailAndAppId2AppUserId;
     bool lookupUser(const reducedsole::uuid &appId,
-                       const std::string &loginEMail,
-                       reducedsole::uuid &appUserId,
-                       std::string &message);
+                    const std::string &loginEMail,
+                    reducedsole::uuid &appUserId,
+                    std::string &message);
     void refreshAppUserLoginToken(const reducedsole::uuid &appId,
                                   const std::string &loginEMail,
                                   std::chrono::system_clock::time_point &loginTokenValidUntil);
-    void resetUpdatePasswordToken(const reducedsole::uuid &userId);
 
 public:
     DatabaseLogicAppUser(LogStatController &logStatController,
                          PGConnectionPool &pool,
                          ORMPersistenceInterface &opi);
 
-    reducedsole::uuid getUserId(const reducedsole::uuid &appId,
-                            const std::string &loginEMail);
     bool createAppUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &password,
@@ -67,18 +64,18 @@ public:
                            std::string &message,
                            std::string &verifyToken);
 
-    bool verifyAppUser(const reducedsole::uuid &appId,
+    bool verifyUser(const reducedsole::uuid &appId,
                        const std::string &loginEMail,
                        const std::string &verifyToken,
                        std::string &message,
                        ExtRapidJSONWriter &w,
                        reducedsole::uuid &appUserId);
-    bool loginAppUser(const reducedsole::uuid &appId,
-                      const std::string &loginEMail,
-                      const std::string &password,
-                      std::string &message,
-                      ExtRapidJSONWriter &w,
-                      reducedsole::uuid &appUserId);
+    bool loginUser(const reducedsole::uuid &appId,
+                   const std::string &loginEMail,
+                   const std::string &password,
+                   std::string &message,
+                   ExtRapidJSONWriter &w,
+                   reducedsole::uuid &appUserId);
     bool logoutAppUserByLoginToken(const std::string lt);
 
     bool updateAppUser(const reducedsole::uuid &appId,

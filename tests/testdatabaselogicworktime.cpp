@@ -8,7 +8,7 @@ TestDatabaseLogicWorktime::TestDatabaseLogicWorktime(LogStatController &logStatC
 
     reducedsole::uuid appId(reducedsole::rebuild("6ce520ba-4c44-47be-9386-15f021ea3a41"));
     std::string loginEMail("jens@wienoebst.com");
-    reducedsole::uuid userId(databaseLogics.databaseLogicAppUser.getUserId(appId, loginEMail));
+    reducedsole::uuid userId; //(databaseLogics.databaseLogicAppUser.getUserId(appId, loginEMail));
     DatabaseLogicWorktime::UserMood userMood(DatabaseLogicWorktime::UserMoodUnknown);
     DatabaseLogicWorktime::DayRating dayRating(DatabaseLogicWorktime::DayRatingUnknown);
     std::chrono::system_clock::time_point workStart;

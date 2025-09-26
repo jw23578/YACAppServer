@@ -16,9 +16,12 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
     BeginEndTrack bet(__FILE__, __LINE__, request.resource());
     this->request = &request;
     this->response = &response;
-    if (!getHeaderUuid<AppIdHeader>(appId, true))
+    if (appIdNeeded)
     {
-        return;
+        if (!getHeaderUuid<AppIdHeader>(appId, true))
+        {
+            return;
+        }
     }
     if (loginNeeded == TypeLoginNeeded && !checkLogin())
     {
@@ -208,7 +211,8 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                                                    LoginNeededType loginNeeded):
-    request(0), response(0),
+    request(0),
+    response(0),
     loginNeeded(loginNeeded)
 {
 }
