@@ -10,7 +10,7 @@ LoggedInAppUsersContainer::LoggedInAppUsersContainer(ORMPersistenceInterface &op
 
 }
 
-bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
+bool LoggedInAppUsersContainer::isLoggedIn(CurrentContext &context,
                                            const std::string &loginEMail,
                                            const std::string &loginToken,
                                            const std::string &third,
@@ -37,13 +37,13 @@ bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
             if (loggedIn)
             {
                 t0002_user userProfile;
-                userProfile.loadByLoginEMail(opi, appId, loginEMail);
+                userProfile.loadByLoginEMail(context, loginEMail);
                 userId = userProfile.user_id;
             }
         }
         else
         {
-            loggedIn = databaseLogics.databaseLogicAppUser.appUserLoggedIn(appId,
+            loggedIn = databaseLogics.databaseLogicAppUser.appUserLoggedIn(context,
                                                                            loginEMail,
                                                                            loginToken,
                                                                            userId,
@@ -75,7 +75,7 @@ bool LoggedInAppUsersContainer::isLoggedIn(const reducedsole::uuid &appId,
         }
         else
         {
-            databaseLogics.databaseLogicAppUser.refreshAppUserLoginToken(appId,
+            databaseLogics.databaseLogicAppUser.refreshAppUserLoginToken(context,
                                                                          loginEMail,
                                                                          it->second.loginTokenValidUntil);
         }

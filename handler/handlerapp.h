@@ -10,11 +10,12 @@ class HandlerAPP : public PistacheHandlerInterface
 
 public:
     HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
-                  PistacheServerInterface &serverInterface);
+               ORMPersistenceInterface &opi,
+               PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface
 public:
-    void method();
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERAPP_H

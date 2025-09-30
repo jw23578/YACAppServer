@@ -28,12 +28,7 @@ class DatabaseLogicAppUser
                          const reducedsole::uuid &userId,
                          std::string &loginToken);
 
-    std::map<std::string, reducedsole::uuid> loginEMailAndAppId2AppUserId;
-    bool lookupUser(const reducedsole::uuid &appId,
-                    const std::string &loginEMail,
-                    reducedsole::uuid &appUserId,
-                    std::string &message);
-    void refreshAppUserLoginToken(const reducedsole::uuid &appId,
+    void refreshAppUserLoginToken(CurrentContext &context,
                                   const std::string &loginEMail,
                                   std::chrono::system_clock::time_point &loginTokenValidUntil);
 
@@ -42,35 +37,7 @@ public:
                          PGConnectionPool &pool,
                          ORMPersistenceInterface &opi);
 
-    bool createAppUser(const reducedsole::uuid &appId,
-                       const std::string &loginEMail,
-                       const std::string &password,
-                       std::string &message,
-                       std::string &verifyToken);
-
-    bool createVerifiedAppUser(const reducedsole::uuid &appId,
-                               const std::string &loginEMail,
-                               const std::string &fstname,
-                               const std::string &surname,
-                               const std::string &visible_name,
-                               const bool searching_exactly_allowed,
-                               const bool searching_fuzzy_allowed,
-                               const std::string &public_key_base64,
-                               std::string &message,
-                               t0002_user &target);
-
-    bool createVerifyToken(const reducedsole::uuid &appId,
-                           const std::string &loginEMail,
-                           std::string &message,
-                           std::string &verifyToken);
-
-    bool verifyUser(const reducedsole::uuid &appId,
-                       const std::string &loginEMail,
-                       const std::string &verifyToken,
-                       std::string &message,
-                       ExtRapidJSONWriter &w,
-                       reducedsole::uuid &appUserId);
-    bool loginUser(const reducedsole::uuid &appId,
+    bool loginUser(CurrentContext &context,
                    const std::string &loginEMail,
                    const std::string &password,
                    std::string &message,
@@ -78,34 +45,20 @@ public:
                    reducedsole::uuid &appUserId);
     bool logoutAppUserByLoginToken(const std::string lt);
 
-    bool updateAppUser(const reducedsole::uuid &appId,
-                       const reducedsole::uuid &userId,
-                       const std::string &fstname,
-                       const std::string &surname,
-                       const std::string &visible_name,
-                       const std::string &color,
-                       const std::string &message_font_color,
-                       const bool searching_exactly_allowed,
-                       const bool searching_fuzzy_allowed,
-                       const std::string &public_key_base64,
-                       const bool with_image,
-                       const reducedsole::uuid imageId,
-                       std::string &message);
-
-    bool appUserLoggedIn(const reducedsole::uuid &appId,
+    bool appUserLoggedIn(CurrentContext &context,
                          const std::string &loginEMail,
                          const std::string &loginToken,
                          reducedsole::uuid &userId,
                          std::chrono::system_clock::time_point &loginTokenValidUntil);
 
-    bool requestUpdatePassword(const reducedsole::uuid &appId,
+    bool requestUpdatePassword(CurrentContext &context,
                                const std::string &loginEMail,
                                std::string &updatePasswordToken,
                                std::string &message);
 
     bool updatePasswordLoggedIn(const reducedsole::uuid &user_id,
                                 const std::string &password);
-    bool updatePassword(const reducedsole::uuid &appId,
+    bool updatePassword(CurrentContext &context,
                         const std::string &loginEMail,
                         const std::string &updatePasswordToken,
                         const std::string &password,

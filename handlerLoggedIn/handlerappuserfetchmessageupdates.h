@@ -13,7 +13,7 @@ public:
                                       DatabaseLogics &databaseLogics,
                                       LoggedInAppUsersContainer &loggedInAppUsersContainer);
 
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERAPPUSERFETCHMESSAGEUPDATES_H

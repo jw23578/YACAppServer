@@ -17,8 +17,6 @@ TestDatabaseLogics::TestDatabaseLogics(DatabaseLogics &databaseLogics)
     id = ExtUuid::NullUuid;
     bool request_allowed(false);
     bool visible_for_non_members(false);
-    dlrg.deleteRightGroup(id, id, message);
-    dlrg.deleteRightGroup(id, creater_id, message);
 
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);

@@ -3,9 +3,11 @@
 #include "orm-mapper/orm2rapidjson.h"
 
 HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+                                   ORMPersistenceInterface &opi,
                                    PistacheServerInterface &serverInterface,
                                    LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               opi,
                              methodNames.uploadApp,
                              TypePost,
                              loggedInAppUsersContainer),
@@ -16,7 +18,7 @@ HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAnd
     addMethod(serverInterface, t0027.getORMName(), TypeDelete);
 }
 
-void HandlerUploadApp::method()
+void HandlerUploadApp::method(CurrentContext &context)
 {
     std::string errorMessage;
     ORM2rapidjson orm2json;
@@ -24,7 +26,7 @@ void HandlerUploadApp::method()
     {
         orm2json.fromJson(getPostedData(), t0027);
         bool appExists(false);
-        if (!dlua.userIsAppOwner(t0027.app_id, loggedInUserId, errorMessage, appExists))
+        if (!dlua.userIsAppOwner(t0027.app_id, context.userId, errorMessage, appExists))
         {
             answerOk(errorMessage, false);
             return;
@@ -59,7 +61,7 @@ void HandlerUploadApp::method()
         return;
     }
 
-    if (!dlua.saveApp(loggedInUserId, app, installation_code, errorMessage))
+    if (!dlua.saveApp(context.userId, app, installation_code, errorMessage))
     {
         answerOk(errorMessage, false);
         return;

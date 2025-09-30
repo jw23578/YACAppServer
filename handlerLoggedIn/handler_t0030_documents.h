@@ -7,7 +7,6 @@
 
 class Handler_t0030_documents : public HandlerLoggedInInterface
 {
-    PGORMPersistence &opi;
 public:
     Handler_t0030_documents(PistacheServerInterface &serverInterface,
                             LoggedInAppUsersContainer &loggedInAppUsersContainer,
@@ -17,7 +16,7 @@ public:
 
     // PistacheHandlerInterface interface
 public:
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLER_T0030_DOCUMENTS_H

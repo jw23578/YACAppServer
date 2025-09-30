@@ -1,7 +1,7 @@
 #include "rightslogic.h"
-#include "extrapidjson.h"
 #include "orm_implementions/t0022_right_group2appuser.h"
 #include "orm-mapper/orm2postgres.h"
+#include "orm_implementions/t0021_right_group.h"
 
 void RightsLogic::fetchRightsForUser(const reducedsole::uuid &appuser_id)
 {
@@ -32,49 +32,44 @@ int RightsLogic::appUserMissesRight(const reducedsole::uuid &appuser_id,
 
 void RightsLogic::clear()
 {
-    checkedAppIds.clear();
     appUsers2RightNumbers.clear();
 }
 
-void RightsLogic::addUserRights(const reducedsole::uuid &app_id,
-                                const reducedsole::uuid &user_id,
+void RightsLogic::addUserRights(CurrentContext &context,
                                 rapidjson::Value &target,
                                 rapidjson::MemoryPoolAllocator<> &alloc)
 {
-    if (checkedAppIds.find(app_id) == checkedAppIds.end())
-    {
-        dlrg.checkAndGenerateAdminGroup(app_id, Rights::Administrator, Rights::allRightNumbers);
-    }
+    t0021_right_group::checkAndGenerateAdminGroup(context);
 
-    if (appIdsWhereAdminExists.find(app_id) == appIdsWhereAdminExists.end())
+    if (appIdsWhereAdminExists.find(context.appId) == appIdsWhereAdminExists.end())
     {
-        if (dlrg.adminExists(app_id, Rights::Administrator))
+        if (dlrg.adminExists(context.appId, Rights::Administrator))
         {
-            appIdsWhereAdminExists.insert(app_id);
+            appIdsWhereAdminExists.insert(context.appId);
         }
         else
         {
-            reducedsole::uuid right_group_id;
-            if (dlrg.fetchIDOfOneRightGroupByName(app_id, Rights::Administrator, right_group_id))
+            t0021_right_group administratorRightGroup;
+            if (administratorRightGroup.load(context, {{administratorRightGroup.name.name(), Rights::Administrator}}))
             {
                 t0022_right_group2appuser t0022;
-                t0022.right_group_id = right_group_id;
-                t0022.user_id = user_id;
+                t0022.right_group_id = administratorRightGroup.right_group_id;
+                t0022.user_id = context.userId;
                 t0022.requested_datetime = TimePointPostgreSqlNow;
                 t0022.approved_datetime = TimePointPostgreSqlNow;
-                t0022.approved_appuser_id = user_id;
-                t0022.denied_datetime = TimePointPostgreSqlNull;
+                t0022.approved_appuser_id = context.userId;
+                t0022.denied_datetime.setNull(true);
                 t0022.denied_appuser_id = ExtUuid::NullUuid;
                 ORM2Postgres orm2postgres(dlrg.pool);
                 orm2postgres.insertOrUpdate(t0022);
-                appIdsWhereAdminExists.insert(app_id);
+                appIdsWhereAdminExists.insert(context.appId);
             }
         }
     }
     rapidjson::Value rightsArray;
     rightsArray.SetArray();
-    fetchRightsForUser(user_id);
-    auto appUserRights(appUsers2RightNumbers[user_id]);
+    fetchRightsForUser(context.userId);
+    auto appUserRights(appUsers2RightNumbers[context.userId]);
     for (auto const &rn: appUserRights)
     {
         rightsArray.PushBack(rn, alloc);

@@ -3,8 +3,10 @@
 #include "utils/base64.h"
 
 HandlerAPP::HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+                       ORMPersistenceInterface &opi,
                        PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
+                             opi,
                              TypeNoLoginNeeded),
     dlua(databaseLogicUserAndApp)
 {
@@ -18,7 +20,7 @@ HandlerAPP::HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
               methodNames.getAPPImage,
               TypeGet);}
 
-void HandlerAPP::method()
+void HandlerAPP::method(CurrentContext &context)
 {
     if (isMethod(methodNames.getAPPImage))
     {

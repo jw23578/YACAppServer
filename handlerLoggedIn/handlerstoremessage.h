@@ -22,7 +22,7 @@ public:
 
     // PistacheHandlerInterface interface
 public:
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERSTOREMESSAGE_H

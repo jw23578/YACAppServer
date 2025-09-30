@@ -6,24 +6,26 @@
 #include "serverHeader/mandantheader.h"
 
 HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
+                                                   ORMPersistenceInterface &opi,
                                                    LoggedInContainerInterface &loggedInContainer):
-    PistacheHandlerInterface(serverInterface, TypeLoginNeeded),
+    PistacheHandlerInterface(serverInterface, opi, TypeLoginNeeded),
     loggedInContainer(loggedInContainer)
 {
 
 }
 
 HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
+                                                   ORMPersistenceInterface &opi,
                                                    const std::string &methodName,
                                                    HandlerType type,
                                                    LoggedInContainerInterface &loggedInContainer):
-    PistacheHandlerInterface(serverInterface, methodName, type, TypeLoginNeeded),
+    PistacheHandlerInterface(serverInterface, opi, methodName, type, TypeLoginNeeded),
     loggedInContainer(loggedInContainer)
 {
 
 }
 
-bool HandlerLoggedInInterface::checkLogin()
+bool HandlerLoggedInInterface::checkLogin(CurrentContext &context)
 {
     if (!getHeaderStringEMail<LoginEMailHeader>(loginEMail, true))
     {
@@ -37,12 +39,12 @@ bool HandlerLoggedInInterface::checkLogin()
     getHeaderString<MandantHeader>(mandant, false);
 
 
-    if (!loggedInContainer.isLoggedIn(appId,
+    if (!loggedInContainer.isLoggedIn(context,
                                       loginEMail,
                                       loginToken,
                                       third,
                                       mandant,
-                                      loggedInUserId))
+                                      context.userId))
     {
         answerBad("not logged in");
         return false;

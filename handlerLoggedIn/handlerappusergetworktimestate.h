@@ -13,7 +13,7 @@ public:
                                    PistacheServerInterface &serverInterface,
                                    LoggedInAppUsersContainer &loggedInAppUsersContainer);
 
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERAPPUSERGETWORKTIMESTATE_H

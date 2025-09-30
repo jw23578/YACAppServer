@@ -19,6 +19,7 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
                                      PistacheServerInterface &serverInterface,
                                      LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              "",
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -49,7 +50,7 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
 
 }
 
-void HandlerORMObjects::method()
+void HandlerORMObjects::method(CurrentContext &context)
 {
     if (isGet())
     {
@@ -65,11 +66,12 @@ void HandlerORMObjects::method()
                 SqlString sql;
                 sql.select(t0021.getORMName());
                 sql.addCompare("where", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
-                sql.addCompare("and", tableFields.app_id, "=", appId);
+                sql.addCompare("and", tableFields.app_id, "=", context.appId);
                 orm2postgres.toJsonArray(sql, t0021, rightgroups, document.GetAllocator());
                 document.AddMember("t0021_right_group", rightgroups, document.GetAllocator());
 
-                databaseLogics.rightsLogic.addUserRights(appId, loggedInUserId, document, document.GetAllocator());
+                context.userId = context.userId;
+                databaseLogics.rightsLogic.addUserRights(context, document, document.GetAllocator());
                 answerOk(true, document);
                 return;
             }
@@ -109,17 +111,17 @@ void HandlerORMObjects::method()
             if (isMethod(on))
             {
                 std::unique_ptr<YACBaseObject> baseObject(static_cast<YACBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
-                if (answerMissingRight(rightsLogic.appUserMissesRight(loggedInUserId, baseObject->changeRight)))
+                if (answerMissingRight(rightsLogic.appUserMissesRight(context.userId, baseObject->changeRight)))
                 {
                     return;
                 }
                 if (baseObject->propertyExists(tableFields.app_id) && baseObject->propertyIsNull(tableFields.app_id))
                 {
-                    baseObject->setPropertyFromString(tableFields.app_id, appId.str());
+                    baseObject->setPropertyFromString(tableFields.app_id, context.appId.str());
                 }
                 if (baseObject->propertyExists(tableFields.creater_id) && baseObject->propertyIsNull(tableFields.creater_id))
                 {
-                    baseObject->setPropertyFromString(tableFields.creater_id, loggedInUserId.str());
+                    baseObject->setPropertyFromString(tableFields.creater_id, context.userId.str());
                 }
                 storeObject(*baseObject);
                 return;

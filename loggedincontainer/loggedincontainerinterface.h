@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include "orm_implementions/currentcontext.h"
 
 class LoggedInContainerInterface
 {
@@ -23,7 +24,7 @@ public:
 
     virtual bool appIdMandatory() const = 0;
 
-    virtual bool isLoggedIn(const reducedsole::uuid &appId,
+    virtual bool isLoggedIn(CurrentContext &context,
                             const std::string &loginEMail,
                             const std::string &loginToken,
                             const std::string &third,
@@ -31,7 +32,7 @@ public:
                             reducedsole::uuid &userId) = 0;
     virtual bool logout(const std::string &loginToken) = 0;
 
-    bool isLoggedInWithOutUserId(const reducedsole::uuid &appId,
+    bool isLoggedInWithOutUserId(CurrentContext &context,
                                  const std::string &loginEMail,
                                  const std::string &loginToken,
                                  const std::string &third,

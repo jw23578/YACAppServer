@@ -1,9 +1,11 @@
 #include "handlerappusersearchprofiles.h"
 
 HandlerAppUserSearchProfiles::HandlerAppUserSearchProfiles(PistacheServerInterface &serverInterface,
+                                                           ORMPersistenceInterface &opi,
                                                            DatabaseLogicAppUser &databaseLogicAppUser,
                                                            LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                             opi,
                              "/appUserSearchProfiles",
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -12,7 +14,7 @@ HandlerAppUserSearchProfiles::HandlerAppUserSearchProfiles(PistacheServerInterfa
 
 }
 
-void HandlerAppUserSearchProfiles::method()
+void HandlerAppUserSearchProfiles::method(CurrentContext &context)
 {
     MACRO_GetMandatoryString(needle);
     MACRO_GetInt(limit);
@@ -22,7 +24,7 @@ void HandlerAppUserSearchProfiles::method()
     rapidjson::Document answer;
     answer.SetObject();
     rapidjson::Value profiles;
-    bool success(databaseLogicAppUser.searchProfiles(appId,
+    bool success(databaseLogicAppUser.searchProfiles(context.appId,
                                                      needle,
                                                      limit,
                                                      offset,

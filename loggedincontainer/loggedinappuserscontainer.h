@@ -13,7 +13,7 @@ public:
     LoggedInAppUsersContainer(ORMPersistenceInterface &opi,
                               DatabaseLogics &databaseLogics);
 
-    bool isLoggedIn(const reducedsole::uuid &appId,
+    bool isLoggedIn(CurrentContext &context,
                     const std::string &loginEMail,
                     const std::string &loginToken,
                     const std::string &third,

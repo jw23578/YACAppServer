@@ -7,15 +7,12 @@
 #include "beginendtrack.h"
 #include "serverHeader/appidheader.h"
 
-const reducedsole::uuid &PistacheHandlerInterface::getAppId() const
-{
-    return appId;
-}
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
     BeginEndTrack bet(__FILE__, __LINE__, request.resource());
     this->request = &request;
     this->response = &response;
+    reducedsole::uuid appId(NullUuid);
     if (appIdNeeded)
     {
         if (!getHeaderUuid<AppIdHeader>(appId, true))
@@ -23,7 +20,8 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
             return;
         }
     }
-    if (loginNeeded == TypeLoginNeeded && !checkLogin())
+    CurrentContext context(opi, appId, NullUuid);
+    if (loginNeeded == TypeLoginNeeded && !checkLogin(context))
     {
         return;
     }
@@ -41,7 +39,7 @@ void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &req
     }
     MACRO_GetBool(prettyJson);
     ep.prettyJson = prettyJson;
-    method();
+    method(context);
     bet.track(__FILE__, __LINE__);
 }
 
@@ -210,7 +208,9 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
 }
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                                                   ORMPersistenceInterface &opi,
                                                    LoginNeededType loginNeeded):
+    opi(opi),
     request(0),
     response(0),
     loginNeeded(loginNeeded)
@@ -218,9 +218,11 @@ PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serv
 }
 
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                                                   ORMPersistenceInterface &opi,
                                                    std::string const &methodName,
                                                    HandlerType type,
                                                    LoginNeededType loginNeeded):
+    opi(opi),
     request(0), response(0),
     loginNeeded(loginNeeded)
 {
@@ -354,7 +356,7 @@ bool PistacheHandlerInterface::getTimePointFromISO(const std::string &name,
     return true;
 }
 
-bool PistacheHandlerInterface::checkLogin()
+bool PistacheHandlerInterface::checkLogin(CurrentContext &context)
 {
     return true;
 }

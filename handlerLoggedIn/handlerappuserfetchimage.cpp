@@ -6,6 +6,7 @@ HandlerAppUserFetchImage::HandlerAppUserFetchImage(PistacheServerInterface &serv
                                                    DatabaseLogics &databaseLogics,
                                                    LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              "/fetchImage",
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -13,7 +14,7 @@ HandlerAppUserFetchImage::HandlerAppUserFetchImage(PistacheServerInterface &serv
 {
 }
 
-void HandlerAppUserFetchImage::method()
+void HandlerAppUserFetchImage::method(CurrentContext &context)
 {
     MACRO_GetMandatoryUuid(imageId);
     MACRO_GetMandatoryString(imageType);

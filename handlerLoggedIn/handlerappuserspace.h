@@ -14,7 +14,7 @@ public:
                         LoggedInAppUsersContainer &loggedInAppUsersContainer);
 
 public:
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERAPPUSERSPACE_H

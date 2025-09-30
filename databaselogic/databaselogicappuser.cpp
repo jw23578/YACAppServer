@@ -7,50 +7,6 @@
 #include "JWUtils/extuuid.h"
 #include "orm_implementions/t0003_user_passwordhashes.h"
 
-void DatabaseLogicAppUser::loginSuccessful(const reducedsole::uuid &appId,
-                                           const reducedsole::uuid &userId,
-                                           std::string &loginToken)
-{
-    if (loginToken.size() == 0)
-    {
-        loginToken = ExtUuid::generateUuid().str();
-    }
-    int validHours(24 * 7);
-    t0004_user_logintoken userLogintoken;
-    userLogintoken.prepareFirstInsert();
-    userLogintoken.app_id = appId;
-    userLogintoken.user_id.set(userId);
-    userLogintoken.login_token.set(loginToken);
-    userLogintoken.login_token_valid_until.set(std::chrono::system_clock::now() + std::chrono::hours(1) * validHours);
-    opi.insertObject(userLogintoken, userId);
-}
-
-bool DatabaseLogicAppUser::lookupUser(const reducedsole::uuid &appId,
-                                      const std::string &loginEMail,
-                                      reducedsole::uuid &userId,
-                                      std::string &message)
-{
-    auto it(loginEMailAndAppId2AppUserId.find(loginEMail + appId.str()));
-    if (it != loginEMailAndAppId2AppUserId.end())
-    {
-        userId = it->second;
-        return true;
-    }
-    t0002_user userProfile;
-    if (!opi.selectObject({{userProfile.loginemail.name(), loginEMail},
-                           {userProfile.app_id.name(), appId.str()}},userProfile))
-    {
-        message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
-        return false;
-    }
-    if (userProfile.verified.isNull())
-    {
-        message = "LoginEMail/User not yet verified";
-        return false;
-    }
-    userId = userProfile.user_id;
-    return true;
-}
 
 DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
                                            PGConnectionPool &pool,
@@ -62,186 +18,20 @@ DatabaseLogicAppUser::DatabaseLogicAppUser(LogStatController &logStatController,
 
 }
 
-bool DatabaseLogicAppUser::createAppUser(reducedsole::uuid const &appId,
-                                         const std::string &loginEMail,
-                                         const std::string &password,
-                                         std::string &message,
-                                         std::string &verifyToken)
-{
-    Log::Scope scope("createAppUser");
-    t0001_apps t0001;
-    if (!opi.existObject(appId, t0001))
-    {
-        message = "App with app_id: " + appId.str() + " does not exist";
-        return false;
-    }
-    t0002_user userProfile;
-    if (userProfile.loadByLoginEMail(opi, appId, loginEMail))
-    {
-        message = "LoginEMail already exists.";
-        return false;
-    }
-    verifyToken = ExtString::randomString(0, 0, 4, 0);
-    {
-        t0002_user userProfile;
-        userProfile.app_id = appId;
-        userProfile.fstname = "";
-        userProfile.surname = "";
-        userProfile.visible_name = "";
-        userProfile.verified.setNull(true);
-        userProfile.loginemail = loginEMail;
-        userProfile.verify_token = verifyToken;
-        userProfile.verify_token_valid_until = std::chrono::system_clock::now() + std::chrono::minutes(60);
-        userProfile.update_password_token =  "";
-        userProfile.update_password_token_valid_until.setNull(true);
-        userProfile.deleted.setNull(true);
-        userProfile.searching_exactly_allowed = false; // FIXME
-        userProfile.searching_fuzzy_allowed = true; // FIXME
-        userProfile.public_key_base64 = ""; // FIXME
-        userProfile.image_id.setNull(true); // FIXME
-        userProfile.prepareFirstInsert();
-        opi.insertObject(userProfile, userProfile.user_id);
-    }
-
-    if (password.size())
-    {
-        t0003_user_passwordhashes t0004;
-        t0004.user_id = userProfile.user_id;
-        t0004.prepareFirstInsert();
-        t0004.password_hash = password;
-        opi.insertObject(t0004, userProfile.user_id);
-    }
-
-    return true;
-}
-
-bool DatabaseLogicAppUser::createVerifiedAppUser(const reducedsole::uuid &appId,
-                                                 const std::string &loginEMail,
-                                                 const std::string &fstname,
-                                                 const std::string &surname,
-                                                 const std::string &visible_name,
-                                                 const bool searching_exactly_allowed,
-                                                 const bool searching_fuzzy_allowed,
-                                                 const std::string &public_key_base64,
-                                                 std::string &message,
-                                                 t0002_user &target)
-{
-    if (target.loadByLoginEMail(opi, appId, loginEMail))
-    {
-        message = "LoginEMail already exists.";
-        return false;
-    }
-    target.app_id = appId;
-    target.fstname = fstname;
-    target.surname = surname;
-    target.visible_name = visible_name;
-    target.verified = std::chrono::system_clock::now();
-    target.loginemail = loginEMail;
-    target.verify_token = "";
-    target.verify_token_valid_until.setNull(true);
-    target.update_password_token = "";
-    target.update_password_token_valid_until.setNull(true);
-    target.deleted.setNull(true);
-    target.searching_exactly_allowed = searching_exactly_allowed;
-    target.searching_fuzzy_allowed = searching_fuzzy_allowed;
-    target.public_key_base64 = public_key_base64;
-    target.image_id.setNull(true);
-    target.prepareFirstInsert();
-    opi.insertObject(target, target.getuser_id());
-    return true;
-}
-
-bool DatabaseLogicAppUser::createVerifyToken(const reducedsole::uuid &appId,
-                                             const std::string &loginEMail,
-                                             std::string &message,
-                                             std::string &verifyToken)
-{
-    t0002_user userProfile;
-    if (!opi.selectObject({{userProfile.loginemail.name(), loginEMail},
-                           {userProfile.app_id.name(), appId.str()}},
-                          userProfile))
-    {
-        message = "LoginEMail does not exist.";
-        return false;
-    }
-    verifyToken = ExtString::randomString(0, 0, 4, 0);
-    userProfile.verify_token = verifyToken;
-    userProfile.verify_token_valid_until = std::chrono::system_clock::now() + std::chrono::minutes(60);
-    opi.insertObject(userProfile, userProfile.user_id);
-    return true;
-}
-
-bool DatabaseLogicAppUser::verifyUser(const reducedsole::uuid &appId,
-                                         const std::string &loginEMail,
-                                         const std::string &verifyToken,
-                                         std::string &message,
-                                         ExtRapidJSONWriter &w,
-                                         reducedsole::uuid &appUserId)
-{
-    size_t count(0);
-    t0002_user userProfile;
-    if (!opi.selectObject({{userProfile.loginemail.name(), loginEMail},
-                           {userProfile.app_id.name(), appId.str()}},
-                          userProfile,
-                          count))
-    {
-        message = std::string("no appuser with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found");
-        return false;
-    }
-    if (count > 1)
-    {
-        message = std::string("more than one user with loginEMail: ") + ExtString::quote(loginEMail) + std::string(" found. This is definitely a fatal error!");
-        return false;
-    }
-    appUserId = userProfile.user_id;
-    logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                          std::string("verify_token_valid_until as string: ") + userProfile.verify_token_valid_until.asString());
-
-    logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                          std::string("verify_token_valid_until: ") + ExtString::timepointToISO(userProfile.verify_token_valid_until));
-
-    std::chrono::system_clock::time_point now(std::chrono::system_clock::now());
-    logStatController.log(__FILE__, __LINE__, LogStatController::verbose,
-                          std::string("now: ") + ExtString::timepointToISO(now));
-    if (userProfile.verify_token_valid_until < now)
-    {
-        message = std::string("Token not valid any more, please request new Token.");
-        return false;
-    }
-    if (userProfile.verify_token != verifyToken)
-    {
-        message = std::string("wrong token");
-        return false;
-    }
-
-    {
-        userProfile.verified = TimePointPostgreSqlNow;
-        userProfile.verify_token = "";
-        userProfile.verify_token_valid_until.setNull(true);
-        opi.insertObject(userProfile, userProfile.user_id);
-    }
-    std::string loginToken;
-    loginSuccessful(appId, appUserId, loginToken);
-    w.addMember("loginToken", loginToken);
-    w.addMember(userProfile.user_id.name(), userProfile.user_id.asString());
-    w.addMember(userProfile.fstname.name(), userProfile.fstname);
-    w.addMember(userProfile.surname.name(), userProfile.surname);
-    w.addMember(userProfile.visible_name.name(), userProfile.visible_name);
-    return true;
-}
-
-bool DatabaseLogicAppUser::loginUser(const reducedsole::uuid &appId,
+bool DatabaseLogicAppUser::loginUser(CurrentContext &context,
                                         const std::string &loginEMail,
                                         const std::string &password,
                                         std::string &message,
                                         ExtRapidJSONWriter &w,
                                         reducedsole::uuid &userId)
 {
-    if (!lookupUser(appId, loginEMail, userId, message))
+    t0002_user user;
+    if (!t0002_user::lookupUser(context, loginEMail, user, message))
     {
         message = "LoginEMail/User not found. Please check your LoginEMail or register first.";
         return false;
     }
+    userId = user.user_id;
     PGExecutor login(pool);
     if (!login.login(t0003_user_passwordhashes().getORMName(),
                      "password_hash",
@@ -264,9 +54,9 @@ bool DatabaseLogicAppUser::loginUser(const reducedsole::uuid &appId,
         message = "Fatal error, could not load profile data";
         return false;
     }
-    std::string loginToken;
-    loginSuccessful(appId, userId, loginToken);
-    w.addMember("loginToken", loginToken);
+    t0004_user_logintoken userLogintoken;
+    userLogintoken.loginSuccessful(context, userId);
+    w.addMember("loginToken", userLogintoken.login_token);
     w.addMember(userProfile.user_id.name(), userProfile.user_id.asString());
     w.addMember(userProfile.fstname.name(), userProfile.fstname);
     w.addMember(userProfile.surname.name(), userProfile.surname);
@@ -285,53 +75,19 @@ bool DatabaseLogicAppUser::logoutAppUserByLoginToken(const std::string lt)
     return opi.deleteObject(loginToken, loginToken.user_id);
 }
 
-bool DatabaseLogicAppUser::updateAppUser(const reducedsole::uuid &appId,
-                                         const reducedsole::uuid &userId,
-                                         const std::string &fstname,
-                                         const std::string &surname,
-                                         const std::string &visible_name,
-                                         const std::string &color,
-                                         const std::string &message_font_color,
-                                         const bool searching_exactly_allowed,
-                                         const bool searching_fuzzy_allowed,
-                                         const std::string &public_key_base64,
-                                         const bool with_image,
-                                         const reducedsole::uuid imageId,
-                                         std::string &message)
-{
-    SqlString sql;
-    t0002_user userProfile;
-    sql.update(userProfile.getORMName());
-    sql.addSet(MACRO_NameValue(fstname), false);
-    sql.addSet(MACRO_NameValue(surname), false);
-    sql.addSet(MACRO_NameValue(visible_name), false);
-    sql.addSet(MACRO_NameValue(color), false);
-    sql.addSet(MACRO_NameValue(message_font_color), false);
-    sql.addSet(MACRO_NameValue(searching_exactly_allowed), false);
-    sql.addSet(MACRO_NameValue(searching_fuzzy_allowed), false);
-    sql.addSet(MACRO_NameValue(public_key_base64), false);
-    if (with_image)
-    {
-        sql.addSet(tableFields.image_id, imageId, false);
-    }
-    sql.addCompare("where", tableFields.app_id, "=", appId);
-    sql.addCompare("and", tableFields.id, "=", userId);
-    PGExecutor e(pool, sql);
-    message = "profile updated";
-    return true;
-}
-
-bool DatabaseLogicAppUser::appUserLoggedIn(const reducedsole::uuid &appId,
+bool DatabaseLogicAppUser::appUserLoggedIn(CurrentContext &context,
                                            const std::string &loginEMail,
                                            const std::string &loginToken,
                                            reducedsole::uuid &userId,
                                            std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     std::string ignored;
-    if (!lookupUser(appId, loginEMail, userId, ignored))
+    t0002_user user;
+    if (!t0002_user::lookupUser(context, loginEMail, user, ignored))
     {
         return false;
     }
+    userId = user.user_id;
     SqlString sql("select * from ");
     sql += t0004_user_logintoken().getORMName();
     sql.addCompare("where", t0004_user_logintoken().user_id.name(), "=", userId);
@@ -345,20 +101,14 @@ bool DatabaseLogicAppUser::appUserLoggedIn(const reducedsole::uuid &appId,
     return true;
 }
 
-bool DatabaseLogicAppUser::requestUpdatePassword(const reducedsole::uuid &appId,
+bool DatabaseLogicAppUser::requestUpdatePassword(CurrentContext &context,
                                                  const std::string &loginEMail,
                                                  std::string &updatePasswordToken,
                                                  std::string &message)
 {
-    reducedsole::uuid userId;
-    if (!lookupUser(appId, loginEMail, userId, message))
-    {
-        return false;
-    }
     t0002_user userProfile;
-    if (!opi.selectObject(userId, userProfile))
+    if (!t0002_user::lookupUser(context, loginEMail, userProfile, message))
     {
-        message = "could not load userProfile";
         return false;
     }
     userProfile.update_password_token = ExtString::randomString(0, 0, 4, 0);
@@ -398,7 +148,7 @@ bool DatabaseLogicAppUser::updatePasswordLoggedIn(const reducedsole::uuid &user_
     return true;
 }
 
-bool DatabaseLogicAppUser::updatePassword(const reducedsole::uuid &appId,
+bool DatabaseLogicAppUser::updatePassword(CurrentContext &context,
                                           const std::string &loginEMail,
                                           const std::string &updatePasswordToken,
                                           const std::string &password,
@@ -409,7 +159,7 @@ bool DatabaseLogicAppUser::updatePassword(const reducedsole::uuid &appId,
     size_t count(0);
     t0002_user userProfile;
     if (!opi.selectObject({{userProfile.loginemail.name(), loginEMail},
-                           {userProfile.app_id.name(), appId.str()}},
+                           {userProfile.app_id.name(), context.appId.str()}},
                           userProfile,
                           count))
     {
@@ -455,7 +205,9 @@ bool DatabaseLogicAppUser::updatePassword(const reducedsole::uuid &appId,
         PGExecutor erase(pool);
         erase.delet(t0004_user_logintoken().getORMName(), t0004_user_logintoken().user_id.name(), userId.str());
     }
-    loginSuccessful(appId, userId, loginToken);
+    t0004_user_logintoken userLogintoken;
+    userLogintoken.loginSuccessful(context, userId);
+    loginToken = userLogintoken.login_token;
     message = "update password successful";
     return true;
 
@@ -600,13 +352,13 @@ size_t DatabaseLogicAppUser::fetchDeviceToken(const reducedsole::uuid &userId,
     return e.size();
 }
 
-void DatabaseLogicAppUser::refreshAppUserLoginToken(const reducedsole::uuid &appId,
+void DatabaseLogicAppUser::refreshAppUserLoginToken(CurrentContext &context,
                                                     const std::string &loginEMail,
                                                     std::chrono::system_clock::time_point &loginTokenValidUntil)
 {
     std::string ignored;
-    reducedsole::uuid appUserId;
-    if (!lookupUser(appId, loginEMail, appUserId, ignored))
+    t0002_user userProfile;
+    if (!t0002_user::lookupUser(context, loginEMail, userProfile, ignored))
     {
         return;
     }
@@ -616,7 +368,7 @@ void DatabaseLogicAppUser::refreshAppUserLoginToken(const reducedsole::uuid &app
     sql += " set login_token_valid_until = now() + interval '1 hour' *:validhours "
            "where user_id = :userid "
            "returning login_token_valid_until";
-    MACRO_set(sql, appUserId);
+    MACRO_set(sql, userProfile.user_id);
     int validHours(24 * 7);
     MACRO_set(sql, validHours);
     PGExecutor e(pool, sql);

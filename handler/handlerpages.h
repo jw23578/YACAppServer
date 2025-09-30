@@ -6,11 +6,12 @@
 class HandlerPages : public PistacheHandlerInterface
 {
 public:
-    HandlerPages(PistacheServerInterface &serverInterface);
+    HandlerPages(PistacheServerInterface &serverInterface,
+                 ORMPersistenceInterface &opi);
 
     // PistacheHandlerInterface interface
 public:
-    void method();
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERPAGES_H

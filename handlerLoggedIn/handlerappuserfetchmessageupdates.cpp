@@ -4,6 +4,7 @@ HandlerAppUserFetchMessageUpdates::HandlerAppUserFetchMessageUpdates(PistacheSer
                                                                      DatabaseLogics &databaseLogics,
                                                                      LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              "/fetchMessageUpdates",
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -12,7 +13,7 @@ HandlerAppUserFetchMessageUpdates::HandlerAppUserFetchMessageUpdates(PistacheSer
 
 }
 
-void HandlerAppUserFetchMessageUpdates::method()
+void HandlerAppUserFetchMessageUpdates::method(CurrentContext &context)
 {
     MACRO_GetMandatoryTimePointFromISO(updatesSinceISO);
     rapidjson::Document document;
@@ -21,7 +22,7 @@ void HandlerAppUserFetchMessageUpdates::method()
     document.AddMember("serverNowISO", serverNowISO, document.GetAllocator());
     rapidjson::Value messages;
     DatabaseLogicMessages &dlm(databaseLogics.databaseLogicMessages);
-    if (!dlm.fetchMessages(loggedInUserId,
+    if (!dlm.fetchMessages(context.userId,
                            updatesSinceISO,
                            messages,
                            document.GetAllocator()))
@@ -32,7 +33,7 @@ void HandlerAppUserFetchMessageUpdates::method()
     document.AddMember("messages", messages, document.GetAllocator());
     rapidjson::Value receivedMessages;
     rapidjson::Value readMessages;
-    if (!dlm.fetchReceivedAndReadMessages(loggedInUserId,
+    if (!dlm.fetchReceivedAndReadMessages(context.userId,
                                           updatesSinceISO,
                                           receivedMessages,
                                           readMessages,
@@ -47,7 +48,7 @@ void HandlerAppUserFetchMessageUpdates::method()
     DatabaseLogicSpaces &dls(databaseLogics.databaseLogicSpaces);
     rapidjson::Value spaceRequests;
     std::string errorMessage;
-    if (!dls.fetchSpaceRequests(loggedInUserId,
+    if (!dls.fetchSpaceRequests(context.userId,
                                 spaceRequests,
                                 document.GetAllocator(),
                                 errorMessage))

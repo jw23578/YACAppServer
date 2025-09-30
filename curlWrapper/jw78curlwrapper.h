@@ -28,7 +28,7 @@ class CurlWrapper
         std::ostream *streamTarget;
         std::string stringDebugTarget;
         sTarget():stringTarget(nullptr), streamTarget(nullptr) {}
-        sTarget(std::string &s):stringTarget(&s), streamTarget(nullptr) {}
+        sTarget(std::string &s):stringTarget(&s), streamTarget(nullptr) {s = "";}
         sTarget(std::ostream &s):stringTarget(nullptr), streamTarget(&s) {}
         void add(char *data, size_t size)
         {

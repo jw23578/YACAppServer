@@ -16,7 +16,7 @@ public:
                                 DeviceTokenCache &deviceTokenCache,
                                 LoggedInAppUsersContainer &loggedInAppUsersContainer);
 
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERAPPUSERUPDATEPROFILE_H

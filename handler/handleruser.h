@@ -14,7 +14,7 @@ class HandlerUser : public PistacheHandlerInterface
     DatabaseLogics &databaseLogics;
     DeviceTokenCache &deviceTokenCache;
 
-    bool thirdLogin(const reducedsole::uuid &appId,
+    bool thirdLogin(CurrentContext &context,
                     const std::string &third,
                     const std::string &mandant,
                     const std::string &loginEMail,
@@ -33,7 +33,7 @@ public:
 
     // PistacheHandlerInterface interface
 public:
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERUSER_H

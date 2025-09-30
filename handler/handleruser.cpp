@@ -5,7 +5,7 @@
 #include "serverHeader/mandantheader.h"
 #include "extmap.h"
 
-bool HandlerUser::thirdLogin(const reducedsole::uuid &appId,
+bool HandlerUser::thirdLogin(CurrentContext &context,
                              const std::string &third,
                              const std::string &mandant,
                              const std::string &loginEMail,
@@ -39,7 +39,7 @@ bool HandlerUser::thirdLogin(const reducedsole::uuid &appId,
     }
 
     t0029_third_party_user_data thirdPartyUser;
-    if (!databaseLogics.databaseLogicThirdParty.lookup(appId,
+    if (!databaseLogics.databaseLogicThirdParty.lookup(context.appId,
                                                        third,
                                                        mandant,
                                                        user_id_string,
@@ -49,20 +49,19 @@ bool HandlerUser::thirdLogin(const reducedsole::uuid &appId,
         const bool searching_fuzzy_allowed(true);
         const std::string public_key_base64; // FIXME
         t0002_user user;
-        if (!databaseLogics.databaseLogicAppUser.createVerifiedAppUser(appId,
-                                                                       loginEMail,
-                                                                       fstname,
-                                                                       surname,
-                                                                       visible_name,
-                                                                       searching_exactly_allowed,
-                                                                       searching_fuzzy_allowed,
-                                                                       public_key_base64,
-                                                                       message,
-                                                                       user))
+        if (!user.createVerifiedAppUser(context,
+                                        loginEMail,
+                                        fstname,
+                                        surname,
+                                        visible_name,
+                                        searching_exactly_allowed,
+                                        searching_fuzzy_allowed,
+                                        public_key_base64,
+                                        message))
         {
             return false;
         }
-        databaseLogics.databaseLogicThirdParty.create(appId,
+        databaseLogics.databaseLogicThirdParty.create(context.appId,
                                                       third,
                                                       mandant,
                                                       user_id_string,
@@ -94,6 +93,7 @@ HandlerUser::HandlerUser(LoggedInAppUsersContainer &loggedInUsersContainer,
                          DeviceTokenCache &deviceTokenCache,
                          PistacheServerInterface &serverInterface):
     PistacheHandlerInterface(serverInterface,
+                             databaseLogics.getOpi(),
                              TypeNoLoginNeeded),
     loggedInUsersContainer(loggedInUsersContainer),
     emailLogic(emailLogic),
@@ -109,7 +109,7 @@ HandlerUser::HandlerUser(LoggedInAppUsersContainer &loggedInUsersContainer,
     addMethod(serverInterface, methodNames.requestUpdatePasswordUser, TypePost);
 }
 
-void HandlerUser::method()
+void HandlerUser::method(CurrentContext &context)
 {
     if (isMethod(methodNames.requestUpdatePasswordUser))
     {
@@ -117,7 +117,7 @@ void HandlerUser::method()
 
         std::string message;
         std::string updatePasswordToken;
-        if (!databaseLogics.databaseLogicAppUser.requestUpdatePassword(getAppId(),
+        if (!databaseLogics.databaseLogicAppUser.requestUpdatePassword(context,
                                                                        loginEMail,
                                                                        updatePasswordToken,
                                                                        message))
@@ -139,7 +139,7 @@ void HandlerUser::method()
         std::string message;
         std::string loginToken;
         reducedsole::uuid userId;
-        if (!databaseLogics.databaseLogicAppUser.updatePassword(getAppId(),
+        if (!databaseLogics.databaseLogicAppUser.updatePassword(context,
                                                                 loginEMail,
                                                                 updatePasswordToken,
                                                                 password,
@@ -161,39 +161,44 @@ void HandlerUser::method()
         MACRO_GetMandatoryString(verifyToken);
 
         std::string message;
-        rapidjson::Document data;
-        data.SetObject();
-        ExtRapidJSONWriter w(data, data.GetAllocator());
-        reducedsole::uuid appUserId;
-        if (!databaseLogics.databaseLogicAppUser.verifyUser(getAppId(),
-                                                               loginEMail,
-                                                               verifyToken,
-                                                               message,
-                                                               w,
-                                                               appUserId))
+        std::string loginToken;
+        t0002_user userToVerify;
+        if (!userToVerify.verifyUser(context,
+                                     loginEMail,
+                                     verifyToken,
+                                     loginToken,
+                                     message))
         {
             answerOk(message, false);
             return;
         }
+
+        rapidjson::Document data;
+        data.SetObject();
+        ExtRapidJSONWriter w(data, data.GetAllocator());
+        w.addMember("loginToken", loginToken);
+        w.addMember(userToVerify.user_id.name(), userToVerify.user_id.asString());
+        w.addMember(userToVerify.fstname.name(), userToVerify.fstname);
+        w.addMember(userToVerify.surname.name(), userToVerify.surname);
+        w.addMember(userToVerify.visible_name.name(), userToVerify.visible_name);
         w.addMember("message", message);
-        databaseLogics.rightsLogic.addUserRights(getAppId(), appUserId, data, data.GetAllocator());
+        databaseLogics.rightsLogic.addUserRights(context, data, data.GetAllocator());
         answerOk(true, data);
         return;
     }
     if (isMethod(methodNames.requestVerifyToken))
     {
         MACRO_GetMandatoryEMail(loginEMail);
-        std::string verifyToken;
         std::string message;
-        if (!databaseLogics.databaseLogicAppUser.createVerifyToken(getAppId(),
-                                                                   loginEMail,
-                                                                   message,
-                                                                   verifyToken))
+        t0002_user user;
+        if (!user.createVerifyToken(context,
+                                    loginEMail,
+                                    message))
         {
             answerOk(message, false);
             return;
         }
-        emailLogic.sendVerifyTokenMail(loginEMail, verifyToken);
+        emailLogic.sendVerifyTokenMail(loginEMail, user.verify_token);
         answerOk("verifyToken created and sended",
                  true);
         return;
@@ -203,19 +208,17 @@ void HandlerUser::method()
         MACRO_GetMandatoryEMail(loginEMail);
         MACRO_GetString(password);
 
-
-        std::string verifyToken;
+        t0002_user newUser;
         std::string message;
-        if (!databaseLogics.databaseLogicAppUser.createAppUser(getAppId(),
-                                                               loginEMail,
-                                                               password,
-                                                               message,
-                                                               verifyToken))
+        if (!newUser.registerUser(context,
+                                  loginEMail,
+                                  password,
+                                  message))
         {
             answerOk(message, false);
             return;
         }
-        emailLogic.sendPleaseVerifyMail(loginEMail, verifyToken);
+        emailLogic.sendPleaseVerifyMail(loginEMail, newUser.verify_token);
         answerOk("appuser registered, please verify", true);
         return;
     }
@@ -230,7 +233,7 @@ void HandlerUser::method()
         getHeaderString<MandantHeader>(mandant, false);
 
 
-        if (loggedInUsersContainer.isLoggedInWithOutUserId(getAppId(),
+        if (loggedInUsersContainer.isLoggedInWithOutUserId(context,
                                                            loginEMail,
                                                            loginToken,
                                                            third,
@@ -255,7 +258,6 @@ void HandlerUser::method()
     databaseLogics.getLogStat().log(__FILE__, __LINE__, LogStatController::verbose, std::string("mandant: ") + mandant);
 
     std::string message;
-    reducedsole::uuid userId;
     rapidjson::Document data;
     data.SetObject();
     ExtRapidJSONWriter w(data, data.GetAllocator());
@@ -263,23 +265,23 @@ void HandlerUser::method()
     bool loggedIn(false);
     if (third.size())
     {
-        loggedIn = thirdLogin(getAppId(),
+        loggedIn = thirdLogin(context,
                               third,
                               mandant,
                               loginEMail,
                               password,
                               message,
                               w,
-                              userId);
+                              context.userId);
     }
     else
     {
-        loggedIn = databaseLogics.databaseLogicAppUser.loginUser(getAppId(),
-                                                                    loginEMail,
-                                                                    password,
-                                                                    message,
-                                                                    w,
-                                                                    userId);
+        loggedIn = databaseLogics.databaseLogicAppUser.loginUser(context,
+                                                                 loginEMail,
+                                                                 password,
+                                                                 message,
+                                                                 w,
+                                                                 context.userId);
     }
     if (!loggedIn)
     {
@@ -289,12 +291,12 @@ void HandlerUser::method()
     MACRO_GetString(deviceToken);
     if (deviceToken.size())
     {
-        deviceTokenCache.add(userId,
+        deviceTokenCache.add(context.userId,
                              deviceToken);
     }
     w.addMember("message", "Login successful");
     RightsLogic &rl(databaseLogics.rightsLogic);
-    rl.addUserRights(getAppId(), userId, data, data.GetAllocator());
+    rl.addUserRights(context, data, data.GetAllocator());
     databaseLogics.getLogStat().log(__FILE__, __LINE__, LogStatController::verbose, data);
     answerOk(true, data);
 }

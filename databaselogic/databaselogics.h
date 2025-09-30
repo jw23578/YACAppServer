@@ -22,6 +22,10 @@ class DatabaseLogics
 
 public:
     PGConnectionPool &pool;
+    ORMPersistenceInterface &getOpi()
+    {
+        return opi;
+    }
 
     DatabaseLogicAppUser databaseLogicAppUser;
     DatabaseLogicWorktime databaseLogicWorktime;

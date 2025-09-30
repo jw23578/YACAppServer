@@ -9,13 +9,12 @@
 Handler_t0030_documents::Handler_t0030_documents(PistacheServerInterface &serverInterface,
                                                  LoggedInAppUsersContainer &loggedInAppUsersContainer,
                                                  PGORMPersistence &opi):
-    HandlerLoggedInInterface(serverInterface, loggedInAppUsersContainer),
-    opi(opi)
+    HandlerLoggedInInterface(serverInterface, opi, loggedInAppUsersContainer)
 {
     addAllMethodTypes(serverInterface, t0030_documents().getORMName());
 }
 
-void Handler_t0030_documents::method()
+void Handler_t0030_documents::method(CurrentContext &context)
 {
     coutLogger::ActivateVisibleLogging avl;
     if (isPost() || isPut())
@@ -40,13 +39,13 @@ void Handler_t0030_documents::method()
             answerOk("No decoded Document-Data", false);
             return;
         }
-        t0030.document_blob_id = opi.storeBlob(data, loggedInUserId);
-        t0030.app_id = appId;
-        t0030.creater_id = loggedInUserId;
+        t0030.document_blob_id = context.opi.storeBlob(data, context.userId);
+        t0030.app_id = context.appId;
+        t0030.creater_id = context.userId;
 
         if (isPost())
         {
-            if (!opi.insertObject(t0030, loggedInUserId))
+            if (!context.opi.insertObject(t0030, context.userId))
             {
                 answerOk("Insert of Document failed", false);
                 return;
@@ -54,7 +53,7 @@ void Handler_t0030_documents::method()
         }
         if (isPut())
         {
-            if (!opi.insertObject(t0030, loggedInUserId))
+            if (!context.opi.insertObject(t0030, context.userId))
             {
                 answerOk("Update of Document failed", false);
                 return;
@@ -72,15 +71,15 @@ void Handler_t0030_documents::method()
             t0031_catchphrases t0031;
             t0031.id.generate();
             t0031.catchphrase = std::string(cp);
-            t0031.app_id = appId;
-            opi.insertIfNotSameDataExists(t0031, loggedInUserId);
+            t0031.app_id = context.appId;
+            context.opi.insertIfNotSameDataExists(t0031, context.userId);
 
             t0032_catchphrase2document t0032;
             t0032.id.generate();
-            t0032.app_id = appId;
+            t0032.app_id = context.appId;
             t0032.document_id = t0030.id;
             t0032.t0031_id = t0031.id;
-            opi.insertObject(t0032, loggedInUserId);
+            context.opi.insertObject(t0032, context.userId);
         }
 
         answerOk("Document stored", true);
@@ -103,7 +102,7 @@ void Handler_t0030_documents::method()
                           "(select *, (select coalesce(string_agg(catchphrase, ', '), '') from t0031_catchphrases t0031 "
                           "where t0031.id in (select t0031_id from t0032_catchphrase2document t0032 where t0032.document_id = t0030.id)) as comma_separated_catchphrases from ");
             sql += tableNames.t0030_documents + " t0030 ";
-            sql.addCompare("where", tableFields.creater_id, "=", loggedInUserId);
+            sql.addCompare("where", tableFields.creater_id, "=", context.userId);
             sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
             sql += ") docs ";
             sql.addCompare("where", "'1'", "=", "1");
@@ -116,7 +115,7 @@ void Handler_t0030_documents::method()
             sql += std::string(" order by created_datetime ");
             sql.limit(limit, offset);
             ORMVector<t0030_documents> documents;
-            if (!opi.fetchObjects(sql, documents))
+            if (!context.opi.fetchObjects(sql, documents))
             {
                 answerOk("No matching Document found", true);
                 return;
@@ -154,12 +153,12 @@ void Handler_t0030_documents::method()
 
         MACRO_GetMandatoryUuid(id);
         t0030_documents t0030;
-        if (!opi.selectObject(id, t0030))
+        if (!context.opi.selectObject(id, t0030))
         {
             answerOk(std::string("No Document with id ") + id.pretty() + " found", false);
             return;
         }
-        if (t0030.creater_id != loggedInUserId)
+        if (t0030.creater_id != context.userId)
         {
             answerOk(std::string("Not allowed to download this document, wrong Creator"), false);
             return;
@@ -170,7 +169,7 @@ void Handler_t0030_documents::method()
             return;
         }
         std::basic_string<std::byte> data;
-        if (!opi.fetchBlob(t0030.document_blob_id, data))
+        if (!context.opi.fetchBlob(t0030.document_blob_id, data))
         {
             answerOk(std::string("Could not load Documentdata for id ") + t0030.document_blob_id.asString(), false);
             return;
@@ -186,17 +185,17 @@ void Handler_t0030_documents::method()
     {
         MACRO_GetMandatoryUuid(id);
         t0030_documents t0030;
-        if (!opi.selectObject(id, t0030))
+        if (!context.opi.selectObject(id, t0030))
         {
             answerOk(std::string("No Document with id ") + id.pretty() + " found", false);
             return;
         }
-        if (t0030.creater_id != loggedInUserId)
+        if (t0030.creater_id != context.userId)
         {
             answerOk(std::string("Not allowed to delete this document, wrong Creator"), false);
             return;
         }
-        opi.deleteObject(t0030, loggedInUserId);
+        context.opi.deleteObject(t0030, context.userId);
         answerOk("document deleted", true);
         return;
     }

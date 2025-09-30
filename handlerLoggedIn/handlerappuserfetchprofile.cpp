@@ -4,6 +4,7 @@ HandlerAppUserFetchProfile::HandlerAppUserFetchProfile(DatabaseLogics &databaseL
                                                        PistacheServerInterface &serverInterface,
                                                        LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              methodNames.fetchProfile,
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -14,15 +15,15 @@ HandlerAppUserFetchProfile::HandlerAppUserFetchProfile(DatabaseLogics &databaseL
               TypeGet);
 }
 
-void HandlerAppUserFetchProfile::method()
+void HandlerAppUserFetchProfile::method(CurrentContext &context)
 {
     rapidjson::Document profile;
     profile.SetObject();
     if (isMethod(methodNames.fetchMyProfile))
     {
         std::string message;
-        if (!databaseLogics.databaseLogicAppUser.fetchMyProfile(appId,
-                                                                loggedInUserId,
+        if (!databaseLogics.databaseLogicAppUser.fetchMyProfile(context.appId,
+                                                                context.userId,
                                                                 message,
                                                                 profile,
                                                                 profile.GetAllocator()))
@@ -35,7 +36,7 @@ void HandlerAppUserFetchProfile::method()
     {
         MACRO_GetMandatoryUuid(profileId);
         std::string message;
-        if (!databaseLogics.databaseLogicAppUser.fetchProfile(appId,
+        if (!databaseLogics.databaseLogicAppUser.fetchProfile(context.appId,
                                                               profileId,
                                                               message,
                                                               profile,

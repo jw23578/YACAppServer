@@ -12,12 +12,13 @@ class HandlerUploadApp : public HandlerLoggedInInterface
     DatabaseLogicUserAndApp &dlua;
 public:
     HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
+                     ORMPersistenceInterface &opi,
                      PistacheServerInterface &serverInterface,
                      LoggedInAppUsersContainer &loggedInAppUsersContainer);
 
     // PistacheHandlerInterface interface
 public:
-    void method() override;
+    void method(CurrentContext &context) override;
 };
 
 #endif // HANDLERUPLOADAPP_H

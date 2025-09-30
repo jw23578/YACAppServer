@@ -7,6 +7,7 @@ HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface
                                                          DeviceTokenCache &deviceTokenCache,
                                                          LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              methodNames.updateAppUserProfile,
                              TypePost,
                              loggedInAppUsersContainer),
@@ -18,12 +19,12 @@ HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface
               TypePost);
 }
 
-void HandlerAppUserUpdateProfile::method()
+void HandlerAppUserUpdateProfile::method(CurrentContext &context)
 {
     if (isMethod(methodNames.updateDeviceToken))
     {
         MACRO_GetMandatoryString(deviceToken);
-        deviceTokenCache.add(loggedInUserId,
+        deviceTokenCache.add(context.userId,
                              deviceToken);
         answerOk("deviceToken stored",
                  true);
@@ -65,33 +66,35 @@ void HandlerAppUserUpdateProfile::method()
     MACRO_GetString(deviceToken);
     if (deviceToken.size())
     {
-        deviceTokenCache.add(loggedInUserId,
+        deviceTokenCache.add(context.userId,
                              deviceToken);
     }
     if (password.size())
     {
-        databaseLogics.databaseLogicAppUser.updatePasswordLoggedIn(loggedInUserId, password);
+        databaseLogics.databaseLogicAppUser.updatePasswordLoggedIn(context.userId, password);
     }
 
-    std::string message;
-    if (!databaseLogics.databaseLogicAppUser.updateAppUser(appId,
-                                                           loggedInUserId,
-                                                           fstname,
-                                                           surname,
-                                                           visible_name,
-                                                           color,
-                                                           message_font_color,
-                                                           searching_exactly_allowed,
-                                                           searching_fuzzy_allowed,
-                                                           public_key_base64,
-                                                           with_image,
-                                                           imageId,
-                                                           message))
+    t0002_user user;
+    if (!user.load(context, context.userId))
     {
-        answerOk(message, false);
+        answerOk("could not load user", false);
         return;
     }
+    user.setfstname(fstname);
+    user.setsurname(surname);
+    user.setvisible_name(visible_name);
+    user.setcolor(color);
+    user.setmessage_font_color(message_font_color);
+    user.setsearching_exactly_allowed(searching_exactly_allowed);
+    user.setsearching_fuzzy_allowed(searching_fuzzy_allowed);
+    user.setpublic_key_base64(public_key_base64);
+    if (with_image)
+    {
+        user.setimage_id(imageId);
+    }
+    user.store(context);
+
     std::map<std::string, std::string> data;
     data["image_id"] = imageId.str();
-    answerOk(message, true, data);
+    answerOk("profile updated", true, data);
 }

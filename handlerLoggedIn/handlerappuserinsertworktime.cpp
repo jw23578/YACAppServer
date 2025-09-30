@@ -4,6 +4,7 @@ HandlerAppUserInsertWorktime::HandlerAppUserInsertWorktime(DatabaseLogics &datab
                                                            PistacheServerInterface &serverInterface,
                                                            LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              methodNames.insertWorktime,
                              TypePost,
                              loggedInAppUsersContainer),
@@ -17,14 +18,14 @@ HandlerAppUserInsertWorktime::HandlerAppUserInsertWorktime(DatabaseLogics &datab
               TypePost);
 }
 
-void HandlerAppUserInsertWorktime::method()
+void HandlerAppUserInsertWorktime::method(CurrentContext &context)
 {
     DatabaseLogicWorktime &dlwt(databaseLogics.databaseLogicWorktime);
     if (isMethod(methodNames.deleteWorktime))
     {
         MACRO_GetMandatoryUuid(id);
         std::string message;
-        answerOk(message, dlwt.deleteWorktime(loggedInUserId,
+        answerOk(message, dlwt.deleteWorktime(context.userId,
                                               id,
                                               message));
         return;
@@ -35,7 +36,7 @@ void HandlerAppUserInsertWorktime::method()
         MACRO_GetMandatoryTimePointFromISO(endISO);
         MACRO_GetMandatoryInt(worktimeType, false);
         std::string message;
-        answerOk(message, dlwt.insertWorktimeBeginEnd(loggedInUserId,
+        answerOk(message, dlwt.insertWorktimeBeginEnd(context.userId,
                                                       beginISO,
                                                       endISO,
                                                       static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
@@ -50,7 +51,7 @@ void HandlerAppUserInsertWorktime::method()
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    bool success(dlwt.insertWorktime(loggedInUserId, ts,
+    bool success(dlwt.insertWorktime(context.userId, ts,
                                      static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
                                      static_cast<DatabaseLogicWorktime::UserMood>(userMood),
                                      static_cast<DatabaseLogicWorktime::DayRating>(dayRating),

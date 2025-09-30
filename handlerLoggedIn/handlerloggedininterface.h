@@ -11,20 +11,20 @@ class HandlerLoggedInInterface : public PistacheHandlerInterface
     std::string loginToken;
     std::string third;
     std::string mandant;
-protected:
-    reducedsole::uuid appId;
-    reducedsole::uuid loggedInUserId;
+
 public:
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
+                             ORMPersistenceInterface &opi,
                              LoggedInContainerInterface &loggedInContainer);
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
+                             ORMPersistenceInterface &opi,
                              const std::string &methodName,
                              HandlerType type,
                              LoggedInContainerInterface &loggedInContainer);
 
     // PistacheHandlerInterface interface
 public:
-    bool checkLogin() override;
+    bool checkLogin(CurrentContext &context) override;
     bool logout();
 };
 

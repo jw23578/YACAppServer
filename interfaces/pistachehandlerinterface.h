@@ -10,7 +10,8 @@
 #include "yacAppAndServer/yacappservermethodnames.h"
 #include "JWUtils/extstring.h"
 #include "extpistache.h"
-
+#include "ormpersistenceinterface.h"
+#include "orm_implementions/currentcontext.h"
 
 #define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
 if (!getByteString(#targetName, targetName, true) || !targetName.size()) \
@@ -89,7 +90,7 @@ public:
     const TableFields tableFields;
     ExtPistache ep;
 private:
-    reducedsole::uuid appId;
+    ORMPersistenceInterface &opi;
 protected:
     bool appIdNeeded{true};
 private:
@@ -149,7 +150,6 @@ protected:
                    std::string const &methodName,
                    HandlerType type);
 public:
-    const reducedsole::uuid &getAppId() const;
 
     enum LoginNeededType
     {
@@ -159,9 +159,11 @@ public:
     LoginNeededType loginNeeded;
 
     PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                             ORMPersistenceInterface &opi,
                              LoginNeededType loginNeeded);
 
     PistacheHandlerInterface(PistacheServerInterface &serverInterface,
+                             ORMPersistenceInterface &opi,
                              const std::string &methodName,
                              HandlerType type,
                              LoginNeededType loginNeeded);
@@ -193,8 +195,8 @@ public:
                              std::chrono::system_clock::time_point &tp,
                              bool ifMissingThenSendResponse);
 
-    virtual void method() = 0;
-    virtual bool checkLogin();
+    virtual void method(CurrentContext &context) = 0;
+    virtual bool checkLogin(CurrentContext &context);
 
     template<class T>
     bool getHeaderString(std::string &target,

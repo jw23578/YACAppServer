@@ -4,6 +4,7 @@ HandlerAppUserGetWorktimeState::HandlerAppUserGetWorktimeState(DatabaseLogics &d
                                                                PistacheServerInterface &serverInterface,
                                                                LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              methodNames.getWorktimeState,
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -14,7 +15,7 @@ HandlerAppUserGetWorktimeState::HandlerAppUserGetWorktimeState(DatabaseLogics &d
               TypeGet);
 }
 
-void HandlerAppUserGetWorktimeState::method()
+void HandlerAppUserGetWorktimeState::method(CurrentContext &context)
 {
     if (isMethod(methodNames.fetchWorktimes))
     {
@@ -24,7 +25,7 @@ void HandlerAppUserGetWorktimeState::method()
         document.SetObject();
         rapidjson::Value worktimes;
         std::string message;
-        if (!databaseLogics.databaseLogicWorktime.fetchWorktimes(loggedInUserId,
+        if (!databaseLogics.databaseLogicWorktime.fetchWorktimes(context.userId,
                                                                  sinceISO,
                                                                  untilISO,
                                                                  worktimes,
@@ -41,7 +42,7 @@ void HandlerAppUserGetWorktimeState::method()
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    if (!databaseLogics.databaseLogicWorktime.currentState(loggedInUserId,
+    if (!databaseLogics.databaseLogicWorktime.currentState(context.userId,
                                                            workStart,
                                                            pauseStart,
                                                            offSiteWorkStart))

@@ -4,6 +4,7 @@ HandlerAppUserUpdateMessageStates::HandlerAppUserUpdateMessageStates(PistacheSer
                                                                      DatabaseLogics &databaseLogics,
                                                                      LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              "/updateMessageStates",
                              TypePost,
                              loggedInAppUsersContainer),
@@ -12,7 +13,7 @@ HandlerAppUserUpdateMessageStates::HandlerAppUserUpdateMessageStates(PistacheSer
 
 }
 
-void HandlerAppUserUpdateMessageStates::method()
+void HandlerAppUserUpdateMessageStates::method(CurrentContext &context)
 {
     const rapidjson::Value &messages(getPostedJsonValue("messages"));
     if (!messages.IsArray())
@@ -26,7 +27,7 @@ void HandlerAppUserUpdateMessageStates::method()
         if (m.HasMember("readAtISO"))
         {
             std::chrono::system_clock::time_point readAt(ExtString::toTimepoint(m["readAtIDO"].GetString()));
-            databaseLogics.databaseLogicMessages.setRead(loggedInUserId,
+            databaseLogics.databaseLogicMessages.setRead(context.userId,
                                                          messageId,
                                                          readAt);
         }

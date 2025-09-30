@@ -212,39 +212,38 @@ int main(int argc, char **argv)
     databaseLogicTables.createDatabaseTables();
 
     // check for superuser
+    std::string appId(createrApp.getString("app_id"));
     t0002_user superUserProfile;
+    CurrentContext context(opi, ExtUuid::stringToUuid(appId), NullUuid);
     if (!opi.selectObject({{superUserProfile.super_user.name(), "true"}}, superUserProfile))
     {
-        superUserProfile.fstname = "superUser";
-        superUserProfile.surname = "superUser";
+        superUserProfile.fstname = context.superUserFstname;
+        superUserProfile.surname = context.superUserSurname;
         superUserProfile.loginemail = superUser.getString("loginEMail");
         superUserProfile.super_user = true;
         superUserProfile.verified = TimePointPostgreSqlNow;
-        superUserProfile.app_id = NullUuid;
         superUserProfile.prepareFirstInsert();
-        opi.insertObject(superUserProfile, superUserProfile.user_id);
+        context.userId = superUserProfile.user_id;
+        superUserProfile.store(context);
 
         t0003_user_passwordhashes passwordHash;
         passwordHash.user_id = superUserProfile.user_id;
         passwordHash.password_hash = superUser.getString("password");
-        passwordHash.app_id = NullUuid;
-        passwordHash.prepareFirstInsert();
-        opi.insertObject(passwordHash, superUserProfile.user_id);
+        passwordHash.store(context);
     }
     t0001_apps theCreaterApp;
-    std::string appId(createrApp.getString("app_id"));
     if (!opi.selectObject({{theCreaterApp.app_id.name(), appId}}, theCreaterApp))
     {
         theCreaterApp.app_id = appId;
         theCreaterApp.app_name = createrApp.getString("app_name");
-        opi.insertObject(theCreaterApp, superUserProfile.user_id);
+        theCreaterApp.store(context);
     }
 
     ORMVector<t0001_apps> allApps;
     opi.fetchAllObjects(allApps);
     for (size_t i(0); i < allApps.size(); ++i)
     {
-        allApps[i].createDefaults(opi);
+        allApps[i].createDefaults(context);
     }
 
 

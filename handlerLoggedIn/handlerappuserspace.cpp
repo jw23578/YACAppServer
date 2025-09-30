@@ -4,6 +4,7 @@ HandlerAppUserSpace::HandlerAppUserSpace(DatabaseLogics &databaseLogics,
                                          PistacheServerInterface &serverInterface,
                                          LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              methodNames.fetchSpaces,
                              TypeGet,
                              loggedInAppUsersContainer),
@@ -29,7 +30,7 @@ HandlerAppUserSpace::HandlerAppUserSpace(DatabaseLogics &databaseLogics,
               TypePost);
 }
 
-void HandlerAppUserSpace::method()
+void HandlerAppUserSpace::method(CurrentContext &context)
 {
     DatabaseLogicSpaces &dls(databaseLogics.databaseLogicSpaces);
     RightsLogic &rl(databaseLogics.rightsLogic);
@@ -50,8 +51,8 @@ void HandlerAppUserSpace::method()
     {
         MACRO_GetMandatoryUuid(space_id);
         reducedsole::uuid id(ExtUuid::NullUuid);
-        dls.fetchSpaceRequestId(space_id, loggedInUserId, id);
-        dls.insertOrUpdateSpace2AppUser(id, appId, space_id, loggedInUserId, TimePointPostgreSqlNow, TimePointPostgreSqlNull, ExtUuid::NullUuid, TimePointPostgreSqlNull, ExtUuid::NullUuid);
+        dls.fetchSpaceRequestId(space_id, context.userId, id);
+        dls.insertOrUpdateSpace2AppUser(id, context.appId, space_id, context.userId, TimePointPostgreSqlNow, TimePointPostgreSqlNull, ExtUuid::NullUuid, TimePointPostgreSqlNull, ExtUuid::NullUuid);
         answerOk("request successful", true);
         return;
     }
@@ -80,8 +81,8 @@ void HandlerAppUserSpace::method()
         document.SetObject();
         rapidjson::Value spaces;
         std::string message;
-        if (!dls.fetchSpaces(appId,
-                             loggedInUserId,
+        if (!dls.fetchSpaces(context.appId,
+                             context.userId,
                              spaces,
                              document.GetAllocator(),
                              message))
@@ -90,13 +91,14 @@ void HandlerAppUserSpace::method()
             return;
         }
         document.AddMember("spaces", spaces, document.GetAllocator());
-        databaseLogics.rightsLogic.addUserRights(appId, loggedInUserId, document, document.GetAllocator());
+        context.userId = context.userId;
+        databaseLogics.rightsLogic.addUserRights(context, document, document.GetAllocator());
         answerOk(true, document);
         return;
     }
     if (isMethod(methodNames.insertSpace))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_changeSpaces)))
+        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeSpaces)))
         {
             return;
         }
@@ -110,9 +112,9 @@ void HandlerAppUserSpace::method()
         rapidjson::Value space;
         reducedsole::uuid id(ExtUuid::NullUuid);
         if (!dls.insertOrUpdateSpace(id,
-                                     appId,
+                                     context.appId,
                                      name,
-                                     loggedInUserId,
+                                     context.userId,
                                      automatic,
                                      access_code,
                                      request_allowed,
@@ -130,7 +132,7 @@ void HandlerAppUserSpace::method()
 
     if (isMethod(methodNames.updateSpace))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_changeSpaces)))
+        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeSpaces)))
         {
             return;
         }
@@ -144,9 +146,9 @@ void HandlerAppUserSpace::method()
         document.SetObject();
         rapidjson::Value space;
         if(!dls.insertOrUpdateSpace(id,
-                                    appId,
+                                    context.appId,
                                     name,
-                                    loggedInUserId,
+                                    context.userId,
                                     automatic,
                                     access_code,
                                     request_allowed,
@@ -164,7 +166,7 @@ void HandlerAppUserSpace::method()
 
     if (isMethod(methodNames.deleteSpace))
     {
-        if (answerMissingRight(rl.appUserMissesRight(loggedInUserId, Rights::RN_changeSpaces)))
+        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeSpaces)))
         {
             return;
         }
@@ -172,7 +174,7 @@ void HandlerAppUserSpace::method()
         std::string message;
         answerOk(message,
                  dls.deleteSpace(id,
-                                 loggedInUserId,
+                                 context.userId,
                                  message));
         return;
     }

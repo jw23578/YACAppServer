@@ -5,7 +5,7 @@ LoggedInContainerInterface::LoggedInContainerInterface()
 
 }
 
-bool LoggedInContainerInterface::isLoggedInWithOutUserId(const reducedsole::uuid &appId,
+bool LoggedInContainerInterface::isLoggedInWithOutUserId(CurrentContext &context,
                                                          const std::string &loginEMail,
                                                          const std::string &loginToken,
                                                          const std::string &third,
@@ -13,7 +13,7 @@ bool LoggedInContainerInterface::isLoggedInWithOutUserId(const reducedsole::uuid
 {
 
     reducedsole::uuid userId;
-    return isLoggedIn(appId, loginEMail, loginToken, third, mandant, userId);
+    return isLoggedIn(context, loginEMail, loginToken, third, mandant, userId);
 }
 
 void LoggedInContainerInterface::clear(const reducedsole::uuid &userId)

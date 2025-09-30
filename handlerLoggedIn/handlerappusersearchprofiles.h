@@ -10,9 +10,10 @@ class HandlerAppUserSearchProfiles : public HandlerLoggedInInterface
     DatabaseLogicAppUser &databaseLogicAppUser;
 public:
     HandlerAppUserSearchProfiles(PistacheServerInterface &serverInterface,
+                                 ORMPersistenceInterface &opi,
                                  DatabaseLogicAppUser &databaseLogicAppUser,
                                  LoggedInAppUsersContainer &loggedInAppUsersContainer);
-    void method() override;
+    void method(CurrentContext &context) override;
 
 };
 

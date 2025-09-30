@@ -10,6 +10,7 @@ HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
                                          PistacheServerInterface &serverInterface,
                                          LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
+                               databaseLogics.getOpi(),
                              "/storeMessage",
                              TypePost,
                              loggedInAppUsersContainer),
@@ -21,7 +22,7 @@ HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
     addMethod(serverInterface, t0028.getORMName(), TypeGet);
 }
 
-void HandlerStoreMessage::method()
+void HandlerStoreMessage::method(CurrentContext &context)
 {
     /*
     addMethod(serverInterface, t0007_messages().getORMName(), TypeDelete);
@@ -71,7 +72,7 @@ void HandlerStoreMessage::method()
     MACRO_GetMandatoryString(content_base64);
 
     databaseLogics.databaseLogicMessages.storeMessage(id,
-                                                      loggedInUserId,
+                                                      context.userId,
                                                       to_id,
                                                       content_base64);
     std::set<std::string> deviceToken;

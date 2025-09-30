@@ -1,7 +1,9 @@
 #include "handlerpages.h"
 
-HandlerPages::HandlerPages(PistacheServerInterface &serverInterface):
+HandlerPages::HandlerPages(PistacheServerInterface &serverInterface,
+                           ORMPersistenceInterface &opi):
     PistacheHandlerInterface(serverInterface,
+                             opi,
                              "*",
                              TypeGet,
                              TypeNoLoginNeeded)
@@ -9,7 +11,7 @@ HandlerPages::HandlerPages(PistacheServerInterface &serverInterface):
     appIdNeeded = false;
 }
 
-void HandlerPages::method()
+void HandlerPages::method(CurrentContext &context)
 {
     if (requestRessource() == "/info.html")
     {
