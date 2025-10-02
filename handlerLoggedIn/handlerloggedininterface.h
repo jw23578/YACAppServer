@@ -25,7 +25,7 @@ public:
     // PistacheHandlerInterface interface
 public:
     bool checkLogin(CurrentContext &context) override;
-    bool logout();
+    bool logout(CurrentContext &context);
 };
 
 #endif // HANDLERLOGGEDININTERFACE_H

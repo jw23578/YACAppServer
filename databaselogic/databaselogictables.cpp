@@ -126,11 +126,6 @@ void DatabaseLogicTables::createDatabaseTables()
                               {{tableFields.id, pg_uuid, true},
                                {tableFields.data, pg_blob}});
 
-    utils.createTableIfNeeded(tableNames.t0015_appuser_devicetoken,
-                              {idPrimaryKey,
-                               {tableFields.user_id, pg_uuid, false, true},
-                               {tableFields.device_token, pg_text}});
-
     utils.createTableIfNeeded(tableNames.t0017_element_usable4appuser,
                               {idPrimaryKey,
                                {tableFields.element_id, pg_uuid, false, true},

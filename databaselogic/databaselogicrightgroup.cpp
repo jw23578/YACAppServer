@@ -5,17 +5,6 @@
 #include "orm_implementions/t0002_user.h"
 #include "orm_implementions/t0021_right_group.h"
 
-bool DatabaseLogicRightGroup::appuserInRightGroup(const reducedsole::uuid &right_group_id, const reducedsole::uuid &appuser_id)
-{
-    SqlString sql;
-    sql.select(tableNames.t0022_right_group2appuser);
-    sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-    sql.addCompare("and", tableFields.user_id, "=", appuser_id);
-    sql.addCompare("and", tableFields.approved_datetime, "is not", TimePointPostgreSqlNull);
-    PGExecutor e(pool, sql);
-    return e.size() > 0;
-}
-
 DatabaseLogicRightGroup::DatabaseLogicRightGroup(LogStatController &logStatController,
                                                  PGConnectionPool &pool):
     logStatController(logStatController),
@@ -42,22 +31,6 @@ bool DatabaseLogicRightGroup::fetchRightGroupMember(const reducedsole::uuid &rig
     return true;
 }
 
-void DatabaseLogicRightGroup::fetchAppUserRightNumbers(const reducedsole::uuid &appuser_id, std::set<int> &right_numbers)
-{
-    SqlString sql;
-    sql.select(tableNames.t0023_right2rightgroup);
-    sql += std::string(" where ") + tableFields.right_group_id;
-    sql += std::string(" in (select ") + tableFields.right_group_id;
-    sql += std::string(" from ") + tableNames.t0022_right_group2appuser;
-    sql.addCompare("where", tableFields.user_id, "=", appuser_id);
-    sql += std::string(")");
-    PGExecutor e(pool, sql);
-    for (size_t i(0); i < e.size(); ++i)
-    {
-        right_numbers.insert(e.integer(tableFields.right_number));
-        e.next();
-    }
-}
 
 bool DatabaseLogicRightGroup::removeRight(const reducedsole::uuid &right_group_id, const int right_number, std::string &message)
 {
@@ -65,16 +38,6 @@ bool DatabaseLogicRightGroup::removeRight(const reducedsole::uuid &right_group_i
     sql.delet(tableNames.t0023_right2rightgroup);
     sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
     sql.addCompare("and", tableFields.right_number, "=", right_number);
-    PGExecutor e(pool, sql);
-    return true;
-}
-
-bool DatabaseLogicRightGroup::removeUser(const reducedsole::uuid &right_group_id, const reducedsole::uuid &appuser_id, std::string &message)
-{
-    SqlString sql;
-    sql.delet(tableNames.t0022_right_group2appuser);
-    sql.addCompare("where", tableFields.right_group_id, "=", right_group_id);
-    sql.addCompare("and", tableFields.user_id, "=", appuser_id);
     PGExecutor e(pool, sql);
     return true;
 }

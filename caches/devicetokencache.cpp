@@ -1,4 +1,5 @@
 #include "devicetokencache.h"
+#include "orm_implementions/t0015_user_devicetoken.h"
 
 DeviceTokenCache::DeviceTokenCache(DatabaseLogics &databaseLogics):
     CacheInterface(databaseLogics)
@@ -6,15 +7,15 @@ DeviceTokenCache::DeviceTokenCache(DatabaseLogics &databaseLogics):
 
 }
 
-void DeviceTokenCache::add(const reducedsole::uuid &userId, const std::string &deviceToken)
+void DeviceTokenCache::add(CurrentContext &context, const std::string &deviceToken)
 {
-    auto itUserId(userId2DeviceToken.find(userId));
+    auto itUserId(userId2DeviceToken.find(context.userId));
     if (itUserId == userId2DeviceToken.end())
     {
         // unknown User, fetch all known DeviceToken and create User entry
-        databaseLogics.databaseLogicAppUser.fetchDeviceToken(userId,
-                                                             userId2DeviceToken[userId]);
-        itUserId = userId2DeviceToken.find(userId);
+        t0015_user_devicetoken userDeviceToken;
+        userDeviceToken.fetchDeviceToken(context, context.userId, userId2DeviceToken[context.userId]);
+        itUserId = userId2DeviceToken.find(context.userId);
     }
     auto itDeviceToken(itUserId->second.find(deviceToken));
     if (itDeviceToken != itUserId->second.end())
@@ -24,11 +25,15 @@ void DeviceTokenCache::add(const reducedsole::uuid &userId, const std::string &d
     }
     // insert DeviceToken in cache and save DeviceToken in Database
     itUserId->second.insert(deviceToken);
-    databaseLogics.databaseLogicAppUser.storeDeviceToken(userId,
-                                                         deviceToken);
+
+    t0015_user_devicetoken userDeviceToken;
+    userDeviceToken.user_id = context.userId;
+    userDeviceToken.device_token = deviceToken;
+    userDeviceToken.store(context);
 }
 
-void DeviceTokenCache::remove(const reducedsole::uuid &userId,
+void DeviceTokenCache::remove(CurrentContext &context,
+                              const reducedsole::uuid &userId,
                               const std::string &deviceToken)
 {
     auto itUserId(userId2DeviceToken.find(userId));
@@ -37,12 +42,18 @@ void DeviceTokenCache::remove(const reducedsole::uuid &userId,
         // user is known, try to remove deviceToken
         itUserId->second.erase(deviceToken);
     }
-    // in either way remove from the database
-    databaseLogics.databaseLogicAppUser.removeDeviceToken(userId,
-                                                          deviceToken);
+    t0015_user_devicetoken userDeviceToken;
+    if (!userDeviceToken.load(context,
+                             {{userDeviceToken.user_id.name(), userId.str()},
+                              {userDeviceToken.device_token.name(), deviceToken}}))
+    {
+        return;
+    }
+    userDeviceToken.erase(context);
 }
 
-size_t DeviceTokenCache::get(const reducedsole::uuid &userId,
+size_t DeviceTokenCache::get(CurrentContext &context,
+                             const reducedsole::uuid &userId,
                              std::set<std::string> &deviceToken)
 {
     auto itUserId(userId2DeviceToken.find(userId));
@@ -52,8 +63,8 @@ size_t DeviceTokenCache::get(const reducedsole::uuid &userId,
         deviceToken = itUserId->second;
         return deviceToken.size();
     }
-    if (databaseLogics.databaseLogicAppUser.fetchDeviceToken(userId,
-                                                             deviceToken))
+    t0015_user_devicetoken userDeviceToken;
+    if (userDeviceToken.fetchDeviceToken(context, userId, deviceToken))
     {
         userId2DeviceToken[userId] = deviceToken;
     }

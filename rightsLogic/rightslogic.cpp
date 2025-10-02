@@ -1,14 +1,16 @@
 #include "rightslogic.h"
-#include "orm_implementions/t0022_right_group2appuser.h"
+#include "orm_implementions/t0022_right_group2user.h"
 #include "orm-mapper/orm2postgres.h"
 #include "orm_implementions/t0021_right_group.h"
 
-void RightsLogic::fetchRightsForUser(const reducedsole::uuid &appuser_id)
+void RightsLogic::fetchRightsForUser(CurrentContext &context,
+                                     const reducedsole::uuid &userId)
 {
-    auto it(appUsers2RightNumbers.find(appuser_id));
+    auto it(appUsers2RightNumbers.find(userId));
     if (it == appUsers2RightNumbers.end())
     {
-        dlrg.fetchAppUserRightNumbers(appuser_id, appUsers2RightNumbers[appuser_id]);
+        t0022_right_group2user rightGroup2User;
+        rightGroup2User.fetchUserRightNumbers(context, userId, appUsers2RightNumbers[userId]);
     }
 }
 
@@ -17,11 +19,12 @@ RightsLogic::RightsLogic(DatabaseLogicRightGroup &dlrg):
 {
 }
 
-int RightsLogic::appUserMissesRight(const reducedsole::uuid &appuser_id,
+int RightsLogic::appUserMissesRight(CurrentContext &context,
+                                    const reducedsole::uuid &appuser_id,
                                     const RightNumber &rn)
 {
     // if right is missing then the right number is returned
-    fetchRightsForUser(appuser_id);
+    fetchRightsForUser(context, appuser_id);
     auto appUserRights(appUsers2RightNumbers[appuser_id]);
     if (appUserRights.find(rn.number) == appUserRights.end())
     {
@@ -52,7 +55,7 @@ void RightsLogic::addUserRights(CurrentContext &context,
             t0021_right_group administratorRightGroup;
             if (administratorRightGroup.load(context, {{administratorRightGroup.name.name(), Rights::Administrator}}))
             {
-                t0022_right_group2appuser t0022;
+                t0022_right_group2user t0022;
                 t0022.right_group_id = administratorRightGroup.right_group_id;
                 t0022.user_id = context.userId;
                 t0022.requested_datetime = TimePointPostgreSqlNow;
@@ -68,7 +71,7 @@ void RightsLogic::addUserRights(CurrentContext &context,
     }
     rapidjson::Value rightsArray;
     rightsArray.SetArray();
-    fetchRightsForUser(context.userId);
+    fetchRightsForUser(context, context.userId);
     auto appUserRights(appUsers2RightNumbers[context.userId]);
     for (auto const &rn: appUserRights)
     {

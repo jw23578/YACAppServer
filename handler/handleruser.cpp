@@ -4,6 +4,8 @@
 #include "serverHeader/thirdheader.h"
 #include "serverHeader/mandantheader.h"
 #include "extmap.h"
+#include "orm_implementions/t0003_user_passwordhashes.h"
+#include "orm_implementions/t0004_user_logintoken.h"
 
 bool HandlerUser::thirdLogin(CurrentContext &context,
                              const std::string &third,
@@ -116,16 +118,15 @@ void HandlerUser::method(CurrentContext &context)
         MACRO_GetMandatoryEMail(loginEMail);
 
         std::string message;
-        std::string updatePasswordToken;
-        if (!databaseLogics.databaseLogicAppUser.requestUpdatePassword(context,
-                                                                       loginEMail,
-                                                                       updatePasswordToken,
-                                                                       message))
+        t0002_user user;
+        if (!user.requestUpdatePassword(context,
+                                        loginEMail,
+                                        message))
         {
             answerBad(message);
             return;
         }
-        emailLogic.sendPleaseUpdatePasswordMail(loginEMail, updatePasswordToken);
+        emailLogic.sendPleaseUpdatePasswordMail(loginEMail, user.update_password_token);
         message = "e-mail with updatePasswordToken sended";
         answerOk(message, true);
         return;
@@ -138,19 +139,18 @@ void HandlerUser::method(CurrentContext &context)
 
         std::string message;
         std::string loginToken;
-        reducedsole::uuid userId;
-        if (!databaseLogics.databaseLogicAppUser.updatePassword(context,
-                                                                loginEMail,
-                                                                updatePasswordToken,
-                                                                password,
-                                                                message,
-                                                                loginToken,
-                                                                userId))
+        t0002_user user;
+        if (!user.updatePassword(context,
+                                 loginEMail,
+                                 updatePasswordToken,
+                                 password,
+                                 message,
+                                 loginToken))
         {
             answerBad(message);
             return;
         }
-        loggedInUsersContainer.clear(userId);
+        loggedInUsersContainer.clear(user.user_id);
         MACRO_CreateDataMAP(loginToken);
         answerOk(message, true, data);
         return;
@@ -276,12 +276,31 @@ void HandlerUser::method(CurrentContext &context)
     }
     else
     {
-        loggedIn = databaseLogics.databaseLogicAppUser.loginUser(context,
-                                                                 loginEMail,
-                                                                 password,
-                                                                 message,
-                                                                 w,
-                                                                 context.userId);
+        t0002_user user;
+        if (!user.lookupUser(context, loginEMail, message))
+        {
+            answerOk("LoginEMail/User not found. Please check your LoginEMail or register first.", false);
+            return;
+        }
+        context.userId = user.user_id;
+        t0003_user_passwordhashes userPasswordhash;
+        if (!userPasswordhash.login(context,
+                                    context.userId,
+                                    password,
+                                    message))
+        {
+            answerOk(message, false);
+            return;
+        }
+        t0004_user_logintoken userLogintoken;
+        userLogintoken.loginSuccessful(context, context.userId);
+        w.addMember("loginToken", userLogintoken.login_token);
+        w.addMember(user.user_id.name(), user.user_id.asString());
+        w.addMember(user.fstname.name(), user.fstname);
+        w.addMember(user.surname.name(), user.surname);
+        w.addMember(user.visible_name.name(), user.visible_name);
+        w.addMember(user.image_id.name(), user.image_id.asString());
+        loggedIn = true;
     }
     if (!loggedIn)
     {
@@ -291,7 +310,7 @@ void HandlerUser::method(CurrentContext &context)
     MACRO_GetString(deviceToken);
     if (deviceToken.size())
     {
-        deviceTokenCache.add(context.userId,
+        deviceTokenCache.add(context,
                              deviceToken);
     }
     w.addMember("message", "Login successful");

@@ -76,7 +76,7 @@ void HandlerStoreMessage::method(CurrentContext &context)
                                                       to_id,
                                                       content_base64);
     std::set<std::string> deviceToken;
-    if (deviceTokenCache.get(to_id, deviceToken))
+    if (deviceTokenCache.get(context, to_id, deviceToken))
     {
         jw78::FirebaseWrapper fw;
         for (const auto &dt: deviceToken)
@@ -100,7 +100,7 @@ void HandlerStoreMessage::method(CurrentContext &context)
             {
                 if (false /* deviceToken invalid*/)
                 {
-                    deviceTokenCache.remove(to_id, dt);
+                    deviceTokenCache.remove(context, to_id, dt);
                 }
             }
         }

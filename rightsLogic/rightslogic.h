@@ -10,11 +10,14 @@ class RightsLogic
     DatabaseLogicRightGroup &dlrg;
     std::set<reducedsole::uuid> appIdsWhereAdminExists;
     std::map<reducedsole::uuid, std::set<int>> appUsers2RightNumbers;
-    void fetchRightsForUser(const reducedsole::uuid &appuser_id);
+    void fetchRightsForUser(CurrentContext &context,
+                            const reducedsole::uuid &userId);
 public:
     RightsLogic(DatabaseLogicRightGroup &dlrg);
 
-    int appUserMissesRight(const reducedsole::uuid &appuser_id, RightNumber const &rn);
+    int appUserMissesRight(CurrentContext &context,
+                           const reducedsole::uuid &appuser_id,
+                           RightNumber const &rn);
     void clear();
 
     void addUserRights(CurrentContext &context,

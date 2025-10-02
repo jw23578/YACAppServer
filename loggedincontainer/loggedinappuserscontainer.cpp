@@ -1,5 +1,6 @@
 #include "loggedinappuserscontainer.h"
 #include "thirdparties/thirdcurlrequests.h"
+#include "orm_implementions/t0004_user_logintoken.h"
 
 LoggedInAppUsersContainer::LoggedInAppUsersContainer(ORMPersistenceInterface &opi,
                                                      DatabaseLogics &databaseLogics):
@@ -17,9 +18,8 @@ bool LoggedInAppUsersContainer::isLoggedIn(CurrentContext &context,
                                            const std::string &mandant,
                                            reducedsole::uuid &userId)
 {
-    std::string needle(loginEMail + "##" + third + "##" + mandant + "##" + loginToken);
-    LoggedInUsersMap::iterator it(loggedInUsers.find(needle));
-    if (it == loggedInUsers.end() || it->second.loginTokenValidUntil < std::chrono::system_clock::now())
+    LoggedInUsersMap::iterator it(find(loginEMail, loginToken, third, mandant));
+    if (it == end() || it->second.loginTokenValidUntil < std::chrono::system_clock::now())
     {
         std::chrono::system_clock::time_point loginTokenValidUntil;
         bool loggedIn(false);
@@ -43,23 +43,20 @@ bool LoggedInAppUsersContainer::isLoggedIn(CurrentContext &context,
         }
         else
         {
-            loggedIn = databaseLogics.databaseLogicAppUser.appUserLoggedIn(context,
-                                                                           loginEMail,
-                                                                           loginToken,
-                                                                           userId,
-                                                                           loginTokenValidUntil);
+            t0004_user_logintoken userLoginToken;
+            loggedIn = userLoginToken.userLoggedIn(context, loginEMail, loginToken);
+            userId = userLoginToken.user_id;
+            loginTokenValidUntil = userLoginToken.login_token_valid_until;
         }
         if (!loggedIn)
         {
-            if (it != loggedInUsers.end())
+            if (it != end())
             {
-                loggedInUsers.erase(it);
+                erase(it);
             }
             return false;
         }
-        loggedInUsers[needle].userId = userId;
-        loggedInUsers[needle].loginTokenValidUntil = loginTokenValidUntil;
-        it = loggedInUsers.find(needle);
+        it = add(loginEMail, loginToken, third, mandant, userId, loginTokenValidUntil);
     }
     if (it->second.loginTokenValidUntil < std::chrono::system_clock::now() + std::chrono::hours(24 * 3))
     {
@@ -75,19 +72,27 @@ bool LoggedInAppUsersContainer::isLoggedIn(CurrentContext &context,
         }
         else
         {
-            databaseLogics.databaseLogicAppUser.refreshAppUserLoginToken(context,
-                                                                         loginEMail,
-                                                                         it->second.loginTokenValidUntil);
+            t0004_user_logintoken userLoginToken;
+            userLoginToken.refresh(context,
+                                   loginToken);
+            it->second.loginTokenValidUntil = userLoginToken.login_token_valid_until;
         }
     }
     userId = it->second.userId;
     return true;
 }
 
-bool LoggedInAppUsersContainer::logout(const std::string &loginToken)
+bool LoggedInAppUsersContainer::logout(CurrentContext &context,
+                                       const std::string &loginEMail,
+                                       const std::string &loginToken,
+                                       const std::string &third,
+                                       const std::string &mandant)
 {
-    clearByLoginToken(loginToken);
-    databaseLogics.databaseLogicAppUser.logoutAppUserByLoginToken(loginToken);
+    clearByNeedleData(loginEMail,
+                      loginToken,
+                      third,
+                      mandant);
+    t0004_user_logintoken::logoutUserByLoginToken(context, loginToken);
     return true;
 }
 

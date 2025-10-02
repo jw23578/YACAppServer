@@ -97,9 +97,10 @@ void HandlerORMObjects::method(CurrentContext &context)
     {
         if (isMethod(t0022.getORMName()))
         {
-            std::unique_ptr<t0022_right_group2appuser> object(static_cast<t0022_right_group2appuser*>(orm2json.fromJson(getPostedData(), factory)));
+            std::unique_ptr<t0022_right_group2user> object(static_cast<t0022_right_group2user*>(orm2json.fromJson(getPostedData(), factory)));
 
-            if (databaseLogics.databaseLogicRightGroup.appuserInRightGroup(object->right_group_id.get(), object->user_id.get()))
+            t0022_right_group2user rightGroup2User;
+            if (rightGroup2User.userInRightGroup(context, object->right_group_id.get(), object->user_id.get()))
             {
                 return;
             }
@@ -111,7 +112,7 @@ void HandlerORMObjects::method(CurrentContext &context)
             if (isMethod(on))
             {
                 std::unique_ptr<YACBaseObject> baseObject(static_cast<YACBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
-                if (answerMissingRight(rightsLogic.appUserMissesRight(context.userId, baseObject->changeRight)))
+                if (answerMissingRight(rightsLogic.appUserMissesRight(context, context.userId, baseObject->changeRight)))
                 {
                     return;
                 }

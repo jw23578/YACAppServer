@@ -52,7 +52,7 @@ bool HandlerLoggedInInterface::checkLogin(CurrentContext &context)
     return true;
 }
 
-bool HandlerLoggedInInterface::logout()
+bool HandlerLoggedInInterface::logout(CurrentContext &context)
 {
-    return loggedInContainer.logout(loginToken);
+    return loggedInContainer.logout(context, loginEMail, loginToken, third, mandant);
 }

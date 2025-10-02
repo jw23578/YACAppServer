@@ -98,7 +98,7 @@ void HandlerAppUserSpace::method(CurrentContext &context)
     }
     if (isMethod(methodNames.insertSpace))
     {
-        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeSpaces)))
+        if (answerMissingRight(rl.appUserMissesRight(context, context.userId, Rights::RN_changeSpaces)))
         {
             return;
         }
@@ -132,7 +132,7 @@ void HandlerAppUserSpace::method(CurrentContext &context)
 
     if (isMethod(methodNames.updateSpace))
     {
-        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeSpaces)))
+        if (answerMissingRight(rl.appUserMissesRight(context, context.userId, Rights::RN_changeSpaces)))
         {
             return;
         }
@@ -166,7 +166,7 @@ void HandlerAppUserSpace::method(CurrentContext &context)
 
     if (isMethod(methodNames.deleteSpace))
     {
-        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeSpaces)))
+        if (answerMissingRight(rl.appUserMissesRight(context, context.userId, Rights::RN_changeSpaces)))
         {
             return;
         }

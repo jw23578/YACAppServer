@@ -76,7 +76,7 @@ void HandlerAppUserRightGroup::method(CurrentContext &context)
 
     if (isMethod(methodNames.deleteRightGroup))
     {
-        if (answerMissingRight(rl.appUserMissesRight(context.userId, Rights::RN_changeRightsGroups)))
+        if (answerMissingRight(rl.appUserMissesRight(context, context.userId, Rights::RN_changeRightsGroups)))
         {
             return;
         }

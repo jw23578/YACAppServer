@@ -30,19 +30,15 @@ TestDatabaseLogicAppUser::TestDatabaseLogicAppUser(DatabaseLogicAppUser &databas
     {
         reducedsole::uuid userId(reducedsole::uuid4());
         std::string device_token("irgendein text");
-        databaseLogicAppUser.storeDeviceToken(userId, device_token);
 
         std::set<std::string> all_device_token;
-        databaseLogicAppUser.fetchDeviceToken(userId, all_device_token);
         if (all_device_token.size() != 1)
         {
             error = true;
         }
 
-        databaseLogicAppUser.removeDeviceToken(userId, device_token);
 
         all_device_token.clear();
-        databaseLogicAppUser.fetchDeviceToken(userId, all_device_token);
         if (all_device_token.size() != 0)
         {
             error = true;

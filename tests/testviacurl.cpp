@@ -73,6 +73,27 @@ bool TestViaCurl::run(std::string &resultMessage)
 
     cw.addHeader("YACAPP-LoginEMail", loginEMail);
     cw.addHeader("YACAPP-LoginToken", loginToken);
+    if (!post(baseUrl + methodNames.logoutUser, jsonString, result, message))
+    {
+        resultMessage = methodNames.logoutUser + " did not work";
+        return false;
+    }
+
+    {
+        rapidjson::Document data;
+        data.SetObject();
+        ExtRapidJSONWriter w(data, data.GetAllocator());
+        w.addMember("loginEMail", loginEMail);
+        w.addMember("password", password);
+        jsonString = w.toString();
+    }
+    if (!post(baseUrl + methodNames.updatePasswordUser, jsonString, result, message))
+    {
+        resultMessage = methodNames.updatePasswordUser + " did not work";
+        return false;
+    }
+
+
     {
         rapidjson::Document data;
         data.SetObject();
@@ -86,10 +107,11 @@ bool TestViaCurl::run(std::string &resultMessage)
         w.addMember("searching_fuzzy_allowed", true);
         jsonString = w.toString();
     }
-    if (!post(baseUrl + methodNames.updateAppUserProfile, jsonString, result, message))
+    if (!post(baseUrl + methodNames.updateUserProfile, jsonString, result, message))
     {
-        resultMessage = methodNames.updateAppUserProfile + " did not work";
+        resultMessage = methodNames.updateUserProfile + " did not work";
         return false;
     }
+
     return true;
 }

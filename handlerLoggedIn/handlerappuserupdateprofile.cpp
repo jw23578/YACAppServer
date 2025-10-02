@@ -1,6 +1,7 @@
 #include "handlerappuserupdateprofile.h"
 #include "base64.h"
 #include "JWUtils/definitions.h"
+#include "orm_implementions/t0003_user_passwordhashes.h"
 
 HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface &serverInterface,
                                                          DatabaseLogics &databaseLogics,
@@ -8,7 +9,7 @@ HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface
                                                          LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
-                             methodNames.updateAppUserProfile,
+                             methodNames.updateUserProfile,
                              TypePost,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics),
@@ -17,14 +18,24 @@ HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface
     addMethod(serverInterface,
               methodNames.updateDeviceToken,
               TypePost);
+    addMethod(serverInterface,
+              methodNames.logoutUser,
+              TypePost);
 }
 
 void HandlerAppUserUpdateProfile::method(CurrentContext &context)
 {
+    if (isMethod(methodNames.logoutUser))
+    {
+        logout(context);
+        answerOk("user logged out",
+                 true);
+        return;
+    }
     if (isMethod(methodNames.updateDeviceToken))
     {
         MACRO_GetMandatoryString(deviceToken);
-        deviceTokenCache.add(context.userId,
+        deviceTokenCache.add(context,
                              deviceToken);
         answerOk("deviceToken stored",
                  true);
@@ -66,12 +77,15 @@ void HandlerAppUserUpdateProfile::method(CurrentContext &context)
     MACRO_GetString(deviceToken);
     if (deviceToken.size())
     {
-        deviceTokenCache.add(context.userId,
+        deviceTokenCache.add(context,
                              deviceToken);
     }
     if (password.size())
     {
-        databaseLogics.databaseLogicAppUser.updatePasswordLoggedIn(context.userId, password);
+        t0003_user_passwordhashes userPasswordHash;
+        userPasswordHash.load(context, userPasswordHash.user_id);
+        userPasswordHash.password_hash = password;
+        userPasswordHash.store(context);
     }
 
     t0002_user user;

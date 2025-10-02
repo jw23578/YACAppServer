@@ -19,7 +19,11 @@ public:
                     const std::string &third,
                     const std::string &mandant,
                     reducedsole::uuid &userId) override;
-    bool logout(const std::string &loginToken) override;
+    bool logout(CurrentContext &context,
+                const std::string &loginEMail,
+                const std::string &loginToken,
+                const std::string &third,
+                const std::string &mandant) override;
 
     bool appIdMandatory() const override;
 };

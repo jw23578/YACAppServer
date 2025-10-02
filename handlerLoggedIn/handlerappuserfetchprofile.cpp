@@ -21,30 +21,40 @@ void HandlerAppUserFetchProfile::method(CurrentContext &context)
     profile.SetObject();
     if (isMethod(methodNames.fetchMyProfile))
     {
-        std::string message;
-        if (!databaseLogics.databaseLogicAppUser.fetchMyProfile(context.appId,
-                                                                context.userId,
-                                                                message,
-                                                                profile,
-                                                                profile.GetAllocator()))
+        t0002_user fetchProfile;
+        if (!fetchProfile.load(context, context.userId))
         {
-            answerOk(message, false);
+            answerOk(std::string("could not load profile with id: ") + context.userId.str(), false);
             return;
         }
+        ExtRapidJSONWriter jw(profile, profile.GetAllocator());
+        jw.addMember("id", fetchProfile.user_id.asString());
+        jw.addMember(fetchProfile.message_font_color.name(), fetchProfile.message_font_color);
+        jw.addMember(fetchProfile.color.name(), fetchProfile.color);
+        jw.addMember(fetchProfile.fstname.name(), fetchProfile.fstname);
+        jw.addMember(fetchProfile.surname.name(), fetchProfile.surname);
+        jw.addMember(fetchProfile.visible_name.name(), fetchProfile.visible_name);
+        jw.addMember(fetchProfile.public_key_base64.name(), fetchProfile.public_key_base64);
+        jw.addMember(fetchProfile.image_id.name(), fetchProfile.image_id.asString());
+        jw.addMember(fetchProfile.searching_exactly_allowed.name(), fetchProfile.searching_exactly_allowed);
+        jw.addMember(fetchProfile.searching_fuzzy_allowed.name(), fetchProfile.searching_fuzzy_allowed);
     }
     if (isMethod(methodNames.fetchProfile))
     {
         MACRO_GetMandatoryUuid(profileId);
-        std::string message;
-        if (!databaseLogics.databaseLogicAppUser.fetchProfile(context.appId,
-                                                              profileId,
-                                                              message,
-                                                              profile,
-                                                              profile.GetAllocator()))
+        t0002_user fetchProfile;
+        if (!fetchProfile.load(context, profileId))
         {
-            answerOk(message, false);
+            answerOk(std::string("could not load profile with id: ") + profileId.str(), false);
             return;
         }
+        ExtRapidJSONWriter jw(profile, profile.GetAllocator());
+        jw.addMember("id", fetchProfile.user_id.asString());
+        jw.addMember(fetchProfile.message_font_color.name(), fetchProfile.message_font_color);
+        jw.addMember(fetchProfile.color.name(), fetchProfile.color);
+        jw.addMember(fetchProfile.visible_name.name(), fetchProfile.visible_name);
+        jw.addMember(fetchProfile.public_key_base64.name(), fetchProfile.public_key_base64);
+        jw.addMember(fetchProfile.image_id.name(), fetchProfile.image_id.asString());
     }
     answerOk(true, profile);
 }

@@ -9,11 +9,13 @@ class DeviceTokenCache: public CacheInterface
 public:
     DeviceTokenCache(DatabaseLogics &databaseLogics);
 
-    void add(const reducedsole::uuid &userId,
+    void add(CurrentContext &context,
              const std::string &deviceToken);
-    void remove(const reducedsole::uuid &userId,
+    void remove(CurrentContext &context,
+                const reducedsole::uuid &userId,
                 const std::string &deviceToken);
-    size_t get(const reducedsole::uuid &userId,
+    size_t get(CurrentContext &context,
+               const reducedsole::uuid &userId,
                std::set<std::string> &deviceToken);
 };
 
