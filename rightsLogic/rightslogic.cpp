@@ -46,7 +46,8 @@ void RightsLogic::addUserRights(CurrentContext &context,
 
     if (appIdsWhereAdminExists.find(context.appId) == appIdsWhereAdminExists.end())
     {
-        if (dlrg.adminExists(context.appId, Rights::Administrator))
+        t0022_right_group2user rightGroup2User;
+        if (rightGroup2User.adminExists(context, Rights::Administrator))
         {
             appIdsWhereAdminExists.insert(context.appId);
         }

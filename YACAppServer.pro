@@ -51,7 +51,6 @@ SOURCES += \
         databaselogic/databaselogicspaces.cpp \
         databaselogic/databaselogictables.cpp \
         databaselogic/databaselogicthirdparty.cpp \
-        databaselogic/databaselogicuserandapp.cpp \
         databaselogic/databaselogicworktime.cpp \
         emaillogic.cpp \
         handler/handlerapp.cpp \
@@ -91,7 +90,6 @@ SOURCES += \
         tests/testdatabaselogicimagetable.cpp \
         tests/testdatabaselogicmessages.cpp \
         tests/testdatabaselogics.cpp \
-        tests/testdatabaselogicworktime.cpp \
         tests/testextstring.cpp \
         tests/testorm2postgres.cpp \
         tests/testtimepoint.cpp \
@@ -121,7 +119,6 @@ HEADERS += \
   databaselogic/databaselogicspaces.h \
   databaselogic/databaselogictables.h \
   databaselogic/databaselogicthirdparty.h \
-  databaselogic/databaselogicuserandapp.h \
   databaselogic/databaselogicworktime.h \
   emaillogic.h \
   handler/handlerapp.h \
@@ -161,7 +158,6 @@ HEADERS += \
   tests/testdatabaselogicimagetable.h \
   tests/testdatabaselogicmessages.h \
   tests/testdatabaselogics.h \
-  tests/testdatabaselogicworktime.h \
   tests/testextstring.h \
   tests/testorm2postgres.h \
   tests/testtimepoint.h \

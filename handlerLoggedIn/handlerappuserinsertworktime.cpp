@@ -25,7 +25,8 @@ void HandlerAppUserInsertWorktime::method(CurrentContext &context)
     {
         MACRO_GetMandatoryUuid(id);
         std::string message;
-        answerOk(message, dlwt.deleteWorktime(context.userId,
+        answerOk(message, dlwt.deleteWorktime(context,
+                                              context.userId,
                                               id,
                                               message));
         return;
@@ -36,7 +37,8 @@ void HandlerAppUserInsertWorktime::method(CurrentContext &context)
         MACRO_GetMandatoryTimePointFromISO(endISO);
         MACRO_GetMandatoryInt(worktimeType, false);
         std::string message;
-        answerOk(message, dlwt.insertWorktimeBeginEnd(context.userId,
+        answerOk(message, dlwt.insertWorktimeBeginEnd(context,
+                                                      context.userId,
                                                       beginISO,
                                                       endISO,
                                                       static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
@@ -51,7 +53,9 @@ void HandlerAppUserInsertWorktime::method(CurrentContext &context)
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    bool success(dlwt.insertWorktime(context.userId, ts,
+    bool success(dlwt.insertWorktime(context,
+                                     context.userId,
+                                     ts,
                                      static_cast<DatabaseLogicWorktime::WorktimeType>(worktimeType),
                                      static_cast<DatabaseLogicWorktime::UserMood>(userMood),
                                      static_cast<DatabaseLogicWorktime::DayRating>(dayRating),

@@ -1,28 +1,34 @@
 #include "databaselogicworktime.h"
 #include "orm-mapper/orm2postgres.h"
+#include "orm_implementions/t0012_worktime.h"
 
-bool DatabaseLogicWorktime::selectWorktimeBefore(const reducedsole::uuid &user_id, const TimePoint &ts, PGExecutor &e)
+bool DatabaseLogicWorktime::selectWorktimeBefore(CurrentContext &context,
+                                                 const reducedsole::uuid &user_id,
+                                                 const TimePoint &ts, PGExecutor &e)
 {
+    t0012_worktime worktime;
     SqlString sql;
-    sql.select(tableNames.t0012_worktime);
-    sql.addCompare("where", tableFields.user_id, "=", user_id);
-    sql.addCompare("and", tableFields.ts, "<", ts);
-    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    sql.select(worktime.getORMName());
+    sql.addCompare("where", worktime.user_idORM().name(), "=", user_id);
+    sql.addCompare("and", worktime.tsORM().name(), "<", ts);
+    context.opi.addOnlyInsertDBWhere(false, sql);
     sql += std::string(" order by ts desc limit 1");
     e.exec(sql);
     return e.size() > 0;
 }
 
-bool DatabaseLogicWorktime::selectWorktimeAfter(const reducedsole::uuid &user_id,
+bool DatabaseLogicWorktime::selectWorktimeAfter(CurrentContext &context,
+                                                const reducedsole::uuid &user_id,
                                                 const TimePoint &ts,
                                                 const std::set<WorktimeType> &typesAllowed,
                                                 PGExecutor &e)
 {
+    t0012_worktime worktime;
     SqlString sql;
-    sql.select(tableNames.t0012_worktime);
-    sql.addCompare("where", tableFields.user_id, "=", user_id);
-    sql.addCompare("and", tableFields.ts, ">", ts);
-    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    sql.select(worktime.getORMName());
+    sql.addCompare("where", worktime.user_idORM().name(), "=", user_id);
+    sql.addCompare("and", worktime.tsORM().name(), ">", ts);
+    context.opi.addOnlyInsertDBWhere(false, sql);
     if (typesAllowed.size())
     {
         sql += std::string(" and type in (:typesallowed) ");
@@ -41,11 +47,13 @@ DatabaseLogicWorktime::DatabaseLogicWorktime(LogStatController &logStatControlle
 
 }
 
-bool DatabaseLogicWorktime::currentState(const reducedsole::uuid &user_id,
+bool DatabaseLogicWorktime::currentState(CurrentContext &context,
+                                         const reducedsole::uuid &user_id,
                                          std::chrono::system_clock::time_point &workStart,
                                          std::chrono::system_clock::time_point &pauseStart,
                                          std::chrono::system_clock::time_point &offSiteStart)
 {
+    t0012_worktime worktime;
     SqlString sql("select * from ( ");
     for (int wt(WorkStartType); wt < WorktimeTypeCount; ++wt)
     {
@@ -54,9 +62,9 @@ bool DatabaseLogicWorktime::currentState(const reducedsole::uuid &user_id,
             sql += std::string(" union ");
         }
         sql += std::string(" select * from (select ts, type from ");
-        sql += tableNames.t0012_worktime;
+        sql += worktime.getORMName();
         sql += std::string(" where user_id = :user_id and type = :type") + ExtString::toString(wt);
-        sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+        context.opi.addOnlyInsertDBWhere(false, sql);
         sql += std::string(" order by ts desc limit 1) a") + ExtString::toString(wt) + " ";
         sql.set(std::string("type") + ExtString::toString(wt), wt);
     }
@@ -81,7 +89,8 @@ bool DatabaseLogicWorktime::currentState(const reducedsole::uuid &user_id,
     return true;
 }
 
-bool DatabaseLogicWorktime::insertWorktime(const reducedsole::uuid &user_id,
+bool DatabaseLogicWorktime::insertWorktime(CurrentContext &context,
+                                           const reducedsole::uuid &user_id,
                                            const std::chrono::system_clock::time_point ts,
                                            const WorktimeType type,
                                            const UserMood user_mood,
@@ -91,7 +100,7 @@ bool DatabaseLogicWorktime::insertWorktime(const reducedsole::uuid &user_id,
                                            std::chrono::system_clock::time_point &offSiteWorkStart,
                                            std::string &message)
 {
-    if (!currentState(user_id, workStart, pauseStart, offSiteWorkStart))
+    if (!currentState(context, user_id, workStart, pauseStart, offSiteWorkStart))
     {
         message = "could not retrieve current state";
         return false;
@@ -186,22 +195,18 @@ bool DatabaseLogicWorktime::insertWorktime(const reducedsole::uuid &user_id,
     case WorktimeTypeCount: break;
     }
 
-    SqlString sql;
-    sql.insert(tableNames.t0012_worktime);
-    sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
-    sql.addInsert(tableFields.user_id, user_id, false);
-    sql.addInsert(tableFields.ts, ts, false);
-    sql.addInsert(tableFields.type, type, false);
-    sql.addInsert(tableFields.user_mood, user_mood, false);
-    sql.addInsert(tableFields.day_rating, day_rating, false);
-    sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull, true);
-    sql.addInsert(tableFields.deleted_appuser_id, ExtUuid::NullUuid, true);
-
-    PGExecutor e(pool, sql);
+    t0012_worktime worktime;
+    worktime.user_id.set(user_id);
+    worktime.setts(ts);
+    worktime.settype(type);
+    worktime.setuser_mood(user_mood);
+    worktime.setday_rating(day_rating);
+    worktime.store(context);
     return true;
 }
 
-bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user_id,
+bool DatabaseLogicWorktime::insertWorktimeBeginEnd(CurrentContext &context,
+                                                   const reducedsole::uuid &user_id,
                                                    const TimePoint &begin,
                                                    const TimePoint &end,
                                                    const WorktimeType type,
@@ -213,7 +218,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user
         return false;
     }
     PGExecutor e(pool);
-    if (selectWorktimeBefore(user_id, begin, e))
+    if (selectWorktimeBefore(context, user_id, begin, e))
     {
         WorktimeType beforeType(static_cast<WorktimeType>(e.integer(tableFields.type)));
         if (type == WorkStartType)
@@ -258,7 +263,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user
     }
     if (type == WorkStartType || type == PauseStartType)
     {
-        if (selectWorktimeAfter(user_id, begin, {}, e))
+        if (selectWorktimeAfter(context, user_id, begin, {}, e))
         {
             if (e.timepoint("ts") < end)
             {
@@ -269,7 +274,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user
     }
     if (type == OffSiteWorkStartType)
     {
-        if (selectWorktimeAfter(user_id, begin, {WorkStartType, WorkEndType, OffSiteWorkStartType, OffSiteWorkEndType}, e))
+        if (selectWorktimeAfter(context, user_id, begin, {WorkStartType, WorkEndType, OffSiteWorkStartType, OffSiteWorkEndType}, e))
         {
             if (e.timepoint("ts") < end)
             {
@@ -278,7 +283,7 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user
             }
         }
     }
-    if (selectWorktimeAfter(user_id, end, {}, e))
+    if (selectWorktimeAfter(context, user_id, end, {}, e))
     {
         WorktimeType afterType(static_cast<WorktimeType>(e.integer(tableFields.type)));
         if (type == WorkStartType)
@@ -318,48 +323,42 @@ bool DatabaseLogicWorktime::insertWorktimeBeginEnd(const reducedsole::uuid &user
     }
 
     {
-        SqlString sql;
-        sql.insert(tableNames.t0012_worktime);
-        sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
-        sql.addInsert(tableFields.user_id, user_id, false);
-        sql.addInsert(tableFields.ts, begin, false);
-        sql.addInsert(tableFields.type, type, false);
-        sql.addInsert(tableFields.user_mood, UserMoodUnknown, false);
-        sql.addInsert(tableFields.day_rating, DayRatingUnknown, false);
-        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull, true);
-        sql.addInsert(tableFields.deleted_appuser_id, ExtUuid::NullUuid, true);
-        PGExecutor e(pool, sql);
+        t0012_worktime worktime;
+        worktime.setuser_id(user_id);
+        worktime.setts(begin);
+        worktime.settype(type);
+        worktime.setuser_mood(UserMoodUnknown);
+        worktime.setday_rating(DayRatingUnknown);
+        worktime.store(context);
     }
     {
-        SqlString sql;
-        sql.insert(tableNames.t0012_worktime);
-        sql.addInsert(tableFields.id, reducedsole::uuid4(), false);
-        sql.addInsert(tableFields.user_id, user_id, false);
-        sql.addInsert(tableFields.ts, end, false);
-        sql.addInsert(tableFields.type, type + 1, false);
-        sql.addInsert(tableFields.user_mood, UserMoodUnknown, false);
-        sql.addInsert(tableFields.day_rating, DayRatingUnknown, false);
-        sql.addInsert(tableFields.deleted_datetime, TimePointPostgreSqlNull, true);
-        sql.addInsert(tableFields.deleted_appuser_id, ExtUuid::NullUuid, true);
-        PGExecutor e(pool, sql);
+        t0012_worktime worktime;
+        worktime.setuser_id(user_id);
+        worktime.setts(end);
+        worktime.settype(type);
+        worktime.setuser_mood(UserMoodUnknown);
+        worktime.setday_rating(DayRatingUnknown);
+        worktime.store(context);
     }
 
     return true;
 }
 
-bool DatabaseLogicWorktime::fetchWorktimes(const reducedsole::uuid &user_id,
+bool DatabaseLogicWorktime::fetchWorktimes(CurrentContext &context,
+                                           const reducedsole::uuid &user_id,
                                            const TimePoint &since,
                                            const TimePoint &until,
                                            rapidjson::Value &targetArray,
                                            rapidjson::MemoryPoolAllocator<> &alloc,
                                            std::string &message)
 {
+    t0012_worktime worktime;
     SqlString sql;
-    sql.select(tableNames.t0012_worktime);
+    sql.select(worktime.getORMName());
     sql.addCompare("where", tableFields.user_id, "=", user_id);
     sql += std::string(" and ") + tableFields.ts + " >= :since ";
     sql += std::string(" and ") + tableFields.ts + " <= :until ";
-    sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+    context.opi.addOnlyInsertDBWhere(false, sql);
     MACRO_set(sql, since);
     MACRO_set(sql, until);
     sql += std::string(" order by ") + tableFields.ts;
@@ -373,16 +372,18 @@ bool DatabaseLogicWorktime::fetchWorktimes(const reducedsole::uuid &user_id,
     return true;
 }
 
-bool DatabaseLogicWorktime::deleteWorktime(const reducedsole::uuid &user_id,
+bool DatabaseLogicWorktime::deleteWorktime(CurrentContext &context,
+                                           const reducedsole::uuid &user_id,
                                            const reducedsole::uuid &id,
                                            std::string &message)
 {
     reducedsole::uuid endId(ExtUuid::NullUuid);
     {
+        t0012_worktime worktime;
         SqlString sql;
-        sql.select(tableNames.t0012_worktime);
+        sql.select(worktime.getORMName());
         sql.addCompare("where", tableFields.user_id, "=", user_id);
-        sql.addCompare("and", tableFields.deleted_datetime, "is", TimePointPostgreSqlNull);
+        context.opi.addOnlyInsertDBWhere(false, sql);
         sql += std::string(" and ts >= (select ts from t0012_worktime where id = :id) ");
         sql += std::string(" and type = (select type + 1 from t0012_worktime where id = :id) ");
         sql += "order by ts limit 1";
@@ -393,6 +394,7 @@ bool DatabaseLogicWorktime::deleteWorktime(const reducedsole::uuid &user_id,
             endId = e.uuid(tableFields.id);
         }
     }
+/* FIXME
     SqlString sql;
     sql.update(tableNames.t0012_worktime);
     sql.addSet(tableFields.deleted_datetime, TimePointPostgreSqlNow, false);
@@ -406,6 +408,6 @@ bool DatabaseLogicWorktime::deleteWorktime(const reducedsole::uuid &user_id,
         MACRO_set(sql, endId);
     }
     MACRO_set(sql, id);
-    PGExecutor e(pool, sql);
+    PGExecutor e(pool, sql); */
     return true;
 }

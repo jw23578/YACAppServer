@@ -1,57 +1,28 @@
 #include "handleruploadapp.h"
 #include "orm_implementions/t0001_apps.h"
 #include "orm-mapper/orm2rapidjson.h"
+#include "base64.h"
 
-HandlerUploadApp::HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
-                                   ORMPersistenceInterface &opi,
+HandlerUploadApp::HandlerUploadApp(ORMPersistenceInterface &opi,
                                    PistacheServerInterface &serverInterface,
                                    LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                               opi,
+                             opi,
                              methodNames.uploadApp,
                              TypePost,
-                             loggedInAppUsersContainer),
-    dlua(databaseLogicUserAndApp)
+                             loggedInAppUsersContainer)
 {
-    addMethod(serverInterface, t0027.getORMName(), TypePost);
-    addMethod(serverInterface, t0027.getORMName(), TypeGet);
-    addMethod(serverInterface, t0027.getORMName(), TypeDelete);
 }
 
 void HandlerUploadApp::method(CurrentContext &context)
 {
-    std::string errorMessage;
-    ORM2rapidjson orm2json;
-    if (isMethod(t0027.getORMName()))
+    if (context.appId != t0001_apps::theCreatorApp.app_id)
     {
-        orm2json.fromJson(getPostedData(), t0027);
-        bool appExists(false);
-        if (!dlua.userIsAppOwner(t0027.app_id, context.userId, errorMessage, appExists))
-        {
-            answerOk(errorMessage, false);
-            return;
-        }
-        if (!appExists)
-        {
-            answerOk("app does not exist", false);
-            return;
-        }
-        if (isPost())
-        {
-            dlua.storeAppImage(t0027);
-            answerOk("image stored", true);
-            return;
-        }
-        if (isGet())
-        {
-            // FIXME FIX ME AND IMPLEMENT ME
-        }
-        if (isDelete())
-        {
-            // FIXME FIX ME AND IMPLEMENT ME
-        }
+        answerOk("Only the CreatorApp can Upload Apps", false);
         return;
     }
+    std::string errorMessage;
+    ORM2rapidjson orm2json;
     MACRO_GetString(installation_code);
 
     t0001_apps app;
@@ -61,7 +32,7 @@ void HandlerUploadApp::method(CurrentContext &context)
         return;
     }
 
-    if (!dlua.saveApp(context.userId, app, installation_code, errorMessage))
+    if (!app.saveApp(context, app, installation_code, errorMessage))
     {
         answerOk(errorMessage, false);
         return;

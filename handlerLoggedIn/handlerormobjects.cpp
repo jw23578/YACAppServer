@@ -1,5 +1,4 @@
 #include "handlerormobjects.h"
-#include "orm_implementions/t0027_app_images.h"
 #include "orm_implementions/t0028_message_images.h"
 #include "orm_implementions/t0030_documents.h"
 #include "orm_implementions/t0023_right2rightgroup.h"
@@ -29,7 +28,6 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
     rightsLogic(rightsLogic)
 {
     std::set<std::string> withOwnHandler;
-    withOwnHandler.insert(t0027_app_images().getORMName());
     withOwnHandler.insert(t0028_message_images().getORMName());
     withOwnHandler.insert(t0030_documents().getORMName());
     for (const auto &on: factory.getORMNames())

@@ -18,7 +18,6 @@
 #include "handlerLoggedIn/handlerappuserspace.h"
 #include "handlerLoggedIn/handlerormobjects.h"
 #include "handlerLoggedIn/handler_t0030_documents.h"
-#include "databaselogicuserandapp.h"
 #include "databaselogics.h"
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
@@ -56,7 +55,6 @@ public:
                  YACORMFactory &factory,
                  PGORMPersistence &opi,
                  DatabaseLogics &databaseLogics,
-                 DatabaseLogicUserAndApp &databaseLogicUserAndApp,
                  DatabaseLogicAppUser &databaseLogicAppUser,
                  EMailLogic &emailLogic,
                  int port,

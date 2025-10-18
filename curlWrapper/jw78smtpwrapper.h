@@ -63,7 +63,7 @@ private:
     std::thread theThread;
     ThreadSafeQueue<SMTPWrapper*> mailsToSend;
     SMTPSender();
-    static SMTPSender theInstance;
+    static SMTPSender *theInstance;
 public:
     static SMTPSender &gi();
     void theThreadFunction();

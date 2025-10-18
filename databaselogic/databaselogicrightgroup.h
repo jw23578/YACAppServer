@@ -30,8 +30,6 @@ public:
                      const int right_number,
                      std::string &message);
 
-    bool adminExists(const reducedsole::uuid &app_id,
-                     const std::string &adminGroupName);
 };
 
 #endif // DATABASELOGICRIGHTGROUP_H

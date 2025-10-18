@@ -8,7 +8,6 @@
 #include <fstream>
 #include "extrapidjson.h"
 #include "pgconnectionpool.h"
-#include "databaselogicuserandapp.h"
 #include "emaillogic.h"
 #include "logstatcontroller.h"
 #include "filelogger.h"
@@ -20,9 +19,9 @@
 #include "tests/testdatabaselogics.h"
 #include "tests/testdatabaselogicmessages.h"
 #include "tests/testdatabaselogicappuser.h"
-#include "tests/testdatabaselogicworktime.h"
 #include "tests/testdatabaselogicimagetable.h"
 #include "tests/testorm2postgres.h"
+#include "JWPostgresLib/pgcommandtransactor.h"
 
 #include "curlWrapper/jw78firebasewrapper.h"
 #include "rapidjson/writer.h"
@@ -45,9 +44,18 @@ void testViaCurlMethod()
 }
 
 using namespace std;
+#include "ormpropertyvector.h"
 
 int main(int argc, char **argv)
 {
+    // ORMPropertyVector<ORMUuid> intVector("test");
+    // intVector.addValue(ExtUuid::generateUuid().str());
+    // intVector.addValue(ExtUuid::generateUuid().str());
+    // std::cout << intVector.asString() << std::endl;
+    // return 1;
+#ifndef QT_DEBUG
+    PGCommandTransactor::exitApplicationOnError = true;
+#endif
     LogStatController logStatController(LogStatController::verbose,
                                         "server",
                                         "yacapp");
@@ -126,18 +134,18 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (!json.hasObject("createrApp"))
+    if (!json.hasObject("creatorApp"))
     {
-        std::cerr << "missing createrApp-Object in " << configFilename << std::endl;
+        std::cerr << "missing creatorApp-Object in " << configFilename << std::endl;
         return 1;
     }
-    ExtRapidJSON createrApp(json.getObject("createrApp"));
-    if (createrApp.getString("app_id").size() == 0)
+    ExtRapidJSON creatorApp(json.getObject("creatorApp"));
+    if (creatorApp.getString("app_id").size() == 0)
     {
         std::cerr << "missing app_id in " << configFilename << std::endl;
         return 1;
     }
-    if (createrApp.getString("app_name").size() == 0)
+    if (creatorApp.getString("app_name").size() == 0)
     {
         std::cerr << "missing app_name in " << configFilename << std::endl;
         return 1;
@@ -212,7 +220,7 @@ int main(int argc, char **argv)
     databaseLogicTables.createDatabaseTables();
 
     // check for superuser
-    std::string appId(createrApp.getString("app_id"));
+    std::string appId(creatorApp.getString("app_id"));
     t0002_user superUserProfile;
     CurrentContext context(opi, ExtUuid::stringToUuid(appId), NullUuid);
     if (!opi.selectObject({{superUserProfile.super_user.name(), "true"}}, superUserProfile))
@@ -231,12 +239,11 @@ int main(int argc, char **argv)
         passwordHash.password_hash = superUser.getString("password");
         passwordHash.store(context);
     }
-    t0001_apps theCreaterApp;
-    if (!opi.selectObject({{theCreaterApp.app_id.name(), appId}}, theCreaterApp))
+    if (!opi.selectObject({{t0001_apps::theCreatorApp.app_id.name(), appId}}, t0001_apps::theCreatorApp))
     {
-        theCreaterApp.app_id = appId;
-        theCreaterApp.app_name = createrApp.getString("app_name");
-        theCreaterApp.store(context);
+        t0001_apps::theCreatorApp.app_id = appId;
+        t0001_apps::theCreatorApp.app_name = creatorApp.getString("app_name");
+        t0001_apps::theCreatorApp.store(context);
     }
 
     ORMVector<t0001_apps> allApps;
@@ -245,12 +252,6 @@ int main(int argc, char **argv)
     {
         allApps[i].createDefaults(context);
     }
-
-
-    DatabaseLogicUserAndApp databaseLogicUserAndApp(logStatController,
-                                                    pool,
-                                                    opi);
-
 
 
     DatabaseLogics databaseLogics(logStatController,
@@ -298,7 +299,6 @@ int main(int argc, char **argv)
                         factory,
                         opi,
                         databaseLogics,
-                        databaseLogicUserAndApp,
                         databaseLogics.databaseLogicAppUser,
                         emailLogic,
                         json.getInt("serverPort"),

@@ -99,28 +99,6 @@ void DatabaseLogicTables::createDatabaseTables()
                                {tableFields.read_datetime, pg_timestamp}},
                               {{tableFields.message_id, tableFields.reader_id}});
 
-    utils.createTableIfNeeded(tableNames.t0010_task,
-                              {idPrimaryKey,
-                               {tableFields.task, pg_text},
-                               {tableFields.creater_id, pg_uuid, false, true},
-                               {tableFields.created, pg_timestamp},
-                               {tableFields.finished, pg_timestamp}});
-
-    utils.createTableIfNeeded(tableNames.t0011_task_time,
-                              {idPrimaryKey,
-                               {tableFields.user_id, pg_uuid, false, true},
-                               {tableFields.task_start, pg_timestamp},
-                               {tableFields.task_end, pg_timestamp}});
-
-    utils.createTableIfNeeded(tableNames.t0012_worktime,
-                              {idPrimaryKey,
-                               {tableFields.user_id, pg_uuid, false, true},
-                               {tableFields.ts, pg_timestamp, false, true},
-                               {tableFields.type, pg_int, false, true},
-                               {tableFields.user_mood, pg_int},
-                               {tableFields.day_rating, pg_int},
-                               deletedDateTime,
-                               deletedAppUser});
 
     utils.createTableIfNeeded(tableNames.t0013_images,
                               {{tableFields.id, pg_uuid, true},

@@ -2,17 +2,12 @@
 #define HANDLERUPLOADAPP_H
 
 #include "handlerloggedininterface.h"
-#include "databaselogicuserandapp.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
-#include "orm_implementions/t0027_app_images.h"
 
 class HandlerUploadApp : public HandlerLoggedInInterface
 {
-    t0027_app_images t0027;
-    DatabaseLogicUserAndApp &dlua;
 public:
-    HandlerUploadApp(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
-                     ORMPersistenceInterface &opi,
+    HandlerUploadApp(ORMPersistenceInterface &opi,
                      PistacheServerInterface &serverInterface,
                      LoggedInAppUsersContainer &loggedInAppUsersContainer);
 

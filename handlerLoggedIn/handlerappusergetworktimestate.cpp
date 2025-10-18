@@ -25,7 +25,8 @@ void HandlerAppUserGetWorktimeState::method(CurrentContext &context)
         document.SetObject();
         rapidjson::Value worktimes;
         std::string message;
-        if (!databaseLogics.databaseLogicWorktime.fetchWorktimes(context.userId,
+        if (!databaseLogics.databaseLogicWorktime.fetchWorktimes(context,
+                                                                 context.userId,
                                                                  sinceISO,
                                                                  untilISO,
                                                                  worktimes,
@@ -42,7 +43,8 @@ void HandlerAppUserGetWorktimeState::method(CurrentContext &context)
     std::chrono::system_clock::time_point workStart;
     std::chrono::system_clock::time_point pauseStart;
     std::chrono::system_clock::time_point offSiteWorkStart;
-    if (!databaseLogics.databaseLogicWorktime.currentState(context.userId,
+    if (!databaseLogics.databaseLogicWorktime.currentState(context,
+                                                           context.userId,
                                                            workStart,
                                                            pauseStart,
                                                            offSiteWorkStart))

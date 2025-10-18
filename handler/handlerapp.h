@@ -2,15 +2,11 @@
 #define HANDLERAPP_H
 
 #include "interfaces/pistachehandlerinterface.h"
-#include "databaselogicuserandapp.h"
 
 class HandlerAPP : public PistacheHandlerInterface
 {
-    DatabaseLogicUserAndApp &dlua;
-
 public:
-    HandlerAPP(DatabaseLogicUserAndApp &databaseLogicUserAndApp,
-               ORMPersistenceInterface &opi,
+    HandlerAPP(ORMPersistenceInterface &opi,
                PistacheServerInterface &serverInterface);
 
     // PistacheHandlerInterface interface

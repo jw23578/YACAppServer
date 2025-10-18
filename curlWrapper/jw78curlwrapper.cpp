@@ -184,6 +184,7 @@ void jw78::CurlWrapper::smtpSendMail(const std::string &host,
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&target);
     curl_easy_setopt(curl, CURLOPT_DEBUGDATA, (void *)&target);
     curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, myDebugFunction);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
     CURLcode res(curl_easy_perform(curl));
     curl_slist_free_all(recipients);
     logResult = target.stringDebugTarget;

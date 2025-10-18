@@ -27,8 +27,11 @@ public:
 
     T dequeue(void)
     {
-        std::unique_lock<std::mutex> lock(mutex);
-        condition.wait(lock, [&]{return !dataQueue.empty();});
+        while (dataQueue.size() == 0)
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            condition.wait_for(lock, std::chrono::seconds(10), [&]{return !dataQueue.empty();});
+        }
         T val = dataQueue.front();
         dataQueue.pop();
         return val;

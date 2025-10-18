@@ -39,9 +39,9 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     opi.deleteObject(words2, NullUuid);
 
     t0004_user_logintoken ghost;
-    ORMVector<t0004_user_logintoken> allT0009;
-    opi.fetchAllObjects(allT0009);
-    if (!allT0009.size())
+    ORMVector<t0004_user_logintoken> allLoginToken;
+    opi.fetchAllObjects(allLoginToken);
+    if (!allLoginToken.size())
     {
         return;
     }
@@ -49,16 +49,16 @@ TestORM2Postgres::TestORM2Postgres(PGConnectionPool &pool)
     ORM2rapidjson o2j;
     rapidjson::Document document;
     document.SetObject();
-    for (size_t i(0); i < allT0009.size(); ++i)
+    for (size_t i(0); i < allLoginToken.size(); ++i)
     {
-        YACBaseObject &o(allT0009[i]);
+        YACBaseObject &o(allLoginToken[i]);
         o2j.toJson(o,
                    document,
                    document.GetAllocator());
 
     }
     rapidjson::Value array;
-    o2j.toJson(allT0009, array, document.GetAllocator());
+    o2j.toJson(allLoginToken, array, document.GetAllocator());
     document.AddMember("array", array, document.GetAllocator());
 
     rapidjson::StringBuffer buffer;

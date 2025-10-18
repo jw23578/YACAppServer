@@ -340,7 +340,7 @@ void jw78::SMTPSender_hook(jw78::SMTPSender *sender)
     sender->theThreadFunction();
 }
 
-jw78::SMTPSender jw78::SMTPSender::theInstance;
+jw78::SMTPSender *jw78::SMTPSender::theInstance = 0;
 
 jw78::SMTPSender::SMTPSender():stopped(false),
     theThread(SMTPSender_hook, this)
@@ -349,7 +349,11 @@ jw78::SMTPSender::SMTPSender():stopped(false),
 
 jw78::SMTPSender &jw78::SMTPSender::gi()
 {
-    return theInstance;
+    if (!theInstance)
+    {
+        theInstance = new SMTPSender;
+    }
+    return *theInstance;
 }
 
 void jw78::SMTPSender::theThreadFunction()

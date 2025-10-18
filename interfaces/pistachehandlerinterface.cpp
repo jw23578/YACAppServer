@@ -7,8 +7,26 @@
 #include "beginendtrack.h"
 #include "serverHeader/appidheader.h"
 
+void PistacheHandlerInterface::logACurlCall(const Pistache::Rest::Request &request) const
+{
+    std::string curl("curl -X ");
+    curl += std::string(Pistache::Http::methodString(request.method())) + " ";
+    std::string url = request.address().host() + ":" + ExtString::toString(23578);
+    url += request.resource();
+    url += request.query().as_str();
+    url += std::string(request.query().as_str().size() ? "&" : "?") + "prettyJson=true";
+    curl += ExtString::quote(url, "'");
+    for (const auto &h: request.headers().rawList())
+    {
+        curl += std::string(" -H ") + ExtString::quote(h.second.name() + ": " + h.second.value(), "'");
+    }
+    bool wrapAtWords(false);
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, curl, wrapAtWords);
+}
+
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
+    logACurlCall(request);
     BeginEndTrack bet(__FILE__, __LINE__, request.resource());
     this->request = &request;
     this->response = &response;

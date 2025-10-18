@@ -9,6 +9,7 @@
 #include "rapidjson/document.h"
 #include "JWUtils/definitions.h"
 #include "pgexecutor.h"
+#include "orm_implementions/currentcontext.h"
 
 class DatabaseLogicWorktime
 {
@@ -29,13 +30,14 @@ public:
     };
 private:
 
-    bool selectWorktimeBefore(const reducedsole::uuid &user_id,
+    bool selectWorktimeBefore(CurrentContext &context, const reducedsole::uuid &user_id,
                               const TimePoint &ts,
                               PGExecutor &e);
-    bool selectWorktimeAfter(const reducedsole::uuid &user_id,
-                              const TimePoint &ts,
+    bool selectWorktimeAfter(CurrentContext &context,
+                             const reducedsole::uuid &user_id,
+                             const TimePoint &ts,
                              const std::set<WorktimeType> &typesAllowed,
-                              PGExecutor &e);
+                             PGExecutor &e);
 public:
     DatabaseLogicWorktime(LogStatController &logStatController,
                           PGConnectionPool &pool);
@@ -60,12 +62,14 @@ public:
         DayRating5
     };
 
-    bool currentState(const reducedsole::uuid &user_id,
+    bool currentState(CurrentContext &context,
+                      const reducedsole::uuid &user_id,
                       std::chrono::system_clock::time_point &workStart,
                       std::chrono::system_clock::time_point &pauseStart,
                       std::chrono::system_clock::time_point &offSiteStart);
 
-    bool insertWorktime(const reducedsole::uuid &user_id,
+    bool insertWorktime(CurrentContext &context,
+                        const reducedsole::uuid &user_id,
                         const std::chrono::system_clock::time_point ts,
                         const WorktimeType type,
                         const UserMood user_mood,
@@ -75,20 +79,23 @@ public:
                         std::chrono::system_clock::time_point &offSiteWorkStart,
                         std::string &message);
 
-    bool insertWorktimeBeginEnd(const reducedsole::uuid &user_id,
+    bool insertWorktimeBeginEnd(CurrentContext &context,
+                                const reducedsole::uuid &user_id,
                                 const TimePoint &begin,
                                 const TimePoint &end,
                                 const WorktimeType type,
                                 std::string &message);
 
-    bool fetchWorktimes(const reducedsole::uuid &user_id,
+    bool fetchWorktimes(CurrentContext &context,
+                        const reducedsole::uuid &user_id,
                         const TimePoint &since,
                         const TimePoint &until,
                         rapidjson::Value &targetArray,
                         rapidjson::MemoryPoolAllocator<> &alloc,
                         std::string &message);
 
-    bool deleteWorktime(const reducedsole::uuid &user_id,
+    bool deleteWorktime(CurrentContext &context,
+                        const reducedsole::uuid &user_id,
                         const reducedsole::uuid &id,
                         std::string &message);
 };

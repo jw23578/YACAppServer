@@ -98,6 +98,7 @@ private:
     Pistache::Http::ResponseWriter *response;
     rapidjson::Document postedData;
     const rapidjson::Value emptyValue;
+    void logACurlCall(const Pistache::Rest::Request &request) const;
     void internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response);
 
     void answer(Pistache::Http::Code code,

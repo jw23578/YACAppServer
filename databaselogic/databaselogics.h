@@ -10,7 +10,6 @@
 #include "databaselogicmessages.h"
 #include "databaselogicrightgroup.h"
 #include "databaselogic/databaselogicspaces.h"
-#include "databaselogic/databaselogicuserandapp.h"
 #include "databaselogicthirdparty.h"
 #include "rightsLogic/rightslogic.h"
 #include "ormpersistenceinterface.h"
@@ -33,7 +32,6 @@ public:
     DatabaseLogicMessages databaseLogicMessages;
     DatabaseLogicRightGroup databaseLogicRightGroup;
     DatabaseLogicSpaces databaseLogicSpaces;
-    DatabaseLogicUserAndApp databaseLogicUserAndApp;
     DatabaseLogicThirdParty databaseLogicThirdParty;
 
     RightsLogic rightsLogic;
