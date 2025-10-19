@@ -2,15 +2,8 @@
 #include "orm_implementions/t0028_message_images.h"
 #include "orm_implementions/t0030_documents.h"
 #include "orm_implementions/t0023_right2rightgroup.h"
-
-void HandlerORMObjects::storeObject(YACBaseObject &object)
-{
-    orm2postgres.insertOrUpdate(object);
-    std::map<std::string, std::string> data;
-    data[tableFields.id] = object.getPropertyToString(tableFields.id);
-    answerOk("object stored", true, data);
-}
-
+#include "opencvwrapper/opencvwrapper.h"
+#include "base64.h"
 HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
                                      YACORMFactory &factory,
                                      PGConnectionPool &pool,
@@ -18,10 +11,11 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
                                      PistacheServerInterface &serverInterface,
                                      LoggedInAppUsersContainer &loggedInAppUsersContainer):
     HandlerLoggedInInterface(serverInterface,
-                               databaseLogics.getOpi(),
+                             databaseLogics.getOpi(),
                              "",
                              TypeGet,
                              loggedInAppUsersContainer),
+    largeobjectORMName(t0009_largeobject().getORMName()),
     databaseLogics(databaseLogics),
     factory(factory),
     orm2postgres(pool),
@@ -90,6 +84,47 @@ void HandlerORMObjects::method(CurrentContext &context)
             answerOk(true, document);
             return;
         }
+        std::string ormName(getMethod().substr(1));
+        std::unique_ptr<AppBaseObject> object(static_cast<AppBaseObject*>(factory.create(ormName)));
+        if (!object)
+        {
+            answerBad(ormName + " not found");
+            return;
+        }
+        reducedsole::uuid idUuid;
+        if (!getUuid(object->getIDProperty()->name(), idUuid, true))
+        {
+            return;
+        }
+        object->load(context, idUuid);
+        if (ormName == largeobjectORMName)
+        {
+            MACRO_GetInt(desired_width);
+            MACRO_GetInt(desired_height);
+            t0009_largeobject *largeobject(static_cast<t0009_largeobject*>(object.get()));
+            std::basic_string<std::byte> imageData;
+            if (!context.opi.fetchBlob(largeobject->database_blob_id, imageData))
+            {
+                answerOk("could not load imageData", false);
+                return;
+            }
+            if (desired_height && desired_width)
+            {
+                OpenCVWrapper cv;
+                std::string errorMessage;
+                if (!cv.resizeImage(imageData, desired_width, desired_height, errorMessage))
+                {
+                    answerOk(errorMessage, false);
+                    return;
+                }
+            }
+            largeobject->settransfer_base64(base64_encode(imageData));
+        }
+        rapidjson::Document document;
+        document.SetObject();
+        orm2json.toJson(*object, document);
+        answerOk(true, document);
+        return;
     }
     if (isPost())
     {
@@ -102,27 +137,31 @@ void HandlerORMObjects::method(CurrentContext &context)
             {
                 return;
             }
-            storeObject(*object);
+            object->store(context);
+            std::map<std::string, std::string> data;
+            data[tableFields.id] = object->getPropertyToString(tableFields.id);
+            answerOk("object stored", true, data);
             return;
         }
+
         for (const auto &on: factory.getORMNames())
         {
             if (isMethod(on))
             {
-                std::unique_ptr<YACBaseObject> baseObject(static_cast<YACBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
+                std::unique_ptr<AppBaseObject> baseObject(static_cast<AppBaseObject*>(orm2json.fromJson(getPostedData(), factory)));
                 if (answerMissingRight(rightsLogic.appUserMissesRight(context, context.userId, baseObject->changeRight)))
                 {
                     return;
-                }
-                if (baseObject->propertyExists(tableFields.app_id) && baseObject->propertyIsNull(tableFields.app_id))
+                }                
+                if (isMethod(largeobjectORMName))
                 {
-                    baseObject->setPropertyFromString(tableFields.app_id, context.appId.str());
+                    t0009_largeobject *largeobject(static_cast<t0009_largeobject*>(baseObject.get()));
+                    largeobject->setdatabase_blob_id(context.opi.decodeAndStoreBase64(largeobject->transfer_base64, context.userId));
                 }
-                if (baseObject->propertyExists(tableFields.creater_id) && baseObject->propertyIsNull(tableFields.creater_id))
-                {
-                    baseObject->setPropertyFromString(tableFields.creater_id, context.userId.str());
-                }
-                storeObject(*baseObject);
+                baseObject->store(context);
+                std::map<std::string, std::string> data;
+                data[tableFields.id] = baseObject->getPropertyToString(tableFields.id);
+                answerOk("object stored", true, data);
                 return;
             }
         }

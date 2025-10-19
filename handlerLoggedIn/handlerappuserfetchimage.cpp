@@ -1,6 +1,6 @@
 #include "handlerappuserfetchimage.h"
 #include "opencvwrapper/opencvwrapper.h"
-#include "utils/base64.h"
+#include "base64.h"
 
 HandlerAppUserFetchImage::HandlerAppUserFetchImage(PistacheServerInterface &serverInterface,
                                                    DatabaseLogics &databaseLogics,

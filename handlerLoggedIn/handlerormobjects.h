@@ -13,13 +13,13 @@
 
 #include "orm_implementions/t0021_right_group.h"
 #include "orm_implementions/t0022_right_group2user.h"
+#include "orm_implementions/t0009_largeobject.h"
 
 class HandlerORMObjects : public HandlerLoggedInInterface
 {
     t0021_right_group t0021;
     t0022_right_group2user t0022;
-
-    void storeObject(YACBaseObject &object);
+    const std::string largeobjectORMName;
 
     const TableFields tableFields;
     DatabaseLogics &databaseLogics;

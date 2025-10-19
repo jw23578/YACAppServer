@@ -139,6 +139,7 @@ protected:
                   rapidjson::Document &d);
     void answerOkHtml(const std::string &html);
     const rapidjson::Document &getPostedData() const;
+    const std::string getMethod() const;
     bool isMethod(const std::string &method) const;
     bool isGet() const;
     bool isPost() const;

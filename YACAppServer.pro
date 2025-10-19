@@ -95,7 +95,6 @@ SOURCES += \
         tests/testtimepoint.cpp \
         tests/testviacurl.cpp \
         thirdparties/thirdcurlrequests.cpp \
-        utils/base64.cpp \
         utils/extmap.cpp \
         main.cpp \
         yacappserver.cpp
@@ -163,7 +162,6 @@ HEADERS += \
   tests/testtimepoint.h \
   tests/testviacurl.h \
   thirdparties/thirdcurlrequests.h \
-  utils/base64.h \
   utils/extmap.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \

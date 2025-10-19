@@ -1,6 +1,6 @@
 #include "handlerapp.h"
 #include "opencvwrapper/opencvwrapper.h"
-#include "utils/base64.h"
+#include "base64.h"
 #include "orm_implementions/t0001_apps.h"
 #include "orm_implementions/t0009_largeobject.h"
 #include "orm_implementions/t0010_largeobject2object.h"
@@ -28,7 +28,6 @@ void HandlerAPP::method(CurrentContext &context)
         MACRO_GetMandatoryUuid(imageId);
         MACRO_GetInt(desired_width);
         MACRO_GetInt(desired_height);
-        std::basic_string<std::byte> imageData;
         std::string errorMessage;
         t0009_largeobject appImage;
         if (!appImage.load(context, imageId))
@@ -36,6 +35,7 @@ void HandlerAPP::method(CurrentContext &context)
             answerOk("could not find appImage", false);
             return;
         }
+        std::basic_string<std::byte> imageData;
         if (!context.opi.fetchBlob(appImage.database_blob_id, imageData))
         {
             answerOk("could not load imageData", false);

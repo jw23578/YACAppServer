@@ -6,10 +6,10 @@ PGORMPersistence::PGORMPersistence(ORMSqlInterface &sqlInterface):ORMPersistence
 ORMUuid PGORMPersistence::storeBlob(const std::basic_string<std::byte> &data, const reducedsole::uuid &created_by_t0002_id)
 {
     t0035_blobs t0035;
-    t0035.setid(ExtUuid::generateUuid());
+    t0035.setblob_id(ExtUuid::generateUuid());
     t0035.setblob_oid(ORMPersistenceInterface::storeBlob(data));
     insertObject(t0035, created_by_t0002_id);
-    return t0035.getid();
+    return t0035.getblob_id();
 }
 
 bool PGORMPersistence::fetchBlob(const ORMUuid &blobUuid, std::basic_string<std::byte> &data)

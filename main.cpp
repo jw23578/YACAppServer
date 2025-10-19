@@ -32,6 +32,7 @@
 #include "coutlogger.h"
 #include "postgres/pgormpersistence.h"
 #include "orm_implementions/t0003_user_passwordhashes.h"
+#include "orm_implementions/t0010_largeobject2object.h"
 #include "tests/testviacurl.h"
 
 ORMPersistenceInterface *testOPI = 0;
@@ -64,7 +65,8 @@ int main(int argc, char **argv)
 
     bool runTestsViaCurl(false);
     bool runTests(false);
-    bool cleanup(false);
+    bool bootstrapDatabase(false);
+    bool cleanupDatabase(false);
     for (int i(0); i < argc; ++i)
     {
         std::string arg(argv[i]);
@@ -76,9 +78,13 @@ int main(int argc, char **argv)
         {
             runTests = true;
         }
-        if (arg == "cleanup")
+        if (arg == "bootstrapDatabase")
         {
-            cleanup = true;
+            bootstrapDatabase = true;
+        }
+        if (arg == "cleanupDatabase")
+        {
+            cleanupDatabase = true;
         }
     }
     std::srand(std::time(nullptr));
@@ -174,7 +180,7 @@ int main(int argc, char **argv)
         superOpi.dropDatabase("test");
         superOpi.dropRole("test");
 
-        if (cleanup)
+        if (bootstrapDatabase)
         {
             superOpi.dropDatabase("yacapp_database");
             superOpi.createDatabase("yacapp_database", "yacapp_user");
@@ -218,6 +224,19 @@ int main(int argc, char **argv)
     }
     std::cout << "PGCrypto is installed\n";
     databaseLogicTables.createDatabaseTables();
+
+    if (cleanupDatabase)
+    {
+        for (const auto &ot: factory.getORMNames())
+        {
+            std::unique_ptr<YACBaseObject> object(factory.create(ot));
+            opi.cleanupORMTable(*object);
+            SqlString sql;
+            sql.delet(t0010_largeobject2object().getORMName());
+            sql.addCompare("where", t0010_largeobject2object().largeobject_id.name(), "not in", "(select largeobject_id from t0009_largeobject)", false);
+            sqlImplementation.runCleanUpSql(sql);
+        }
+    }
 
     // check for superuser
     std::string appId(creatorApp.getString("app_id"));

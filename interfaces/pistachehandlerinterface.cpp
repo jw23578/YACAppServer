@@ -127,6 +127,11 @@ bool PistacheHandlerInterface::isPut() const
     return request->method() == Pistache::Http::Method::Put;
 }
 
+const std::string PistacheHandlerInterface::getMethod() const
+{
+    return request->resource();
+}
+
 bool PistacheHandlerInterface::isMethod(const std::string &method) const
 {
     return request->resource() == method || request->resource() == "/" + method;
