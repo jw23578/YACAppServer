@@ -18,6 +18,8 @@
 #include "handlerLoggedIn/handlerappuserspace.h"
 #include "handlerLoggedIn/handlerormobjects.h"
 #include "handlerLoggedIn/handler_t0030_documents.h"
+#include "handlerLoggedIn/handlertex2pdf.h"
+#include "handlerLoggedIn/handleribancheck.h"
 #include "databaselogics.h"
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
@@ -48,6 +50,9 @@ class YACAppServer: public PistacheServerInterface
     HandlerAppUserSpace handlerAppUserSpace;
     HandlerORMObjects handlerORMObjects;
     HandlerStoreMessage handlerStoreMesage;
+
+    HandlerTex2Pdf handlerTex2Pdf;
+    HandlerIBANCheck handlerIBANCheck;
 
 
 public:

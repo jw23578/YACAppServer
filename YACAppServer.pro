@@ -67,9 +67,11 @@ SOURCES += \
         handlerLoggedIn/handlerappuserspace.cpp \
         handlerLoggedIn/handlerappuserupdatemessagestates.cpp \
         handlerLoggedIn/handlerappuserupdateprofile.cpp \
+        handlerLoggedIn/handleribancheck.cpp \
         handlerLoggedIn/handlerloggedininterface.cpp \
         handlerLoggedIn/handlerormobjects.cpp \
         handlerLoggedIn/handlerstoremessage.cpp \
+        handlerLoggedIn/handlertex2pdf.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
@@ -134,9 +136,11 @@ HEADERS += \
   handlerLoggedIn/handlerappuserspace.h \
   handlerLoggedIn/handlerappuserupdatemessagestates.h \
   handlerLoggedIn/handlerappuserupdateprofile.h \
+  handlerLoggedIn/handleribancheck.h \
   handlerLoggedIn/handlerloggedininterface.h \
   handlerLoggedIn/handlerormobjects.h \
   handlerLoggedIn/handlerstoremessage.h \
+  handlerLoggedIn/handlertex2pdf.h \
   handlerLoggedIn/handleruploadapp.h \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
@@ -175,4 +179,5 @@ DISTFILES += \
   go_psql_local.sh \
   intern_doc.txt \
   t0004_user_logintoken.json \
+  tex2pdf.json \
   updateProfile.json

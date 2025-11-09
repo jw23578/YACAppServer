@@ -279,7 +279,7 @@ void HandlerUser::method(CurrentContext &context)
         t0002_user user;
         if (!user.lookupUser(context, loginEMail, message))
         {
-            answerOk("LoginEMail/User not found. Please check your LoginEMail or register first.", false);
+            answerOk(message, false);
             return;
         }
         context.userId = user.user_id;

@@ -30,10 +30,13 @@ void HandlerAPP::method(CurrentContext &context)
         MACRO_GetInt(desired_height);
         std::string errorMessage;
         t0009_largeobject appImage;
-        if (!appImage.load(context, imageId))
         {
-            answerOk("could not find appImage", false);
-            return;
+            CurrentContext::IgnoreAppIdGuard contextGuard(context);
+            if (!appImage.load(context, imageId))
+            {
+                answerOk("could not find appImage", false);
+                return;
+            }
         }
         std::basic_string<std::byte> imageData;
         if (!context.opi.fetchBlob(appImage.database_blob_id, imageData))
@@ -103,7 +106,7 @@ void HandlerAPP::method(CurrentContext &context)
     std::string message;
     if (!app.fetchOneApp(context, current_installed_version, installation_code, message))
     {
-        answerOk("app not found", false);
+        answerOk(message, false);
         return;
     }
     if (!app.installation_code_ok)
@@ -113,10 +116,11 @@ void HandlerAPP::method(CurrentContext &context)
     }
     if (app.app_version <= current_installed_version)
     {
-        answerOk("pp version is up to date", false);
+        answerOk("app version is up to date", false);
         return;
     }
     rapidjson::Document target;
+    target.SetObject();
     ExtRapidJSONWriter json(target, target.GetAllocator());
     json.addMember(app.app_idORM().name(), app.app_id.asString());
     json.addMember(app.app_nameORM().name(), app.app_name.asString());

@@ -21,7 +21,7 @@ void PistacheHandlerInterface::logACurlCall(const Pistache::Rest::Request &reque
         curl += std::string(" -H ") + ExtString::quote(h.second.name() + ": " + h.second.value(), "'");
     }
     bool wrapAtWords(false);
-    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, curl, wrapAtWords);
+    LogStatController::slog(__FILE__, __LINE__, LogStatController::verbose, std::string("\n\n") + curl + "\n", wrapAtWords);
 }
 
 void PistacheHandlerInterface::internalMethod(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)

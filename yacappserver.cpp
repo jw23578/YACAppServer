@@ -73,7 +73,9 @@ YACAppServer::YACAppServer(const std::string &firebaseApiKey,
                        deviceTokenCache,
                        databaseLogics,
                        *this,
-                       loggedInAppUsersContainer)
+                       loggedInAppUsersContainer),
+    handlerTex2Pdf(opi, *this, loggedInAppUsersContainer),
+    handlerIBANCheck(opi,*this, loggedInAppUsersContainer)
 {
     Pistache::Http::Header::Registrar<LoginEMailHeader>();
     Pistache::Http::Header::Registrar<LoginTokenHeader>();

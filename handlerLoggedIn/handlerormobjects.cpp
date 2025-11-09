@@ -156,6 +156,11 @@ void HandlerORMObjects::method(CurrentContext &context)
                 if (isMethod(largeobjectORMName))
                 {
                     t0009_largeobject *largeobject(static_cast<t0009_largeobject*>(baseObject.get()));
+                    if (largeobject->large_object_meaning == t0009_largeobject::LOMunknown)
+                    {
+                        answerOk(largeobject->large_object_meaning.name() + " must be set", false);
+                        return;
+                    }
                     largeobject->setdatabase_blob_id(context.opi.decodeAndStoreBase64(largeobject->transfer_base64, context.userId));
                 }
                 baseObject->store(context);
