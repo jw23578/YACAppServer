@@ -22,7 +22,9 @@ LIBS += \
     -lpistache \
     -L/usr/local/lib \
     -lpqxx -lpq \
-    -lcurl -lpthread
+    -lcurl -lpthread \
+    -lpugixml
+
 LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
 
 INCLUDEPATH += utils
@@ -73,6 +75,7 @@ SOURCES += \
         handlerLoggedIn/handlerstoremessage.cpp \
         handlerLoggedIn/handlertex2pdf.cpp \
         handlerLoggedIn/handleruploadapp.cpp \
+        handlerLoggedIn/handlerxrechnung.cpp \
         interfaces/extpistache.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
@@ -99,6 +102,7 @@ SOURCES += \
         thirdparties/thirdcurlrequests.cpp \
         utils/extmap.cpp \
         main.cpp \
+        xrechnunggenerator.cpp \
         yacappserver.cpp
 
 HEADERS += \
@@ -142,6 +146,7 @@ HEADERS += \
   handlerLoggedIn/handlerstoremessage.h \
   handlerLoggedIn/handlertex2pdf.h \
   handlerLoggedIn/handleruploadapp.h \
+  handlerLoggedIn/handlerxrechnung.h \
   interfaces/extpistache.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
@@ -169,10 +174,12 @@ HEADERS += \
   utils/extmap.h \
   utils/jw78Macros.h \
   utils/threadsafequeue.h \
+  xrechnunggenerator.h \
   yacappserver.h
 
 DISTFILES += \
   .gitignore \
+  XRechnung.json \
   YACAppServerConfig.json \
   curl-format.txt \
   deployToJW78.sh \

@@ -9,7 +9,7 @@
 #include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <ctime>
-#include "utils/base64.h"
+#include "base64.h"
 
 
 std::string jw78::SMTPWrapper::defaultUser;

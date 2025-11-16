@@ -45,7 +45,6 @@ void testViaCurlMethod()
 }
 
 using namespace std;
-#include "ormpropertyvector.h"
 
 int main(int argc, char **argv)
 {

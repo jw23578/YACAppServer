@@ -20,6 +20,7 @@
 #include "handlerLoggedIn/handler_t0030_documents.h"
 #include "handlerLoggedIn/handlertex2pdf.h"
 #include "handlerLoggedIn/handleribancheck.h"
+#include "handlerLoggedIn/handlerxrechnung.h"
 #include "databaselogics.h"
 #include "emaillogic.h"
 #include "loggedincontainer/loggedinappuserscontainer.h"
@@ -53,6 +54,7 @@ class YACAppServer: public PistacheServerInterface
 
     HandlerTex2Pdf handlerTex2Pdf;
     HandlerIBANCheck handlerIBANCheck;
+    HandlerXRechnung handlerXRechnung;
 
 
 public:

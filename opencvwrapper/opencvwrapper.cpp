@@ -1,7 +1,7 @@
 #include "opencvwrapper.h"
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
-#include "utils/base64.h"
+#include "base64.h"
 
 OpenCVWrapper::OpenCVWrapper()
 {
