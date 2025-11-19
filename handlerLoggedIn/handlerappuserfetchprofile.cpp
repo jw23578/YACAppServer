@@ -6,13 +6,13 @@ HandlerAppUserFetchProfile::HandlerAppUserFetchProfile(DatabaseLogics &databaseL
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              methodNames.fetchProfile,
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
     addMethod(serverInterface,
               methodNames.fetchMyProfile,
-              TypeGet);
+              MethodInfo::TypeGet);
 }
 
 void HandlerAppUserFetchProfile::method(CurrentContext &context)

@@ -6,7 +6,7 @@ HandlerAppUserUpdateMessageStates::HandlerAppUserUpdateMessageStates(PistacheSer
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              "/updateMessageStates",
-                             TypePost,
+                             MethodInfo::TypePost,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {

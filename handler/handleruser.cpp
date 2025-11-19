@@ -102,13 +102,13 @@ HandlerUser::HandlerUser(LoggedInAppUsersContainer &loggedInUsersContainer,
     databaseLogics(databaseLogics),
     deviceTokenCache(deviceTokenCache)
 {
-    addMethod(serverInterface, methodNames.loginUser, TypePost);
-    addMethod(serverInterface, methodNames.userLoggedIn, TypeGet);
-    addMethod(serverInterface, methodNames.registerUser, TypePost);
-    addMethod(serverInterface, methodNames.requestVerifyToken, TypePost);
-    addMethod(serverInterface, methodNames.verifyUser, TypePost);
-    addMethod(serverInterface, methodNames.updatePasswordUser, TypePost);
-    addMethod(serverInterface, methodNames.requestUpdatePasswordUser, TypePost);
+    addMethod(serverInterface, methodNames.loginUser, MethodInfo::TypePost);
+    addMethod(serverInterface, methodNames.userLoggedIn, MethodInfo::TypeGet);
+    addMethod(serverInterface, methodNames.registerUser, MethodInfo::TypePost);
+    addMethod(serverInterface, methodNames.requestVerifyToken, MethodInfo::TypePost);
+    addMethod(serverInterface, methodNames.verifyUser, MethodInfo::TypePost);
+    addMethod(serverInterface, methodNames.updatePasswordUser, MethodInfo::TypePost);
+    addMethod(serverInterface, methodNames.requestUpdatePasswordUser, MethodInfo::TypePost);
 }
 
 void HandlerUser::method(CurrentContext &context)
@@ -198,7 +198,9 @@ void HandlerUser::method(CurrentContext &context)
             answerOk(message, false);
             return;
         }
-        emailLogic.sendVerifyTokenMail(loginEMail, user.verify_token);
+        emailLogic.sendVerifyTokenMail(loginEMail,
+                                       user.verify_token,
+                                       serverInterface.getBaseUrl() +std::string("/verify.html?token=") + user.verify_token.asString());
         answerOk("verifyToken created and sended",
                  true);
         return;
@@ -218,7 +220,9 @@ void HandlerUser::method(CurrentContext &context)
             answerOk(message, false);
             return;
         }
-        emailLogic.sendPleaseVerifyMail(loginEMail, newUser.verify_token);
+        emailLogic.sendPleaseVerifyMail(loginEMail,
+                                        newUser.verify_token,
+                                        serverInterface.getBaseUrl() +std::string("/verify.html?token=") + newUser.verify_token.asString());
         answerOk("appuser registered, please verify", true);
         return;
     }

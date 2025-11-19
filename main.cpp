@@ -319,6 +319,7 @@ int main(int argc, char **argv)
                         databaseLogics,
                         databaseLogics.databaseLogicAppUser,
                         emailLogic,
+                        json.getString("baseUrlWithoutPort"),
                         json.getInt("serverPort"),
                         json.getString("serverCertFilename"),
                         json.getString("serverKeyFilename"));

@@ -77,6 +77,8 @@ image.jpg
 YACAppServerConfig.json
 updateProfile.json
 t0004_user_logintoken.json
+XRechnung.json
+tex2pdf.json
 intern_*
 deploy.*
 *.sh

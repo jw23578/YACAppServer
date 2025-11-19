@@ -20,10 +20,12 @@ public:
                std::string smtpPassword);
 
     void sendVerifyTokenMail(const std::string &loginEMail,
-                             const std::string &verifyToken);
+                             const std::string &verifyToken,
+                             const std::string &verifyUrl);
 
     void sendPleaseVerifyMail(const std::string &loginEMail,
-                              const std::string &verifyToken);
+                              const std::string &verifyToken,
+                              const std::string &verifyUrl);
 
     void sendPleaseUpdatePasswordMail(const std::string &loginEMail,
                                       const std::string &updatePasswordToken);

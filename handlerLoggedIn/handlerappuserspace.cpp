@@ -6,28 +6,28 @@ HandlerAppUserSpace::HandlerAppUserSpace(DatabaseLogics &databaseLogics,
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              methodNames.fetchSpaces,
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
     addMethod(serverInterface,
               methodNames.insertSpace,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.updateSpace,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.deleteSpace,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.fetchSpace,
-              TypeGet);
+              MethodInfo::TypeGet);
     addMethod(serverInterface,
               methodNames.requestSpaceAccess,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.spaceRequestResultSeen,
-              TypePost);
+              MethodInfo::TypePost);
 }
 
 void HandlerAppUserSpace::method(CurrentContext &context)

@@ -5,7 +5,7 @@ HandlerPages::HandlerPages(PistacheServerInterface &serverInterface,
     PistacheHandlerInterface(serverInterface,
                              opi,
                              "*",
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              TypeNoLoginNeeded)
 {
     appIdNeeded = false;
@@ -13,6 +13,26 @@ HandlerPages::HandlerPages(PistacheServerInterface &serverInterface,
 
 void HandlerPages::method(CurrentContext &context)
 {
+    if (requestRessource() == "/methods.html")
+    {
+        std::string answer("<!DOCTYPE html>"
+                           "<html lang=\"de\"> "
+                           "<head>"
+                           "<meta charset=\"utf-8\">"
+                           "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+                           "<title>YACAppServer Methods</title>"
+                           "</head>"
+                           "<body>");
+        answer += serverInterface.getBaseUrl() + "<br><br>";
+        for (const auto &mi: serverInterface.allMethods)
+        {
+            answer += mi.getTypeAsString() + " " + mi.getMethod() + "<br>";
+        }
+        answer += std::string("</body>"
+                           "</html>");
+        answerOkHtml(answer);
+        return;
+    }
     if (requestRessource() == "/info.html")
     {
         answerOk("info.html", true);

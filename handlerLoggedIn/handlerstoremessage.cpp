@@ -12,14 +12,14 @@ HandlerStoreMessage::HandlerStoreMessage(const std::string &firebaseApiKey,
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              "/storeMessage",
-                             TypePost,
+                             MethodInfo::TypePost,
                              loggedInAppUsersContainer),
     firebaseApiKey(firebaseApiKey),
     deviceTokenCache(deviceTokenCache),
     databaseLogics(databaseLogics)
 {
-    addMethod(serverInterface, t0028.getORMName(), TypePost);
-    addMethod(serverInterface, t0028.getORMName(), TypeGet);
+    addMethod(serverInterface, t0028.getORMName(), MethodInfo::TypePost);
+    addMethod(serverInterface, t0028.getORMName(), MethodInfo::TypeGet);
 }
 
 void HandlerStoreMessage::method(CurrentContext &context)

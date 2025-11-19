@@ -64,6 +64,7 @@ public:
                  DatabaseLogics &databaseLogics,
                  DatabaseLogicAppUser &databaseLogicAppUser,
                  EMailLogic &emailLogic,
+                 const std::string &baseUrlWithoutPort,
                  int port,
                  const std::string &certFilename,
                  const std::string &keyFilename);

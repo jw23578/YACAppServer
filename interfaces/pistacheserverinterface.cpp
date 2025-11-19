@@ -1,9 +1,12 @@
 #include "pistacheserverinterface.h"
 #include "logstatcontroller.h"
+#include "extstring.h"
 
-PistacheServerInterface::PistacheServerInterface(int port,
+PistacheServerInterface::PistacheServerInterface(const std::string &baseUrlWithoutPort,
+                                                 int port,
                                                  const std::string &certFilename,
                                                  const std::string &keyFilename):
+    baseUrlWithoutPort(baseUrlWithoutPort),
     addr(Pistache::Ipv4::any(), Pistache::Port(port)),
     server(addr),
     certFilename(certFilename),
@@ -34,4 +37,9 @@ void PistacheServerInterface::serve()
 
     server.serve();
 
+}
+
+const std::string PistacheServerInterface::getBaseUrl() const
+{
+    return baseUrlWithoutPort + ":" + ExtString::toString(server.getPort());
 }

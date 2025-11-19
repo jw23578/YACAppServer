@@ -9,7 +9,7 @@ HandlerUploadApp::HandlerUploadApp(ORMPersistenceInterface &opi,
     HandlerLoggedInInterface(serverInterface,
                              opi,
                              methodNames.uploadApp,
-                             TypePost,
+                             MethodInfo::TypePost,
                              loggedInAppUsersContainer)
 {
 }

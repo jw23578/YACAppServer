@@ -7,19 +7,19 @@ HandlerAppUserRightGroup::HandlerAppUserRightGroup(DatabaseLogics &databaseLogic
     HandlerLoggedInInterface(serverInterface,
                              databaseLogics.getOpi(),
                              "",
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
     addMethod(serverInterface,
               methodNames.deleteRightGroup,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.fetchRightGroup,
-              TypeGet);
+              MethodInfo::TypeGet);
     addMethod(serverInterface,
               methodNames.fetchRightGroupMember,
-              TypeGet);
+              MethodInfo::TypeGet);
 }
 
 void HandlerAppUserRightGroup::method(CurrentContext &context)

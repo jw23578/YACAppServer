@@ -77,6 +77,7 @@ SOURCES += \
         handlerLoggedIn/handleruploadapp.cpp \
         handlerLoggedIn/handlerxrechnung.cpp \
         interfaces/extpistache.cpp \
+        interfaces/methodinfo.cpp \
         interfaces/pistachehandlerinterface.cpp \
         interfaces/pistacheserverinterface.cpp \
         loggedincontainer/loggedinappuserscontainer.cpp \
@@ -148,6 +149,7 @@ HEADERS += \
   handlerLoggedIn/handleruploadapp.h \
   handlerLoggedIn/handlerxrechnung.h \
   interfaces/extpistache.h \
+  interfaces/methodinfo.h \
   interfaces/pistachehandlerinterface.h \
   interfaces/pistacheserverinterface.h \
   loggedincontainer/loggedinappuserscontainer.h \

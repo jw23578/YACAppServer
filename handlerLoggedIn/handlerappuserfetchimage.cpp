@@ -8,7 +8,7 @@ HandlerAppUserFetchImage::HandlerAppUserFetchImage(PistacheServerInterface &serv
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              "/fetchImage",
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {

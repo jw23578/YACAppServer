@@ -13,7 +13,7 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
     HandlerLoggedInInterface(serverInterface,
                              databaseLogics.getOpi(),
                              "",
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     largeobjectORMName(t0009_largeobject().getORMName()),
     databaseLogics(databaseLogics),
@@ -30,13 +30,13 @@ HandlerORMObjects::HandlerORMObjects(DatabaseLogics &databaseLogics,
         {
             addMethod(serverInterface,
                       on,
-                      TypeGet);
+                      MethodInfo::TypeGet);
             addMethod(serverInterface,
                       on,
-                      TypePost);
+                      MethodInfo::TypePost);
             addMethod(serverInterface,
                       on,
-                      TypeDelete);
+                      MethodInfo::TypeDelete);
         }
     }
 

@@ -13,13 +13,13 @@ HandlerAPP::HandlerAPP(ORMPersistenceInterface &opi,
 {
     addMethod(serverInterface,
               methodNames.getAPP,
-              TypeGet);
+              MethodInfo::TypeGet);
     addMethod(serverInterface,
               methodNames.getAllAPPs,
-              TypeGet);
+              MethodInfo::TypeGet);
     addMethod(serverInterface,
               methodNames.getAPPImage,
-              TypeGet);}
+              MethodInfo::TypeGet);}
 
 void HandlerAPP::method(CurrentContext &context)
 {

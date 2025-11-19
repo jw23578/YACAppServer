@@ -7,7 +7,7 @@ HandlerAppUserSearchProfiles::HandlerAppUserSearchProfiles(PistacheServerInterfa
     HandlerLoggedInInterface(serverInterface,
                              opi,
                              "/appUserSearchProfiles",
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     databaseLogicAppUser(databaseLogicAppUser)
 {

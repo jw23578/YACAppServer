@@ -17,7 +17,7 @@ HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serv
 HandlerLoggedInInterface::HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                                                    ORMPersistenceInterface &opi,
                                                    const std::string &methodName,
-                                                   HandlerType type,
+                                                   MethodInfo::MethodType type,
                                                    LoggedInContainerInterface &loggedInContainer):
     PistacheHandlerInterface(serverInterface, opi, methodName, type, TypeLoginNeeded),
     loggedInContainer(loggedInContainer)

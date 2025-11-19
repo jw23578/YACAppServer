@@ -7,7 +7,7 @@ HandlerXRechnung::HandlerXRechnung(PistacheServerInterface &serverInterface,
                                    LoggedInAppUsersContainer &loggedInAppUsersContainer,
                                    PGORMPersistence &opi):HandlerLoggedInInterface(serverInterface, opi, loggedInAppUsersContainer)
 {
-    addMethod(serverInterface, "generateXRechnung", TypeGet);
+    addMethod(serverInterface, "generateXRechnung", MethodInfo::TypeGet);
 }
 
 void HandlerXRechnung::method(CurrentContext &context)

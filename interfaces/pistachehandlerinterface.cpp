@@ -11,7 +11,7 @@ void PistacheHandlerInterface::logACurlCall(const Pistache::Rest::Request &reque
 {
     std::string curl("curl -X ");
     curl += std::string(Pistache::Http::methodString(request.method())) + " ";
-    std::string url = request.address().host() + ":" + ExtString::toString(23578);
+    std::string url = serverInterface.getBaseUrl();
     url += request.resource();
     url += request.query().as_str();
     url += std::string(request.query().as_str().size() ? "&" : "?") + "prettyJson=true";
@@ -190,15 +190,15 @@ bool PistacheHandlerInterface::answerMissingRight(const int rightNumber)
 void PistacheHandlerInterface::addAllMethodTypes(PistacheServerInterface &serverInterface,
                                                  std::string const &methodName)
 {
-    addMethod(serverInterface, methodName, TypeGet);
-    addMethod(serverInterface, methodName, TypePost);
-    addMethod(serverInterface, methodName, TypeDelete);
-    addMethod(serverInterface, methodName, TypePut);
+    addMethod(serverInterface, methodName, MethodInfo::TypeGet);
+    addMethod(serverInterface, methodName, MethodInfo::TypePost);
+    addMethod(serverInterface, methodName, MethodInfo::TypeDelete);
+    addMethod(serverInterface, methodName, MethodInfo::TypePut);
 }
 
 void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterface,
                                          std::string const &methodName,
-                                         HandlerType type)
+                                         MethodInfo::MethodType type)
 {
     if (!methodName.size())
     {
@@ -209,22 +209,23 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
     {
         slash = "/";
     }
-    if (type == TypePut)
+    serverInterface.allMethods.push_back(MethodInfo(type, slash + methodName, ""));
+    if (type == MethodInfo::TypePut)
     {
         Pistache::Rest::Routes::Put(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
-    if (type == TypeDelete)
+    if (type == MethodInfo::TypeDelete)
     {
         Pistache::Rest::Routes::Delete(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
-    if (type == TypePost)
+    if (type == MethodInfo::TypePost)
     {
         Pistache::Rest::Routes::Post(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
         return;
     }
-    if (type == TypeGet)
+    if (type == MethodInfo::TypeGet)
     {
         Pistache::Rest::Routes::Get(serverInterface.router, slash + methodName, Pistache::Rest::Routes::bind(&PistacheHandlerInterface::internalMethod, this));
     }
@@ -233,6 +234,7 @@ void PistacheHandlerInterface::addMethod(PistacheServerInterface &serverInterfac
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                                                    ORMPersistenceInterface &opi,
                                                    LoginNeededType loginNeeded):
+    serverInterface(serverInterface),
     opi(opi),
     request(0),
     response(0),
@@ -243,8 +245,9 @@ PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serv
 PistacheHandlerInterface::PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                                                    ORMPersistenceInterface &opi,
                                                    std::string const &methodName,
-                                                   HandlerType type,
+                                                   MethodInfo::MethodType type,
                                                    LoginNeededType loginNeeded):
+    serverInterface(serverInterface),
     opi(opi),
     request(0), response(0),
     loginNeeded(loginNeeded)

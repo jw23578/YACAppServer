@@ -6,13 +6,13 @@ HandlerAppUserGetWorktimeState::HandlerAppUserGetWorktimeState(DatabaseLogics &d
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              methodNames.getWorktimeState,
-                             TypeGet,
+                             MethodInfo::TypeGet,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
     addMethod(serverInterface,
               methodNames.fetchWorktimes,
-              TypeGet);
+              MethodInfo::TypeGet);
 }
 
 void HandlerAppUserGetWorktimeState::method(CurrentContext &context)

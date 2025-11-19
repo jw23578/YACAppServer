@@ -8,7 +8,7 @@ HandlerIBANCheck::HandlerIBANCheck(ORMPersistenceInterface &opi,
                              opi,
                              loggedInAppUsersContainer)
 {
-    addMethod(serverInterface, methodNames.checkIBAN, TypeGet);
+    addMethod(serverInterface, methodNames.checkIBAN, MethodInfo::TypeGet);
 }
 
 void HandlerIBANCheck::method(CurrentContext &context)

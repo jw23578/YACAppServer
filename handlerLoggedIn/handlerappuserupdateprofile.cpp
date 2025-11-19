@@ -10,17 +10,17 @@ HandlerAppUserUpdateProfile::HandlerAppUserUpdateProfile(PistacheServerInterface
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              methodNames.updateUserProfile,
-                             TypePost,
+                             MethodInfo::TypePost,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics),
     deviceTokenCache(deviceTokenCache)
 {
     addMethod(serverInterface,
               methodNames.updateDeviceToken,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.logoutUser,
-              TypePost);
+              MethodInfo::TypePost);
 }
 
 void HandlerAppUserUpdateProfile::method(CurrentContext &context)

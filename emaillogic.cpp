@@ -17,19 +17,22 @@ EMailLogic::EMailLogic(std::string smtpSenderName,
 
 }
 void EMailLogic::sendVerifyTokenMail(const std::string &loginEMail,
-                                     const std::string &verifyToken)
+                                     const std::string &verifyToken,
+                                     const std::string &verifyUrl)
 {
     // TODo Implement E-Mails
     sendPleaseVerifyMail(loginEMail,
-                         verifyToken);
+                         verifyToken,
+                         verifyUrl);
 }
 
 void EMailLogic::sendPleaseVerifyMail(const std::string &loginEMail,
-                                      const std::string &verifyToken)
+                                      const std::string &verifyToken,
+                                      const std::string &verifyUrl)
 {
     jw78::SMTPWrapper *smtp(new jw78::SMTPWrapper);
     smtp->createEmptyEMail("Please Verify your Account",
-                           verifyToken,
+                           verifyToken +"<br><br>" + verifyUrl,
                            smtpSenderName,
                            smtpSenderEMail);
     smtp->to_addr.push_back(loginEMail);

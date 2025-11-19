@@ -19,7 +19,7 @@ public:
     HandlerLoggedInInterface(PistacheServerInterface &serverInterface,
                              ORMPersistenceInterface &opi,
                              const std::string &methodName,
-                             HandlerType type,
+                             MethodInfo::MethodType type,
                              LoggedInContainerInterface &loggedInContainer);
 
     // PistacheHandlerInterface interface

@@ -10,7 +10,7 @@ HandlerTex2Pdf::HandlerTex2Pdf(ORMPersistenceInterface &opi,
                              opi,
                              loggedInAppUsersContainer)
 {
-    addMethod(serverInterface, methodNames.tex2pdf, TypePost);
+    addMethod(serverInterface, methodNames.tex2pdf, MethodInfo::TypePost);
 }
 
 void HandlerTex2Pdf::method(CurrentContext &context)

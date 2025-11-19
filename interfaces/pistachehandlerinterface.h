@@ -12,6 +12,7 @@
 #include "extpistache.h"
 #include "ormpersistenceinterface.h"
 #include "orm_implementions/currentcontext.h"
+#include "methodinfo.h"
 
 #define MACRO_GetMandatoryByteString(targetName) std::basic_string<std::byte> targetName; \
 if (!getByteString(#targetName, targetName, true) || !targetName.size()) \
@@ -89,6 +90,8 @@ public:
     const TableNames tableNames;
     const TableFields tableFields;
     ExtPistache ep;
+protected:
+    PistacheServerInterface &serverInterface;
 private:
     ORMPersistenceInterface &opi;
 protected:
@@ -118,13 +121,6 @@ private:
                 const std::string &html);
 
 public:
-    enum HandlerType
-    {
-        TypeGet,
-        TypePost,
-        TypeDelete,
-        TypePut
-    };
 protected:
     bool answerMissingRight(const int rightNumber);
     void answerBad(const std::string &message);
@@ -150,7 +146,7 @@ protected:
                           std::string const &methodName);
     void addMethod(PistacheServerInterface &serverInterface,
                    std::string const &methodName,
-                   HandlerType type);
+                   MethodInfo::MethodType type);
 public:
 
     enum LoginNeededType
@@ -167,7 +163,7 @@ public:
     PistacheHandlerInterface(PistacheServerInterface &serverInterface,
                              ORMPersistenceInterface &opi,
                              const std::string &methodName,
-                             HandlerType type,
+                             MethodInfo::MethodType type,
                              LoginNeededType loginNeeded);
 
     const rapidjson::Value &getPostedJsonValue(std::string const &name);

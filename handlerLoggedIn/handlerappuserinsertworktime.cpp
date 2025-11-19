@@ -6,16 +6,16 @@ HandlerAppUserInsertWorktime::HandlerAppUserInsertWorktime(DatabaseLogics &datab
     HandlerLoggedInInterface(serverInterface,
                                databaseLogics.getOpi(),
                              methodNames.insertWorktime,
-                             TypePost,
+                             MethodInfo::TypePost,
                              loggedInAppUsersContainer),
     databaseLogics(databaseLogics)
 {
     addMethod(serverInterface,
               methodNames.insertWorktimeBeginEnd,
-              TypePost);
+              MethodInfo::TypePost);
     addMethod(serverInterface,
               methodNames.deleteWorktime,
-              TypePost);
+              MethodInfo::TypePost);
 }
 
 void HandlerAppUserInsertWorktime::method(CurrentContext &context)
